@@ -1,0 +1,3 @@
+- Keep the site static (HTML/CSS/JS) unless asked otherwise.
+- Implement only the required UX: Home (YouTube embed + button), Games list, and embedded game page.
+- Prefer simple, readable code; avoid extra pages and features.

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>STAYGO</title>
+    <link rel="stylesheet" href="./assets/site.css" />
+    <script defer src="./assets/config.js"></script>
+    <script defer src="./assets/site.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <main>
+        <div class="top-logo">
+          <a href="https://www.youtube.com/@STAYGO" target="_blank" rel="noopener noreferrer">
+            <img src="./games/reveal-board/staygo-logo.png" alt="Staygo" />
+          </a>
+        </div>
+
+        <section class="hero">
+          <h1>STAYGO</h1>
+          <p class="muted">เว็บเล่นเกมสำหรับช่อง YouTube STAYGO (boardgame) — คลิปล่าสุดอยู่ด้านล่าง และกดไปหน้าเลือกเกมเพื่อเริ่มเล่นได้เลย</p>
+
+          <div class="actions">
+            <a class="button" href="./games/">ไปหน้าเลือกเกม</a>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2 style="margin:0 0 8px 0">คลิปล่าสุดใน YouTube</h2>
+          <div class="embed" data-latest-youtube></div>
+        </section>
+
+        <section class="card">
+          <h2 style="margin:0 0 8px 0">คลิปทั้งหมด (แยกตาม Playlist)</h2>
+          <p class="muted" style="margin:0 0 12px 0">ค้นหาชื่อคลิปได้ และรายการจะกรองให้ทันที</p>
+
+          <div class="video-tools">
+            <input
+              class="search"
+              type="search"
+              inputmode="search"
+              placeholder="ค้นหาชื่อคลิป…"
+              aria-label="ค้นหาชื่อคลิป"
+              data-video-search
+            />
+            <div class="muted" data-video-search-status></div>
+          </div>
+
+          <div class="video-browser" data-video-browser></div>
+        </section>
+
+        <div class="footer">© STAYGO</div>
+      </main>
+    </div>
+  </body>
+</html>

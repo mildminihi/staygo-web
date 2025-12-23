@@ -5,6 +5,7 @@ function getConfig() {
 
     youTubeApiKey: typeof cfg.youTubeApiKey === "string" ? cfg.youTubeApiKey.trim() : "",
     youTubeChannelId: typeof cfg.youTubeChannelId === "string" ? cfg.youTubeChannelId.trim() : "",
+    youTubeApiBaseUrl: typeof cfg.youTubeApiBaseUrl === "string" ? cfg.youTubeApiBaseUrl.trim() : "",
     youTubeMaxPlaylists: Number.isFinite(cfg.youTubeMaxPlaylists) ? cfg.youTubeMaxPlaylists : 50,
     youTubeMaxVideosPerPlaylist: Number.isFinite(cfg.youTubeMaxVideosPerPlaylist) ? cfg.youTubeMaxVideosPerPlaylist : 200,
   };
@@ -43,8 +44,10 @@ async function fetchJson(url, { timeoutMs = 12000 } = {}) {
   }
 }
 
-function buildYouTubeUrl(path, params) {
-  const url = new URL(`https://www.googleapis.com/youtube/v3/${path}`);
+function buildYouTubeUrl(path, params, { baseUrl = "" } = {}) {
+  const base = (baseUrl || "").trim() || "https://www.googleapis.com/youtube/v3";
+  const normalizedBase = base.endsWith("/") ? base.slice(0, -1) : base;
+  const url = new URL(`${normalizedBase}/${path}`);
   Object.entries(params || {}).forEach(([key, value]) => {
     if (value === undefined || value === null || value === "") return;
     url.searchParams.set(key, String(value));
@@ -98,15 +101,19 @@ function formatThaiDate(isoString) {
   }
 }
 
-async function getLatestYouTubeVideoId({ apiKey, channelId }) {
-  const url = buildYouTubeUrl("search", {
+async function getLatestYouTubeVideoId({ apiKey, channelId, baseUrl }) {
+  const url = buildYouTubeUrl(
+    "search",
+    {
     part: "snippet",
     channelId,
     order: "date",
     type: "video",
     maxResults: 1,
     key: apiKey,
-  });
+    },
+    { baseUrl }
+  );
 
   const data = await fetchJson(url);
   const first = Array.isArray(data?.items) ? data.items[0] : null;
@@ -135,11 +142,16 @@ async function renderLatestVideo() {
 
   const cfg = getConfig();
 
-  // Prefer fetching the real latest upload when API is configured.
-  if (cfg.youTubeApiKey && cfg.youTubeChannelId) {
+  // Prefer fetching the real latest upload when Data API is configured.
+  // Note: For security, prefer using a proxy (youTubeApiBaseUrl) and keep apiKey empty.
+  if (cfg.youTubeChannelId && (cfg.youTubeApiKey || cfg.youTubeApiBaseUrl)) {
     mount.innerHTML = "<p class=\"muted\">กำลังโหลดคลิปล่าสุดจาก YouTube…</p>";
     try {
-      const latestId = await getLatestYouTubeVideoId({ apiKey: cfg.youTubeApiKey, channelId: cfg.youTubeChannelId });
+      const latestId = await getLatestYouTubeVideoId({
+        apiKey: cfg.youTubeApiKey,
+        channelId: cfg.youTubeChannelId,
+        baseUrl: cfg.youTubeApiBaseUrl,
+      });
       if (latestId) {
         renderLatestVideoEmbed({ mount, videoId: latestId });
         return;
@@ -243,14 +255,15 @@ async function loadYouTubePlaylistsAndVideos() {
   const cfg = getConfig();
   const apiKey = cfg.youTubeApiKey;
   const channelId = cfg.youTubeChannelId;
+  const baseUrl = cfg.youTubeApiBaseUrl;
   const maxPlaylists = normalizeLimit(cfg.youTubeMaxPlaylists, 50);
   const maxVideosPerPlaylist = normalizeLimit(cfg.youTubeMaxVideosPerPlaylist, 200);
 
-  if (!apiKey || !channelId) {
+  if (!channelId || (!apiKey && !baseUrl)) {
     renderVideoBrowserError({
       mount,
       statusEl,
-      message: "ยังไม่ได้ตั้งค่า youTubeApiKey / youTubeChannelId ใน assets/config.js — ถ้าตั้งค่าแล้วจะแสดงรายการคลิปแยกตาม Playlist และค้นหาได้",
+      message: "ยังไม่ได้ตั้งค่า youTubeChannelId และ (youTubeApiKey หรือ youTubeApiBaseUrl) ใน assets/config.js — ถ้าตั้งค่าแล้วจะแสดงรายการคลิปแยกตาม Playlist และค้นหาได้",
     });
     return;
   }
@@ -260,13 +273,17 @@ async function loadYouTubePlaylistsAndVideos() {
   try {
     const playlists = await fetchAllPages(
       async ({ pageToken, pageSize }) => {
-        const url = buildYouTubeUrl("playlists", {
+        const url = buildYouTubeUrl(
+          "playlists",
+          {
           part: "snippet,contentDetails",
           channelId,
           maxResults: Math.min(pageSize, 50),
           pageToken,
           key: apiKey,
-        });
+          },
+          { baseUrl }
+        );
         return fetchJson(url);
       },
       { pageSize: 50, limit: maxPlaylists }
@@ -284,13 +301,17 @@ async function loadYouTubePlaylistsAndVideos() {
     for (const pl of playlistModels) {
       const items = await fetchAllPages(
         async ({ pageToken, pageSize }) => {
-          const url = buildYouTubeUrl("playlistItems", {
+          const url = buildYouTubeUrl(
+            "playlistItems",
+            {
             part: "snippet,contentDetails",
             playlistId: pl.id,
             maxResults: Math.min(pageSize, 50),
             pageToken,
             key: apiKey,
-          });
+            },
+            { baseUrl }
+          );
           return fetchJson(url);
         },
         { pageSize: 50, limit: maxVideosPerPlaylist }

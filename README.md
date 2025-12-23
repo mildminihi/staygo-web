@@ -37,6 +37,45 @@
 
 ถ้า `youTubeApiKey`/`youTubeChannelId` ยังว่าง จะไม่แสดงรายการคลิป (โชว์ข้อความแนะนำการตั้งค่าแทน)
 
+## YouTube API Security (สำคัญ)
+
+เว็บนี้เป็น static (รันบนเบราว์เซอร์ล้วน) ดังนั้นถ้าคุณใส่ `youTubeApiKey` ลงใน `assets/config.js`:
+
+- API key จะถูกดาวน์โหลดไปอยู่บนเครื่องผู้ใช้ (มองเห็นได้ใน DevTools)
+- ทำให้ “ซ่อน key” แบบ 100% ทำไม่ได้
+
+ตัวเลือกที่ปลอดภัย/เหมาะสมมี 2 แบบ:
+
+### A) ไม่ใช้ Data API เลย (ปลอดภัยสุด)
+
+- เว้น `youTubeApiKey` ว่าง
+- ใช้ `latestYouTubeVideoId` เพื่อฝังคลิปล่าสุดแบบ manual
+- หน้าเว็บจะใช้ YouTube embed (`youtube-nocookie.com`) ซึ่งไม่ต้องใช้ key
+
+### B) ใช้ Data API แต่ทำให้ปลอดภัยขึ้น
+
+**ทางเลือก B1 — ใช้ API key ในฝั่ง client (ทำได้ แต่อยู่ในระดับ “จำกัดความเสี่ยง”)**
+
+1) ไปที่ Google Cloud Console → สร้าง API key
+2) เปิดใช้ “YouTube Data API v3”
+3) ตั้งค่า Restriction:
+   - Application restrictions: เลือก “HTTP referrers (web sites)”
+     - เพิ่มโดเมนของคุณ เช่น `https://yourdomain.com/*`
+     - เพิ่มโลคัล เช่น `http://localhost:5173/*`
+   - API restrictions: เลือก “Restrict key” แล้วเลือกเฉพาะ “YouTube Data API v3”
+4) ตั้ง Quota/Alert และเตรียม rotate key เมื่อจำเป็น
+
+**ทางเลือก B2 — แนะนำที่สุด: ทำ Proxy ฝั่งเซิร์ฟเวอร์/Serverless (ซ่อน key ได้จริง)**
+
+- เก็บ API key ไว้ใน env ของ serverless (เช่น Cloudflare Workers / Netlify Functions / Vercel)
+- หน้าเว็บเรียก proxy ของคุณแทน Google โดยตั้งค่าใน `assets/config.js`:
+  - `youTubeApiBaseUrl`: ตัวอย่าง `https://your-worker.example.com/youtube/v3`
+  - เว้น `youTubeApiKey` ว่างได้ (ให้ proxy ใส่ key ให้เอง)
+- ฝั่ง proxy ควรทำเพิ่ม:
+  - จำกัด CORS ให้เรียกได้เฉพาะโดเมนของคุณ
+  - ใส่ rate limit / caching (ลด quota และกัน abuse)
+
+
 ## Run locally
 
 ตัวเว็บเป็น static files แนะนำรันผ่าน local server:

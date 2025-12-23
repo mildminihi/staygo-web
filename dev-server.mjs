@@ -6,7 +6,10 @@ import { fileURLToPath } from "node:url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const PORT = Number(process.env.PORT || 5173);
+const defaultPort = 5173;
+const requestedPortRaw = process.env.PORT;
+const requestedPort = requestedPortRaw ? Number(requestedPortRaw) : null;
+const initialPort = Number.isFinite(requestedPort) ? requestedPort : defaultPort;
 
 const mimeByExt = {
   ".html": "text/html; charset=utf-8",
@@ -84,6 +87,35 @@ const server = http.createServer((req, res) => {
   fs.createReadStream(filePath).pipe(res);
 });
 
-server.listen(PORT, () => {
-  console.log(`Serving ${__dirname} at http://localhost:${PORT}`);
-});
+function tryListen(port, remainingAutoTries) {
+  server.once("error", (err) => {
+    if (err && err.code === "EADDRINUSE") {
+      if (requestedPortRaw) {
+        console.error(`Port ${port} is already in use.`);
+        console.error("Pick a different port by setting PORT, e.g.:\n  $env:PORT=5174; node dev-server.mjs");
+        process.exit(1);
+      }
+
+      if (remainingAutoTries > 0) {
+        const next = port + 1;
+        console.warn(`Port ${port} in use — trying ${next}...`);
+        setTimeout(() => tryListen(next, remainingAutoTries - 1), 50);
+        return;
+      }
+
+      console.error(`Port ${port} is already in use, and no free port was found.`);
+      console.error("Tip: set PORT, e.g.:\n  $env:PORT=5174; node dev-server.mjs");
+      process.exit(1);
+      return;
+    }
+
+    console.error(err);
+    process.exit(1);
+  });
+
+  server.listen(port, () => {
+    console.log(`Serving ${__dirname} at http://localhost:${port}`);
+  });
+}
+
+tryListen(initialPort, 10);

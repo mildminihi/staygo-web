@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📸 Guess the Photo - Reveal Board</title>
+    <title>Reveal Board</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -28,6 +28,38 @@
             max-width: 1000px;
             width: 95%;
             border: 2px solid rgba(251, 191, 36, 0.2);
+            position: relative;
+        }
+
+        .lang-toggle {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            display: inline-flex;
+            gap: 8px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lang-btn {
+            padding: 8px 10px;
+            border-radius: 14px;
+            border: 2px solid rgba(251, 191, 36, 0.22);
+            background: rgba(251, 191, 36, 0.10);
+            color: #92400E;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .lang-btn:hover {
+            background: rgba(251, 191, 36, 0.14);
+        }
+
+        .lang-btn.active {
+            background: rgba(251, 191, 36, 0.18);
+            box-shadow: 0 10px 18px rgba(0, 0, 0, 0.08);
         }
 
         h1 {
@@ -313,53 +345,58 @@
 
 <body>
     <div class="container">
+        <div class="lang-toggle" role="group" aria-label="Language">
+            <button type="button" class="lang-btn" data-lang="th" aria-label="ภาษาไทย">ไทย</button>
+            <button type="button" class="lang-btn" data-lang="en" aria-label="English">EN</button>
+        </div>
+
         <div style="display: flex; justify-content: center; margin-bottom: 20px;">
             <a href="https://www.youtube.com/@STAYGO" target="_blank" rel="noopener noreferrer">
                 <img src="staygo-logo.png" alt="StayGo Logo" style="width: 220px; max-width: 60vw; height: auto;">
             </a>
         </div>
-        <h1>📸 Guess the Photo</h1>
-        <p class="game-subtitle">Reveal tiles to guess what the photo is!</p>
+        <h1 data-i18n="title">เปิดแผ่นป้าย</h1>
+        <p class="game-subtitle" data-i18n="subtitle">อัปโหลดรูป แล้วกด Create Board เพื่อเริ่มเล่น</p>
 
         <div class="controls-panel">
             <div class="control-group">
                 <div class="input-field">
-                    <label for="imageUpload">📁 Upload Feature Images:</label>
+                    <label for="imageUpload" data-i18n="labelUpload">📁 อัปโหลดรูป:</label>
                     <input type="file" id="imageUpload" accept="image/jpeg,image/jpg,image/png,image/webp" multiple>
                     <div id="imageCount" style="font-size: 0.85em; color: #92400E; margin-top: 5px;"></div>
                 </div>
                 <div class="input-field">
-                    <label for="rows">📊 Rows (1-30):</label>
+                    <label for="rows" data-i18n="labelRows">📊 แถว (1-30):</label>
                     <input type="number" id="rows" min="1" max="30" value="5">
                 </div>
                 <div class="input-field">
-                    <label for="columns">📐 Columns (1-30):</label>
+                    <label for="columns" data-i18n="labelCols">📐 คอลัมน์ (1-30):</label>
                     <input type="number" id="columns" min="1" max="30" value="8">
                 </div>
             </div>
             <div>
-                <button class="button primary-button" onclick="createBoard()">🎮 Create Board</button>
-                <button class="button secondary-button" onclick="resetBoard()" id="resetBtn" disabled>🔄 Reset Board</button>
-                <button class="button primary-button" onclick="nextImage()" id="nextBtn" disabled>➡️ Next Image</button>
-                <button class="button secondary-button" onclick="toggleFullscreen()" id="fullscreenBtn" disabled>⛶ Fullscreen</button>
+                <button class="button primary-button" onclick="createBoard()" data-i18n="btnCreate">🎮 สร้างกระดาน</button>
+                <button class="button secondary-button" onclick="resetBoard()" id="resetBtn" disabled data-i18n="btnReset">🔄 Reset Board</button>
+                <button class="button primary-button" onclick="nextImage()" id="nextBtn" disabled data-i18n="btnNext">➡️ Next Image</button>
+                <button class="button secondary-button" onclick="toggleFullscreen()" id="fullscreenBtn" disabled data-i18n="btnFullscreen">⛶ Fullscreen</button>
             </div>
         </div>
 
         <div class="stats-panel" id="statsPanel" style="display: none;">
             <div class="stat-item">
-                <div class="stat-label">Current Image</div>
+                <div class="stat-label" data-i18n="statCurrent">Current Image</div>
                 <div class="stat-value" id="currentImageNum">1 / 1</div>
             </div>
             <div class="stat-item">
-                <div class="stat-label">Total Tiles</div>
+                <div class="stat-label" data-i18n="statTotal">Total Tiles</div>
                 <div class="stat-value" id="totalTiles">0</div>
             </div>
             <div class="stat-item">
-                <div class="stat-label">Revealed</div>
+                <div class="stat-label" data-i18n="statRevealed">Revealed</div>
                 <div class="stat-value" id="revealedCount">0</div>
             </div>
             <div class="stat-item">
-                <div class="stat-label">Remaining</div>
+                <div class="stat-label" data-i18n="statRemaining">Remaining</div>
                 <div class="stat-value" id="remainingCount">0</div>
             </div>
         </div>
@@ -369,34 +406,15 @@
             <div class="tiles-overlay" id="tilesOverlay"></div>
         </div>
 
-        <div class="placeholder" id="placeholder">
-            📸 Upload one or more photos and create a board to start playing!
+        <div class="placeholder" id="placeholder" data-i18n="placeholder">
+            📸 อัปโหลดรูปอย่างน้อย 1 รูป แล้วกด Create Board เพื่อเริ่มเล่น
         </div>
 
         <div style="margin-top: 30px;">
-            <button class="button back-button" onclick="window.location.href='index.html'">⟳ Reload Page</button>
+            <button class="button back-button" onclick="window.location.href='index.html'" data-i18n="btnReload">⟳ Reload Page</button>
         </div>
 
-        <div class="game-rules">
-            <h3>🎯 How to Play Guess the Photo</h3>
-            <p><strong>A visual guessing game where everyone reveals tiles to identify the hidden photo!</strong></p>
-            <ul>
-                <li><strong>Setup:</strong> Host uploads one or more photos (events, places, products, anything fun)</li>
-                <li><strong>Configure Grid:</strong> Choose number of rows and columns (max 30x30)</li>
-                <li><strong>Create Board:</strong> Grid tiles automatically cover the photo</li>
-                <li><strong>Play:</strong> Players take turns clicking tiles to reveal parts of the photo</li>
-                <li><strong>Guess:</strong> After each reveal, try to identify what the photo is</li>
-                <li><strong>Win:</strong> Successfully identify the photo before all tiles are revealed!</li>
-                <li><strong>Reset:</strong> Use the Reset Board button to cover all tiles again</li>
-                <li><strong>Multiple Rounds:</strong> Upload multiple images and use Next Image button to move to the next feature</li>
-            </ul>
-            <p><strong>💡 Tips:</strong></p>
-            <ul>
-                <li>Start with fewer tiles (5x8) for easier games</li>
-                <li>Use more tiles (20x30) for challenging rounds</li>
-                <li>Great for sprint reviews, feature onboarding, and team building!</li>
-            </ul>
-        </div>
+        <div class="game-rules" id="rules" data-i18n-html="rules"></div>
     </div>
 
     <script src="reveal-board.js"></script>

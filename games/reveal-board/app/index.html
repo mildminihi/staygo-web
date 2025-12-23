@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Reveal Board</title>
+    <title>เปิดแผ่นป้าย</title>
     <link rel="stylesheet" href="../../../assets/site.css" />
     <style>
       * { box-sizing: border-box; }
@@ -18,6 +18,30 @@
           linear-gradient(180deg, #ffffff 0%, #f6f8ff 100%);
       }
       .container { max-width: 1100px; margin: 0 auto; padding: 16px; }
+
+      .lang-toggle {
+        position: fixed;
+        top: 16px;
+        right: 16px;
+        display: inline-flex;
+        gap: 8px;
+        align-items: center;
+        justify-content: center;
+        z-index: 50;
+      }
+      .lang-btn {
+        padding: 8px 10px;
+        border-radius: 14px;
+        border: 1px solid var(--border, rgba(0,0,0,0.12));
+        background: rgba(255,255,255,0.9);
+        color: var(--text, #111827);
+        font-weight: 800;
+        font-size: 13px;
+        cursor: pointer;
+        line-height: 1;
+      }
+      .lang-btn:hover { filter: brightness(0.98); }
+      .lang-btn.active { box-shadow: 0 10px 18px rgba(0,0,0,0.10); }
       .top { display: flex; align-items: center; justify-content: center; padding: 12px 0; }
       .logo { width: 220px; max-width: 60vw; height: auto; }
       h1 { margin: 0 0 8px 0; text-align: center; }
@@ -91,6 +115,11 @@
     </style>
   </head>
   <body>
+    <div class="lang-toggle" role="group" aria-label="Language">
+      <button type="button" class="lang-btn" data-lang="th" aria-label="ภาษาไทย">ไทย</button>
+      <button type="button" class="lang-btn" data-lang="en" aria-label="English">EN</button>
+    </div>
+
     <div class="container">
       <div class="top">
         <a href="https://www.youtube.com/@STAYGO" target="_blank" rel="noopener noreferrer">
@@ -98,49 +127,49 @@
         </a>
       </div>
 
-      <h1>Reveal Board</h1>
-      <p class="muted">อัปโหลดรูป แล้วกด Create Board เพื่อเริ่มเล่น</p>
+      <h1 data-i18n="title">เปิดแผ่นป้าย</h1>
+      <p class="muted" data-i18n="subtitle">อัปโหลดรูป แล้วกด Create Board เพื่อเริ่มเล่น</p>
 
       <div class="panel">
         <div class="controls">
           <div>
-            <label for="imageUpload">Upload images</label>
+            <label for="imageUpload" data-i18n="labelUpload">📁 อัปโหลดรูป:</label>
             <input type="file" id="imageUpload" accept="image/jpeg,image/jpg,image/png,image/webp" multiple />
             <div id="imageCount" style="font-size: 12px; color: #444; margin-top: 6px"></div>
           </div>
           <div>
-            <label for="rows">Rows (1-30)</label>
+            <label for="rows" data-i18n="labelRows">📊 แถว (1-30):</label>
             <input type="number" id="rows" min="1" max="30" value="5" />
           </div>
           <div>
-            <label for="columns">Columns (1-30)</label>
+            <label for="columns" data-i18n="labelCols">📐 คอลัมน์ (1-30):</label>
             <input type="number" id="columns" min="1" max="30" value="8" />
           </div>
         </div>
 
         <div class="buttons">
-          <button onclick="createBoard()">Create Board</button>
-          <button class="secondary" onclick="resetBoard()" id="resetBtn" disabled>Reset</button>
-          <button onclick="nextImage()" id="nextBtn" disabled>Next Image</button>
-          <button class="secondary" onclick="toggleFullscreen()" id="fullscreenBtn" disabled>Fullscreen</button>
-          <button class="secondary" onclick="location.reload()">Reload</button>
+          <button onclick="createBoard()" data-i18n="btnCreate">🎮 สร้างกระดาน</button>
+          <button class="secondary" onclick="resetBoard()" id="resetBtn" disabled data-i18n="btnReset">🔄 รีเซ็ต</button>
+          <button onclick="nextImage()" id="nextBtn" disabled data-i18n="btnNext">➡️ รูปถัดไป</button>
+          <button class="secondary" onclick="toggleFullscreen()" id="fullscreenBtn" disabled data-i18n="btnFullscreen">⛶ เต็มจอ</button>
+          <button class="secondary" onclick="location.reload()" data-i18n="btnReload">⟳ โหลดใหม่</button>
         </div>
 
         <div class="stats" id="statsPanel">
           <div class="stat">
-            <div class="label">Current Image</div>
+            <div class="label" data-i18n="statCurrent">รูปปัจจุบัน</div>
             <div class="value" id="currentImageNum">1 / 1</div>
           </div>
           <div class="stat">
-            <div class="label">Total Tiles</div>
+            <div class="label" data-i18n="statTotal">จำนวนช่องทั้งหมด</div>
             <div class="value" id="totalTiles">0</div>
           </div>
           <div class="stat">
-            <div class="label">Revealed</div>
+            <div class="label" data-i18n="statRevealed">เปิดแล้ว</div>
             <div class="value" id="revealedCount">0</div>
           </div>
           <div class="stat">
-            <div class="label">Remaining</div>
+            <div class="label" data-i18n="statRemaining">เหลือ</div>
             <div class="value" id="remainingCount">0</div>
           </div>
         </div>
@@ -151,7 +180,7 @@
         <div class="tiles-overlay" id="tilesOverlay"></div>
       </div>
 
-      <div id="placeholder">อัปโหลดรูปอย่างน้อย 1 รูป แล้วกด Create Board</div>
+      <div id="placeholder" data-i18n="placeholder">📸 อัปโหลดรูปอย่างน้อย 1 รูป แล้วกด Create Board เพื่อเริ่มเล่น</div>
     </div>
 
     <script src="../reveal-board.js"></script>

@@ -1,6 +1,175 @@
 // Reveal Board Game JavaScript
 // A guessing game where players reveal tiles to identify features
 
+const LANG_STORAGE_KEY = "staygo.revealBoard.lang";
+
+const I18N = {
+    th: {
+        pageTitle: "เปิดแผ่นป้าย",
+        title: "เปิดแผ่นป้าย",
+        subtitle: "อัปโหลดรูป แล้วกด Create Board เพื่อเริ่มเล่น",
+        labelUpload: "📁 อัปโหลดรูป:",
+        labelRows: "📊 แถว (1-30):",
+        labelCols: "📐 คอลัมน์ (1-30):",
+
+        btnCreate: "🎮 สร้างกระดาน",
+        btnReset: "🔄 รีเซ็ต",
+        btnNext: "➡️ รูปถัดไป",
+        btnFullscreenEnter: "⛶ เต็มจอ",
+        btnFullscreenExit: "⛶ ออกจากเต็มจอ",
+        btnReload: "⟳ โหลดใหม่",
+
+        statCurrent: "รูปปัจจุบัน",
+        statTotal: "จำนวนช่องทั้งหมด",
+        statRevealed: "เปิดแล้ว",
+        statRemaining: "เหลือ",
+
+        placeholder: "📸 อัปโหลดรูปอย่างน้อย 1 รูป แล้วกด Create Board เพื่อเริ่มเล่น",
+        imageCount: (n) => `${n} รูป (อัปโหลดแล้ว)` ,
+
+        errInvalidImageType: (name) => `ไฟล์ ${name} ไม่ใช่รูปที่รองรับ (JPG, PNG หรือ WebP)`,
+        errNeedUpload: "กรุณาอัปโหลดรูปอย่างน้อย 1 รูปก่อน!",
+        errInvalidGrid: "กรุณาใส่จำนวนแถว/คอลัมน์ที่ถูกต้อง (1-30)",
+        doneAllTiles: "🎉 เปิดครบทุกช่องแล้ว! เดาถูกไหม?",
+        doneAllImages: "🎉 เล่นครบทุกภาพแล้ว!",
+        errFullscreen: "โหมดเต็มจอไม่รองรับ หรือถูกบล็อกโดยเบราว์เซอร์",
+
+        rulesHtml: `
+            <h3>🎯 วิธีเล่น Reveal Board</h3>
+            <p><strong>เกมทายภาพ: ค่อย ๆ เปิดช่องเพื่อเดาว่ารูปคืออะไร!</strong></p>
+            <ul>
+                <li><strong>เริ่มต้น:</strong> คนคุมเกมอัปโหลดรูป 1 รูปหรือหลายรูป</li>
+                <li><strong>ตั้งค่ากริด:</strong> เลือกจำนวนแถวและคอลัมน์ (สูงสุด 30×30)</li>
+                <li><strong>สร้างบอร์ด:</strong> ระบบจะวางช่องปิดทับรูปอัตโนมัติ</li>
+                <li><strong>เล่น:</strong> ผู้เล่นผลัดกันกดช่องเพื่อเปิดบางส่วนของรูป</li>
+                <li><strong>เดา:</strong> หลังเปิดแต่ละครั้ง ลองเดาว่ารูปคืออะไร</li>
+                <li><strong>ชนะ:</strong> เดาถูกก่อนที่จะเปิดครบทุกช่อง</li>
+                <li><strong>รีเซ็ต:</strong> กดรีเซ็ตเพื่อปิดช่องกลับมาใหม่</li>
+                <li><strong>หลายรอบ:</strong> ถ้าอัปโหลดหลายรูป กด “รูปถัดไป” เพื่อไปภาพถัดไป</li>
+            </ul>
+            <p><strong>💡 ทิป:</strong></p>
+            <ul>
+                <li>เริ่มด้วยกริดน้อย ๆ (เช่น 5×8) เล่นง่ายขึ้น</li>
+                <li>เพิ่มกริดใหญ่ (เช่น 20×30) ให้ท้าทายขึ้น</li>
+                <li>เหมาะสำหรับเล่นกับเพื่อน/ทีม และกิจกรรมบนไลฟ์</li>
+            </ul>
+        `,
+    },
+    en: {
+        pageTitle: "Reveal Board",
+        title: "Reveal Board",
+        subtitle: "Upload images, then press Create Board to start",
+        labelUpload: "📁 Upload images:",
+        labelRows: "📊 Rows (1-30):",
+        labelCols: "📐 Columns (1-30):",
+
+        btnCreate: "🎮 Create Board",
+        btnReset: "🔄 Reset",
+        btnNext: "➡️ Next Image",
+        btnFullscreenEnter: "⛶ Fullscreen",
+        btnFullscreenExit: "⛶ Exit Fullscreen",
+        btnReload: "⟳ Reload Page",
+
+        statCurrent: "Current Image",
+        statTotal: "Total Tiles",
+        statRevealed: "Revealed",
+        statRemaining: "Remaining",
+
+        placeholder: "📸 Upload one or more photos and create a board to start playing!",
+        imageCount: (n) => `${n} image(s) uploaded`,
+
+        errInvalidImageType: (name) => `File ${name} is not a valid image (JPG, PNG, or WebP)`,
+        errNeedUpload: "Please upload at least one image first!",
+        errInvalidGrid: "Please enter valid numbers for rows (1-30) and columns (1-30)",
+        doneAllTiles: "🎉 All tiles revealed! Did you guess the photo?",
+        doneAllImages: "🎉 You've completed all images!",
+        errFullscreen: "Fullscreen is not supported or was blocked by the browser.",
+
+        rulesHtml: `
+            <h3>🎯 How to Play Reveal Board</h3>
+            <p><strong>A visual guessing game where everyone reveals tiles to identify the hidden photo!</strong></p>
+            <ul>
+                <li><strong>Setup:</strong> Host uploads one or more photos (anything fun)</li>
+                <li><strong>Configure Grid:</strong> Choose rows and columns (max 30×30)</li>
+                <li><strong>Create Board:</strong> Tiles automatically cover the photo</li>
+                <li><strong>Play:</strong> Players take turns clicking tiles to reveal parts of the image</li>
+                <li><strong>Guess:</strong> After each reveal, try to identify what the photo is</li>
+                <li><strong>Win:</strong> Guess correctly before all tiles are revealed</li>
+                <li><strong>Reset:</strong> Use Reset to cover the tiles again</li>
+                <li><strong>Multiple Rounds:</strong> Upload multiple images and use Next Image</li>
+            </ul>
+            <p><strong>💡 Tips:</strong></p>
+            <ul>
+                <li>Start with fewer tiles (5×8) for easier games</li>
+                <li>Use more tiles (20×30) for challenging rounds</li>
+                <li>Great for live streams and group play</li>
+            </ul>
+        `,
+    },
+};
+
+function normalizeLang(value) {
+    return value === "en" ? "en" : "th";
+}
+
+function getCurrentLang() {
+    const saved = (() => {
+        try { return localStorage.getItem(LANG_STORAGE_KEY) || ""; } catch { return ""; }
+    })();
+
+    if (saved) return normalizeLang(saved);
+    const docLang = (document.documentElement.getAttribute("lang") || "").toLowerCase();
+    if (docLang.startsWith("en")) return "en";
+    return "th";
+}
+
+function setCurrentLang(lang) {
+    const normalized = normalizeLang(lang);
+    try { localStorage.setItem(LANG_STORAGE_KEY, normalized); } catch { /* ignore */ }
+    document.documentElement.setAttribute("lang", normalized);
+    applyI18n(normalized);
+}
+
+function t(lang, key, ...args) {
+    const pack = I18N[normalizeLang(lang)] || I18N.th;
+    const value = pack[key];
+    if (typeof value === "function") return value(...args);
+    return typeof value === "string" ? value : "";
+}
+
+function applyI18n(lang) {
+    const normalized = normalizeLang(lang);
+    document.title = t(normalized, "pageTitle");
+
+    // Update simple text nodes
+    document.querySelectorAll("[data-i18n]").forEach((el) => {
+        const key = el.getAttribute("data-i18n");
+        if (!key) return;
+        const value = t(normalized, key);
+        if (value) el.textContent = value;
+    });
+
+    // Update HTML blocks
+    document.querySelectorAll("[data-i18n-html]").forEach((el) => {
+        const key = el.getAttribute("data-i18n-html");
+        if (!key) return;
+        if (key === "rules") {
+            el.innerHTML = t(normalized, "rulesHtml");
+        }
+    });
+
+    // Buttons managed by JS state
+    if (typeof game !== "undefined" && game && typeof game.updateFullscreenButton === "function") {
+        game.updateFullscreenButton();
+    }
+
+    // Toggle UI state
+    document.querySelectorAll(".lang-btn[data-lang]").forEach((btn) => {
+        const btnLang = normalizeLang(btn.getAttribute("data-lang"));
+        btn.classList.toggle("active", btnLang === normalized);
+    });
+}
+
 class RevealBoardGame {
     constructor() {
         this.uploadedImages = [];
@@ -49,6 +218,14 @@ class RevealBoardGame {
 
     setupEventListeners() {
         this.imageUpload.addEventListener('change', (e) => this.handleImageUpload(e));
+
+        // Language toggle (if present)
+        document.querySelectorAll('.lang-btn[data-lang]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const lang = btn.getAttribute('data-lang') || 'th';
+                setCurrentLang(lang);
+            });
+        });
     }
 
     handleImageUpload(event) {
@@ -63,7 +240,8 @@ class RevealBoardGame {
         Array.from(files).forEach((file, index) => {
             // Validate file type
             if (!file.type.match('image/(jpeg|jpg|png|webp)')) {
-                alert(`File ${file.name} is not a valid image (JPG, PNG, or WebP)`);
+                const lang = getCurrentLang();
+                alert(t(lang, 'errInvalidImageType', file.name));
                 return;
             }
 
@@ -74,7 +252,8 @@ class RevealBoardGame {
 
                 // When all images are loaded
                 if (loadedCount === files.length) {
-                    this.imageCount.textContent = `${this.uploadedImages.length} image(s) uploaded`;
+                    const lang = getCurrentLang();
+                    this.imageCount.textContent = t(lang, 'imageCount', this.uploadedImages.length);
                     console.log(`${this.uploadedImages.length} images loaded successfully`);
                 }
             };
@@ -85,7 +264,7 @@ class RevealBoardGame {
     createBoard() {
         // Validate inputs
         if (!this.uploadedImages || this.uploadedImages.length === 0) {
-            alert('Please upload at least one image first!');
+            alert(t(getCurrentLang(), 'errNeedUpload'));
             return;
         }
 
@@ -93,7 +272,7 @@ class RevealBoardGame {
         this.columns = parseInt(this.columnsInput.value);
 
         if (this.rows < 1 || this.rows > 30 || this.columns < 1 || this.columns > 30) {
-            alert('Please enter valid numbers for rows (1-30) and columns (1-30)');
+            alert(t(getCurrentLang(), 'errInvalidGrid'));
             return;
         }
 
@@ -165,7 +344,7 @@ class RevealBoardGame {
         // Check if all tiles are revealed
         if (this.revealedTiles === this.totalTiles) {
             setTimeout(() => {
-                alert('🎉 All tiles revealed! Did you guess the feature?');
+                alert(t(getCurrentLang(), 'doneAllTiles'));
             }, 500);
         }
     }
@@ -183,7 +362,7 @@ class RevealBoardGame {
 
     nextImage() {
         if (this.currentImageIndex >= this.uploadedImages.length - 1) {
-            alert('🎉 You\'ve completed all images!');
+            alert(t(getCurrentLang(), 'doneAllImages'));
             return;
         }
 
@@ -229,7 +408,7 @@ class RevealBoardGame {
             }
         } catch (error) {
             console.error('Fullscreen toggle failed:', error);
-            alert('Fullscreen is not supported or was blocked by the browser.');
+            alert(t(getCurrentLang(), 'errFullscreen'));
         } finally {
             this.updateFullscreenButton();
         }
@@ -237,7 +416,8 @@ class RevealBoardGame {
 
     updateFullscreenButton() {
         if (!this.fullscreenBtn) return;
-        this.fullscreenBtn.textContent = this.isFullscreen ? '⛶ Exit Fullscreen' : '⛶ Fullscreen';
+        const lang = getCurrentLang();
+        this.fullscreenBtn.textContent = this.isFullscreen ? t(lang, 'btnFullscreenExit') : t(lang, 'btnFullscreenEnter');
     }
 }
 
@@ -247,6 +427,9 @@ let game;
 // Initialize game when page loads
 window.addEventListener('load', function () {
     game = new RevealBoardGame();
+
+    // Initial language apply
+    applyI18n(getCurrentLang());
 });
 
 // Global functions for HTML onclick handlers
@@ -256,6 +439,14 @@ function createBoard() {
 
 function resetBoard() {
     game.resetBoard();
+}
+
+function nextImage() {
+    game.nextImage();
+}
+
+function toggleFullscreen() {
+    game.toggleFullscreen();
 }
 
 function nextImage() {

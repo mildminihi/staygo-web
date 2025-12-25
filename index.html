@@ -4,62 +4,214 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>STAYGO</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Kanit:wght@700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="./assets/site.css" />
     <script defer src="./assets/config.js"></script>
     <script defer src="./assets/site.js"></script>
   </head>
   <body>
-    <div class="container">
-      <main>
-        <details class="corner-menu">
-          <summary class="corner-nav" aria-label="เลือกเกม" title="เลือกเกม">เลือกเกม</summary>
-          <div class="corner-menu-panel" role="menu" aria-label="รายการเกม">
-            <a class="corner-menu-link" role="menuitem" href="./games/reveal-board/">เปิดแผ่นป้ายทายภาพ</a>
-          </div>
-        </details>
-
-        <nav class="corner-social" aria-label="ช่องทางการติดต่อ">
-          <a class="corner-social-link" href="https://facebook.com/STAYG0" target="_blank" rel="noopener noreferrer" aria-label="Facebook">Facebook</a>
-          <a class="corner-social-link" href="https://instagram.com/stay._.go" target="_blank" rel="noopener noreferrer" aria-label="Instagram">Instagram</a>
-          <a class="corner-social-link" href="https://tiktok.com/@staygo_official" target="_blank" rel="noopener noreferrer" aria-label="TikTok">TikTok</a>
-          <a class="corner-social-link" href="https://twitch.tv/staygogamming" target="_blank" rel="noopener noreferrer" aria-label="Twitch">Twitch</a>
-        </nav>
-
-        <div class="top-logo">
-          <a href="https://www.youtube.com/@STAYGO" target="_blank" rel="noopener noreferrer">
-            <img src="./games/reveal-board/staygo-logo.png" alt="Staygo" />
+    <header class="header">
+      <div class="container">
+        <div class="header-content">
+          <a href="/" class="logo-link">
+            <img src="./games/reveal-board/staygo-logo.png" alt="Staygo" class="logo" />
           </a>
+          
+          <nav class="nav" aria-label="เมนูหลัก">
+            <a href="#play" class="nav-link active">Play</a>
+            <a href="#tools" class="nav-link">Tools</a>
+            <a href="#watch" class="nav-link">Watch & Play</a>
+            <a href="#about" class="nav-link">About</a>
+          </nav>
+
+          <div class="header-actions">
+            <a href="https://www.youtube.com/@STAYGO" target="_blank" rel="noopener noreferrer" class="icon-button" aria-label="YouTube">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
+                <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+              </svg>
+            </a>
+            <button class="icon-button" aria-label="เมนู">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            </button>
+          </div>
         </div>
+      </div>
+    </header>
 
-        <section class="hero">
-          <p class="muted">ช่องรวมความบันเทิงของกลุ่มเพื่อน ฝากกดไลค์ กดติดตามด้วยนะครับ</p>
-        </section>
+    <main>
+      <section class="hero" id="play">
+        <div class="container">
+          <div class="hero-content">
+            <div class="hero-text">
+              <h1 class="hero-title">เล่นเกม Staygo ได้ทันที</h1>
+              <p class="hero-subtitle">เกมปาร์ตี้ & เครื่องมือช่วยเล่น</p>
+              
+              <div class="hero-actions">
+                <button class="button button-primary button-lg">▶ เล่นเกม</button>
+                <button class="button button-secondary button-lg">👥 โหมดโฮสต์</button>
+              </div>
+            </div>
+            
+            <div class="hero-illustration">
+              <svg viewBox="0 0 600 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="50" y="80" width="500" height="280" rx="20" fill="#F3F4F6"/>
+                <circle cx="200" cy="150" r="40" fill="#E5E7EB"/>
+                <circle cx="300" cy="150" r="40" fill="#E5E7EB"/>
+                <circle cx="400" cy="150" r="40" fill="#E5E7EB"/>
+                <rect x="100" y="220" width="140" height="100" rx="10" fill="#DBEAFE"/>
+                <rect x="260" y="220" width="140" height="100" rx="10" fill="#FEF3C7"/>
+                <rect x="420" y="220" width="80" height="80" rx="10" fill="#FECACA"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </section>
 
-        <section class="card">
-          <h2 style="margin:0 0 8px 0">คลิปล่าสุดสดๆร้อนๆ</h2>
-          <div class="embed" data-latest-youtube></div>
-        </section>
-
-        <section class="card">
-          <h2 style="margin:0 0 8px 0">คลิปทั้งหมด</h2>
-
-          <div class="video-tools">
-            <input
-              class="search"
-              type="search"
-              inputmode="search"
-              placeholder="ค้นหาชื่อคลิป…"
-              aria-label="ค้นหาชื่อคลิป"
-              data-video-search
-            />
-            <div class="muted" data-video-search-status></div>
+      <section class="section" id="games">
+        <div class="container">
+          <div class="section-header">
+            <h2 class="section-title">Featured Games</h2>
+            <a href="#all-games" class="link-more">ดูทั้งหมด →</a>
           </div>
 
-          <div class="video-browser" data-video-browser></div>
-        </section>
+          <div class="game-grid">
+            <article class="game-card">
+              <div class="game-thumbnail">
+                <svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect width="200" height="160" fill="#F3F4F6"/>
+                  <circle cx="100" cy="80" r="40" fill="#D1D5DB"/>
+                  <text x="100" y="90" text-anchor="middle" font-size="40" fill="#9CA3AF">?</text>
+                </svg>
+              </div>
+              <div class="game-info">
+                <h3 class="game-title">Guess the Picture</h3>
+                <p class="game-meta">4–20 Players</p>
+                <div class="game-actions">
+                  <a href="./games/reveal-board/" class="button button-primary button-md">เล่นเกม</a>
+                </div>
+              </div>
+            </article>
 
-        <div class="footer">© STAYGO</div>
-      </main>
-    </div>
+            <article class="game-card">
+              <div class="game-thumbnail">
+                <svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect width="200" height="160" fill="#F3F4F6"/>
+                  <rect x="50" y="50" width="40" height="60" rx="5" fill="#3B82F6"/>
+                  <rect x="110" y="50" width="40" height="60" rx="5" fill="#FACC15"/>
+                  <text x="70" y="85" text-anchor="middle" font-size="24" fill="white">?</text>
+                  <text x="130" y="85" text-anchor="middle" font-size="24" fill="#7C5E00">?</text>
+                </svg>
+              </div>
+              <div class="game-info">
+                <h3 class="game-title">Cardloop</h3>
+                <p class="game-meta">Party Game</p>
+                <div class="game-actions">
+                  <button class="button button-primary button-md">เล่นเกม</button>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-light" id="tools">
+        <div class="container">
+          <h2 class="section-title">Quick Tools</h2>
+          
+          <div class="tools-grid">
+            <button class="tool-button">
+              <div class="tool-icon">🎲</div>
+              <span class="tool-label">ทอยลูกเต๋า</span>
+            </button>
+            
+            <button class="tool-button">
+              <div class="tool-icon">⏱️</div>
+              <span class="tool-label">จับเวลา</span>
+            </button>
+            
+            <button class="tool-button">
+              <div class="tool-icon">💡</div>
+              <span class="tool-label">สุ่มทีม</span>
+            </button>
+            
+            <button class="tool-button">
+              <div class="tool-icon">📊</div>
+              <span class="tool-label">นับคะแนน</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="watch">
+        <div class="container">
+          <h2 class="section-title">Watch & Play</h2>
+          
+          <div class="watch-hero">
+            <div class="watch-illustration">
+              <svg viewBox="0 0 400 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="20" y="20" width="360" height="200" rx="16" fill="#F3F4F6"/>
+                <rect x="40" y="40" width="160" height="160" rx="8" fill="#DBEAFE"/>
+                <circle cx="120" cy="90" r="25" fill="#3B82F6"/>
+                <rect x="220" y="40" width="140" height="70" rx="8" fill="#FEF3C7"/>
+                <rect x="220" y="130" width="140" height="70" rx="8" fill="#FECACA"/>
+              </svg>
+            </div>
+            <div class="watch-content">
+              <p class="watch-description">ช่องรวมความบันเทิงของกลุ่มเพื่อน ฝากกดไลค์ กดติดตามด้วยนะครับ</p>
+              <button class="button button-primary button-lg">▶ เล่นเกมที่ใช้ในคลิปนี้</button>
+            </div>
+          </div>
+
+          <div class="video-section">
+            <h3 class="video-section-title">คลิปล่าสุดสดๆร้อนๆ</h3>
+            <div class="embed" data-latest-youtube></div>
+          </div>
+
+          <div class="video-section">
+            <h3 class="video-section-title">คลิปทั้งหมด</h3>
+            
+            <div class="video-tools">
+              <input
+                class="search"
+                type="search"
+                inputmode="search"
+                placeholder="ค้นหาชื่อคลิป…"
+                aria-label="ค้นหาชื่อคลิป"
+                data-video-search
+              />
+              <div class="muted" data-video-search-status></div>
+            </div>
+
+            <div class="video-browser" data-video-browser></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-logo">
+            <img src="./games/reveal-board/staygo-logo.png" alt="Staygo" />
+          </div>
+          
+          <nav class="footer-links">
+            <a href="https://facebook.com/STAYG0" target="_blank" rel="noopener noreferrer">Facebook</a>
+            <a href="https://instagram.com/stay._.go" target="_blank" rel="noopener noreferrer">Instagram</a>
+            <a href="https://tiktok.com/@staygo_official" target="_blank" rel="noopener noreferrer">TikTok</a>
+            <a href="https://twitch.tv/staygogamming" target="_blank" rel="noopener noreferrer">Twitch</a>
+          </nav>
+          
+          <p class="footer-copy">© STAYGO 2025</p>
+        </div>
+      </div>
+    </footer>
   </body>
 </html>

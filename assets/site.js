@@ -363,4 +363,59 @@ async function loadYouTubePlaylistsAndVideos() {
 document.addEventListener("DOMContentLoaded", () => {
   renderLatestVideo();
   loadYouTubePlaylistsAndVideos();
+  initScrollSpy();
 });
+
+// Scroll spy for navigation highlighting
+function initScrollSpy() {
+  const navLinks = document.querySelectorAll('.nav-link');
+  const sections = document.querySelectorAll('section[id]');
+  
+  if (!navLinks.length || !sections.length) return;
+
+  function updateActiveNav() {
+    const scrollPos = window.scrollY + 100; // offset for header height
+
+    sections.forEach(section => {
+      const sectionTop = section.offsetTop;
+      const sectionHeight = section.offsetHeight;
+      const sectionId = section.getAttribute('id');
+      
+      if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
+        navLinks.forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === `#${sectionId}`) {
+            link.classList.add('active');
+          }
+        });
+      }
+    });
+  }
+
+  // Update on scroll
+  window.addEventListener('scroll', updateActiveNav, { passive: true });
+  
+  // Update on load
+  updateActiveNav();
+  
+  // Smooth scroll for anchor links
+  navLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      const href = link.getAttribute('href');
+      if (href && href.startsWith('#')) {
+        e.preventDefault();
+        const targetId = href.substring(1);
+        const targetSection = document.getElementById(targetId);
+        if (targetSection) {
+          const headerHeight = document.querySelector('.header')?.offsetHeight || 64;
+          const targetPosition = targetSection.offsetTop - headerHeight;
+          window.scrollTo({
+            top: targetPosition,
+            behavior: 'smooth'
+          });
+        }
+      }
+    });
+  });
+}
+

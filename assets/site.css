@@ -1470,3 +1470,423 @@ h3 {
     width: 100%;
   }
 }
+
+/* ===== Timer Styles ===== */
+
+/* Timer Header */
+.timer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.timer-header-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+/* Timer Mode Tabs */
+.timer-mode-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 32px;
+  justify-content: center;
+}
+
+.timer-mode-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 20px 40px;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-muted);
+  min-width: 160px;
+}
+
+.timer-mode-tab span:first-child {
+  font-size: 32px;
+}
+
+.timer-mode-tab:hover {
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.timer-mode-tab.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--text-inverse);
+}
+
+/* Timer Display */
+.timer-display-container {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 60px 40px;
+  margin-bottom: 32px;
+  box-shadow: var(--shadow-md);
+  text-align: center;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.timer-display {
+  font-family: 'Kanit', sans-serif;
+  font-size: 120px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--text);
+  letter-spacing: 0.05em;
+}
+
+.timer-milliseconds {
+  font-family: 'Kanit', sans-serif;
+  font-size: 48px;
+  font-weight: 700;
+  color: var(--text-muted);
+  align-self: flex-end;
+  padding-bottom: 12px;
+}
+
+/* Timer Warning Animation */
+.timer-display-container.timer-warning {
+  animation: timerPulse 1s ease-in-out infinite;
+}
+
+@keyframes timerPulse {
+  0%, 100% {
+    background: var(--surface);
+  }
+  50% {
+    background: #FEF3C7;
+  }
+}
+
+/* Timer Finished Animation */
+.timer-display-container.timer-finished {
+  animation: timerFlash 0.5s ease-in-out 3;
+  background: var(--success);
+}
+
+.timer-display-container.timer-finished .timer-display {
+  color: var(--text-inverse);
+}
+
+@keyframes timerFlash {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Timer Mode Panels */
+.timer-mode-panel {
+  display: none;
+}
+
+.timer-mode-panel.active {
+  display: block;
+}
+
+/* Timer Presets */
+.timer-presets {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.timer-preset-btn {
+  padding: 12px 24px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.timer-preset-btn:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--text-inverse);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Timer Input Group */
+.timer-input-group {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 32px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.timer-input-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 120px;
+}
+
+.timer-input-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  text-align: center;
+}
+
+.timer-input-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.timer-input-btn {
+  width: 40px;
+  height: 48px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.timer-input-btn:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--text-inverse);
+}
+
+.timer-input {
+  width: 70px;
+  height: 48px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 24px;
+  font-weight: 700;
+  font-family: 'Kanit', sans-serif;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.timer-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+/* Timer Controls */
+.timer-controls {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 32px;
+}
+
+.timer-controls .button {
+  min-width: 140px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+}
+
+.timer-btn-icon {
+  font-size: 20px;
+}
+
+/* Timer Lap Section */
+.timer-lap-section {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  box-shadow: var(--shadow-sm);
+}
+
+.timer-section-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 16px 0;
+  color: var(--text);
+}
+
+.timer-lap-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.timer-lap-empty {
+  text-align: center;
+  padding: 40px;
+}
+
+.timer-lap-item {
+  display: grid;
+  grid-template-columns: 80px 1fr 1fr;
+  gap: 16px;
+  padding: 12px 16px;
+  background: var(--surface-2);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  align-items: center;
+}
+
+.timer-lap-number {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.timer-lap-split {
+  font-size: 16px;
+  font-weight: 600;
+  font-family: 'Kanit', sans-serif;
+  color: var(--primary);
+  text-align: center;
+}
+
+.timer-lap-time {
+  font-size: 14px;
+  font-weight: 500;
+  font-family: 'Kanit', sans-serif;
+  color: var(--text-muted);
+  text-align: right;
+}
+
+/* Fullscreen Styles */
+:fullscreen .timer-display-container,
+:-webkit-full-screen .timer-display-container,
+:-moz-full-screen .timer-display-container {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  border-radius: 0;
+}
+
+:fullscreen .timer-display,
+:-webkit-full-screen .timer-display,
+:-moz-full-screen .timer-display {
+  font-size: 200px;
+}
+
+:fullscreen .timer-milliseconds,
+:-webkit-full-screen .timer-milliseconds,
+:-moz-full-screen .timer-milliseconds {
+  font-size: 80px;
+  padding-bottom: 24px;
+}
+
+/* Responsive Timer Styles */
+@media (max-width: 1024px) {
+  .timer-display {
+    font-size: 100px;
+  }
+  
+  .timer-milliseconds {
+    font-size: 40px;
+    padding-bottom: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .timer-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .timer-mode-tabs {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .timer-mode-tab {
+    width: 100%;
+  }
+
+  .timer-display-container {
+    padding: 40px 20px;
+  }
+
+  .timer-display {
+    font-size: 72px;
+  }
+
+  .timer-milliseconds {
+    font-size: 32px;
+    padding-bottom: 8px;
+  }
+
+  .timer-input-group {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .timer-input-field {
+    min-width: auto;
+  }
+
+  .timer-controls {
+    flex-direction: column;
+  }
+
+  .timer-controls .button {
+    width: 100%;
+  }
+
+  .timer-lap-item {
+    grid-template-columns: 60px 1fr 1fr;
+    gap: 8px;
+    font-size: 14px;
+  }
+
+  .timer-lap-section {
+    padding: 24px;
+  }
+
+  :fullscreen .timer-display,
+  :-webkit-full-screen .timer-display,
+  :-moz-full-screen .timer-display {
+    font-size: 120px;
+  }
+
+  :fullscreen .timer-milliseconds,
+  :-webkit-full-screen .timer-milliseconds,
+  :-moz-full-screen .timer-milliseconds {
+    font-size: 48px;
+  }
+}

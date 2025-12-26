@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Kanit:wght@700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../assets/site.css" />
     <style>
         /* Design Tokens */
         :root {
@@ -50,11 +51,17 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
             align-items: center;
             padding: 20px;
         }
 
-        .container {
+        .game-container {
             background: var(--surface);
             border-radius: var(--radius-lg);
             padding: 40px;
@@ -411,16 +418,44 @@
 </head>
 
 <body>
-    <div class="container">
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="/" class="logo-link">
+                    <img src="staygo-logo.png" alt="Staygo" class="logo" />
+                </a>
+                
+                <nav class="nav" aria-label="เมนูหลัก">
+                    <a href="/#play" class="nav-link">Play</a>
+                    <a href="/#tools" class="nav-link">Tools</a>
+                    <a href="/#watch" class="nav-link">Watch & Play</a>
+                    <a href="/#about" class="nav-link">About</a>
+                </nav>
+
+                <div class="header-actions">
+                    <a href="https://www.youtube.com/@STAYGO" target="_blank" rel="noopener noreferrer" class="icon-button" aria-label="YouTube">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
+                            <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+                        </svg>
+                    </a>
+                    <button class="icon-button" aria-label="เมนู">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="3" y1="12" x2="21" y2="12"></line>
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <line x1="3" y1="18" x2="21" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+    <div class="game-container">
         <div class="lang-toggle" role="group" aria-label="Language">
             <button type="button" class="lang-btn" data-lang="th" aria-label="ภาษาไทย">ไทย</button>
             <button type="button" class="lang-btn" data-lang="en" aria-label="English">EN</button>
-        </div>
-
-        <div style="display: flex; justify-content: center; margin-bottom: 20px;">
-            <a href="https://www.youtube.com/@STAYGO" target="_blank" rel="noopener noreferrer">
-                <img src="staygo-logo.png" alt="StayGo Logo" style="width: 220px; max-width: 60vw; height: auto;">
-            </a>
         </div>
         <h1 data-i18n="title">เปิดแผ่นป้าย</h1>
         <p class="game-subtitle" data-i18n="subtitle">อัปโหลดรูป แล้วกด สร้างกระดาน เพื่อเริ่มเล่น</p>
@@ -483,6 +518,7 @@
 
         <div class="game-rules" id="rules" data-i18n-html="rules"></div>
     </div>
+    </main>
 
     <script src="reveal-board.js"></script>
 </body>

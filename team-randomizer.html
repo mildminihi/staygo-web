@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>สุ่มทีม - STAYGO</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Kanit:wght@700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./assets/site.css" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="container">
+        <div class="header-content">
+          <a href="/" class="logo-link">
+            <img src="./games/reveal-board/staygo-logo.png" alt="Staygo" class="logo" />
+          </a>
+          
+          <nav class="nav" aria-label="เมนูหลัก">
+            <a href="/#play" class="nav-link">Play</a>
+            <a href="/#tools" class="nav-link active">Tools</a>
+            <a href="/#watch" class="nav-link">Watch & Play</a>
+            <a href="/#about" class="nav-link">About</a>
+          </nav>
+
+          <div class="header-actions">
+            <a href="https://www.youtube.com/@STAYGO" target="_blank" rel="noopener noreferrer" class="icon-button" aria-label="YouTube">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
+                <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+              </svg>
+            </a>
+            <button class="icon-button" aria-label="เมนู">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="section">
+        <div class="container">
+          <div class="team-header">
+            <h1 class="section-title">💡 สุ่มทีม</h1>
+            <a href="/#tools" class="button button-ghost button-sm">← กลับ</a>
+          </div>
+
+          <div class="team-container">
+            <div class="team-input-panel">
+              <div class="team-input-section">
+                <label class="team-label">รายชื่อสมาชิก (คนละบรรทัด)</label>
+                <textarea 
+                  id="memberInput" 
+                  class="team-textarea" 
+                  placeholder="กรอกชื่อสมาชิกคนละบรรทัด&#10;เช่น&#10;แดง&#10;เขียว&#10;น้ำเงิน&#10;เหลือง"
+                  rows="10"
+                ></textarea>
+              </div>
+
+              <div class="team-mode-section">
+                <label class="team-label">วิธีการแบ่งทีม</label>
+                <div class="team-mode-options">
+                  <label class="team-mode-option">
+                    <input type="radio" name="mode" value="teams" checked />
+                    <span>จำนวนทีม</span>
+                  </label>
+                  <label class="team-mode-option">
+                    <input type="radio" name="mode" value="members" />
+                    <span>คนต่อทีม</span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="team-number-section">
+                <label class="team-label" id="numberLabel">จำนวนทีม</label>
+                <input 
+                  type="number" 
+                  id="numberInput" 
+                  class="team-number-input" 
+                  value="2" 
+                  min="2" 
+                  max="20"
+                />
+              </div>
+
+              <div class="team-warning" id="warningMessage"></div>
+
+              <div class="team-actions">
+                <button id="randomizeBtn" class="button button-primary button-lg">🎲 สุ่มทีม</button>
+                <button id="resetBtn" class="button button-outline button-lg">♻️ รีเซ็ต</button>
+              </div>
+            </div>
+
+            <div class="team-results-panel">
+              <div id="resultsContainer" class="team-results-empty">
+                <div class="empty-state">
+                  <div class="empty-icon">💡</div>
+                  <p class="empty-text">กรอกรายชื่อและกดสุ่มทีมเพื่อเริ่มต้น</p>
+                </div>
+              </div>
+
+              <div id="reshuffleContainer" class="team-reshuffle-container" style="display: none;">
+                <button id="reshuffleBtn" class="button button-secondary button-md">🔄 สุ่มใหม่ (รายชื่อเดิม)</button>
+                <button id="createScoreboardBtn" class="button button-primary button-md" onclick="exportToScoreboard()">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 8px;">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="12" y1="18" x2="12" y2="12"></line>
+                    <line x1="9" y1="15" x2="15" y2="15"></line>
+                  </svg>
+                  สร้างตารางคะแนน
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-logo">
+            <img src="./games/reveal-board/staygo-logo.png" alt="Staygo" />
+          </div>
+          
+          <nav class="footer-links">
+            <a href="https://facebook.com/STAYG0" target="_blank" rel="noopener noreferrer">Facebook</a>
+            <a href="https://instagram.com/staygo.official" target="_blank" rel="noopener noreferrer">Instagram</a>
+            <a href="https://tiktok.com/@staygo.official" target="_blank" rel="noopener noreferrer">TikTok</a>
+            <a href="https://twitch.tv/staygogamming" target="_blank" rel="noopener noreferrer">Twitch</a>
+          </nav>
+          
+          <p class="footer-copy">© STAYGO 2025</p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      class TeamRandomizer {
+        constructor() {
+          this.members = [];
+          this.teams = [];
+          this.mode = 'teams';
+          this.number = 2;
+          this.init();
+        }
+
+        init() {
+          // Get elements
+          this.memberInput = document.getElementById('memberInput');
+          this.numberInput = document.getElementById('numberInput');
+          this.numberLabel = document.getElementById('numberLabel');
+          this.warningMessage = document.getElementById('warningMessage');
+          this.resultsContainer = document.getElementById('resultsContainer');
+          this.reshuffleContainer = document.getElementById('reshuffleContainer');
+          this.randomizeBtn = document.getElementById('randomizeBtn');
+          this.resetBtn = document.getElementById('resetBtn');
+          this.reshuffleBtn = document.getElementById('reshuffleBtn');
+
+          // Event listeners
+          document.querySelectorAll('input[name="mode"]').forEach(radio => {
+            radio.addEventListener('change', (e) => this.handleModeChange(e));
+          });
+
+          this.randomizeBtn.addEventListener('click', () => this.randomizeTeams());
+          this.resetBtn.addEventListener('click', () => this.reset());
+          this.reshuffleBtn.addEventListener('click', () => this.reshuffle());
+          this.numberInput.addEventListener('input', () => this.updateWarning());
+          this.memberInput.addEventListener('input', () => this.updateWarning());
+        }
+
+        handleModeChange(e) {
+          this.mode = e.target.value;
+          if (this.mode === 'teams') {
+            this.numberLabel.textContent = 'จำนวนทีม';
+          } else {
+            this.numberLabel.textContent = 'คนต่อทีม';
+          }
+          this.updateWarning();
+        }
+
+        getMembers() {
+          const text = this.memberInput.value.trim();
+          if (!text) return [];
+          
+          // Split by newline and filter out empty lines
+          return text.split('\n')
+            .map(name => name.trim())
+            .filter(name => name.length > 0);
+        }
+
+        updateWarning() {
+          const members = this.getMembers();
+          const count = members.length;
+          const number = parseInt(this.numberInput.value) || 2;
+
+          this.warningMessage.textContent = '';
+          this.warningMessage.style.display = 'none';
+
+          if (count < 2) {
+            return;
+          }
+
+          if (this.mode === 'teams') {
+            // Check if members can be divided evenly into teams
+            if (count % number !== 0) {
+              this.warningMessage.textContent = `⚠️ จำนวนสมาชิก ${count} คน หารด้วย ${number} ทีมไม่ลงตัว บางทีมอาจมีจำนวนคนไม่เท่ากัน`;
+              this.warningMessage.style.display = 'block';
+            }
+          } else {
+            // Check if members can be divided evenly by members per team
+            if (count % number !== 0) {
+              const teams = Math.ceil(count / number);
+              this.warningMessage.textContent = `⚠️ จำนวนสมาชิก ${count} คน หารด้วย ${number} คนต่อทีมไม่ลงตัว จะได้ ${teams} ทีม และบางทีมอาจมีจำนวนคนไม่เท่ากัน`;
+              this.warningMessage.style.display = 'block';
+            }
+          }
+        }
+
+        randomizeTeams() {
+          this.members = this.getMembers();
+          const count = this.members.length;
+          this.number = parseInt(this.numberInput.value) || 2;
+
+          // Validation
+          if (count < 2) {
+            alert('กรุณากรอกรายชื่อสมาชิกอย่างน้อย 2 คน');
+            return;
+          }
+
+          if (this.mode === 'teams' && this.number > count) {
+            alert(`จำนวนทีม (${this.number}) มากกว่าจำนวนสมาชิก (${count})`);
+            return;
+          }
+
+          if (this.mode === 'members' && this.number > count) {
+            alert(`จำนวนคนต่อทีม (${this.number}) มากกว่าจำนวนสมาชิกทั้งหมด (${count})`);
+            return;
+          }
+
+          // Shuffle and divide
+          this.divideTeams();
+          this.renderTeams();
+          this.reshuffleContainer.style.display = 'block';
+        }
+
+        divideTeams() {
+          // Shuffle members
+          const shuffled = [...this.members].sort(() => Math.random() - 0.5);
+          
+          let numTeams, membersPerTeam;
+          
+          if (this.mode === 'teams') {
+            numTeams = this.number;
+            membersPerTeam = Math.ceil(shuffled.length / numTeams);
+          } else {
+            membersPerTeam = this.number;
+            numTeams = Math.ceil(shuffled.length / membersPerTeam);
+          }
+
+          // Divide into teams
+          this.teams = [];
+          for (let i = 0; i < numTeams; i++) {
+            const start = i * membersPerTeam;
+            const end = start + membersPerTeam;
+            const teamMembers = shuffled.slice(start, end);
+            
+            if (teamMembers.length > 0) {
+              this.teams.push({
+                members: teamMembers,
+                color: this.generateRandomColor()
+              });
+            }
+          }
+        }
+
+        generateRandomColor() {
+          // Generate random pastel colors for better contrast
+          const hue = Math.floor(Math.random() * 360);
+          const saturation = 65 + Math.floor(Math.random() * 20); // 65-85%
+          const lightness = 55 + Math.floor(Math.random() * 15); // 55-70%
+          return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+        }
+
+        getColorName(hslColor) {
+          // Extract hue from HSL
+          const hue = parseInt(hslColor.match(/\d+/)[0]);
+          
+          // Map hue to Thai color names
+          if (hue < 30) return 'แดง';
+          if (hue < 60) return 'ส้ม';
+          if (hue < 90) return 'เหลือง';
+          if (hue < 150) return 'เขียว';
+          if (hue < 210) return 'ฟ้า';
+          if (hue < 270) return 'น้ำเงิน';
+          if (hue < 330) return 'ม่วง';
+          return 'ชมพู';
+        }
+
+        renderTeams() {
+          if (this.teams.length === 0) {
+            this.resultsContainer.innerHTML = `
+              <div class="empty-state">
+                <div class="empty-icon">💡</div>
+                <p class="empty-text">กรอกรายชื่อและกดสุ่มทีมเพื่อเริ่มต้น</p>
+              </div>
+            `;
+            this.resultsContainer.className = 'team-results-empty';
+            return;
+          }
+
+          this.resultsContainer.className = 'team-results-grid';
+          this.resultsContainer.innerHTML = this.teams.map((team, index) => {
+            const colorName = this.getColorName(team.color);
+            return `
+              <div class="team-card" style="border-color: ${team.color};">
+                <div class="team-card-header" style="background-color: ${team.color};">
+                  <h3 class="team-card-title">ทีมสี${colorName}</h3>
+                  <span class="team-card-count">${team.members.length} คน</span>
+                </div>
+                <div class="team-card-body">
+                  <ul class="team-member-list">
+                    ${team.members.map(member => `
+                      <li class="team-member-item">
+                        <span class="team-member-dot" style="background-color: ${team.color};"></span>
+                        <span class="team-member-name">${member}</span>
+                      </li>
+                    `).join('')}
+                  </ul>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+
+        reshuffle() {
+          if (this.members.length < 2) return;
+          this.divideTeams();
+          this.renderTeams();
+        }
+
+        reset() {
+          this.memberInput.value = '';
+          this.numberInput.value = '2';
+          this.members = [];
+          this.teams = [];
+          this.warningMessage.textContent = '';
+          this.warningMessage.style.display = 'none';
+          this.renderTeams();
+          this.reshuffleContainer.style.display = 'none';
+        }
+
+        exportToScoreboard() {
+          const teamData = this.teams.map((team, index) => ({
+            name: `ทีม ${index + 1}`,
+            members: team.members,
+            color: team.color
+          }));
+          
+          localStorage.setItem('scoreboardTeams', JSON.stringify(teamData));
+          window.location.href = './scoreboard.html?fromTeams=true';
+        }
+      }
+
+      // Initialize
+      let randomizer;
+      document.addEventListener('DOMContentLoaded', () => {
+        randomizer = new TeamRandomizer();
+        
+        // Add click handler for create scoreboard button
+        const createScoreboardBtn = document.getElementById('createScoreboardBtn');
+        if (createScoreboardBtn) {
+          createScoreboardBtn.addEventListener('click', () => {
+            randomizer.exportToScoreboard();
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

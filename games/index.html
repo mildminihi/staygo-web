@@ -3,33 +3,125 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>เลือกเกม | STAYGO</title>
+    <title>เกมทั้งหมด - STAYGO</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Kanit:wght@700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="../assets/site.css" />
   </head>
   <body>
-    <div class="container">
-      <main>
-        <div class="top-logo">
-          <a href="https://www.youtube.com/@STAYGO" target="_blank" rel="noopener noreferrer">
-            <img src="../games/reveal-board/staygo-logo.png" alt="Staygo" />
+    <header class="header">
+      <div class="container">
+        <div class="header-content">
+          <a href="/" class="logo-link">
+            <img src="./reveal-board/staygo-logo.png" alt="Staygo" class="logo" />
           </a>
-        </div>
+          
+          <nav class="nav" aria-label="เมนูหลัก">
+            <a href="/#play" class="nav-link active">Play</a>
+            <a href="/#tools" class="nav-link">Tools</a>
+            <a href="/#watch" class="nav-link">Watch & Play</a>
+            <a href="/#about" class="nav-link">About</a>
+          </nav>
 
-        <section class="hero">
-          <h1>เลือกเกม</h1>
-          <p class="muted">เลือกเกมที่อยากเล่น (ในอนาคตจะเพิ่มเกมใหม่เข้ามาเรื่อย ๆ)</p>
-        </section>
-
-        <section class="grid">
-          <div class="card">
-            <h2 style="margin:0 0 8px 0">Reveal Tiles Board</h2>
-            <p class="muted" style="margin:0 0 16px 0">เกมเปิดแผ่นป้ายทายภาพ</p>
-            <a class="button" href="./reveal-board/">เล่นเกมนี้</a>
+          <div class="header-actions">
+            <a href="https://www.youtube.com/@STAYGO" target="_blank" rel="noopener noreferrer" class="icon-button" aria-label="YouTube">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
+                <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+              </svg>
+            </a>
+            <button class="icon-button" aria-label="เมนู">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            </button>
           </div>
-        </section>
+        </div>
+      </div>
+    </header>
 
-        <div class="footer"><a href="../" style="color:inherit">กลับหน้า Home</a></div>
-      </main>
-    </div>
+    <main>
+      <section class="section">
+        <div class="container">
+          <div class="section-header" style="text-align: center; margin-bottom: 48px;">
+            <h1 class="section-title" style="font-size: 40px; margin-bottom: 16px;">🎮 เกมทั้งหมด</h1>
+            <p style="color: var(--text-secondary); font-size: 18px;">เลือกเกมที่อยากเล่น (ในอนาคตจะเพิ่มเกมใหม่เข้ามาเรื่อย ๆ)</p>
+          </div>
+
+          <div class="game-grid">
+            <article class="game-card">
+              <div class="game-thumbnail game-thumbnail-hover">
+                <img src="../assets/image/reveal-cover-1.png" alt="Guess the Picture" class="thumbnail-default" />
+                <img src="../assets/image/reveal-cover-2.png" alt="Guess the Picture" class="thumbnail-hover" />
+              </div>
+              <div class="game-info">
+                <h3 class="game-title">Guess the Picture</h3>
+                <p class="game-meta">4–20 Players • เกมปาร์ตี้</p>
+                <p class="game-description">เปิดแผ่นป้ายทีละช่องเพื่อทายภาพ เหมาะสำหรับเล่นเป็นกลุ่ม</p>
+                <div class="game-actions">
+                  <a href="./reveal-board/" class="button button-primary button-md">เล่นเกม</a>
+                </div>
+              </div>
+            </article>
+
+            <article class="game-card">
+              <div class="game-thumbnail game-thumbnail-hover">
+                <img src="../assets/image/cardloop-cover-1.png" alt="Cardloop" class="thumbnail-default" />
+                <img src="../assets/image/cardloop-cover-2.png" alt="Cardloop" class="thumbnail-hover" />
+              </div>
+              <div class="game-info">
+                <h3 class="game-title">Cardloop</h3>
+                <p class="game-meta">1 Player • เกมไพ่</p>
+                <p class="game-description">ตอบคำถาม 4 ข้อให้ถูกต้องติดต่อกันเพื่อชนะ เกมท้าทายความจำและโชค</p>
+                <div class="game-actions">
+                  <a href="../cardloop.html" class="button button-primary button-md">เล่นเกม</a>
+                </div>
+              </div>
+            </article>
+
+            <!-- Placeholder for future games -->
+            <article class="game-card" style="opacity: 0.6; pointer-events: none;">
+              <div class="game-thumbnail">
+                <svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect width="200" height="160" fill="#F3F4F6"/>
+                  <text x="100" y="80" text-anchor="middle" font-size="48" fill="#9CA3AF">?</text>
+                  <text x="100" y="110" text-anchor="middle" font-size="14" fill="#6B7280">Coming Soon</text>
+                </svg>
+              </div>
+              <div class="game-info">
+                <h3 class="game-title">เกมใหม่</h3>
+                <p class="game-meta">เร็วๆ นี้</p>
+                <p class="game-description">เกมใหม่กำลังจะมาเร็วๆ นี้ ติดตามได้ทางช่อง YouTube</p>
+                <div class="game-actions">
+                  <button class="button button-secondary button-md" disabled>เร็วๆ นี้</button>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-logo">
+            <img src="./reveal-board/staygo-logo.png" alt="Staygo" />
+          </div>
+          
+          <nav class="footer-links">
+            <a href="https://facebook.com/STAYG0" target="_blank" rel="noopener noreferrer">Facebook</a>
+            <a href="https://instagram.com/staygo.official" target="_blank" rel="noopener noreferrer">Instagram</a>
+            <a href="https://tiktok.com/@staygo.official" target="_blank" rel="noopener noreferrer">TikTok</a>
+            <a href="https://twitch.tv/staygogamming" target="_blank" rel="noopener noreferrer">Twitch</a>
+          </nav>
+          
+          <p class="footer-copy">© STAYGO 2025</p>
+        </div>
+      </div>
+    </footer>
   </body>
 </html>

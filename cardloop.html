@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cardloop - STAYGO</title>
+    <link rel="stylesheet" href="./assets/site.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Kanit:wght@700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="/" class="logo-link">
+                    <img src="./games/reveal-board/staygo-logo.png" alt="Staygo" class="logo" />
+                </a>
+                
+                <nav class="nav" aria-label="เมนูหลัก">
+                    <a href="/#play" class="nav-link">Play</a>
+                    <a href="/#tools" class="nav-link active">Tools</a>
+                    <a href="/#watch" class="nav-link">Watch & Play</a>
+                    <a href="/#about" class="nav-link">About</a>
+                </nav>
+
+                <div class="header-actions">
+                    <a href="https://www.youtube.com/@STAYGO" target="_blank" rel="noopener noreferrer" class="icon-button" aria-label="YouTube">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
+                            <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+                        </svg>
+                    </a>
+                    <button class="icon-button" aria-label="เมนู">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="3" y1="12" x2="21" y2="12"></line>
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <line x1="3" y1="18" x2="21" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="section">
+            <div class="container">
+                <div class="team-header">
+                    <h1 class="section-title">🎴 Cardloop</h1>
+                    <p class="team-description">ตอบคำถาม 4 ข้อให้ถูกต้องติดต่อกัน เพื่อชนะเกม!</p>
+                </div>
+
+            <div class="cardloop-game">
+                <!-- Stats -->
+                <div class="cardloop-stats">
+                    <div class="stat-card">
+                        <div class="stat-label">รอบปัจจุบัน</div>
+                        <div class="stat-value" id="currentRound">1</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">คำถามที่</div>
+                        <div class="stat-value" id="currentQuestion">1</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">ชนะแล้ว</div>
+                        <div class="stat-value" id="totalWins">0</div>
+                    </div>
+                </div>
+
+                <!-- Card Display -->
+                <div class="card-display">
+                    <div class="card-slot" id="card1">
+                        <div class="card-back">?</div>
+                    </div>
+                    <div class="card-slot" id="card2">
+                        <div class="card-back">?</div>
+                    </div>
+                    <div class="card-slot" id="card3">
+                        <div class="card-back">?</div>
+                    </div>
+                    <div class="card-slot" id="card4">
+                        <div class="card-back">?</div>
+                    </div>
+                </div>
+
+                <!-- Question Area -->
+                <div class="question-area">
+                    <h2 class="question-text" id="questionText">เริ่มเกมใหม่</h2>
+                    <div class="answer-buttons" id="answerButtons">
+                        <button class="answer-btn start-btn" id="startBtn">เริ่มเกม</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    </main>
+
+    <!-- Win Modal -->
+    <div class="modal-overlay" id="winModal">
+        <div class="modal-content win-modal">
+            <h2 class="modal-title">🎉 ยินดีด้วย!</h2>
+            <p class="modal-text">คุณตอบถูกทั้ง 4 ข้อติดต่อกัน!</p>
+            <p class="modal-rounds">ใช้ทั้งหมด <span id="winRounds"></span> รอบ</p>
+            <button class="modal-btn" id="playAgainBtn">เล่นอีกครั้ง</button>
+        </div>
+    </div>
+
+    <!-- Wrong Answer Modal -->
+    <div class="modal-overlay" id="wrongModal">
+        <div class="modal-content wrong-modal">
+            <h2 class="modal-title">❌ ผิด!</h2>
+            <p class="modal-text">เริ่มใหม่จากคำถามที่ 1</p>
+            <button class="modal-btn wrong-btn" id="continueBtn">เริ่มใหม่</button>
+        </div>
+    </div>
+
+    <script>
+        class CardloopGame {
+            constructor() {
+                this.deck = [];
+                this.currentCard = null;
+                this.previousCard = null;
+                this.secondCard = null;
+                this.question = 0; // 0 = not started, 1-4 = questions
+                this.round = 1;
+                this.totalWins = 0;
+                this.cards = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+                this.suits = ['♠', '♣', '♥', '♦'];
+                this.redSuits = ['♥', '♦'];
+                this.blackSuits = ['♠', '♣'];
+                
+                this.init();
+            }
+
+            init() {
+                this.createDeck();
+                this.attachEventListeners();
+                this.updateStats();
+            }
+
+            createDeck() {
+                this.deck = [];
+                for (let suit of this.suits) {
+                    for (let card of this.cards) {
+                        this.deck.push({ card, suit });
+                    }
+                }
+                this.shuffleDeck();
+            }
+
+            shuffleDeck() {
+                for (let i = this.deck.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [this.deck[i], this.deck[j]] = [this.deck[j], this.deck[i]];
+                }
+            }
+
+            getCardValue(card) {
+                const values = {
+                    'A': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7,
+                    '8': 8, '9': 9, '10': 10, 'J': 11, 'Q': 12, 'K': 13
+                };
+                return values[card];
+            }
+
+            drawCard() {
+                if (this.deck.length === 0) {
+                    this.createDeck();
+                }
+                return this.deck.pop();
+            }
+
+            startGame() {
+                this.question = 1;
+                this.currentCard = null;
+                this.previousCard = null;
+                this.secondCard = null;
+                this.clearCards();
+                this.showQuestion();
+            }
+
+            clearCards() {
+                for (let i = 1; i <= 4; i++) {
+                    const cardSlot = document.getElementById(`card${i}`);
+                    cardSlot.innerHTML = '<div class="card-back">?</div>';
+                    cardSlot.classList.remove('revealed');
+                }
+            }
+
+            showQuestion() {
+                this.updateStats();
+                const questionText = document.getElementById('questionText');
+                const answerButtons = document.getElementById('answerButtons');
+
+                switch(this.question) {
+                    case 1:
+                        questionText.textContent = 'คำถามที่ 1: ไพ่จะเป็นสีแดงหรือสีดำ?';
+                        answerButtons.innerHTML = `
+                            <button class="answer-btn red-btn" data-answer="red">แดง ♥ ♦</button>
+                            <button class="answer-btn black-btn" data-answer="black">ดำ ♠ ♣</button>
+                        `;
+                        break;
+                    case 2:
+                        questionText.textContent = 'คำถามที่ 2: ไพ่ใบต่อไปจะสูงกว่าหรือต่ำกว่า?';
+                        answerButtons.innerHTML = `
+                            <button class="answer-btn higher-btn" data-answer="higher">สูงกว่า ↑</button>
+                            <button class="answer-btn lower-btn" data-answer="lower">ต่ำกว่า ↓</button>
+                        `;
+                        break;
+                    case 3:
+                        questionText.textContent = 'คำถามที่ 3: ไพ่ใบต่อไปจะอยู่ในช่วงหรือนอกช่วง?';
+                        answerButtons.innerHTML = `
+                            <button class="answer-btn inside-btn" data-answer="inside">ในช่วง</button>
+                            <button class="answer-btn outside-btn" data-answer="outside">นอกช่วง</button>
+                        `;
+                        break;
+                    case 4:
+                        questionText.textContent = 'คำถามที่ 4: ไพ่ใบต่อไปจะเป็นหน้าไหน?';
+                        answerButtons.innerHTML = `
+                            <button class="answer-btn suit-btn" data-answer="♠">♠</button>
+                            <button class="answer-btn suit-btn" data-answer="♣">♣</button>
+                            <button class="answer-btn suit-btn suit-red" data-answer="♥">♥</button>
+                            <button class="answer-btn suit-btn suit-red" data-answer="♦">♦</button>
+                        `;
+                        break;
+                }
+
+                this.attachAnswerListeners();
+            }
+
+            attachEventListeners() {
+                document.getElementById('startBtn').addEventListener('click', () => this.startGame());
+                document.getElementById('playAgainBtn').addEventListener('click', () => this.playAgain());
+                document.getElementById('continueBtn').addEventListener('click', () => this.closeWrongModal());
+            }
+
+            attachAnswerListeners() {
+                const buttons = document.querySelectorAll('.answer-btn');
+                buttons.forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const answer = e.target.dataset.answer;
+                        this.handleAnswer(answer);
+                    });
+                });
+            }
+
+            handleAnswer(answer) {
+                this.currentCard = this.drawCard();
+                
+                if (this.checkAnswer(answer, this.currentCard)) {
+                    // Correct answer
+                    this.revealCard(this.currentCard, this.question);
+                    
+                    if (this.question === 4) {
+                        // Win!
+                        setTimeout(() => this.showWinModal(), 800);
+                    } else {
+                        // Next question
+                        if (this.question === 1) {
+                            this.previousCard = this.currentCard;
+                        } else if (this.question === 2) {
+                            this.secondCard = this.currentCard;
+                        }
+                        
+                        this.question++;
+                        setTimeout(() => this.showQuestion(), 800);
+                    }
+                } else {
+                    // Wrong answer - restart
+                    this.revealCard(this.currentCard, this.question);
+                    setTimeout(() => {
+                        this.showWrongModal();
+                    }, 800);
+                }
+            }
+
+            checkAnswer(answer, card) {
+                const isRed = this.redSuits.includes(card.suit);
+                const cardValue = this.getCardValue(card.card);
+
+                switch(this.question) {
+                    case 1:
+                        return (answer === 'red' && isRed) || (answer === 'black' && !isRed);
+                    
+                    case 2:
+                        const prevValue = this.getCardValue(this.previousCard.card);
+                        if (answer === 'higher') {
+                            return cardValue > prevValue;
+                        } else {
+                            return cardValue < prevValue;
+                        }
+                    
+                    case 3:
+                        const val1 = this.getCardValue(this.previousCard.card);
+                        const val2 = this.getCardValue(this.secondCard.card);
+                        const min = Math.min(val1, val2);
+                        const max = Math.max(val1, val2);
+                        
+                        if (answer === 'inside') {
+                            return cardValue >= min && cardValue <= max;
+                        } else {
+                            return cardValue < min || cardValue > max;
+                        }
+                    
+                    case 4:
+                        return card.suit === answer;
+                    
+                    default:
+                        return false;
+                }
+            }
+
+            revealCard(card, position) {
+                const cardSlot = document.getElementById(`card${position}`);
+                const isRed = this.redSuits.includes(card.suit);
+                const colorClass = isRed ? 'red' : 'black';
+                
+                cardSlot.innerHTML = `
+                    <div class="card-front ${colorClass}">
+                        <div class="card-value">${card.card}</div>
+                        <div class="card-suit">${card.suit}</div>
+                    </div>
+                `;
+                cardSlot.classList.add('revealed');
+            }
+
+            showWinModal() {
+                this.totalWins++;
+                document.getElementById('winRounds').textContent = this.round;
+                document.getElementById('winModal').classList.add('active');
+            }
+
+            showWrongModal() {
+                document.getElementById('wrongModal').classList.add('active');
+            }
+
+            closeWrongModal() {
+                document.getElementById('wrongModal').classList.remove('active');
+                this.round++;
+                this.startGame();
+            }
+
+            playAgain() {
+                document.getElementById('winModal').classList.remove('active');
+                this.round = 1;
+                this.updateStats();
+                this.question = 0;
+                this.clearCards();
+                
+                const questionText = document.getElementById('questionText');
+                const answerButtons = document.getElementById('answerButtons');
+                questionText.textContent = 'เริ่มเกมใหม่';
+                answerButtons.innerHTML = '<button class="answer-btn start-btn" id="startBtn">เริ่มเกม</button>';
+                
+                document.getElementById('startBtn').addEventListener('click', () => this.startGame());
+            }
+
+            updateStats() {
+                document.getElementById('currentRound').textContent = this.round;
+                document.getElementById('currentQuestion').textContent = this.question || '-';
+                document.getElementById('totalWins').textContent = this.totalWins;
+            }
+        }
+
+        // Initialize game
+        const game = new CardloopGame();
+    </script>
+</body>
+</html>

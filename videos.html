@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Videos - STAYGO</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Kanit:wght@700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./assets/site.css" />
+    <script defer src="./assets/config.js"></script>
+    <script defer src="./assets/site.js"></script>
+  </head>
+  <body>
+    <header class="header">
+      <div class="container">
+        <div class="header-content">
+          <a href="/" class="logo-link">
+            <img src="./games/reveal-board/staygo-logo.png" alt="Staygo" class="logo" />
+          </a>
+          
+          <nav class="nav" aria-label="เมนูหลัก">
+            <a href="/#play" class="nav-link">Play</a>
+            <a href="/#tools" class="nav-link">Tools</a>
+            <a href="/#watch" class="nav-link">Watch & Play</a>
+            <a href="/#about" class="nav-link">About</a>
+          </nav>
+
+          <div class="header-actions">
+            <a href="https://www.youtube.com/@STAYGO" target="_blank" rel="noopener noreferrer" class="icon-button" aria-label="YouTube">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
+                <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+              </svg>
+            </a>
+            <button class="icon-button" aria-label="เมนู">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="section">
+        <div class="container">
+          <h2 class="section-title">Videos</h2>
+          
+          <div class="video-section">
+            <h3 class="video-section-title">คลิปล่าสุดสดๆร้อนๆ</h3>
+            <div class="embed" data-latest-youtube></div>
+          </div>
+
+          <div class="video-section">
+            <h3 class="video-section-title">คลิปทั้งหมด</h3>
+            
+            <div class="video-tools">
+              <input
+                class="search"
+                type="search"
+                inputmode="search"
+                placeholder="ค้นหาชื่อคลิป…"
+                aria-label="ค้นหาชื่อคลิป"
+                data-video-search
+              />
+              <div class="muted" data-video-search-status></div>
+            </div>
+
+            <div class="video-browser" data-video-browser></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-logo">
+            <img src="./games/reveal-board/staygo-logo.png" alt="Staygo" />
+          </div>
+          
+          <nav class="footer-links">
+            <a href="https://facebook.com/STAYG0" target="_blank" rel="noopener noreferrer">Facebook</a>
+            <a href="https://instagram.com/stay._.go" target="_blank" rel="noopener noreferrer">Instagram</a>
+            <a href="https://tiktok.com/@staygo_official" target="_blank" rel="noopener noreferrer">TikTok</a>
+            <a href="https://twitch.tv/staygogamming" target="_blank" rel="noopener noreferrer">Twitch</a>
+          </nav>
+          
+          <p class="footer-copy">© STAYGO 2025</p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

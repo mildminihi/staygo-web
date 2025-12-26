@@ -392,10 +392,12 @@ h3 {
   background: var(--surface-2);
 }
 
-.game-thumbnail svg {
+.game-thumbnail svg,
+.game-thumbnail img {
   width: 100%;
   height: 100%;
   display: block;
+  object-fit: cover;
 }
 
 .game-info {
@@ -864,5 +866,607 @@ h3 {
 @media (min-width: 1024px) {
   .video-list {
     grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ===== Dice Roller Styles ===== */
+
+/* Dice Header */
+.dice-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+/* Dice Display Section */
+.dice-display-section {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 40px;
+  margin-bottom: 32px;
+  box-shadow: var(--shadow-sm);
+}
+
+.dice-result-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+  align-items: center;
+  min-height: 160px;
+  margin-bottom: 24px;
+}
+
+.dice-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-muted);
+}
+
+.dice-placeholder-icon {
+  font-size: 64px;
+  opacity: 0.5;
+}
+
+.dice-placeholder-text {
+  margin: 0;
+  font-size: 16px;
+}
+
+/* Dice Items */
+.dice-item {
+  width: 80px;
+  height: 80px;
+  background: var(--surface-2);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.dice-item.rolling {
+  animation: diceRoll 0.6s ease-in-out;
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--text-inverse);
+}
+
+.dice-item.revealed {
+  animation: diceReveal 0.3s ease-out;
+  background: var(--surface);
+  border-color: var(--primary);
+}
+
+.dice-face {
+  font-size: 32px;
+  font-weight: 700;
+  font-family: 'Kanit', sans-serif;
+  color: var(--text);
+}
+
+.dice-item.rolling .dice-face {
+  color: var(--text-inverse);
+}
+
+.dice-type-badge {
+  position: absolute;
+  bottom: 4px;
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--surface-2);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.dice-item.rolling .dice-type-badge {
+  color: var(--text-inverse);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Dice Animations */
+@keyframes diceRoll {
+  0%, 100% {
+    transform: rotate(0deg) scale(1);
+  }
+  25% {
+    transform: rotate(90deg) scale(1.1);
+  }
+  50% {
+    transform: rotate(180deg) scale(1);
+  }
+  75% {
+    transform: rotate(270deg) scale(1.1);
+  }
+}
+
+@keyframes diceReveal {
+  0% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Dice Total */
+.dice-total {
+  text-align: center;
+  padding: 16px;
+  background: var(--surface-2);
+  border-radius: var(--radius-md);
+  display: none;
+}
+
+.dice-total:not(:empty) {
+  display: block;
+}
+
+.dice-total-label {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-right: 8px;
+}
+
+.dice-total-value {
+  font-size: 32px;
+  font-weight: 800;
+  font-family: 'Kanit', sans-serif;
+  color: var(--primary);
+}
+
+/* Dice Controls */
+.dice-controls {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  margin-bottom: 32px;
+  box-shadow: var(--shadow-sm);
+}
+
+.dice-control-section {
+  margin-bottom: 24px;
+}
+
+.dice-section-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 16px 0;
+  color: var(--text);
+}
+
+/* Dice Type Tabs */
+.dice-type-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  border-bottom: 2px solid var(--border);
+}
+
+.dice-type-tab {
+  padding: 12px 24px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-muted);
+  transition: all 0.2s ease;
+  margin-bottom: -2px;
+}
+
+.dice-type-tab:hover {
+  color: var(--text);
+}
+
+.dice-type-tab.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+
+/* Dice Type Panels */
+.dice-type-panel {
+  display: none;
+}
+
+.dice-type-panel.active {
+  display: block;
+}
+
+/* Dice Type Grid */
+.dice-type-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.dice-type-button {
+  padding: 16px 12px;
+  background: var(--surface-2);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.dice-type-button:hover {
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.dice-type-button.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--text-inverse);
+}
+
+.dice-type-label {
+  font-size: 18px;
+  font-weight: 700;
+  font-family: 'Kanit', sans-serif;
+}
+
+.dice-type-desc {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.dice-type-button.active .dice-type-label,
+.dice-type-button.active .dice-type-desc {
+  color: var(--text-inverse);
+}
+
+/* Custom Dice Input */
+.dice-custom-input {
+  max-width: 400px;
+}
+
+.dice-custom-label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.dice-custom-sublabel {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+/* Dice Count Control */
+.dice-control-label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.dice-count-control {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 240px;
+}
+
+.dice-count-btn {
+  width: 40px;
+  height: 40px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dice-count-btn:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--text-inverse);
+}
+
+.dice-number-input {
+  flex: 1;
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 16px;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.dice-number-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+/* Roll Button */
+.dice-roll-button {
+  width: 100%;
+  margin-top: 8px;
+}
+
+.dice-roll-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Dice Queue */
+.dice-queue-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.dice-queue {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-height: 60px;
+  padding: 16px;
+  background: var(--surface-2);
+  border-radius: var(--radius-md);
+  border: 2px dashed var(--border);
+}
+
+.dice-queue-empty {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dice-queue-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.dice-queue-label {
+  color: var(--text);
+}
+
+.dice-queue-remove {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--danger);
+  color: var(--text-inverse);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  transition: all 0.2s ease;
+}
+
+.dice-queue-remove:hover {
+  transform: scale(1.1);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Dice History Section */
+.dice-history-section {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  box-shadow: var(--shadow-sm);
+}
+
+.dice-history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.dice-history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.dice-history-empty {
+  text-align: center;
+  padding: 40px;
+}
+
+.dice-history-item {
+  padding: 16px;
+  background: var(--surface-2);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+
+.dice-history-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.dice-history-time {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.dice-history-type {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.dice-history-total {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.dice-history-results {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.dice-history-result {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+  padding: 0 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* Modal */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal.active {
+  display: flex;
+}
+
+.modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.modal-content {
+  position: relative;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: var(--shadow-md);
+  z-index: 1;
+}
+
+.modal-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 12px 0;
+  color: var(--text);
+}
+
+.modal-text {
+  font-size: 16px;
+  color: var(--text-muted);
+  margin: 0 0 24px 0;
+  line-height: 1.5;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+/* Responsive Dice Styles */
+@media (max-width: 768px) {
+  .dice-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .dice-display-section {
+    padding: 24px;
+  }
+
+  .dice-controls {
+    padding: 24px;
+  }
+
+  .dice-history-section {
+    padding: 24px;
+  }
+
+  .dice-type-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .dice-item {
+    width: 64px;
+    height: 64px;
+  }
+
+  .dice-face {
+    font-size: 24px;
+  }
+
+  .dice-total-value {
+    font-size: 24px;
+  }
+
+  .modal-content {
+    padding: 24px;
+  }
+  
+  .modal-actions {
+    flex-direction: column;
+  }
+  
+  .modal-actions .button {
+    width: 100%;
   }
 }

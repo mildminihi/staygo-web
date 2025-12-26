@@ -84,11 +84,7 @@
           <div class="game-grid">
             <article class="game-card">
               <div class="game-thumbnail">
-                <svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect width="200" height="160" fill="#F3F4F6"/>
-                  <circle cx="100" cy="80" r="40" fill="#D1D5DB"/>
-                  <text x="100" y="90" text-anchor="middle" font-size="40" fill="#9CA3AF">?</text>
-                </svg>
+                <img src="./assets/image/reveal-cover.png" alt="Guess the Picture" />
               </div>
               <div class="game-info">
                 <h3 class="game-title">Guess the Picture</h3>
@@ -126,10 +122,10 @@
           <h2 class="section-title">Quick Tools</h2>
           
           <div class="tools-grid">
-            <button class="tool-button">
+            <a href="./dice.html" class="tool-button">
               <div class="tool-icon">🎲</div>
               <span class="tool-label">ทอยลูกเต๋า</span>
-            </button>
+            </a>
             
             <button class="tool-button">
               <div class="tool-icon">⏱️</div>
@@ -155,41 +151,12 @@
           
           <div class="watch-hero">
             <div class="watch-illustration">
-              <svg viewBox="0 0 400 240" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="20" y="20" width="360" height="200" rx="16" fill="#F3F4F6"/>
-                <rect x="40" y="40" width="160" height="160" rx="8" fill="#DBEAFE"/>
-                <circle cx="120" cy="90" r="25" fill="#3B82F6"/>
-                <rect x="220" y="40" width="140" height="70" rx="8" fill="#FEF3C7"/>
-                <rect x="220" y="130" width="140" height="70" rx="8" fill="#FECACA"/>
-              </svg>
+              <iframe width="560" height="315" src="https://www.youtube.com/embed/2tUUn1ywX80?si=w8qAOuBIVbpFLN1T" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
             </div>
             <div class="watch-content">
               <p class="watch-description">ช่องรวมความบันเทิงของกลุ่มเพื่อน ฝากกดไลค์ กดติดตามด้วยนะครับ</p>
-              <button class="button button-primary button-lg">▶ เล่นเกมที่ใช้ในคลิปนี้</button>
+              <a href="./videos.html" class="button button-primary button-lg">▶ ดูวิดีโอทั้งหมด</a>
             </div>
-          </div>
-
-          <div class="video-section">
-            <h3 class="video-section-title">คลิปล่าสุดสดๆร้อนๆ</h3>
-            <div class="embed" data-latest-youtube></div>
-          </div>
-
-          <div class="video-section">
-            <h3 class="video-section-title">คลิปทั้งหมด</h3>
-            
-            <div class="video-tools">
-              <input
-                class="search"
-                type="search"
-                inputmode="search"
-                placeholder="ค้นหาชื่อคลิป…"
-                aria-label="ค้นหาชื่อคลิป"
-                data-video-search
-              />
-              <div class="muted" data-video-search-status></div>
-            </div>
-
-            <div class="video-browser" data-video-browser></div>
           </div>
         </div>
       </section>

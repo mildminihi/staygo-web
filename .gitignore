@@ -1,0 +1,11 @@
+# ไฟล์และโฟลเดอร์ที่ไม่ต้อง deploy
+node_modules/
+.DS_Store
+*.log
+.env
+.vscode/
+refactor.sh
+dev-server.mjs
+
+# Backup folders
+../staygo-web-backup-*/

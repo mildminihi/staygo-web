@@ -75,14 +75,22 @@
 
           <!-- Dice Display Area -->
           <div class="dice-display-section">
+            <div class="dice-display-header">
+              <span class="dice-count-label">ลูกเต๋าที่เลือก (<span id="diceQueueCount">0</span>)</span>
+              <button class="button button-ghost button-sm" id="clearQueue" style="display: none;">ลบลูกเต๋าทั้งหมด</button>
+            </div>
             <div class="dice-result-container" id="diceResultContainer">
               <div class="dice-placeholder">
                 <div class="dice-placeholder-icon">🎲</div>
-                <p class="dice-placeholder-text">เลือกลูกเต๋าและกดทอย</p>
+                <p class="dice-placeholder-text">คลิกเพิ่มลูกเต๋าเพื่อเริ่มต้น</p>
               </div>
             </div>
             <div class="dice-total" id="diceTotal"></div>
           </div>
+
+          <button class="button button-primary button-lg dice-roll-button" id="rollButton" disabled style="margin-top: 16px; margin-bottom: 16px;">
+            🎲 ทอยลูกเต๋า
+          </button>
 
           <!-- Controls Panel -->
           <div class="dice-controls">
@@ -156,23 +164,6 @@
                 </div>
               </div>
             </div>
-
-            <!-- Dice Queue Section -->
-            <div class="dice-control-section">
-              <div class="dice-queue-header">
-                <h3 class="dice-section-title">ลูกเต๋าที่จะทอย (<span id="diceQueueCount">0</span>)</h3>
-                <button class="button button-ghost button-sm" id="clearQueue">ล้างทั้งหมด</button>
-              </div>
-              <div class="dice-queue" id="diceQueue">
-                <div class="dice-queue-empty">
-                  <p class="muted">คลิกเพื่อเพิ่มลูกเต๋า</p>
-                </div>
-              </div>
-            </div>
-
-            <button class="button button-primary button-lg dice-roll-button" id="rollButton" disabled>
-              🎲 ทอยลูกเต๋า
-            </button>
           </div>
 
           <!-- History Section -->
@@ -285,7 +276,50 @@
 
         removeDiceFromQueue(index) {
           this.diceQueue.splice(index, 1);
-          this.renderQueue();
+          
+          // Check if we need to re-render or transition states
+          const container = document.getElementById('diceResultContainer');
+          const diceElements = container.querySelectorAll('.dice-item');
+          
+          // If dice are in revealed state, keep the results but update structure
+          if (diceElements.length > 0 && diceElements[0].classList.contains('revealed')) {
+            // Remove the specific dice element
+            if (diceElements[index]) {
+              diceElements[index].remove();
+            }
+            
+            // Update remaining dice indices
+            const remaining = container.querySelectorAll('.dice-item');
+            remaining.forEach((el, newIndex) => {
+              const removeBtn = el.querySelector('.dice-remove-btn');
+              if (removeBtn) {
+                removeBtn.dataset.index = newIndex;
+              }
+            });
+
+            // Update count and clear button visibility
+            document.getElementById('diceQueueCount').textContent = this.diceQueue.length;
+            const clearButton = document.getElementById('clearQueue');
+            const rollButton = document.getElementById('rollButton');
+            
+            if (this.diceQueue.length === 0) {
+              // Clear everything and show placeholder
+              container.innerHTML = `
+                <div class="dice-placeholder">
+                  <div class="dice-placeholder-icon">🎲</div>
+                  <p class="dice-placeholder-text">คลิกเพิ่มลูกเต๋าเพื่อเริ่มต้น</p>
+                </div>
+              `;
+              document.getElementById('diceTotal').innerHTML = '';
+              clearButton.style.display = 'none';
+              rollButton.disabled = true;
+            } else {
+              rollButton.disabled = false;
+            }
+          } else {
+            // Normal queue rendering
+            this.renderQueue();
+          }
         }
 
         clearQueue() {
@@ -295,47 +329,43 @@
         }
 
         renderQueue() {
-          const queueElement = document.getElementById('diceQueue');
+          const container = document.getElementById('diceResultContainer');
           const countElement = document.getElementById('diceQueueCount');
           const rollButton = document.getElementById('rollButton');
+          const clearButton = document.getElementById('clearQueue');
           
           countElement.textContent = this.diceQueue.length;
 
           if (this.diceQueue.length === 0) {
-            queueElement.innerHTML = '<div class="dice-queue-empty"><p class="muted">คลิกเพื่อเพิ่มลูกเต๋า</p></div>';
+            container.innerHTML = `
+              <div class="dice-placeholder">
+                <div class="dice-placeholder-icon">🎲</div>
+                <p class="dice-placeholder-text">คลิกเพิ่มลูกเต๋าเพื่อเริ่มต้น</p>
+              </div>
+            `;
             rollButton.disabled = true;
+            clearButton.style.display = 'none';
             return;
           }
 
           rollButton.disabled = false;
+          clearButton.style.display = 'block';
 
-          // Group dice by faces for display
-          const grouped = {};
-          this.diceQueue.forEach((dice, index) => {
-            const key = `${dice.isCustom ? 'Custom-' : ''}D${dice.faces}`;
-            if (!grouped[key]) {
-              grouped[key] = { faces: dice.faces, isCustom: dice.isCustom, indices: [] };
-            }
-            grouped[key].indices.push(index);
-          });
-
-          queueElement.innerHTML = Object.entries(grouped).map(([key, data]) => `
-            <div class="dice-queue-item">
-              <span class="dice-queue-label">
-                ${data.count || data.indices.length}× ${data.isCustom ? 'Custom ' : ''}D${data.faces}
-              </span>
-              <button class="dice-queue-remove" data-indices="${data.indices.join(',')}">×</button>
+          // Render each die as a visual dice item
+          container.innerHTML = this.diceQueue.map((dice, index) => `
+            <div class="dice-item queued" data-index="${index}">
+              <button class="dice-remove-btn" data-index="${index}" title="ลบลูกเต๋านี้">×</button>
+              <div class="dice-face">?</div>
+              <div class="dice-type-badge">${dice.isCustom ? 'C' : ''}D${dice.faces}</div>
             </div>
           `).join('');
 
           // Add remove handlers
-          queueElement.querySelectorAll('.dice-queue-remove').forEach(btn => {
+          container.querySelectorAll('.dice-remove-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
-              const indices = e.target.dataset.indices.split(',').map(Number);
-              // Remove from highest index to lowest to avoid index shifting
-              indices.sort((a, b) => b - a).forEach(index => {
-                this.removeDiceFromQueue(index);
-              });
+              e.stopPropagation();
+              const index = parseInt(e.target.dataset.index);
+              this.removeDiceFromQueue(index);
             });
           });
         }
@@ -346,19 +376,19 @@
 
           const results = [];
           const container = document.getElementById('diceResultContainer');
+          const clearButton = document.getElementById('clearQueue');
           
-          // Clear placeholder
-          container.innerHTML = '';
+          // Hide clear button during roll
+          clearButton.style.display = 'none';
           
-          // Create dice elements for each die in queue
-          this.diceQueue.forEach((dice, i) => {
-            const diceElement = document.createElement('div');
-            diceElement.className = 'dice-item rolling';
-            diceElement.innerHTML = `
-              <div class="dice-face">?</div>
-              <div class="dice-type-badge">${dice.isCustom ? 'C' : ''}D${dice.faces}</div>
-            `;
-            container.appendChild(diceElement);
+          // Change queued dice to rolling state
+          const diceElements = container.querySelectorAll('.dice-item');
+          diceElements.forEach(el => {
+            el.classList.remove('queued');
+            el.classList.add('rolling');
+            // Remove the × button
+            const removeBtn = el.querySelector('.dice-remove-btn');
+            if (removeBtn) removeBtn.remove();
           });
 
           // Animate rolling
@@ -373,7 +403,7 @@
             // Stagger the reveal
             await new Promise(resolve => setTimeout(resolve, 150));
             
-            const diceElement = container.children[i];
+            const diceElement = diceElements[i];
             diceElement.classList.remove('rolling');
             diceElement.classList.add('revealed');
             diceElement.querySelector('.dice-face').textContent = result;
@@ -398,6 +428,24 @@
           if (this.history.length > 50) this.history.pop();
           
           this.renderHistory();
+
+          // Add remove buttons back to revealed dice
+          diceElements.forEach((el, index) => {
+            const removeBtn = document.createElement('button');
+            removeBtn.className = 'dice-remove-btn';
+            removeBtn.dataset.index = index;
+            removeBtn.textContent = '×';
+            removeBtn.title = 'ลบลูกเต๋านี้';
+            removeBtn.addEventListener('click', (e) => {
+              e.stopPropagation();
+              const idx = parseInt(e.target.dataset.index);
+              this.removeDiceFromQueue(idx);
+            });
+            el.appendChild(removeBtn);
+          });
+
+          // Show clear button again
+          clearButton.style.display = 'block';
           
           this.isRolling = false;
         }

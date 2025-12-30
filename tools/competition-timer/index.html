@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>จับเวลาสำหรับแข่ง - STAYGO</title>
+    <link rel="icon" type="image/png" href="../../games/reveal-board/staygo-logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Kanit:wght@700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../assets/css/site.css" />
+    <script defer src="../../assets/js/config.js"></script>
+    <script defer src="../../assets/js/site.js"></script>
+  </head>
+  <body>
+    <header class="header">
+      <div class="container">
+        <div class="header-content">
+          <a href="../../" class="logo-link">
+            <img src="../../games/reveal-board/staygo-logo.png" alt="Staygo" class="logo" />
+          </a>
+          
+          <nav class="nav" aria-label="เมนูหลัก">
+            <a href="../../#play" class="nav-link">Play</a>
+            <a href="../../#tools" class="nav-link active">Tools</a>
+            <a href="../../#watch" class="nav-link">Watch & Play</a>
+            <a href="../../about/" class="nav-link">About</a>
+          </nav>
+
+          <div class="header-actions">
+            <a href="https://www.youtube.com/@STAYGO" target="_blank" rel="noopener noreferrer" class="icon-button" aria-label="YouTube">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
+                <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+              </svg>
+            </a>
+            <button id="menuToggle" class="icon-button" aria-label="เมนู">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu">
+      <div class="mobile-menu-overlay"></div>
+      <div class="mobile-menu-content">
+        <div class="mobile-menu-header">
+          <h3 class="mobile-menu-title">ติดตามเรา</h3>
+          <button id="menuClose" class="mobile-menu-close" aria-label="ปิดเมนู">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <nav class="mobile-menu-nav">
+          <a href="https://www.youtube.com/@STAYGO" target="_blank" rel="noopener noreferrer" class="mobile-menu-link">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
+              <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+            </svg>
+            <span>YouTube</span>
+          </a>
+          <a href="https://facebook.com/STAYG0" target="_blank" rel="noopener noreferrer" class="mobile-menu-link">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+            </svg>
+            <span>Facebook</span>
+          </a>
+          <a href="https://instagram.com/staygo.official" target="_blank" rel="noopener noreferrer" class="mobile-menu-link">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </svg>
+            <span>Instagram</span>
+          </a>
+          <a href="https://tiktok.com/@staygo.official" target="_blank" rel="noopener noreferrer" class="mobile-menu-link">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+            </svg>
+            <span>TikTok</span>
+          </a>
+          <a href="https://twitch.tv/staygogamming" target="_blank" rel="noopener noreferrer" class="mobile-menu-link">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"/>
+            </svg>
+            <span>Twitch</span>
+          </a>
+        </nav>
+      </div>
+    </div>
+
+    <main>
+      <section class="section">
+        <div class="container">
+          <h1 class="tool-title">จับเวลาสำหรับแข่ง</h1>
+          <p class="tool-description">เครื่องมือจับเวลาสำหรับเกมที่แต่ละคนมีเวลาจำกัด เวลาจะนับถอยหลังเฉพาะเทิร์นของตัวเอง</p>
+
+          <!-- Setup Phase -->
+          <div id="setupPhase" class="timer-setup active">
+            <div class="setup-card">
+              <h2 class="setup-section-title">จำนวนผู้เล่น</h2>
+              <div class="player-count-selector">
+                <label for="playerCount">เลือกจำนวนผู้เล่น (2-8 คน):</label>
+                <input type="number" id="playerCount" min="2" max="8" value="2" class="input-field" />
+              </div>
+              <button id="updatePlayersBtn" class="button button-secondary button-sm">อัพเดทจำนวนผู้เล่น</button>
+            </div>
+
+            <div class="setup-card">
+              <h2 class="setup-section-title">ชื่อผู้เล่น</h2>
+              <div id="playerNamesContainer" class="player-names-grid">
+                <!-- Dynamic player name inputs -->
+              </div>
+            </div>
+
+            <div class="setup-card">
+              <h2 class="setup-section-title">ตั้งเวลา</h2>
+              <div class="time-presets">
+                <button class="button button-outline button-sm preset-btn" data-minutes="15">15 นาที</button>
+                <button class="button button-outline button-sm preset-btn" data-minutes="20">20 นาที</button>
+                <button class="button button-outline button-sm preset-btn" data-minutes="30">30 นาที</button>
+              </div>
+              <div class="custom-time-input">
+                <label for="customMinutes">หรือกำหนดเวลาเอง (นาที):</label>
+                <input type="number" id="customMinutes" min="1" max="180" value="15" class="input-field" />
+              </div>
+            </div>
+
+            <button id="startGameBtn" class="button button-primary button-lg">เริ่มเกม</button>
+          </div>
+
+          <!-- Countdown Overlay -->
+          <div id="countdownOverlay" class="countdown-overlay">
+            <div class="countdown-content">
+              <div class="countdown-text">เตรียมพร้อม</div>
+              <div class="countdown-number" id="countdownNumber">3</div>
+            </div>
+          </div>
+
+          <!-- Game Phase -->
+          <div id="gamePhase" class="timer-game">
+            <div class="timer-controls-top">
+              <button id="pauseBtn" class="button button-secondary button-md">
+                <span id="pauseIcon">⏸</span> <span id="pauseText">หยุดชั่วคราว</span>
+              </button>
+              <button id="resetBtn" class="button button-outline button-md">🔄 เริ่มใหม่</button>
+            </div>
+
+            <div id="timersGrid" class="timer-grid">
+              <!-- Dynamic timer cards -->
+            </div>
+
+            <div class="timer-controls-bottom">
+              <button id="endTurnBtn" class="button button-primary button-xl">จบเทิร์น</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-logo">
+            <img src="../../games/reveal-board/staygo-logo.png" alt="Staygo" />
+          </div>
+          
+          <nav class="footer-links">
+            <a href="https://facebook.com/STAYG0" target="_blank" rel="noopener noreferrer">Facebook</a>
+            <a href="https://instagram.com/staygo.official" target="_blank" rel="noopener noreferrer">Instagram</a>
+            <a href="https://tiktok.com/@staygo.official" target="_blank" rel="noopener noreferrer">TikTok</a>
+            <a href="https://twitch.tv/staygogamming" target="_blank" rel="noopener noreferrer">Twitch</a>
+          </nav>
+          
+          <p class="footer-copy">© STAYGO 2025</p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Game State
+      let gameState = {
+        players: [],
+        currentPlayerIndex: 0,
+        isPaused: false,
+        intervalId: null,
+        isGameStarted: false
+      };
+
+      // Audio Context for sound effects
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+      // DOM Elements
+      const setupPhase = document.getElementById('setupPhase');
+      const gamePhase = document.getElementById('gamePhase');
+      const countdownOverlay = document.getElementById('countdownOverlay');
+      const countdownNumber = document.getElementById('countdownNumber');
+      const playerCountInput = document.getElementById('playerCount');
+      const updatePlayersBtn = document.getElementById('updatePlayersBtn');
+      const playerNamesContainer = document.getElementById('playerNamesContainer');
+      const customMinutesInput = document.getElementById('customMinutes');
+      const startGameBtn = document.getElementById('startGameBtn');
+      const timersGrid = document.getElementById('timersGrid');
+      const pauseBtn = document.getElementById('pauseBtn');
+      const resetBtn = document.getElementById('resetBtn');
+      const endTurnBtn = document.getElementById('endTurnBtn');
+      const pauseIcon = document.getElementById('pauseIcon');
+      const pauseText = document.getElementById('pauseText');
+
+      // Initialize player name inputs
+      function updatePlayerInputs() {
+        const count = parseInt(playerCountInput.value);
+        playerNamesContainer.innerHTML = '';
+        
+        for (let i = 1; i <= count; i++) {
+          const div = document.createElement('div');
+          div.className = 'player-name-input';
+          div.innerHTML = `
+            <label for="player${i}">ผู้เล่น ${i}:</label>
+            <input type="text" id="player${i}" value="ผู้เล่น ${i}" class="input-field" />
+          `;
+          playerNamesContainer.appendChild(div);
+        }
+      }
+
+      // Preset time buttons
+      document.querySelectorAll('.preset-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const minutes = parseInt(btn.dataset.minutes);
+          customMinutesInput.value = minutes;
+          
+          // Visual feedback
+          document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+        });
+      });
+
+      // Update players button
+      updatePlayersBtn.addEventListener('click', updatePlayerInputs);
+
+      // Start game
+      startGameBtn.addEventListener('click', startGame);
+
+      function startGame() {
+        const playerCount = parseInt(playerCountInput.value);
+        const minutes = parseInt(customMinutesInput.value);
+        
+        if (minutes < 1) {
+          alert('กรุณากำหนดเวลาอย่างน้อย 1 นาที');
+          return;
+        }
+
+        // Initialize players
+        gameState.players = [];
+        for (let i = 1; i <= playerCount; i++) {
+          const nameInput = document.getElementById(`player${i}`);
+          const name = nameInput.value.trim() || `ผู้เล่น ${i}`;
+          gameState.players.push({
+            name: name,
+            totalSeconds: minutes * 60,
+            remainingSeconds: minutes * 60,
+            isOut: false
+          });
+        }
+
+        gameState.currentPlayerIndex = 0;
+        gameState.isPaused = false;
+        gameState.isGameStarted = false; // Will be set to true after countdown
+
+        // Switch to game phase
+        setupPhase.classList.remove('active');
+        gamePhase.classList.add('active');
+
+        // Create timer cards
+        createTimerCards();
+        
+        // Show countdown before starting
+        showCountdown();
+      }
+
+      function showCountdown() {
+        countdownOverlay.classList.add('active');
+        let count = 3;
+        countdownNumber.textContent = count;
+        
+        playCountdownBeep();
+        
+        const countdownInterval = setInterval(() => {
+          count--;
+          
+          if (count > 0) {
+            countdownNumber.textContent = count;
+            playCountdownBeep();
+          } else {
+            clearInterval(countdownInterval);
+            countdownNumber.textContent = 'เริ่ม!';
+            playStartBeep();
+            
+            setTimeout(() => {
+              countdownOverlay.classList.remove('active');
+              gameState.isGameStarted = true;
+              startTimer();
+            }, 500);
+          }
+        }, 1000);
+      }
+
+      function createTimerCards() {
+        timersGrid.innerHTML = '';
+        
+        gameState.players.forEach((player, index) => {
+          const card = document.createElement('div');
+          card.className = 'timer-card';
+          card.id = `timer-card-${index}`;
+          
+          if (index === gameState.currentPlayerIndex) {
+            card.classList.add('active');
+          }
+
+          card.innerHTML = `
+            <div class="timer-card-header">
+              <h3 class="timer-player-name">${player.name}</h3>
+              <span class="timer-status" id="status-${index}"></span>
+            </div>
+            <div class="timer-display" id="timer-${index}">${formatTime(player.remainingSeconds)}</div>
+          `;
+          
+          timersGrid.appendChild(card);
+        });
+      }
+
+      function startTimer() {
+        if (gameState.intervalId) {
+          clearInterval(gameState.intervalId);
+        }
+
+        gameState.intervalId = setInterval(() => {
+          if (!gameState.isPaused && gameState.isGameStarted) {
+            const currentPlayer = gameState.players[gameState.currentPlayerIndex];
+            
+            if (!currentPlayer.isOut && currentPlayer.remainingSeconds > 0) {
+              currentPlayer.remainingSeconds -= 0.1;
+              
+              // Check for timeout
+              if (currentPlayer.remainingSeconds <= 0) {
+                currentPlayer.remainingSeconds = 0;
+                currentPlayer.isOut = true;
+                handleTimeout(gameState.currentPlayerIndex);
+              }
+              
+              updateDisplay();
+            }
+          }
+        }, 100);
+      }
+
+      function updateDisplay() {
+        gameState.players.forEach((player, index) => {
+          const timerDisplay = document.getElementById(`timer-${index}`);
+          const statusDisplay = document.getElementById(`status-${index}`);
+          const card = document.getElementById(`timer-card-${index}`);
+          
+          if (timerDisplay) {
+            timerDisplay.textContent = formatTime(player.remainingSeconds);
+          }
+
+          // Update card state
+          card.classList.remove('active', 'warning', 'timeout');
+          
+          if (index === gameState.currentPlayerIndex && !gameState.isPaused) {
+            card.classList.add('active');
+          }
+          
+          if (player.remainingSeconds < 60 && player.remainingSeconds > 0) {
+            card.classList.add('warning');
+          }
+          
+          if (player.isOut) {
+            card.classList.add('timeout');
+            statusDisplay.textContent = 'TIME OUT';
+          } else {
+            statusDisplay.textContent = '';
+          }
+        });
+      }
+
+      function formatTime(seconds) {
+        const totalSeconds = Math.max(0, Math.ceil(seconds));
+        const mins = Math.floor(totalSeconds / 60);
+        const secs = totalSeconds % 60;
+        return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+      }
+
+      function handleTimeout(playerIndex) {
+        playAlertSound();
+        
+        // Show alert
+        setTimeout(() => {
+          const player = gameState.players[playerIndex];
+          alert(`⏰ หมดเวลา!\n${player.name} หมดเวลาแล้ว แต่ยังสามารถเล่นต่อได้`);
+        }, 100);
+      }
+
+      // End turn button
+      endTurnBtn.addEventListener('click', () => {
+        if (!gameState.isGameStarted || gameState.isPaused) return;
+        
+        playClickSound();
+        
+        // Move to next player
+        gameState.currentPlayerIndex = (gameState.currentPlayerIndex + 1) % gameState.players.length;
+        updateDisplay();
+      });
+
+      // Pause button
+      pauseBtn.addEventListener('click', () => {
+        gameState.isPaused = !gameState.isPaused;
+        
+        if (gameState.isPaused) {
+          pauseIcon.textContent = '▶';
+          pauseText.textContent = 'เล่นต่อ';
+          pauseBtn.classList.remove('button-secondary');
+          pauseBtn.classList.add('button-primary');
+        } else {
+          pauseIcon.textContent = '⏸';
+          pauseText.textContent = 'หยุดชั่วคราว';
+          pauseBtn.classList.remove('button-primary');
+          pauseBtn.classList.add('button-secondary');
+        }
+        
+        updateDisplay();
+      });
+
+      // Reset button
+      resetBtn.addEventListener('click', () => {
+        if (confirm('ต้องการเริ่มเกมใหม่หรือไม่?')) {
+          resetGame();
+        }
+      });
+
+      function resetGame() {
+        if (gameState.intervalId) {
+          clearInterval(gameState.intervalId);
+        }
+        
+        gameState = {
+          players: [],
+          currentPlayerIndex: 0,
+          isPaused: false,
+          intervalId: null,
+          isGameStarted: false
+        };
+        
+        // Switch back to setup phase
+        gamePhase.classList.remove('active');
+        setupPhase.classList.add('active');
+        
+        // Reset pause button state
+        pauseIcon.textContent = '⏸';
+        pauseText.textContent = 'หยุดชั่วคราว';
+        pauseBtn.classList.remove('button-primary');
+        pauseBtn.classList.add('button-secondary');
+      }
+
+      // Sound effects using Web Audio API
+      function playClickSound() {
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.frequency.value = 800;
+        oscillator.type = 'sine';
+        
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+        
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.1);
+      }
+
+      function playAlertSound() {
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.frequency.value = 440;
+        oscillator.type = 'square';
+        
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+        
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.5);
+      }
+
+      function playCountdownBeep() {
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.frequency.value = 600;
+        oscillator.type = 'sine';
+        
+        gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.15);
+        
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.15);
+      }
+
+      function playStartBeep() {
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.frequency.value = 1000;
+        oscillator.type = 'sine';
+        
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+        
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.3);
+      }
+
+      // Initialize on load
+      updatePlayerInputs();
+    </script>
+  </body>
+</html>
+

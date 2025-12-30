@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Primary Meta Tags -->
+    <title>จับสลากออนไลน์ - Random Picker | STAYGO</title>
+    <meta name="title" content="จับสลากออนไลน์ - Random Picker | STAYGO" />
+    <meta name="description" content="เครื่องมือจับสลากออนไลน์ สุ่มรายการแบบสุ่ม เหมาะสำหรับจับรางวัล จับคู่ หรือสุ่มเลือกอะไรก็ได้" />
+    <meta name="keywords" content="จับสลาก, random picker, สุ่มรายการ, lucky draw, จับรางวัล" />
+    <meta name="robots" content="index, follow" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://staygo.net/tools/lucky-draw/" />
+    <meta property="og:title" content="จับสลากออนไลน์ - Random Picker | STAYGO" />
+    <meta property="og:description" content="เครื่องมือจับสลากออนไลน์ สุ่มรายการแบบสุ่ม เหมาะสำหรับจับรางวัล จับคู่ หรือสุ่มเลือกอะไรก็ได้" />
+    <meta property="og:image" content="https://staygo.net/games/reveal-board/staygo-logo.png" />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://staygo.net/tools/lucky-draw/" />
+    
+    <link rel="icon" type="image/png" href="../../games/reveal-board/staygo-logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Kanit:wght@700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../assets/css/site.css" />
+    <script defer src="../../assets/js/config.js"></script>
+    <script defer src="../../assets/js/site.js"></script>
+  </head>
+  <body>
+    <header class="header">
+      <div class="container">
+        <div class="header-content">
+          <a href="../../" class="logo-link">
+            <img src="../../games/reveal-board/staygo-logo.png" alt="Staygo" class="logo" />
+          </a>
+          
+          <nav class="nav" aria-label="เมนูหลัก">
+            <a href="../../#play" class="nav-link">Play</a>
+            <a href="../../#tools" class="nav-link active">Tools</a>
+            <a href="../../#watch" class="nav-link">Watch & Play</a>
+            <a href="../../about/" class="nav-link">About</a>
+          </nav>
+
+          <div class="header-actions">
+            <a href="https://www.youtube.com/@STAYGO" target="_blank" rel="noopener noreferrer" class="icon-button" aria-label="YouTube">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
+                <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+              </svg>
+            </a>
+            <button id="menuToggle" class="icon-button" aria-label="เมนู">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu">
+      <div class="mobile-menu-overlay"></div>
+      <div class="mobile-menu-content">
+        <div class="mobile-menu-header">
+          <h3 class="mobile-menu-title">ติดตามเรา</h3>
+          <button id="menuClose" class="mobile-menu-close" aria-label="ปิดเมนู">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <nav class="mobile-menu-nav">
+          <a href="https://www.youtube.com/@STAYGO" target="_blank" rel="noopener noreferrer" class="mobile-menu-link">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
+              <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+            </svg>
+            <span>YouTube</span>
+          </a>
+          <a href="https://facebook.com/STAYG0" target="_blank" rel="noopener noreferrer" class="mobile-menu-link">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+            </svg>
+            <span>Facebook</span>
+          </a>
+          <a href="https://instagram.com/staygo.official" target="_blank" rel="noopener noreferrer" class="mobile-menu-link">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </svg>
+            <span>Instagram</span>
+          </a>
+          <a href="https://tiktok.com/@staygo.official" target="_blank" rel="noopener noreferrer" class="mobile-menu-link">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+            </svg>
+            <span>TikTok</span>
+          </a>
+          <a href="https://twitch.tv/staygogamming" target="_blank" rel="noopener noreferrer" class="mobile-menu-link">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"/>
+            </svg>
+            <span>Twitch</span>
+          </a>
+        </nav>
+      </div>
+    </div>
+
+    <main>
+      <section class="section">
+        <div class="container">
+          <h1 class="tool-title">จับสลาก</h1>
+          <p class="tool-description">เครื่องมือจับสลากออนไลน์ สุ่มรายการแบบสุ่ม เหมาะสำหรับจับรางวัล จับคู่ หรือสุ่มเลือกอะไรก็ได้</p>
+
+          <div class="lucky-draw-container">
+            <!-- Setup Section -->
+            <div class="lucky-draw-setup">
+              <div class="setup-card">
+                <h2 class="setup-section-title">เพิ่มสลาก</h2>
+                <div class="item-input-group">
+                  <input type="text" id="itemInput" class="input-field" placeholder="พิมพ์ชื่อรายการ (กด Enter เพื่อเพิ่ม)" />
+                  <button id="addItemBtn" class="button button-primary button-md">+ เพิ่ม</button>
+                </div>
+                
+                <div class="settings-group">
+                  <label class="checkbox-label">
+                    <input type="checkbox" id="removeAfterDraw" checked />
+                    <span>เอาสลากที่จับแล้วออกจาก pool</span>
+                  </label>
+                </div>
+
+                <div class="stats-bar">
+                  <div class="stat-item">
+                    <span class="stat-label">สลากทั้งหมด:</span>
+                    <span class="stat-value" id="totalItems">0</span>
+                  </div>
+                  <div class="stat-item">
+                    <span class="stat-label">สลากคงเหลือ:</span>
+                    <span class="stat-value" id="remainingItems">0</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="setup-card">
+                <h2 class="setup-section-title">รายการสลาก</h2>
+                <div id="itemList" class="item-list">
+                  <div class="item-list-empty">
+                    <p class="muted">ยังไม่มีรายการสลาก กรุณาเพิ่มรายการ</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Drawing Section -->
+            <div class="lucky-draw-main">
+              <div class="draw-area">
+                <div id="drawResult" class="draw-result">
+                  <div class="draw-result-empty">
+                    <p class="muted">กดปุ่ม "จับสลาก" เพื่อเริ่มต้น</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="draw-controls">
+                <button id="drawBtn" class="button button-primary button-xl" disabled>
+                  🎲 จับสลาก
+                </button>
+                <button id="resetBtn" class="button button-outline button-md">
+                  🔄 เริ่มใหม่
+                </button>
+              </div>
+
+              <!-- History Section -->
+              <div class="history-section">
+                <h2 class="history-title">ประวัติการจับสลาก</h2>
+                <div class="history-stats">
+                  <span>จับไปแล้ว: <strong id="drawnCount">0</strong> รายการ</span>
+                </div>
+                <div id="historyList" class="history-list">
+                  <div class="history-empty">
+                    <p class="muted">ยังไม่มีการจับสลาก</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-logo">
+            <img src="../../games/reveal-board/staygo-logo.png" alt="Staygo" />
+          </div>
+          
+          <nav class="footer-links">
+            <a href="https://facebook.com/STAYG0" target="_blank" rel="noopener noreferrer">Facebook</a>
+            <a href="https://instagram.com/staygo.official" target="_blank" rel="noopener noreferrer">Instagram</a>
+            <a href="https://tiktok.com/@staygo.official" target="_blank" rel="noopener noreferrer">TikTok</a>
+            <a href="https://twitch.tv/staygogamming" target="_blank" rel="noopener noreferrer">Twitch</a>
+          </nav>
+          
+          <p class="footer-copy">© STAYGO 2025</p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Game State
+      let state = {
+        items: [],
+        drawnItems: [],
+        removeAfterDraw: true
+      };
+
+      // DOM Elements
+      const itemInput = document.getElementById('itemInput');
+      const addItemBtn = document.getElementById('addItemBtn');
+      const removeAfterDrawCheckbox = document.getElementById('removeAfterDraw');
+      const itemList = document.getElementById('itemList');
+      const drawBtn = document.getElementById('drawBtn');
+      const resetBtn = document.getElementById('resetBtn');
+      const drawResult = document.getElementById('drawResult');
+      const historyList = document.getElementById('historyList');
+      const totalItems = document.getElementById('totalItems');
+      const remainingItems = document.getElementById('remainingItems');
+      const drawnCount = document.getElementById('drawnCount');
+
+      // Add item
+      function addItem() {
+        const text = itemInput.value.trim();
+        if (!text) {
+          alert('กรุณาใส่ชื่อรายการ');
+          return;
+        }
+
+        if (state.items.length >= 100) {
+          alert('เพิ่มได้สูงสุด 100 รายการ');
+          return;
+        }
+
+        state.items.push(text);
+        itemInput.value = '';
+        itemInput.focus();
+        updateDisplay();
+      }
+
+      // Remove item
+      function removeItem(index) {
+        state.items.splice(index, 1);
+        updateDisplay();
+      }
+
+      // Draw item
+      function drawItem() {
+        if (state.items.length === 0) {
+          alert('ไม่มีสลากในตัวเลือก');
+          return;
+        }
+
+        // Random selection
+        const randomIndex = Math.floor(Math.random() * state.items.length);
+        const drawnItem = state.items[randomIndex];
+
+        // Show animation
+        showDrawAnimation(drawnItem);
+
+        // Add to history
+        state.drawnItems.push({
+          item: drawnItem,
+          time: new Date()
+        });
+
+        // Remove from pool if checked
+        if (state.removeAfterDraw) {
+          state.items.splice(randomIndex, 1);
+        }
+
+        // Update display after animation
+        setTimeout(() => {
+          updateDisplay();
+        }, 500);
+      }
+
+      // Show draw animation
+      function showDrawAnimation(item) {
+        drawResult.innerHTML = `
+          <div class="draw-result-content draw-animation">
+            <div class="draw-result-label">ผลการจับสลาก</div>
+            <div class="draw-result-item">${item}</div>
+          </div>
+        `;
+      }
+
+      // Reset all
+      function resetAll() {
+        if (state.items.length === 0 && state.drawnItems.length === 0) {
+          return;
+        }
+
+        if (!confirm('ต้องการเริ่มใหม่หรือไม่? ข้อมูลทั้งหมดจะถูกลบ')) {
+          return;
+        }
+
+        state.items = [];
+        state.drawnItems = [];
+        drawResult.innerHTML = `
+          <div class="draw-result-empty">
+            <p class="muted">กดปุ่ม "จับสลาก" เพื่อเริ่มต้น</p>
+          </div>
+        `;
+        updateDisplay();
+      }
+
+      // Update display
+      function updateDisplay() {
+        // Update stats
+        totalItems.textContent = state.items.length + state.drawnItems.length;
+        remainingItems.textContent = state.items.length;
+        drawnCount.textContent = state.drawnItems.length;
+
+        // Update item list
+        if (state.items.length === 0) {
+          itemList.innerHTML = `
+            <div class="item-list-empty">
+              <p class="muted">ยังไม่มีรายการสลาก กรุณาเพิ่มรายการ</p>
+            </div>
+          `;
+        } else {
+          itemList.innerHTML = state.items.map((item, index) => `
+            <div class="item-chip">
+              <span class="item-chip-text">${item}</span>
+              <button class="item-chip-remove" onclick="removeItem(${index})" aria-label="ลบ">×</button>
+            </div>
+          `).join('');
+        }
+
+        // Update history
+        if (state.drawnItems.length === 0) {
+          historyList.innerHTML = `
+            <div class="history-empty">
+              <p class="muted">ยังไม่มีการจับสลาก</p>
+            </div>
+          `;
+        } else {
+          historyList.innerHTML = state.drawnItems.map((entry, index) => `
+            <div class="history-item">
+              <div class="history-order">#${index + 1}</div>
+              <div class="history-item-name">${entry.item}</div>
+            </div>
+          `).join('');
+        }
+
+        // Enable/disable draw button
+        drawBtn.disabled = state.items.length === 0;
+      }
+
+      // Event listeners
+      addItemBtn.addEventListener('click', addItem);
+      itemInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          addItem();
+        }
+      });
+      removeAfterDrawCheckbox.addEventListener('change', (e) => {
+        state.removeAfterDraw = e.target.checked;
+      });
+      drawBtn.addEventListener('click', drawItem);
+      resetBtn.addEventListener('click', resetAll);
+
+      // Initialize
+      updateDisplay();
+    </script>
+  </body>
+</html>
+

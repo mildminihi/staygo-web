@@ -3200,6 +3200,121 @@ h3 {
 }
 
 /* ===========================
+   Partners Section Styles
+   =========================== */
+
+.partners-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  margin-top: 32px;
+}
+
+.partner-card {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: all 0.15s ease-out;
+  box-shadow: var(--shadow-sm);
+}
+
+.partner-card:hover {
+  border-color: var(--primary);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.partner-logo {
+  width: 120px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+  padding: 16px;
+}
+
+.partner-logo img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.partner-name {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 16px 0;
+}
+
+.partner-code {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border: 2px solid var(--secondary);
+  border-radius: var(--radius-md);
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.partner-code-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.partner-code-value {
+  font-family: 'Kanit', sans-serif;
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--secondary-hover);
+  letter-spacing: 1px;
+}
+
+.partner-card .button {
+  width: 100%;
+}
+
+/* Responsive Partners Section */
+@media (max-width: 768px) {
+  .partners-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .partners-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .partner-card {
+    padding: 24px;
+  }
+
+  .partner-logo {
+    width: 100px;
+    height: 100px;
+  }
+
+  .partner-code-value {
+    font-size: 20px;
+  }
+}
+
+/* ===========================
    Tournament Bracket Styles
    =========================== */
 

@@ -1,0 +1,1691 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>จัดสายการแข่งขัน - STAYGO</title>
+    <link rel="icon" type="image/png" href="../../games/reveal-board/staygo-logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Kanit:wght@700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../assets/css/site.css" />
+    <script defer src="../../assets/js/config.js"></script>
+    <script defer src="../../assets/js/site.js"></script>
+    <style>
+      /* Tournament Bracket Styles */
+      .bracket-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 32px;
+      }
+
+      .bracket-setup {
+        background: var(--surface);
+        border-radius: var(--radius-lg);
+        padding: 32px;
+        margin-bottom: 32px;
+        box-shadow: var(--shadow-sm);
+      }
+
+      .bracket-setup-section {
+        margin-bottom: 24px;
+      }
+
+      .bracket-label {
+        display: block;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text);
+        margin-bottom: 8px;
+      }
+
+      .bracket-mode-options {
+        display: flex;
+        gap: 12px;
+      }
+
+      .bracket-mode-option {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 12px;
+        border: 2px solid var(--border);
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        transition: all 0.15s ease;
+        font-weight: 500;
+        font-size: 14px;
+      }
+
+      .bracket-mode-option:hover {
+        border-color: var(--primary);
+        background: var(--surface-2);
+      }
+
+      .bracket-mode-option input[type="radio"] {
+        margin: 0;
+        cursor: pointer;
+      }
+
+      .bracket-mode-option:has(input[type="radio"]:checked) {
+        border-color: var(--primary);
+        background: var(--surface-2);
+      }
+
+      .bracket-textarea {
+        width: 100%;
+        min-height: 150px;
+        padding: 12px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        font-family: 'Inter', sans-serif;
+        font-size: 14px;
+        line-height: 1.6;
+        color: var(--text);
+        background: var(--surface);
+        resize: vertical;
+        transition: border-color 0.15s ease;
+      }
+
+      .bracket-textarea:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px var(--focus-ring);
+      }
+
+      .bracket-textarea::placeholder {
+        color: var(--text-muted);
+      }
+
+      .bracket-checkbox-option {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        background: var(--surface-2);
+        cursor: pointer;
+        transition: all 0.15s ease;
+      }
+
+      .bracket-checkbox-option:hover {
+        background: var(--surface);
+        border-color: var(--primary);
+      }
+
+      .bracket-checkbox-option input[type="checkbox"] {
+        margin: 0;
+        cursor: pointer;
+        width: 18px;
+        height: 18px;
+      }
+
+      .bracket-checkbox-option label {
+        margin: 0;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+      }
+
+      /* Bracket Display */
+      .bracket-display {
+        background: var(--surface);
+        border-radius: var(--radius-lg);
+        padding: 32px;
+        box-shadow: var(--shadow-sm);
+        display: none;
+      }
+
+      .bracket-display.active {
+        display: block;
+      }
+
+      .bracket-container {
+        overflow-x: auto;
+        overflow-y: visible;
+        padding: 20px 0;
+      }
+
+      .bracket-wrapper {
+        display: flex;
+        gap: 60px;
+        min-width: min-content;
+      }
+
+      .bracket-section {
+        margin-bottom: 40px;
+      }
+
+      .bracket-section-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      .bracket-section.winner .bracket-section-title {
+        color: var(--success);
+      }
+
+      .bracket-section.loser .bracket-section-title {
+        color: var(--danger);
+      }
+
+      .bracket-section.grand-final .bracket-section-title {
+        color: var(--secondary);
+      }
+
+      .bracket-round {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        min-width: 200px;
+      }
+
+      .bracket-round-title {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text-muted);
+        text-align: center;
+        margin-bottom: 16px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .bracket-matches {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .bracket-match {
+        background: var(--surface-2);
+        border: 2px solid var(--border);
+        border-radius: var(--radius-sm);
+        padding: 12px;
+        cursor: pointer;
+        transition: all 0.15s ease;
+        min-width: 180px;
+      }
+
+      .bracket-match:hover {
+        border-color: var(--primary);
+        box-shadow: var(--shadow-sm);
+        transform: translateY(-2px);
+      }
+
+      .bracket-match.completed {
+        border-color: var(--success);
+      }
+
+      .bracket-match.has-bye {
+        border-color: var(--warning);
+        border-style: dashed;
+      }
+
+      .bracket-match.has-bye:hover {
+        border-color: var(--secondary);
+        border-style: solid;
+      }
+
+      .bracket-participant {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 10px;
+        border-radius: 4px;
+        background: var(--surface);
+        margin-bottom: 6px;
+        transition: all 0.15s ease;
+      }
+
+      .bracket-participant:last-child {
+        margin-bottom: 0;
+      }
+
+      .bracket-participant.winner {
+        background: var(--success);
+        color: white;
+        font-weight: 600;
+      }
+
+      .bracket-participant.loser {
+        opacity: 0.5;
+      }
+
+      .bracket-participant.bye {
+        background: var(--surface-2);
+        color: var(--text-muted);
+        font-style: italic;
+      }
+
+      .bracket-participant-name {
+        font-size: 14px;
+        font-weight: 500;
+      }
+
+      .bracket-participant-score {
+        font-size: 14px;
+        font-weight: 700;
+        margin-left: 8px;
+      }
+
+      /* Modal */
+      .bracket-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .bracket-modal.active {
+        display: flex;
+      }
+
+      .bracket-modal-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(4px);
+      }
+
+      .bracket-modal-content {
+        position: relative;
+        background: var(--surface);
+        border-radius: var(--radius-lg);
+        padding: 32px;
+        max-width: 500px;
+        width: 90%;
+        box-shadow: var(--shadow-md);
+        z-index: 1;
+      }
+
+      .bracket-modal-title {
+        font-size: 20px;
+        font-weight: 700;
+        margin: 0 0 20px 0;
+        color: var(--text);
+      }
+
+      .bracket-modal-match {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        margin-bottom: 24px;
+      }
+
+      .bracket-modal-participant {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px;
+        background: var(--surface-2);
+        border-radius: var(--radius-sm);
+      }
+
+      .bracket-modal-participant-name {
+        flex: 1;
+        font-size: 16px;
+        font-weight: 600;
+      }
+
+      .bracket-modal-score-input {
+        width: 80px;
+        padding: 8px 12px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        font-size: 16px;
+        font-weight: 700;
+        text-align: center;
+      }
+
+      .bracket-modal-score-input:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px var(--focus-ring);
+      }
+
+      .bracket-modal-actions {
+        display: flex;
+        gap: 12px;
+        justify-content: flex-end;
+      }
+
+      .bracket-modal-winner-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+
+      .bracket-winner-button {
+        padding: 16px;
+        background: var(--surface-2);
+        border: 2px solid var(--border);
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 600;
+        transition: all 0.15s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .bracket-winner-button:hover {
+        background: var(--primary);
+        border-color: var(--primary);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-sm);
+      }
+
+      /* Champion Display */
+      .bracket-champion {
+        text-align: center;
+        padding: 40px;
+        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        border-radius: var(--radius-lg);
+        border: 3px solid var(--secondary);
+        margin-top: 32px;
+        display: none;
+      }
+
+      .bracket-champion.active {
+        display: block;
+      }
+
+      .bracket-champion-icon {
+        font-size: 64px;
+        margin-bottom: 16px;
+      }
+
+      .bracket-champion-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 12px;
+      }
+
+      .bracket-champion-name {
+        font-family: 'Kanit', sans-serif;
+        font-size: 36px;
+        font-weight: 800;
+        color: var(--secondary-hover);
+      }
+
+      /* Rankings Display */
+      .bracket-rankings {
+        display: none;
+        margin-top: 24px;
+        background: var(--surface);
+        border-radius: var(--radius-lg);
+        padding: 24px;
+        box-shadow: var(--shadow-sm);
+      }
+
+      .bracket-rankings.active {
+        display: block;
+      }
+
+      .bracket-rankings-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 16px;
+        text-align: center;
+      }
+
+      .bracket-ranking-items {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .bracket-ranking-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 16px 20px;
+        background: var(--surface-2);
+        border-radius: var(--radius-md);
+        border: 2px solid var(--border);
+        min-width: 200px;
+      }
+
+      .bracket-ranking-item.rank-2 {
+        background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+        border-color: #9ca3af;
+      }
+
+      .bracket-ranking-item.rank-3 {
+        background: linear-gradient(135deg, #fed7aa 0%, #fdba74 100%);
+        border-color: #f97316;
+      }
+
+      .bracket-ranking-medal {
+        font-size: 32px;
+        line-height: 1;
+      }
+
+      .bracket-ranking-info {
+        flex: 1;
+      }
+
+      .bracket-ranking-position {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text-muted);
+        text-transform: uppercase;
+      }
+
+      .bracket-ranking-name {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--text);
+      }
+
+      /* Responsive - Mobile Vertical Layout */
+      @media (max-width: 768px) {
+        .bracket-header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 16px;
+        }
+
+        .bracket-setup {
+          padding: 24px;
+        }
+
+        .bracket-mode-options {
+          flex-direction: column;
+        }
+
+        .bracket-display {
+          padding: 24px;
+        }
+
+        .bracket-wrapper {
+          flex-direction: column;
+          gap: 40px;
+        }
+
+        .bracket-round {
+          min-width: 100%;
+        }
+
+        .bracket-match {
+          min-width: 100%;
+        }
+
+        .bracket-modal-content {
+          padding: 24px;
+        }
+
+        .bracket-modal-actions {
+          flex-direction: column;
+        }
+
+        .bracket-modal-actions .button {
+          width: 100%;
+        }
+
+        .bracket-champion-name {
+          font-size: 28px;
+        }
+
+        .bracket-ranking-items {
+          flex-direction: column;
+        }
+
+        .bracket-ranking-item {
+          min-width: auto;
+          width: 100%;
+        }
+
+        .bracket-ranking-medal {
+          font-size: 28px;
+        }
+
+        .bracket-ranking-name {
+          font-size: 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <div class="container">
+        <div class="header-content">
+          <a href="../../" class="logo-link">
+            <img src="../../games/reveal-board/staygo-logo.png" alt="Staygo" class="logo" />
+          </a>
+          
+          <nav class="nav" aria-label="เมนูหลัก">
+            <a href="../../#play" class="nav-link">Play</a>
+            <a href="../../#tools" class="nav-link active">Tools</a>
+            <a href="../../#watch" class="nav-link">Watch & Play</a>
+            <a href="../../#about" class="nav-link">About</a>
+          </nav>
+
+          <div class="header-actions">
+            <a href="https://www.youtube.com/@STAYGO" target="_blank" rel="noopener noreferrer" class="icon-button" aria-label="YouTube">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
+                <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+              </svg>
+            </a>
+            <button id="menuToggle" class="icon-button" aria-label="เมนู">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu">
+      <div class="mobile-menu-header">
+        <span class="mobile-menu-title">เมนู</span>
+        <button id="menuClose" class="icon-button" aria-label="ปิดเมนู">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <nav class="mobile-nav">
+        <a href="../../#play" class="mobile-nav-link">Play</a>
+        <a href="../../#tools" class="mobile-nav-link">Tools</a>
+        <a href="../../#watch" class="mobile-nav-link">Watch & Play</a>
+        <a href="../../#about" class="mobile-nav-link">About</a>
+      </nav>
+    </div>
+
+    <main>
+      <section class="section">
+        <div class="container">
+          <div class="bracket-header">
+            <h1 class="section-title">🏆 จัดสายการแข่งขัน</h1>
+            <a href="../../#tools" class="button button-ghost button-sm">← กลับ</a>
+          </div>
+
+          <!-- Setup Panel -->
+          <div class="bracket-setup">
+            <div class="bracket-setup-section">
+              <label class="bracket-label">โหมดการแข่งขัน</label>
+              <div class="bracket-mode-options">
+                <label class="bracket-mode-option">
+                  <input type="radio" name="mode" value="single" checked />
+                  <span>Single Elimination</span>
+                </label>
+                <label class="bracket-mode-option">
+                  <input type="radio" name="mode" value="double" />
+                  <span>Double Elimination</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="bracket-setup-section">
+              <label class="bracket-label">รายชื่อผู้เข้าแข่งขัน (คนละบรรทัด)</label>
+              <textarea 
+                id="participantsInput" 
+                class="bracket-textarea" 
+                placeholder="กรอกชื่อผู้เข้าแข่งขันคนละบรรทัด&#10;เช่น&#10;ผู้เล่น 1&#10;ผู้เล่น 2&#10;ผู้เล่น 3&#10;ผู้เล่น 4"
+                rows="8"
+              ></textarea>
+            </div>
+
+            <div class="bracket-setup-section">
+              <div class="bracket-checkbox-option">
+                <input type="checkbox" id="trackScore" />
+                <label for="trackScore">บันทึกคะแนนในแต่ละคู่</label>
+              </div>
+            </div>
+
+            <div class="bracket-setup-section">
+              <button id="generateBtn" class="button button-primary button-lg" style="width: 100%;">
+                🏆 จัดสายการแข่งขัน
+              </button>
+            </div>
+          </div>
+
+          <!-- Bracket Display -->
+          <div id="bracketDisplay" class="bracket-display">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+              <h2 class="section-title" style="margin: 0;">สายการแข่งขัน</h2>
+              <button id="resetBtn" class="button button-outline button-md">♻️ รีเซ็ต</button>
+            </div>
+            
+            <div id="bracketContainer" class="bracket-container">
+              <!-- Bracket will be rendered here -->
+            </div>
+
+            <div id="championDisplay" class="bracket-champion">
+              <div class="bracket-champion-icon">🏆</div>
+              <div class="bracket-champion-title">แชมป์</div>
+              <div id="championName" class="bracket-champion-name"></div>
+            </div>
+
+            <div id="rankingsDisplay" class="bracket-rankings">
+              <div class="bracket-rankings-title">อันดับ</div>
+              <div class="bracket-ranking-items">
+                <div id="rank2Display" class="bracket-ranking-item rank-2" style="display: none;">
+                  <div class="bracket-ranking-medal">🥈</div>
+                  <div class="bracket-ranking-info">
+                    <div class="bracket-ranking-position">อันดับ 2</div>
+                    <div id="rank2Name" class="bracket-ranking-name"></div>
+                  </div>
+                </div>
+                <div id="rank3Display" class="bracket-ranking-item rank-3" style="display: none;">
+                  <div class="bracket-ranking-medal">🥉</div>
+                  <div class="bracket-ranking-info">
+                    <div class="bracket-ranking-position">อันดับ 3</div>
+                    <div id="rank3Name" class="bracket-ranking-name"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-logo">
+            <img src="../../games/reveal-board/staygo-logo.png" alt="Staygo" />
+          </div>
+          
+          <nav class="footer-links">
+            <a href="https://facebook.com/STAYG0" target="_blank" rel="noopener noreferrer">Facebook</a>
+            <a href="https://instagram.com/staygo.official" target="_blank" rel="noopener noreferrer">Instagram</a>
+            <a href="https://tiktok.com/@staygo.official" target="_blank" rel="noopener noreferrer">TikTok</a>
+            <a href="https://twitch.tv/staygogamming" target="_blank" rel="noopener noreferrer">Twitch</a>
+          </nav>
+          
+          <p class="footer-copy">© STAYGO 2025</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Match Result Modal -->
+    <div id="matchModal" class="bracket-modal">
+      <div class="bracket-modal-overlay"></div>
+      <div class="bracket-modal-content">
+        <h3 class="bracket-modal-title">บันทึกผลการแข่งขัน</h3>
+        
+        <!-- With Score Tracking -->
+        <div id="modalWithScore" style="display: none;">
+          <div class="bracket-modal-match">
+            <div class="bracket-modal-participant">
+              <span id="modalP1Name" class="bracket-modal-participant-name">ผู้เล่น 1</span>
+              <input type="number" id="modalP1Score" class="bracket-modal-score-input" min="0" placeholder="0" />
+            </div>
+            <div class="bracket-modal-participant">
+              <span id="modalP2Name" class="bracket-modal-participant-name">ผู้เล่น 2</span>
+              <input type="number" id="modalP2Score" class="bracket-modal-score-input" min="0" placeholder="0" />
+            </div>
+          </div>
+          <div class="bracket-modal-actions">
+            <button id="modalCancelScore" class="button button-ghost button-md">ยกเลิก</button>
+            <button id="modalSaveScore" class="button button-primary button-md">บันทึก</button>
+          </div>
+        </div>
+
+        <!-- Without Score Tracking -->
+        <div id="modalWithoutScore" style="display: none;">
+          <div class="bracket-modal-winner-buttons">
+            <button id="modalWinner1" class="bracket-winner-button">ผู้เล่น 1</button>
+            <button id="modalWinner2" class="bracket-winner-button">ผู้เล่น 2</button>
+          </div>
+          <div class="bracket-modal-actions">
+            <button id="modalCancelWinner" class="button button-ghost button-md" style="width: 100%;">ยกเลิก</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      class TournamentBracket {
+        constructor() {
+          this.mode = 'single';
+          this.trackScore = false;
+          this.participants = [];
+          this.bracket = null;
+          this.currentMatchId = null;
+          this.init();
+        }
+
+        init() {
+          // Get elements
+          this.participantsInput = document.getElementById('participantsInput');
+          this.generateBtn = document.getElementById('generateBtn');
+          this.resetBtn = document.getElementById('resetBtn');
+          this.bracketDisplay = document.getElementById('bracketDisplay');
+          this.bracketContainer = document.getElementById('bracketContainer');
+          this.championDisplay = document.getElementById('championDisplay');
+          this.championName = document.getElementById('championName');
+          this.rankingsDisplay = document.getElementById('rankingsDisplay');
+          this.rank2Display = document.getElementById('rank2Display');
+          this.rank2Name = document.getElementById('rank2Name');
+          this.rank3Display = document.getElementById('rank3Display');
+          this.rank3Name = document.getElementById('rank3Name');
+          this.matchModal = document.getElementById('matchModal');
+
+          // Event listeners
+          document.querySelectorAll('input[name="mode"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+              this.mode = e.target.value;
+            });
+          });
+
+          document.getElementById('trackScore').addEventListener('change', (e) => {
+            this.trackScore = e.target.checked;
+          });
+
+          this.generateBtn.addEventListener('click', () => this.generateBracket());
+          this.resetBtn.addEventListener('click', () => this.reset());
+
+          // Modal events
+          document.getElementById('modalSaveScore').addEventListener('click', () => this.saveScoreResult());
+          document.getElementById('modalCancelScore').addEventListener('click', () => this.closeModal());
+          document.getElementById('modalWinner1').addEventListener('click', () => this.saveWinnerResult(1));
+          document.getElementById('modalWinner2').addEventListener('click', () => this.saveWinnerResult(2));
+          document.getElementById('modalCancelWinner').addEventListener('click', () => this.closeModal());
+          document.querySelector('.bracket-modal-overlay').addEventListener('click', () => this.closeModal());
+        }
+
+        getParticipants() {
+          const text = this.participantsInput.value.trim();
+          if (!text) return [];
+          return text.split('\n')
+            .map(name => name.trim())
+            .filter(name => name.length > 0);
+        }
+
+        generateBracket() {
+          this.participants = this.getParticipants();
+          
+          if (this.participants.length < 2) {
+            alert('กรุณากรอกรายชื่อผู้เข้าแข่งขันอย่างน้อย 2 คน');
+            return;
+          }
+
+          if (this.participants.length > 32) {
+            alert('รองรับผู้เข้าแข่งขันสูงสุด 32 คน');
+            return;
+          }
+
+          if (this.mode === 'single') {
+            this.bracket = this.generateSingleElimination(this.participants);
+          } else {
+            this.bracket = this.generateDoubleElimination(this.participants);
+          }
+
+          // Process BYE matches after bracket is created
+          this.processBYEMatches();
+          
+          // Render bracket to show results
+          this.renderBracket();
+          this.bracketDisplay.classList.add('active');
+          this.championDisplay.classList.remove('active');
+        }
+
+        processBYEMatches() {
+          // Process BYE matches in order, round by round
+          // ไม่ auto-advance ในรอบ final - ต้องให้ผู้ใช้เลือกผู้ชนะเอง
+          
+          if (this.bracket.mode === 'single') {
+            const finalRoundIndex = this.bracket.rounds.length - 1;
+            
+            for (let r = 0; r < this.bracket.rounds.length; r++) {
+              const round = this.bracket.rounds[r];
+              
+              for (const match of round.matches) {
+                // ไม่ auto-advance ในรอบ final
+                if (r === finalRoundIndex) {
+                  continue; // ข้ามรอบ final - ต้องให้ผู้ใช้เลือกเอง
+                }
+                
+                if (!match.winner && match.participant1 && !match.participant2) {
+                  match.winner = match.participant1;
+                  this.advanceWinner(match);
+                } else if (!match.winner && !match.participant1 && match.participant2) {
+                  match.winner = match.participant2;
+                  this.advanceWinner(match);
+                }
+              }
+            }
+          } else {
+            // Process BYEs in winner bracket (not in final round)
+            const finalRoundIndex = this.bracket.winnerBracket.rounds.length - 1;
+            
+            for (let r = 0; r < this.bracket.winnerBracket.rounds.length; r++) {
+              const round = this.bracket.winnerBracket.rounds[r];
+              
+              for (const match of round.matches) {
+                // ไม่ auto-advance ในรอบ final ของ winner bracket
+                if (r === finalRoundIndex) {
+                  continue; // ข้ามรอบ final
+                }
+                
+                if (!match.winner && match.participant1 && !match.participant2) {
+                  match.winner = match.participant1;
+                  this.advanceWinner(match);
+                } else if (!match.winner && !match.participant1 && match.participant2) {
+                  match.winner = match.participant2;
+                  this.advanceWinner(match);
+                }
+              }
+            }
+          }
+        }
+
+        generateSingleElimination(participants) {
+          const totalRounds = Math.ceil(Math.log2(participants.length));
+          const totalSlots = Math.pow(2, totalRounds);
+          const byes = totalSlots - participants.length;
+
+          // Create proper seeding with distributed byes
+          const seeding = this.createSeeding(participants, totalSlots);
+
+          // Create rounds - DON'T auto-advance BYEs yet
+          const rounds = [];
+          let currentRound = seeding;
+          
+          for (let r = 0; r < totalRounds; r++) {
+            const matches = [];
+            for (let i = 0; i < currentRound.length; i += 2) {
+              const p1 = currentRound[i];
+              const p2 = currentRound[i + 1];
+              
+              const match = {
+                id: `r${r}-m${matches.length}`,
+                participant1: p1,
+                participant2: p2,
+                score1: null,
+                score2: null,
+                winner: null
+              };
+              
+              matches.push(match);
+            }
+            
+            rounds.push({
+              name: r === totalRounds - 1 ? 'ชิงชนะเลิศ' : `รอบที่ ${r + 1}`,
+              matches: matches
+            });
+            
+            // Prepare next round structure (empty slots)
+            currentRound = new Array(matches.length).fill(null);
+          }
+
+          return { mode: 'single', rounds: rounds };
+        }
+
+        createSeeding(participants, totalSlots) {
+          // Create standard seeding with BYEs distributed properly
+          // BYEs should be placed to benefit top seeds
+          const seeding = new Array(totalSlots).fill(null);
+          const byes = totalSlots - participants.length;
+          
+          // Place participants
+          for (let i = 0; i < participants.length; i++) {
+            seeding[i] = participants[i];
+          }
+          
+          // If we have BYEs, redistribute to spread them out
+          if (byes > 0) {
+            const positions = [];
+            for (let i = 0; i < totalSlots; i++) {
+              positions.push(i);
+            }
+            
+            // Place BYEs at end positions (will face top seeds)
+            for (let i = 0; i < byes; i++) {
+              seeding[participants.length + i] = null;
+            }
+          }
+          
+          return seeding;
+        }
+
+        generateDoubleElimination(participants) {
+          // Create winner bracket (same as single elimination)
+          const winnerBracket = this.generateSingleElimination(participants);
+          
+          // Calculate loser bracket structure
+          // In a proper double elimination:
+          // - If winner bracket has n rounds, loser bracket has (2n - 2) rounds
+          // - First round of LB receives losers from WB R1
+          // - Then alternating: LB internal matches, then WB losers drop in
+          
+          const wbRounds = winnerBracket.rounds.length;
+          const lbRounds = Math.max(0, (wbRounds * 2) - 2);
+          const loserBracketRounds = [];
+          
+          // Create empty loser bracket rounds with proper names
+          for (let r = 0; r < lbRounds; r++) {
+            let roundName;
+            if (r === lbRounds - 1) {
+              roundName = 'LB Final';
+            } else {
+              roundName = `LB R${r + 1}`;
+            }
+            
+            loserBracketRounds.push({
+              name: roundName,
+              matches: []
+            });
+          }
+
+          return {
+            mode: 'double',
+            winnerBracket: winnerBracket,
+            loserBracket: { rounds: loserBracketRounds },
+            grandFinal: {
+              match: {
+                id: 'gf',
+                participant1: null,
+                participant2: null,
+                score1: null,
+                score2: null,
+                winner: null
+              },
+              resetMatch: {
+                id: 'gf-reset',
+                participant1: null,
+                participant2: null,
+                score1: null,
+                score2: null,
+                winner: null
+              }
+            }
+          };
+        }
+
+        renderBracket() {
+          if (!this.bracket) return;
+
+          if (this.bracket.mode === 'single') {
+            this.renderSingleElimination();
+          } else {
+            this.renderDoubleElimination();
+          }
+        }
+
+        renderSingleElimination() {
+          const wrapper = document.createElement('div');
+          wrapper.className = 'bracket-wrapper';
+
+          this.bracket.rounds.forEach((round, roundIndex) => {
+            const roundDiv = document.createElement('div');
+            roundDiv.className = 'bracket-round';
+
+            const roundTitle = document.createElement('div');
+            roundTitle.className = 'bracket-round-title';
+            roundTitle.textContent = round.name;
+            roundDiv.appendChild(roundTitle);
+
+            const matchesDiv = document.createElement('div');
+            matchesDiv.className = 'bracket-matches';
+
+            round.matches.forEach(match => {
+              const matchDiv = this.createMatchElement(match);
+              matchesDiv.appendChild(matchDiv);
+            });
+
+            roundDiv.appendChild(matchesDiv);
+            wrapper.appendChild(roundDiv);
+          });
+
+          this.bracketContainer.innerHTML = '';
+          this.bracketContainer.appendChild(wrapper);
+        }
+
+        renderDoubleElimination() {
+          this.bracketContainer.innerHTML = '';
+
+          // Winner Bracket
+          const winnerSection = document.createElement('div');
+          winnerSection.className = 'bracket-section winner';
+          
+          const winnerTitle = document.createElement('div');
+          winnerTitle.className = 'bracket-section-title';
+          winnerTitle.textContent = '🏅 Winner Bracket';
+          winnerSection.appendChild(winnerTitle);
+
+          const winnerWrapper = document.createElement('div');
+          winnerWrapper.className = 'bracket-wrapper';
+
+          this.bracket.winnerBracket.rounds.forEach(round => {
+            const roundDiv = document.createElement('div');
+            roundDiv.className = 'bracket-round';
+
+            const roundTitle = document.createElement('div');
+            roundTitle.className = 'bracket-round-title';
+            roundTitle.textContent = round.name;
+            roundDiv.appendChild(roundTitle);
+
+            const matchesDiv = document.createElement('div');
+            matchesDiv.className = 'bracket-matches';
+
+            round.matches.forEach(match => {
+              const matchDiv = this.createMatchElement(match);
+              matchesDiv.appendChild(matchDiv);
+            });
+
+            roundDiv.appendChild(matchesDiv);
+            winnerWrapper.appendChild(roundDiv);
+          });
+
+          winnerSection.appendChild(winnerWrapper);
+          this.bracketContainer.appendChild(winnerSection);
+
+          // Loser Bracket
+          if (this.bracket.loserBracket.rounds.length > 0) {
+            const loserSection = document.createElement('div');
+            loserSection.className = 'bracket-section loser';
+            
+            const loserTitle = document.createElement('div');
+            loserTitle.className = 'bracket-section-title';
+            loserTitle.textContent = '❌ Loser Bracket';
+            loserSection.appendChild(loserTitle);
+
+            const loserWrapper = document.createElement('div');
+            loserWrapper.className = 'bracket-wrapper';
+
+            this.bracket.loserBracket.rounds.forEach(round => {
+              const roundDiv = document.createElement('div');
+              roundDiv.className = 'bracket-round';
+
+              const roundTitle = document.createElement('div');
+              roundTitle.className = 'bracket-round-title';
+              roundTitle.textContent = round.name;
+              roundDiv.appendChild(roundTitle);
+
+              const matchesDiv = document.createElement('div');
+              matchesDiv.className = 'bracket-matches';
+
+              round.matches.forEach(match => {
+                const matchDiv = this.createMatchElement(match);
+                matchesDiv.appendChild(matchDiv);
+              });
+
+              roundDiv.appendChild(matchesDiv);
+              loserWrapper.appendChild(roundDiv);
+            });
+
+            loserSection.appendChild(loserWrapper);
+            this.bracketContainer.appendChild(loserSection);
+          }
+
+          // Grand Final
+          const gfSection = document.createElement('div');
+          gfSection.className = 'bracket-section grand-final';
+          
+          const gfTitle = document.createElement('div');
+          gfTitle.className = 'bracket-section-title';
+          gfTitle.textContent = '🏆 Grand Final';
+          gfSection.appendChild(gfTitle);
+
+          const gfWrapper = document.createElement('div');
+          gfWrapper.className = 'bracket-wrapper';
+          
+          // Grand Final Match
+          const gfRound = document.createElement('div');
+          gfRound.className = 'bracket-round';
+          
+          const gfTitle2 = document.createElement('div');
+          gfTitle2.className = 'bracket-round-title';
+          gfTitle2.textContent = 'Final';
+          gfRound.appendChild(gfTitle2);
+          
+          const matchesDiv = document.createElement('div');
+          matchesDiv.className = 'bracket-matches';
+          
+          const gfMatch = this.createMatchElement(this.bracket.grandFinal.match);
+          matchesDiv.appendChild(gfMatch);
+          
+          gfRound.appendChild(matchesDiv);
+          gfWrapper.appendChild(gfRound);
+          
+          // Bracket Reset (if needed)
+          if (this.bracket.grandFinal.resetMatch && this.bracket.grandFinal.resetMatch.participant1) {
+            const resetRound = document.createElement('div');
+            resetRound.className = 'bracket-round';
+            
+            const resetTitle = document.createElement('div');
+            resetTitle.className = 'bracket-round-title';
+            resetTitle.textContent = 'Reset';
+            resetRound.appendChild(resetTitle);
+            
+            const resetMatchesDiv = document.createElement('div');
+            resetMatchesDiv.className = 'bracket-matches';
+            
+            const resetMatch = this.createMatchElement(this.bracket.grandFinal.resetMatch);
+            resetMatchesDiv.appendChild(resetMatch);
+            
+            resetRound.appendChild(resetMatchesDiv);
+            gfWrapper.appendChild(resetRound);
+          }
+          
+          gfSection.appendChild(gfWrapper);
+          this.bracketContainer.appendChild(gfSection);
+        }
+
+        createMatchElement(match) {
+          const matchDiv = document.createElement('div');
+          matchDiv.className = 'bracket-match';
+          if (match.winner) {
+            matchDiv.classList.add('completed');
+          }
+
+          const p1 = match.participant1;
+          const p2 = match.participant2;
+          
+          // Mark BYE matches with special class
+          if ((p1 && !p2) || (!p1 && p2)) {
+            matchDiv.classList.add('has-bye');
+            // Add tooltip for BYE matches that haven't been processed
+            if (!match.winner) {
+              matchDiv.title = 'คลิกเพื่อยืนยันผลการแข่งขัน (Walkover)';
+            }
+          }
+
+          // Participant 1
+          const p1Div = document.createElement('div');
+          p1Div.className = 'bracket-participant';
+          if (!p1) {
+            p1Div.classList.add('bye');
+            p1Div.innerHTML = '<span class="bracket-participant-name">BYE</span>';
+          } else {
+            const p1Name = document.createElement('span');
+            p1Name.className = 'bracket-participant-name';
+            p1Name.textContent = p1;
+            p1Div.appendChild(p1Name);
+
+            if (this.trackScore && match.score1 !== null) {
+              const p1Score = document.createElement('span');
+              p1Score.className = 'bracket-participant-score';
+              p1Score.textContent = match.score1;
+              p1Div.appendChild(p1Score);
+            }
+
+            if (match.winner === p1) {
+              p1Div.classList.add('winner');
+            } else if (match.winner) {
+              p1Div.classList.add('loser');
+            }
+          }
+
+          // Participant 2
+          const p2Div = document.createElement('div');
+          p2Div.className = 'bracket-participant';
+          if (!p2) {
+            p2Div.classList.add('bye');
+            p2Div.innerHTML = '<span class="bracket-participant-name">BYE</span>';
+          } else {
+            const p2Name = document.createElement('span');
+            p2Name.className = 'bracket-participant-name';
+            p2Name.textContent = p2;
+            p2Div.appendChild(p2Name);
+
+            if (this.trackScore && match.score2 !== null) {
+              const p2Score = document.createElement('span');
+              p2Score.className = 'bracket-participant-score';
+              p2Score.textContent = match.score2;
+              p2Div.appendChild(p2Score);
+            }
+
+            if (match.winner === p2) {
+              p2Div.classList.add('winner');
+            } else if (match.winner) {
+              p2Div.classList.add('loser');
+            }
+          }
+
+          matchDiv.appendChild(p1Div);
+          matchDiv.appendChild(p2Div);
+
+          // Click to record result
+          // 1. Both participants exist (normal match)
+          // 2. BYE match (one participant only) - need to confirm walkover
+          if ((p1 && p2) || (p1 && !p2) || (!p1 && p2)) {
+            matchDiv.addEventListener('click', () => this.openMatchModal(match));
+            matchDiv.style.cursor = 'pointer';
+          }
+
+          return matchDiv;
+        }
+
+        openMatchModal(match) {
+          this.currentMatchId = match.id;
+          
+          const p1 = match.participant1;
+          const p2 = match.participant2;
+          
+          // กรณีพิเศษ: ถ้ามีแค่คนเดียว (BYE) ให้ยืนยันและ auto-advance
+          if (p1 && !p2) {
+            if (confirm(`ยืนยันให้ ${p1} เป็นผู้ชนะ (Walkover)?`)) {
+              match.winner = p1;
+              this.advanceWinner(match);
+              this.renderBracket();
+              this.checkComplete();
+            }
+            return;
+          } else if (!p1 && p2) {
+            if (confirm(`ยืนยันให้ ${p2} เป็นผู้ชนะ (Walkover)?`)) {
+              match.winner = p2;
+              this.advanceWinner(match);
+              this.renderBracket();
+              this.checkComplete();
+            }
+            return;
+          }
+
+          if (this.trackScore) {
+            // Show score input modal
+            document.getElementById('modalWithScore').style.display = 'block';
+            document.getElementById('modalWithoutScore').style.display = 'none';
+            
+            document.getElementById('modalP1Name').textContent = p1;
+            document.getElementById('modalP2Name').textContent = p2;
+            document.getElementById('modalP1Score').value = match.score1 || '';
+            document.getElementById('modalP2Score').value = match.score2 || '';
+          } else {
+            // Show winner selection modal
+            document.getElementById('modalWithScore').style.display = 'none';
+            document.getElementById('modalWithoutScore').style.display = 'block';
+            
+            document.getElementById('modalWinner1').textContent = p1;
+            document.getElementById('modalWinner2').textContent = p2;
+          }
+
+          this.matchModal.classList.add('active');
+        }
+
+        closeModal() {
+          this.matchModal.classList.remove('active');
+          this.currentMatchId = null;
+        }
+
+        saveScoreResult() {
+          const score1 = parseInt(document.getElementById('modalP1Score').value) || 0;
+          const score2 = parseInt(document.getElementById('modalP2Score').value) || 0;
+
+          if (score1 === score2) {
+            alert('คะแนนต้องไม่เท่ากัน กรุณากรอกใหม่');
+            return;
+          }
+
+          const match = this.findMatch(this.currentMatchId);
+          if (match) {
+            match.score1 = score1;
+            match.score2 = score2;
+            match.winner = score1 > score2 ? match.participant1 : match.participant2;
+            
+            this.advanceWinner(match);
+            this.renderBracket();
+            this.checkComplete();
+          }
+
+          this.closeModal();
+        }
+
+        saveWinnerResult(winnerNum) {
+          const match = this.findMatch(this.currentMatchId);
+          if (match) {
+            match.winner = winnerNum === 1 ? match.participant1 : match.participant2;
+            
+            this.advanceWinner(match);
+            this.renderBracket();
+            this.checkComplete();
+          }
+
+          this.closeModal();
+        }
+
+        findMatch(matchId) {
+          if (this.bracket.mode === 'single') {
+            for (const round of this.bracket.rounds) {
+              const match = round.matches.find(m => m.id === matchId);
+              if (match) return match;
+            }
+          } else {
+            // Check winner bracket
+            for (const round of this.bracket.winnerBracket.rounds) {
+              const match = round.matches.find(m => m.id === matchId);
+              if (match) return match;
+            }
+            // Check loser bracket
+            for (const round of this.bracket.loserBracket.rounds) {
+              const match = round.matches.find(m => m.id === matchId);
+              if (match) return match;
+            }
+            // Check grand final
+            if (this.bracket.grandFinal.match.id === matchId) {
+              return this.bracket.grandFinal.match;
+            }
+            // Check grand final reset
+            if (this.bracket.grandFinal.resetMatch && this.bracket.grandFinal.resetMatch.id === matchId) {
+              return this.bracket.grandFinal.resetMatch;
+            }
+          }
+          return null;
+        }
+
+        advanceWinner(match) {
+          if (!match.winner) return;
+
+          if (this.bracket.mode === 'single') {
+            // Single Elimination: advance winner to next round
+            const currentRoundIndex = parseInt(match.id.split('-')[0].substring(1));
+            const matchIndex = parseInt(match.id.split('-')[1].substring(1));
+            
+            if (currentRoundIndex < this.bracket.rounds.length - 1) {
+              const nextRound = this.bracket.rounds[currentRoundIndex + 1];
+              const nextMatchIndex = Math.floor(matchIndex / 2);
+              const nextMatch = nextRound.matches[nextMatchIndex];
+              
+              if (matchIndex % 2 === 0) {
+                nextMatch.participant1 = match.winner;
+              } else {
+                nextMatch.participant2 = match.winner;
+              }
+            }
+          } else {
+            // Double Elimination logic
+            this.advanceDoubleElimination(match);
+          }
+        }
+
+        advanceDoubleElimination(match) {
+          const winner = match.winner;
+          const loser = match.participant1 === match.winner ? match.participant2 : match.participant1;
+          
+          if (match.id.startsWith('r')) {
+            // Winner Bracket match
+            const currentRoundIndex = parseInt(match.id.split('-')[0].substring(1));
+            const matchIndex = parseInt(match.id.split('-')[1].substring(1));
+            
+            // Advance winner in winner bracket
+            if (currentRoundIndex < this.bracket.winnerBracket.rounds.length - 1) {
+              const nextRound = this.bracket.winnerBracket.rounds[currentRoundIndex + 1];
+              const nextMatchIndex = Math.floor(matchIndex / 2);
+              const nextMatch = nextRound.matches[nextMatchIndex];
+              
+              if (matchIndex % 2 === 0) {
+                nextMatch.participant1 = winner;
+              } else {
+                nextMatch.participant2 = winner;
+              }
+            } else {
+              // Winner bracket champion goes to grand final
+              this.bracket.grandFinal.match.participant1 = winner;
+            }
+            
+            // Move loser to loser bracket
+            if (loser) {
+              this.moveToLoserBracket(loser, currentRoundIndex);
+            }
+            
+          } else if (match.id.startsWith('lb')) {
+            // Loser Bracket match - loser is eliminated, winner advances
+            const currentRoundIndex = parseInt(match.id.split('-')[0].substring(2));
+            const matchIndex = parseInt(match.id.split('-')[1].substring(1));
+            
+            if (currentRoundIndex < this.bracket.loserBracket.rounds.length - 1) {
+              const nextRound = this.bracket.loserBracket.rounds[currentRoundIndex + 1];
+              
+              // In loser bracket, advancement is more complex
+              // Simple approach: each match winner advances to next round
+              // Try to fill existing matches first, or create new ones
+              let placed = false;
+              
+              // Find an existing match with empty slot
+              for (const lbMatch of nextRound.matches) {
+                if (!lbMatch.participant1) {
+                  lbMatch.participant1 = winner;
+                  placed = true;
+                  break;
+                } else if (!lbMatch.participant2) {
+                  lbMatch.participant2 = winner;
+                  placed = true;
+                  break;
+                }
+              }
+              
+              // If not placed, create new match
+              if (!placed) {
+                nextRound.matches.push({
+                  id: `lb${currentRoundIndex + 1}-m${nextRound.matches.length}`,
+                  participant1: winner,
+                  participant2: null,
+                  score1: null,
+                  score2: null,
+                  winner: null
+                });
+              }
+            } else {
+              // Loser bracket champion goes to grand final
+              this.bracket.grandFinal.match.participant2 = winner;
+            }
+            
+          } else if (match.id === 'gf') {
+            // Grand Final
+            if (winner === this.bracket.grandFinal.match.participant2) {
+              // Loser bracket player won - need bracket reset
+              if (!this.bracket.grandFinal.resetMatch.participant1) {
+                // Set up reset match
+                this.bracket.grandFinal.resetMatch.participant1 = this.bracket.grandFinal.match.participant1;
+                this.bracket.grandFinal.resetMatch.participant2 = this.bracket.grandFinal.match.participant2;
+              }
+            }
+            // If winner bracket player won, they are champion
+            
+          } else if (match.id === 'gf-reset') {
+            // Reset match - winner is final champion
+          }
+        }
+
+        moveToLoserBracket(loser, fromWinnerRound) {
+          // Double elimination loser bracket structure (improved):
+          // Loser bracket มี pattern แบบสลับ:
+          // - รอบคี่ (0, 2, 4...): ผู้แพ้จาก WB เล่นกัน หรือ LB winners เล่นกัน
+          // - รอบคู่ (1, 3, 5...): LB winners vs ผู้แพ้จาก WB รอบถัดไป
+          
+          // คำนวณว่าควรไปรอบไหนใน LB
+          // WB R0 → LB R0 (first round, losers play each other)
+          // WB R1 → LB R1 (even round, play vs LB R0 winners)
+          // WB R2 → LB R3 (even round)
+          // Pattern: WB Rn → LB R(2n-1) for n >= 1, LB R0 for n = 0
+          
+          let loserRoundIndex;
+          if (fromWinnerRound === 0) {
+            loserRoundIndex = 0;
+          } else {
+            // WB R1+ → LB R(2n-1)
+            loserRoundIndex = (fromWinnerRound * 2) - 1;
+          }
+          
+          if (loserRoundIndex >= this.bracket.loserBracket.rounds.length) {
+            return; // No more loser bracket rounds
+          }
+          
+          const loserRound = this.bracket.loserBracket.rounds[loserRoundIndex];
+          
+          // พยายามใส่ใน match ที่มีอยู่ก่อน
+          let placed = false;
+          for (const lbMatch of loserRound.matches) {
+            if (!lbMatch.participant1) {
+              lbMatch.participant1 = loser;
+              placed = true;
+              break;
+            } else if (!lbMatch.participant2) {
+              lbMatch.participant2 = loser;
+              placed = true;
+              break;
+            }
+          }
+          
+          // ถ้าไม่มีที่ว่าง สร้าง match ใหม่
+          if (!placed) {
+            const matchId = `lb${loserRoundIndex}-m${loserRound.matches.length}`;
+            loserRound.matches.push({
+              id: matchId,
+              participant1: loser,
+              participant2: null,
+              score1: null,
+              score2: null,
+              winner: null
+            });
+          }
+        }
+
+        checkComplete() {
+          let champion = null;
+          let rank2 = null;
+          let rank3 = null;
+
+          if (this.bracket.mode === 'single') {
+            const finalMatch = this.bracket.rounds[this.bracket.rounds.length - 1].matches[0];
+            // ต้องมี winner จริงๆ ในรอบ final ถึงจะแสดงเป็นแชมป์
+            if (finalMatch && finalMatch.winner) {
+              champion = finalMatch.winner;
+              // อันดับ 2: ผู้แพ้ใน final
+              rank2 = finalMatch.participant1 === champion ? finalMatch.participant2 : finalMatch.participant1;
+              
+              // อันดับ 3: ผู้แพ้ใน semi-final (ถ้ามี)
+              if (this.bracket.rounds.length >= 2) {
+                const semiFinalRound = this.bracket.rounds[this.bracket.rounds.length - 2];
+                // หาผู้แพ้ใน semi-finals ที่ไม่ใช่ rank 2
+                const semiLosers = [];
+                for (const match of semiFinalRound.matches) {
+                  if (match.winner) {
+                    const loser = match.participant1 === match.winner ? match.participant2 : match.participant1;
+                    if (loser && loser !== rank2) {
+                      semiLosers.push(loser);
+                    }
+                  }
+                }
+                if (semiLosers.length > 0) {
+                  rank3 = semiLosers[0]; // ใช้คนแรกเป็นอันดับ 3
+                }
+              }
+            }
+          } else {
+            // Double elimination - check for champion
+            if (this.bracket.grandFinal.resetMatch && this.bracket.grandFinal.resetMatch.winner) {
+              // Reset match was played and has a winner
+              champion = this.bracket.grandFinal.resetMatch.winner;
+              rank2 = this.bracket.grandFinal.resetMatch.participant1 === champion 
+                ? this.bracket.grandFinal.resetMatch.participant2 
+                : this.bracket.grandFinal.resetMatch.participant1;
+              
+              // อันดับ 3: ผู้แพ้ใน loser bracket final
+              if (this.bracket.loserBracket.rounds.length > 0) {
+                const lbFinalRound = this.bracket.loserBracket.rounds[this.bracket.loserBracket.rounds.length - 1];
+                if (lbFinalRound.matches.length > 0) {
+                  const lbFinalMatch = lbFinalRound.matches[0];
+                  if (lbFinalMatch.winner) {
+                    rank3 = lbFinalMatch.participant1 === lbFinalMatch.winner 
+                      ? lbFinalMatch.participant2 
+                      : lbFinalMatch.participant1;
+                  }
+                }
+              }
+            } else if (this.bracket.grandFinal.match.winner) {
+              // Check if winner is from winner bracket (direct champion)
+              if (this.bracket.grandFinal.match.winner === this.bracket.grandFinal.match.participant1) {
+                // Winner bracket player won - champion!
+                champion = this.bracket.grandFinal.match.winner;
+                // อันดับ 2: ผู้แพ้ใน grand final (จาก loser bracket)
+                rank2 = this.bracket.grandFinal.match.participant2;
+                
+                // อันดับ 3: ผู้แพ้ใน loser bracket final
+                if (this.bracket.loserBracket.rounds.length > 0) {
+                  const lbFinalRound = this.bracket.loserBracket.rounds[this.bracket.loserBracket.rounds.length - 1];
+                  if (lbFinalRound.matches.length > 0) {
+                    const lbFinalMatch = lbFinalRound.matches[0];
+                    if (lbFinalMatch.winner) {
+                      rank3 = lbFinalMatch.participant1 === lbFinalMatch.winner 
+                        ? lbFinalMatch.participant2 
+                        : lbFinalMatch.participant1;
+                    }
+                  }
+                }
+              }
+              // If loser bracket player won, reset match is needed (already handled in advance logic)
+            }
+          }
+
+          // แสดง champion เฉพาะเมื่อมีจริง ซ่อนถ้ายังไม่มี
+          if (champion) {
+            this.championName.textContent = champion;
+            this.championDisplay.classList.add('active');
+            
+            // แสดงอันดับ 2, 3
+            this.rankingsDisplay.classList.add('active');
+            
+            if (rank2) {
+              this.rank2Name.textContent = rank2;
+              this.rank2Display.style.display = 'flex';
+            } else {
+              this.rank2Display.style.display = 'none';
+            }
+            
+            if (rank3) {
+              this.rank3Name.textContent = rank3;
+              this.rank3Display.style.display = 'flex';
+            } else {
+              this.rank3Display.style.display = 'none';
+            }
+          } else {
+            // ซ่อน champion display ถ้ายังไม่มีแชมป์
+            this.championDisplay.classList.remove('active');
+            this.rankingsDisplay.classList.remove('active');
+          }
+        }
+
+        reset() {
+          this.participants = [];
+          this.bracket = null;
+          this.currentMatchId = null;
+          this.bracketDisplay.classList.remove('active');
+          this.championDisplay.classList.remove('active');
+          this.rankingsDisplay.classList.remove('active');
+          this.bracketContainer.innerHTML = '';
+          this.participantsInput.value = '';
+        }
+      }
+
+      // Initialize
+      let tournament;
+      document.addEventListener('DOMContentLoaded', () => {
+        tournament = new TournamentBracket();
+      });
+    </script>
+  </body>
+</html>
+

@@ -3198,3 +3198,461 @@ h3 {
     font-size: 28px;
   }
 }
+
+/* ===========================
+   Tournament Bracket Styles
+   =========================== */
+
+.bracket-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.bracket-setup {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  margin-bottom: 32px;
+  box-shadow: var(--shadow-sm);
+}
+
+.bracket-setup-section {
+  margin-bottom: 24px;
+}
+
+.bracket-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.bracket-mode-options {
+  display: flex;
+  gap: 12px;
+}
+
+.bracket-mode-option {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.bracket-mode-option:hover {
+  border-color: var(--primary);
+  background: var(--surface-2);
+}
+
+.bracket-mode-option input[type="radio"] {
+  margin: 0;
+  cursor: pointer;
+}
+
+.bracket-mode-option:has(input[type="radio"]:checked) {
+  border-color: var(--primary);
+  background: var(--surface-2);
+}
+
+.bracket-textarea {
+  width: 100%;
+  min-height: 150px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--surface);
+  resize: vertical;
+  transition: border-color 0.15s ease;
+}
+
+.bracket-textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+.bracket-textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.bracket-checkbox-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.bracket-checkbox-option:hover {
+  background: var(--surface);
+  border-color: var(--primary);
+}
+
+.bracket-checkbox-option input[type="checkbox"] {
+  margin: 0;
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+}
+
+.bracket-checkbox-option label {
+  margin: 0;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Bracket Display */
+.bracket-display {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  box-shadow: var(--shadow-sm);
+  display: none;
+}
+
+.bracket-display.active {
+  display: block;
+}
+
+.bracket-container {
+  overflow-x: auto;
+  overflow-y: visible;
+  padding: 20px 0;
+}
+
+.bracket-wrapper {
+  display: flex;
+  gap: 60px;
+  min-width: min-content;
+}
+
+.bracket-section {
+  margin-bottom: 40px;
+}
+
+.bracket-section-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.bracket-section.winner .bracket-section-title {
+  color: var(--success);
+}
+
+.bracket-section.loser .bracket-section-title {
+  color: var(--danger);
+}
+
+.bracket-section.grand-final .bracket-section-title {
+  color: var(--secondary);
+}
+
+.bracket-round {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  min-width: 200px;
+}
+
+.bracket-round-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-align: center;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.bracket-matches {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.bracket-match {
+  background: var(--surface-2);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  min-width: 180px;
+}
+
+.bracket-match:hover {
+  border-color: var(--primary);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px);
+}
+
+.bracket-match.completed {
+  border-color: var(--success);
+}
+
+.bracket-participant {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 10px;
+  border-radius: 4px;
+  background: var(--surface);
+  margin-bottom: 6px;
+  transition: all 0.15s ease;
+}
+
+.bracket-participant:last-child {
+  margin-bottom: 0;
+}
+
+.bracket-participant.winner {
+  background: var(--success);
+  color: white;
+  font-weight: 600;
+}
+
+.bracket-participant.loser {
+  opacity: 0.5;
+}
+
+.bracket-participant.bye {
+  background: var(--surface-2);
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.bracket-participant-name {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.bracket-participant-score {
+  font-size: 14px;
+  font-weight: 700;
+  margin-left: 8px;
+}
+
+/* Bracket Modal */
+.bracket-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+}
+
+.bracket-modal.active {
+  display: flex;
+}
+
+.bracket-modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.bracket-modal-content {
+  position: relative;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: var(--shadow-md);
+  z-index: 1;
+}
+
+.bracket-modal-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 20px 0;
+  color: var(--text);
+}
+
+.bracket-modal-match {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.bracket-modal-participant {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: var(--surface-2);
+  border-radius: var(--radius-sm);
+}
+
+.bracket-modal-participant-name {
+  flex: 1;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.bracket-modal-score-input {
+  width: 80px;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 16px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.bracket-modal-score-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+.bracket-modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.bracket-modal-winner-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.bracket-winner-button {
+  padding: 16px;
+  background: var(--surface-2);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bracket-winner-button:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Champion Display */
+.bracket-champion {
+  text-align: center;
+  padding: 40px;
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border-radius: var(--radius-lg);
+  border: 3px solid var(--secondary);
+  margin-top: 32px;
+  display: none;
+}
+
+.bracket-champion.active {
+  display: block;
+}
+
+.bracket-champion-icon {
+  font-size: 64px;
+  margin-bottom: 16px;
+}
+
+.bracket-champion-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+
+.bracket-champion-name {
+  font-family: 'Kanit', sans-serif;
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--secondary-hover);
+}
+
+/* Responsive - Mobile Vertical Layout */
+@media (max-width: 768px) {
+  .bracket-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .bracket-setup {
+    padding: 24px;
+  }
+
+  .bracket-mode-options {
+    flex-direction: column;
+  }
+
+  .bracket-display {
+    padding: 24px;
+  }
+
+  .bracket-wrapper {
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .bracket-round {
+    min-width: 100%;
+  }
+
+  .bracket-match {
+    min-width: 100%;
+  }
+
+  .bracket-modal-content {
+    padding: 24px;
+  }
+
+  .bracket-modal-actions {
+    flex-direction: column;
+  }
+
+  .bracket-modal-actions .button {
+    width: 100%;
+  }
+
+  .bracket-champion-name {
+    font-size: 28px;
+  }
+}

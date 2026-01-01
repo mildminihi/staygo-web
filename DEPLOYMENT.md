@@ -1,11 +1,14 @@
-# STAYGO GitHub Pages Deployment Guide
+# STAYGO Deployment Guide
+## Domain: staygoch.com
+
+เว็บไซต์นี้พร้อมใช้งานกับ custom domain: **staygoch.com** 🎉
 
 ## 🚀 ขั้นตอนการ Deploy
 
 ### 1. สร้าง GitHub Repository
 
 ```bash
-cd /Users/pattasingha/staygo-web
+cd /Users/mildminihi/staygo-web
 git init
 git add .
 git commit -m "Initial commit: STAYGO website"
@@ -44,14 +47,61 @@ git push -u origin main
 4. เลือก branch `main` และ folder `/ (root)`
 5. กด **Save**
 
-### 5. รอซักครู่
+### 5. ตั้งค่า Custom Domain (staygoch.com)
 
-- ใช้เวลาประมาณ 1-2 นาที
-- เมื่อเสร็จจะแสดง URL เช่น: `https://YOUR_USERNAME.github.io/staygo-web/`
+GitHub Pages จะอ่านไฟล์ `CNAME` ที่มีในโปรเจคแล้ว (มี `staygoch.com` อยู่แล้ว)
 
-### 6. ทดสอบเว็บไซต์
+**หลังจาก push code ขึ้น GitHub:**
 
-เปิด URL ที่ได้และทดสอบว่าทุกอย่างทำงานถูกต้อง
+1. ไปที่ Repository Settings → Pages
+2. ใน **Custom domain** จะเห็น `staygoch.com` อัตโนมัติ
+3. ✅ เช็ค **Enforce HTTPS** (รอ SSL certificate ประมาณ 5-10 นาที)
+
+### 6. ตั้งค่า DNS ที่ Domain Registrar
+
+**ต้องไปตั้งค่าที่เว็บที่ซื้อ domain (เช่น Namecheap, GoDaddy, Cloudflare):**
+
+#### วิธีที่ 1: A Records + CNAME (แนะนำ)
+
+เพิ่ม DNS Records:
+
+**A Records:**
+- Type: `A`
+- Host/Name: `@` (หรือเว้นว่าง)
+- Value/Points to:
+  - `185.199.108.153`
+  - `185.199.109.153`
+  - `185.199.110.153`
+  - `185.199.111.153`
+- TTL: `3600` (หรือ Automatic)
+
+**CNAME Record (สำหรับ www):**
+- Type: `CNAME`
+- Host/Name: `www`
+- Value/Points to: `YOUR_USERNAME.github.io.` (ต้องมีจุดท้าย)
+- TTL: `3600`
+
+#### วิธีที่ 2: CNAME only (ง่ายกว่าแต่ต้อง support CNAME flattening)
+
+- Type: `CNAME`
+- Host/Name: `@`
+- Value: `YOUR_USERNAME.github.io.`
+
+**หมายเหตุ:** DNS propagation อาจใช้เวลา 15 นาที - 24 ชั่วโมง
+
+### 7. รอและทดสอบ
+
+1. รอ DNS propagate (15 นาที - 24 ชั่วโมง)
+2. ทดสอบเปิด `https://staygoch.com`
+3. ทดสอบทุก page และ tool
+4. ตรวจสอบ HTTPS ทำงาน
+
+**เช็คสถานะ DNS:**
+```bash
+# ใน Terminal
+dig staygoch.com
+nslookup staygoch.com
+```
 
 ---
 
@@ -66,39 +116,31 @@ git push
 ```
 
 GitHub จะ deploy อัตโนมัติภายใน 1-2 นาที
-
----
-
-## 📋 Custom Domain (ถ้าต้องการ)
-
-ถ้ามี domain เป็นของตัวเอง:
-
-1. ไปที่ Repository Settings → Pages
-2. ใส่ domain ใน **Custom domain**
-3. ตั้งค่า DNS records:
-   - Type: `CNAME`
-   - Name: `www` หรือ `@`
-   - Value: `YOUR_USERNAME.github.io`
+เว็บจะอัพเดตที่ `https://staygoch.com` โดยอัตโนมัติ
 
 ---
 
 ## ⚠️ หมายเหตุสำคัญ
 
 - ✅ มีไฟล์ `.nojekyll` แล้ว (ป้องกันปัญหา _ ใน folder names)
-- ✅ มี GitHub Actions workflow แล้ว
-- ✅ โครงสร้างโปรเจคพร้อมแล้ว
-- ⚠️ ถ้าใช้ custom domain อย่าลืมอัปเดต URL ในโค้ด
+- ✅ มีไฟล์ `CNAME` แล้ว (ระบุ domain: staygoch.com)
+- ✅ URL ทั้งหมดในโค้ดเป็น `https://staygoch.com` แล้ว
+- ✅ SEO meta tags, sitemap.xml, robots.txt พร้อมแล้ว
+- ✅ โครงสร้างโปรเจคพร้อม deploy
 
 ---
 
 ## 🎯 หลังจาก Deploy แล้ว
 
-URL จะเป็น: `https://YOUR_USERNAME.github.io/staygo-web/`
+เว็บจะทำงานที่: `https://staygoch.com` 🎉
 
-**ตัวอย่าง:**
-- หน้าหลัก: `https://YOUR_USERNAME.github.io/staygo-web/`
-- เกม Cardloop: `https://YOUR_USERNAME.github.io/staygo-web/games/cardloop/`
-- ทอยลูกเต๋า: `https://YOUR_USERNAME.github.io/staygo-web/tools/dice/`
+**URL ของแต่ละหน้า:**
+- หน้าหลัก: `https://staygoch.com/`
+- About: `https://staygoch.com/about/`
+- เกม Cardloop: `https://staygoch.com/games/cardloop/`
+- ทอยลูกเต๋า: `https://staygoch.com/tools/dice/`
+- จับสลาก: `https://staygoch.com/tools/lucky-draw/`
+- ฯลฯ
 
 ---
 

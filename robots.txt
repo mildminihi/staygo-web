@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemaps
-Sitemap: https://staygo.net/sitemap.xml
+Sitemap: https://staygoch.com/sitemap.xml
 
 # Crawl-delay
 Crawl-delay: 10

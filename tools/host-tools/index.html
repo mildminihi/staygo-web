@@ -1,0 +1,1599 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Primary Meta Tags -->
+    <title>Host Tools - เครื่องมือช่วยจัดการเกมกระดาน | STAYGO</title>
+    <meta name="title" content="Host Tools - เครื่องมือช่วยจัดเกมกระดาน | STAYGO" />
+    <meta name="description" content="เครื่องมือช่วยจัดเกมกระดานแบบครบวงจร จัดการผู้เล่น นับแต้ม จัดการเทิร์น และทอยลูกเต๋า ทุกอย่างในหน้าเดียว" />
+    <meta name="keywords" content="host tools, เกมกระดาน, จัดการผู้เล่น, นับแต้ม, ทอยลูกเต๋า, เทิร์นเกม" />
+    <meta name="robots" content="index, follow" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://staygoch.com/tools/host-tools/" />
+    <meta property="og:title" content="Host Tools - เครื่องมือช่วยจัดเกมกระดาน | STAYGO" />
+    <meta property="og:description" content="เครื่องมือช่วยจัดเกมกระดานแบบครบวงจร จัดการผู้เล่น นับแต้ม จัดการเทิร์น ทุกอย่างในหน้าเดียว" />
+    <meta property="og:image" content="https://staygoch.com/games/reveal-board/staygo-logo.png" />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://staygoch.com/tools/host-tools/" />
+    
+    <link rel="icon" type="image/png" href="../../games/reveal-board/staygo-logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Kanit:wght@700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../assets/css/site.css" />
+    <script defer src="../../assets/js/config.js"></script>
+    <script defer src="../../assets/js/site.js"></script>
+    
+    <style>
+      /* Host Tools Specific Styles */
+      .host-tools-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+      }
+      
+      .host-tools-header {
+        margin-bottom: 2rem;
+      }
+      
+      .host-tools-header-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        gap: 1rem;
+      }
+      
+      .host-tools-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--text-primary, #0F172A);
+        margin: 0;
+      }
+      
+      .header-actions-group {
+        display: flex;
+        gap: 0.5rem;
+      }
+      
+      /* Tab Navigation */
+      .tabs-container {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        margin-bottom: 2rem;
+        overflow: hidden;
+        border: 2px solid #F1F5F9;
+        transition: all 0.3s;
+      }
+      
+      .tabs-container:hover {
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+      }
+      
+      .tabs-nav {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        border-bottom: 2px solid #E2E8F0;
+        background: #F8FAFC;
+      }
+      
+      .tab-button {
+        padding: 1rem;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #64748B;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+      }
+      
+      .tab-button:hover {
+        background: #E2E8F0;
+        color: #334155;
+        transform: translateY(-2px);
+      }
+      
+      .tab-button.active {
+        color: #3B82F6;
+        background: white;
+        font-weight: 700;
+      }
+      
+      .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #3B82F6 0%, #2563EB 100%);
+        border-radius: 2px 2px 0 0;
+        box-shadow: 0 -2px 8px rgba(59, 130, 246, 0.3);
+      }
+      
+      .tab-content {
+        padding: 2rem;
+        display: none;
+      }
+      
+      .tab-content.active {
+        display: block;
+      }
+      
+      /* Player Cards */
+      .players-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+      }
+      
+      .player-card {
+        background: white;
+        border: 2px solid #E2E8F0;
+        border-radius: 16px;
+        padding: 1.25rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      }
+      
+      .player-card:hover {
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        transform: translateY(-4px);
+        border-color: #CBD5E1;
+      }
+      
+      .player-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+      
+      .player-name-input {
+        font-size: 1.125rem;
+        font-weight: 600;
+        border: none;
+        background: transparent;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        flex: 1;
+        color: #0F172A;
+      }
+      
+      .player-name-input:focus {
+        outline: 2px solid #3B82F6;
+        background: #F8FAFC;
+      }
+      
+      .color-palette {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+      }
+      
+      .color-option {
+        width: 100%;
+        aspect-ratio: 1;
+        border-radius: 10px;
+        border: 3px solid transparent;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        position: relative;
+      }
+      
+      .color-option::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: 7px;
+        background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 100%);
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+      
+      .color-option:hover {
+        transform: scale(1.15) rotate(5deg);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+      }
+      
+      .color-option:hover::after {
+        opacity: 1;
+      }
+      
+      .color-option.active {
+        border-color: #0F172A;
+        box-shadow: 0 0 0 3px white, 0 0 0 6px currentColor, 0 6px 16px rgba(0, 0, 0, 0.3);
+        transform: scale(1.05);
+      }
+      
+      .color-option.active::after {
+        opacity: 1;
+      }
+      
+      /* Tracker Cards */
+      .tracker-controls {
+        background: linear-gradient(135deg, #F8FAFC 0%, #EFF6FF 100%);
+        border-radius: 16px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        border: 2px solid #E2E8F0;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      }
+      
+      .tracker-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 1rem;
+      }
+      
+      .tracker-card {
+        background: white;
+        border: 3px solid;
+        border-radius: 16px;
+        padding: 1.5rem;
+        text-align: center;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        position: relative;
+        overflow: hidden;
+      }
+      
+      .tracker-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: currentColor;
+        opacity: 0.3;
+      }
+      
+      .tracker-card:hover {
+        transform: translateY(-4px) scale(1.02);
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+      }
+      
+      .tracker-card-name {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+      }
+      
+      .tracker-value {
+        font-size: 3rem;
+        font-weight: 700;
+        margin: 1rem 0;
+        line-height: 1;
+      }
+      
+      .tracker-buttons {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.5rem;
+      }
+      
+      .tracker-btn {
+        padding: 0.75rem;
+        font-size: 1.125rem;
+        font-weight: 700;
+        border: 2px solid #E2E8F0;
+        background: white;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      }
+      
+      .tracker-btn:hover {
+        background: #F8FAFC;
+        border-color: #CBD5E1;
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+      }
+      
+      .tracker-btn:active {
+        transform: translateY(-1px) scale(1);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      }
+      
+      /* Turn Manager */
+      .current-turn-card {
+        background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+        border-radius: 20px;
+        padding: 3rem 2rem;
+        text-align: center;
+        color: white;
+        margin-bottom: 2rem;
+        box-shadow: 0 12px 32px rgba(102, 126, 234, 0.4);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+      }
+      
+      .current-turn-card::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      }
+      
+      .current-turn-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 16px 40px rgba(102, 126, 234, 0.5);
+      }
+      
+      .current-turn-label {
+        font-size: 1rem;
+        opacity: 0.9;
+        margin-bottom: 0.5rem;
+      }
+      
+      .current-turn-name {
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+      }
+      
+      .round-display {
+        font-size: 1.5rem;
+        opacity: 0.9;
+      }
+      
+      .turn-controls {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin-bottom: 2rem;
+      }
+      
+      .turn-order-list {
+        background: white;
+        border: 2px solid #E2E8F0;
+        border-radius: 16px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      }
+      
+      .turn-order-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        border-radius: 12px;
+        margin-bottom: 0.5rem;
+        background: #F8FAFC;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 2px solid transparent;
+      }
+      
+      .turn-order-item:hover {
+        background: #F1F5F9;
+        transform: translateX(4px);
+      }
+      
+      .turn-order-item.current {
+        background: linear-gradient(135deg, #DBEAFE 0%, #EFF6FF 100%);
+        border: 2px solid #3B82F6;
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+        transform: scale(1.02);
+      }
+      
+      /* Dice Module */
+      .dice-controls {
+        background: white;
+        border: 2px solid #E2E8F0;
+        border-radius: 16px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s;
+      }
+      
+      .dice-controls:hover {
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      }
+      
+      .dice-types {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+      }
+      
+      .dice-type-btn {
+        padding: 1rem 0.5rem;
+        font-size: 1.125rem;
+        font-weight: 700;
+        border: 2px solid #E2E8F0;
+        background: white;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      }
+      
+      .dice-type-btn:hover {
+        border-color: #3B82F6;
+        background: #EFF6FF;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(59, 130, 246, 0.2);
+      }
+      
+      .dice-type-btn.active {
+        background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+        color: white;
+        border-color: #3B82F6;
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        transform: translateY(-2px);
+      }
+      
+      .dice-type-btn:active {
+        transform: translateY(0);
+      }
+      
+      .dice-result-display {
+        background: linear-gradient(135deg, #F8FAFC 0%, #EFF6FF 100%);
+        border-radius: 16px;
+        padding: 2rem;
+        text-align: center;
+        margin-bottom: 2rem;
+        border: 2px solid #E2E8F0;
+        box-shadow: 0 4px 16px rgba(59, 130, 246, 0.1);
+        transition: all 0.3s;
+      }
+      
+      .dice-result-display:hover {
+        box-shadow: 0 8px 24px rgba(59, 130, 246, 0.15);
+        transform: translateY(-2px);
+      }
+      
+      .dice-result-sum {
+        font-size: 4rem;
+        font-weight: 700;
+        color: #3B82F6;
+        margin-bottom: 0.5rem;
+      }
+      
+      .dice-result-details {
+        font-size: 1.125rem;
+        color: #64748B;
+      }
+      
+      .roll-history {
+        background: white;
+        border: 2px solid #E2E8F0;
+        border-radius: 16px;
+        padding: 1.5rem;
+        max-height: 300px;
+        overflow-y: auto;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      }
+      
+      .roll-history::-webkit-scrollbar {
+        width: 8px;
+      }
+      
+      .roll-history::-webkit-scrollbar-track {
+        background: #F1F5F9;
+        border-radius: 4px;
+      }
+      
+      .roll-history::-webkit-scrollbar-thumb {
+        background: #CBD5E1;
+        border-radius: 4px;
+      }
+      
+      .roll-history::-webkit-scrollbar-thumb:hover {
+        background: #94A3B8;
+      }
+      
+      .history-item {
+        padding: 0.75rem;
+        border-bottom: 1px solid #E2E8F0;
+        font-size: 0.875rem;
+        transition: all 0.2s;
+        border-radius: 8px;
+        margin-bottom: 0.25rem;
+      }
+      
+      .history-item:hover {
+        background: #F8FAFC;
+        transform: translateX(4px);
+      }
+      
+      .history-item:last-child {
+        border-bottom: none;
+      }
+      
+      /* Coin Flip Animation */
+      @keyframes coinFlip {
+        0% {
+          transform: rotateY(0deg) scale(1);
+        }
+        25% {
+          transform: rotateY(180deg) scale(1.2);
+        }
+        50% {
+          transform: rotateY(360deg) scale(1);
+        }
+        75% {
+          transform: rotateY(540deg) scale(1.2);
+        }
+        100% {
+          transform: rotateY(720deg) scale(1);
+        }
+      }
+      
+      .coin-flipping {
+        animation: coinFlip 1s ease-in-out;
+        display: inline-block;
+      }
+      
+      @keyframes fadeInBounce {
+        0% {
+          opacity: 0;
+          transform: scale(0.3);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.1);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+      
+      .result-appear {
+        animation: fadeInBounce 0.5s ease-out;
+      }
+      
+      @keyframes buttonPulse {
+        0%, 100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(0.95);
+        }
+      }
+      
+      .button-flipping {
+        animation: buttonPulse 0.3s ease-in-out 3;
+      }
+      
+      /* Dice Rolling Animation */
+      @keyframes diceRoll {
+        0% {
+          transform: rotate(0deg) scale(1);
+        }
+        25% {
+          transform: rotate(90deg) scale(1.1);
+        }
+        50% {
+          transform: rotate(180deg) scale(1);
+        }
+        75% {
+          transform: rotate(270deg) scale(1.1);
+        }
+        100% {
+          transform: rotate(360deg) scale(1);
+        }
+      }
+      
+      .dice-rolling {
+        animation: diceRoll 0.6s ease-in-out;
+        display: inline-block;
+      }
+      
+      @keyframes slideInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      
+      .dice-result-animate {
+        animation: slideInUp 0.4s ease-out;
+      }
+      
+      @keyframes buttonShake {
+        0%, 100% {
+          transform: translateX(0);
+        }
+        10%, 30%, 50%, 70%, 90% {
+          transform: translateX(-3px);
+        }
+        20%, 40%, 60%, 80% {
+          transform: translateX(3px);
+        }
+      }
+      
+      .button-rolling {
+        animation: buttonShake 0.4s ease-in-out;
+      }
+      
+      /* Utility Classes */
+      .button-primary {
+        background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 12px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        position: relative;
+        overflow: hidden;
+      }
+      
+      .button-primary::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.15);
+        opacity: 0;
+        transition: none;
+      }
+      
+      .button-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+      }
+      
+      .button-primary:hover::before {
+        opacity: 1;
+      }
+      
+      .button-primary:active {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+      }
+      
+      .button-primary:active::before {
+        opacity: 0.8;
+      }
+      
+      .button-primary:disabled {
+        background: linear-gradient(135deg, #94A3B8 0%, #64748B 100%);
+        cursor: not-allowed;
+        box-shadow: none;
+        transform: none;
+      }
+      
+      .button-secondary {
+        background: white;
+        color: #3B82F6;
+        padding: 0.75rem 1.5rem;
+        border: 2px solid #3B82F6;
+        border-radius: 12px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
+      }
+      
+      .button-secondary:hover {
+        background: #EFF6FF;
+        border-color: #2563EB;
+        color: #2563EB;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(59, 130, 246, 0.25);
+      }
+      
+      .button-secondary:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
+      }
+      
+      .button-secondary:disabled {
+        background: #F1F5F9;
+        border-color: #CBD5E1;
+        color: #94A3B8;
+        cursor: not-allowed;
+        transform: none;
+      }
+      
+      .button-large {
+        padding: 1.25rem 2rem;
+        font-size: 1.25rem;
+        min-width: 200px;
+        border-radius: 16px;
+        font-weight: 700;
+      }
+      
+      .button-danger {
+        background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+        color: white;
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+      }
+      
+      .button-danger:hover {
+        background: linear-gradient(135deg, #DC2626 0%, #B91C1C 100%);
+        box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);
+      }
+      
+      .empty-state {
+        text-align: center;
+        padding: 3rem 1rem;
+        color: #64748B;
+      }
+      
+      .empty-state-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+      }
+      
+      /* Responsive */
+      @media (max-width: 768px) {
+        .host-tools-title {
+          font-size: 1.5rem;
+        }
+        
+        .tabs-nav {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .tab-button {
+          padding: 0.75rem 0.5rem;
+          font-size: 0.875rem;
+        }
+        
+        .tab-content {
+          padding: 1rem;
+        }
+        
+        .current-turn-name {
+          font-size: 2rem;
+        }
+        
+        .tracker-value {
+          font-size: 2.5rem;
+        }
+        
+        .dice-result-sum {
+          font-size: 3rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <div class="container">
+        <div class="header-content">
+          <a href="../../" class="logo-link">
+            <img src="../../games/reveal-board/staygo-logo.png" alt="Staygo" class="logo" />
+          </a>
+          
+          <nav class="nav" aria-label="เมนูหลัก">
+            <a href="../../#play" class="nav-link">Play</a>
+            <a href="../../#tools" class="nav-link active">Tools</a>
+            <a href="../../#watch" class="nav-link">Watch & Play</a>
+            <a href="../../about/" class="nav-link">About</a>
+          </nav>
+
+          <div class="header-actions">
+            <a href="https://www.youtube.com/@STAYGO" target="_blank" rel="noopener noreferrer" class="icon-button" aria-label="YouTube">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
+                <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+              </svg>
+            </a>
+            <button id="menuToggle" class="icon-button" aria-label="เมนู">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu">
+      <div class="mobile-menu-header">
+        <span class="mobile-menu-title">เมนู</span>
+        <button id="menuClose" class="icon-button" aria-label="ปิดเมนู">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <nav class="mobile-nav">
+        <a href="../../#play" class="mobile-nav-link">Play</a>
+        <a href="../../#tools" class="mobile-nav-link">Tools</a>
+        <a href="../../#watch" class="mobile-nav-link">Watch & Play</a>
+        <a href="../../about/" class="mobile-nav-link">About</a>
+      </nav>
+    </div>
+
+    <main>
+      <div class="host-tools-container">
+        <div class="host-tools-header">
+          <div class="host-tools-header-top">
+            <h1 class="host-tools-title">🎮 Host Tools</h1>
+            <button id="resetBtn" class="button-secondary">รีเซ็ต</button>
+          </div>
+          <a href="../../#tools" class="button button-ghost button-sm">← กลับ</a>
+        </div>
+
+        <div class="tabs-container">
+          <div class="tabs-nav">
+            <button class="tab-button active" data-tab="players">👥 ผู้เล่น</button>
+            <button class="tab-button" data-tab="tracker">📊 นับแต้ม</button>
+            <button class="tab-button" data-tab="turn">🔄 เทิร์น</button>
+            <button class="tab-button" data-tab="dice">🎲 ลูกเต๋า</button>
+          </div>
+
+          <!-- Players Tab -->
+          <div id="players-tab" class="tab-content active">
+            <div id="playersGrid" class="players-grid"></div>
+            <button id="addPlayerBtn" class="button-primary button-large" style="width: 100%;">+ เพิ่มผู้เล่น</button>
+            <div style="margin-top: 1rem;">
+              <button id="randomizeOrderBtn" class="button-secondary" style="width: 100%;">🔀 สุ่มลำดับผู้เล่น</button>
+            </div>
+          </div>
+
+          <!-- Tracker Tab -->
+          <div id="tracker-tab" class="tab-content">
+            <div class="tracker-controls">
+              <h3 style="margin-bottom: 1rem;">การตั้งค่า</h3>
+              <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+                <div>
+                  <label>โหมด:</label>
+                  <select id="trackerMode" style="padding: 0.5rem; border-radius: 4px; border: 2px solid #E2E8F0;">
+                    <option value="life">ชีวิต (Life)</option>
+                    <option value="score">คะแนน (Score)</option>
+                  </select>
+                </div>
+                <div>
+                  <label>ค่าเริ่มต้น:</label>
+                  <input type="number" id="startingValue" value="20" style="padding: 0.5rem; border-radius: 4px; border: 2px solid #E2E8F0; width: 100px;" />
+                </div>
+                <button id="applyToAllBtn" class="button-primary">ใช้กับทุกคน</button>
+              </div>
+            </div>
+            <div id="trackerGrid" class="tracker-grid"></div>
+          </div>
+
+          <!-- Turn Tab -->
+          <div id="turn-tab" class="tab-content">
+            <div id="currentTurnCard" class="current-turn-card">
+              <div class="current-turn-label">ตอนนี้เทิร์นของ</div>
+              <div id="currentTurnName" class="current-turn-name">-</div>
+              <div class="round-display">รอบที่ <span id="roundDisplay">1</span></div>
+            </div>
+            
+            <div class="turn-controls">
+              <button id="prevTurnBtn" class="button-secondary">← ก่อนหน้า</button>
+              <button id="nextTurnBtn" class="button-primary button-large">ถัดไป →</button>
+            </div>
+
+            <div style="margin-bottom: 1rem; text-align: center;">
+              <label style="display: inline-flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                <input type="checkbox" id="autoRoundCheck" checked />
+                <span>เพิ่มรอบอัตโนมัติเมื่อวนครบ</span>
+              </label>
+            </div>
+
+            <div class="turn-order-list">
+              <h3 style="margin-bottom: 1rem;">ลำดับผู้เล่น</h3>
+              <div id="turnOrderList"></div>
+              <button id="randomizeTurnBtn" class="button-secondary" style="width: 100%; margin-top: 1rem;">🔀 สุ่มลำดับใหม่</button>
+            </div>
+          </div>
+
+          <!-- Dice Tab -->
+          <div id="dice-tab" class="tab-content">
+            <div class="dice-controls">
+              <h3 style="margin-bottom: 1rem;">ทอยลูกเต๋า</h3>
+              <div class="dice-types">
+                <button class="dice-type-btn" data-dice="d4">d4</button>
+                <button class="dice-type-btn active" data-dice="d6">d6</button>
+                <button class="dice-type-btn" data-dice="d8">d8</button>
+                <button class="dice-type-btn" data-dice="d10">d10</button>
+                <button class="dice-type-btn" data-dice="d12">d12</button>
+                <button class="dice-type-btn" data-dice="d20">d20</button>
+              </div>
+              
+              <div style="display: flex; gap: 1rem; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
+                <button id="decreaseDiceBtn" class="button-secondary">-</button>
+                <div style="font-size: 1.5rem; font-weight: 600; min-width: 100px; text-align: center;">
+                  <span id="diceCount">2</span> ลูก
+                </div>
+                <button id="increaseDiceBtn" class="button-secondary">+</button>
+              </div>
+              
+              <button id="rollDiceBtn" class="button-primary button-large" style="width: 100%; transition: all 0.2s;">🎲 ทอย!</button>
+            </div>
+
+            <div id="diceResultDisplay" class="dice-result-display" style="display: none;">
+              <div class="dice-result-sum" id="diceResultSum">-</div>
+              <div class="dice-result-details" id="diceResultDetails">-</div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem;">
+              <div>
+                <h3 style="margin-bottom: 1rem;">ทอยเหรียญ</h3>
+                <button id="flipCoinBtn" class="button-primary" style="width: 100%; transition: opacity 0.2s;">🪙 Flip Coin</button>
+                <div id="coinResult" style="text-align: center; font-size: 2rem; font-weight: 700; margin-top: 1rem; min-height: 3rem; display: flex; align-items: center; justify-content: center;"></div>
+              </div>
+              <div>
+                <h3 style="margin-bottom: 1rem;">สุ่ม</h3>
+                <button id="pickPlayerBtn" class="button-primary" style="width: 100%; margin-bottom: 1rem;">สุ่มผู้เล่น</button>
+                
+                <div style="background: #F8FAFC; padding: 1rem; border-radius: 8px; margin-bottom: 0.5rem;">
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 0.75rem;">
+                    <div>
+                      <label style="font-size: 0.875rem; color: #64748B; display: block; margin-bottom: 0.25rem;">ต่ำสุด</label>
+                      <input type="number" id="minNumber" value="1" style="width: 100%; padding: 0.5rem; border: 2px solid #E2E8F0; border-radius: 6px; font-size: 1rem;" />
+                    </div>
+                    <div>
+                      <label style="font-size: 0.875rem; color: #64748B; display: block; margin-bottom: 0.25rem;">สูงสุด</label>
+                      <input type="number" id="maxNumber" value="100" style="width: 100%; padding: 0.5rem; border: 2px solid #E2E8F0; border-radius: 6px; font-size: 1rem;" />
+                    </div>
+                  </div>
+                  <button id="pickNumberBtn" class="button-secondary" style="width: 100%;">สุ่มตัวเลข</button>
+                </div>
+                
+                <div id="randomResult" style="text-align: center; font-size: 1.5rem; font-weight: 600; margin-top: 1rem; color: #3B82F6; min-height: 2rem;"></div>
+              </div>
+            </div>
+
+            <div class="roll-history">
+              <h3 style="margin-bottom: 1rem;">ประวัติการทอย</h3>
+              <div id="historyList"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      // Host Tools App
+      const STORAGE_KEY = 'staygo_host_tools_v1';
+      const PLAYER_COLORS = [
+        '#3B82F6', // blue
+        '#EF4444', // red
+        '#10B981', // green
+        '#F59E0B', // yellow
+        '#8B5CF6', // purple
+        '#F97316', // orange
+        '#EC4899', // pink
+        '#14B8A6'  // teal
+      ];
+
+      let appState = {
+        players: [],
+        tracker: { mode: 'life', startingValue: 20 },
+        turn: { order: [], currentIndex: 0, round: 1, autoRound: true },
+        dice: { lastType: 'd6', lastCount: 2, history: [] },
+        ui: { activeTab: 'players' }
+      };
+
+      // Initialize
+      document.addEventListener('DOMContentLoaded', () => {
+        loadState();
+        initTabs();
+        initPlayers();
+        initTracker();
+        initTurn();
+        initDice();
+        initReset();
+        
+        // Add first player if none exist
+        if (appState.players.length === 0) {
+          addPlayer();
+        }
+      });
+
+      // Tab Management
+      function initTabs() {
+        const tabButtons = document.querySelectorAll('.tab-button');
+        tabButtons.forEach(btn => {
+          btn.addEventListener('click', () => {
+            const tab = btn.dataset.tab;
+            switchTab(tab);
+          });
+        });
+      }
+
+      function switchTab(tabName) {
+        // Update buttons
+        document.querySelectorAll('.tab-button').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.tab === tabName);
+        });
+        
+        // Update content
+        document.querySelectorAll('.tab-content').forEach(content => {
+          content.classList.toggle('active', content.id === `${tabName}-tab`);
+        });
+        
+        appState.ui.activeTab = tabName;
+        saveState();
+        
+        // Render content for the tab
+        if (tabName === 'tracker') renderTracker();
+        if (tabName === 'turn') renderTurn();
+      }
+
+      // Player Management
+      function initPlayers() {
+        document.getElementById('addPlayerBtn').addEventListener('click', addPlayer);
+        document.getElementById('randomizeOrderBtn').addEventListener('click', randomizePlayerOrder);
+        renderPlayers();
+      }
+
+      function addPlayer() {
+        const playerNumber = appState.players.length + 1;
+        const availableColor = PLAYER_COLORS[appState.players.length % PLAYER_COLORS.length];
+        
+        const newPlayer = {
+          id: 'p' + Date.now(),
+          name: `Player ${playerNumber}`,
+          color: availableColor,
+          life: appState.tracker.startingValue
+        };
+        
+        appState.players.push(newPlayer);
+        
+        // Add to turn order if not exists
+        if (!appState.turn.order.includes(newPlayer.id)) {
+          appState.turn.order.push(newPlayer.id);
+        }
+        
+        saveState();
+        renderPlayers();
+        renderTracker();
+        renderTurn();
+      }
+
+      function removePlayer(playerId) {
+        if (appState.players.length <= 1) {
+          alert('ต้องมีผู้เล่นอย่างน้อย 1 คน');
+          return;
+        }
+        
+        if (confirm('ต้องการลบผู้เล่นนี้?')) {
+          appState.players = appState.players.filter(p => p.id !== playerId);
+          appState.turn.order = appState.turn.order.filter(id => id !== playerId);
+          
+          // Adjust turn index if needed
+          if (appState.turn.currentIndex >= appState.turn.order.length) {
+            appState.turn.currentIndex = 0;
+          }
+          
+          saveState();
+          renderPlayers();
+          renderTracker();
+          renderTurn();
+        }
+      }
+
+      function updatePlayerName(playerId, newName) {
+        const player = appState.players.find(p => p.id === playerId);
+        if (player) {
+          player.name = newName;
+          saveState();
+          renderTracker();
+          renderTurn();
+        }
+      }
+
+      function updatePlayerColor(playerId, newColor) {
+        const player = appState.players.find(p => p.id === playerId);
+        if (player) {
+          player.color = newColor;
+          saveState();
+          renderPlayers();
+          renderTracker();
+          renderTurn();
+        }
+      }
+
+      function randomizePlayerOrder() {
+        const shuffled = [...appState.players].sort(() => Math.random() - 0.5);
+        appState.turn.order = shuffled.map(p => p.id);
+        appState.turn.currentIndex = 0;
+        saveState();
+        renderTurn();
+        alert('สุ่มลำดับผู้เล่นเรียบร้อย!');
+      }
+
+      function renderPlayers() {
+        const grid = document.getElementById('playersGrid');
+        
+        if (appState.players.length === 0) {
+          grid.innerHTML = '<div class="empty-state"><div class="empty-state-icon">👤</div><p>ยังไม่มีผู้เล่น</p></div>';
+          return;
+        }
+        
+        grid.innerHTML = appState.players.map(player => `
+          <div class="player-card">
+            <div class="player-card-header">
+              <input 
+                type="text" 
+                class="player-name-input" 
+                value="${player.name}"
+                onchange="updatePlayerName('${player.id}', this.value)"
+              />
+              <button 
+                onclick="removePlayer('${player.id}')" 
+                class="button-secondary" 
+                style="padding: 0.5rem;"
+              >🗑️</button>
+            </div>
+            <div class="color-palette">
+              ${PLAYER_COLORS.map(color => `
+                <button 
+                  class="color-option ${player.color === color ? 'active' : ''}"
+                  style="background: ${color}; color: ${color};"
+                  onclick="updatePlayerColor('${player.id}', '${color}')"
+                ></button>
+              `).join('')}
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // Tracker Management
+      function initTracker() {
+        document.getElementById('trackerMode').value = appState.tracker.mode;
+        document.getElementById('startingValue').value = appState.tracker.startingValue;
+        
+        document.getElementById('trackerMode').addEventListener('change', (e) => {
+          appState.tracker.mode = e.target.value;
+          saveState();
+          renderTracker();
+        });
+        
+        document.getElementById('startingValue').addEventListener('change', (e) => {
+          appState.tracker.startingValue = parseInt(e.target.value) || 20;
+          saveState();
+        });
+        
+        document.getElementById('applyToAllBtn').addEventListener('click', () => {
+          const value = parseInt(document.getElementById('startingValue').value) || 20;
+          appState.players.forEach(p => p.life = value);
+          saveState();
+          renderTracker();
+        });
+        
+        renderTracker();
+      }
+
+      function updateLife(playerId, delta) {
+        const player = appState.players.find(p => p.id === playerId);
+        if (player) {
+          player.life += delta;
+          saveState();
+          renderTracker();
+        }
+      }
+
+      function renderTracker() {
+        const grid = document.getElementById('trackerGrid');
+        const mode = appState.tracker.mode;
+        const label = mode === 'life' ? 'ชีวิต' : 'คะแนน';
+        
+        if (appState.players.length === 0) {
+          grid.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📊</div><p>ยังไม่มีผู้เล่น</p></div>';
+          return;
+        }
+        
+        grid.innerHTML = appState.players.map(player => `
+          <div class="tracker-card" style="border-color: ${player.color};">
+            <div class="tracker-card-name" style="color: ${player.color};">${player.name}</div>
+            <div class="tracker-value" style="color: ${player.color};">${player.life}</div>
+            <div class="tracker-buttons">
+              <button class="tracker-btn" onclick="updateLife('${player.id}', -5)">-5</button>
+              <button class="tracker-btn" onclick="updateLife('${player.id}', -1)">-1</button>
+              <button class="tracker-btn" onclick="updateLife('${player.id}', 1)">+1</button>
+              <button class="tracker-btn" onclick="updateLife('${player.id}', 5)">+5</button>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // Turn Management
+      function initTurn() {
+        document.getElementById('nextTurnBtn').addEventListener('click', nextTurn);
+        document.getElementById('prevTurnBtn').addEventListener('click', prevTurn);
+        document.getElementById('randomizeTurnBtn').addEventListener('click', randomizeTurnOrder);
+        document.getElementById('autoRoundCheck').addEventListener('change', (e) => {
+          appState.turn.autoRound = e.target.checked;
+          saveState();
+        });
+        
+        renderTurn();
+      }
+
+      function nextTurn() {
+        if (appState.turn.order.length === 0) return;
+        
+        appState.turn.currentIndex++;
+        
+        if (appState.turn.currentIndex >= appState.turn.order.length) {
+          appState.turn.currentIndex = 0;
+          if (appState.turn.autoRound) {
+            appState.turn.round++;
+          }
+        }
+        
+        saveState();
+        renderTurn();
+      }
+
+      function prevTurn() {
+        if (appState.turn.order.length === 0) return;
+        
+        appState.turn.currentIndex--;
+        
+        if (appState.turn.currentIndex < 0) {
+          appState.turn.currentIndex = appState.turn.order.length - 1;
+          if (appState.turn.autoRound && appState.turn.round > 1) {
+            appState.turn.round--;
+          }
+        }
+        
+        saveState();
+        renderTurn();
+      }
+
+      function randomizeTurnOrder() {
+        appState.turn.order = appState.turn.order.sort(() => Math.random() - 0.5);
+        appState.turn.currentIndex = 0;
+        saveState();
+        renderTurn();
+      }
+
+      function moveTurnOrder(index, direction) {
+        const newIndex = index + direction;
+        if (newIndex < 0 || newIndex >= appState.turn.order.length) return;
+        
+        const temp = appState.turn.order[index];
+        appState.turn.order[index] = appState.turn.order[newIndex];
+        appState.turn.order[newIndex] = temp;
+        
+        // Update current index if affected
+        if (appState.turn.currentIndex === index) {
+          appState.turn.currentIndex = newIndex;
+        } else if (appState.turn.currentIndex === newIndex) {
+          appState.turn.currentIndex = index;
+        }
+        
+        saveState();
+        renderTurn();
+      }
+
+      function renderTurn() {
+        const currentPlayerId = appState.turn.order[appState.turn.currentIndex];
+        const currentPlayer = appState.players.find(p => p.id === currentPlayerId);
+        
+        document.getElementById('currentTurnName').textContent = currentPlayer ? currentPlayer.name : '-';
+        document.getElementById('roundDisplay').textContent = appState.turn.round;
+        document.getElementById('autoRoundCheck').checked = appState.turn.autoRound;
+        
+        if (currentPlayer) {
+          document.getElementById('currentTurnCard').style.background = 
+            `linear-gradient(135deg, ${currentPlayer.color} 0%, ${currentPlayer.color}dd 100%)`;
+        }
+        
+        const orderList = document.getElementById('turnOrderList');
+        
+        if (appState.turn.order.length === 0) {
+          orderList.innerHTML = '<div class="empty-state"><p>ยังไม่มีผู้เล่น</p></div>';
+          return;
+        }
+        
+        orderList.innerHTML = appState.turn.order.map((playerId, index) => {
+          const player = appState.players.find(p => p.id === playerId);
+          if (!player) return '';
+          
+          const isCurrent = index === appState.turn.currentIndex;
+          
+          return `
+            <div class="turn-order-item ${isCurrent ? 'current' : ''}">
+              <div style="display: flex; align-items: center; gap: 1rem;">
+                <div style="width: 30px; height: 30px; border-radius: 50%; background: ${player.color};"></div>
+                <span style="font-weight: 600;">${player.name}</span>
+              </div>
+              <div style="display: flex; gap: 0.5rem;">
+                <button 
+                  onclick="moveTurnOrder(${index}, -1)" 
+                  class="button-secondary" 
+                  style="padding: 0.5rem;"
+                  ${index === 0 ? 'disabled' : ''}
+                >↑</button>
+                <button 
+                  onclick="moveTurnOrder(${index}, 1)" 
+                  class="button-secondary" 
+                  style="padding: 0.5rem;"
+                  ${index === appState.turn.order.length - 1 ? 'disabled' : ''}
+                >↓</button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // Dice Management
+      function initDice() {
+        document.querySelectorAll('.dice-type-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            document.querySelectorAll('.dice-type-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            appState.dice.lastType = btn.dataset.dice;
+            saveState();
+          });
+        });
+        
+        document.getElementById('increaseDiceBtn').addEventListener('click', () => {
+          if (appState.dice.lastCount < 10) {
+            appState.dice.lastCount++;
+            document.getElementById('diceCount').textContent = appState.dice.lastCount;
+            saveState();
+          }
+        });
+        
+        document.getElementById('decreaseDiceBtn').addEventListener('click', () => {
+          if (appState.dice.lastCount > 1) {
+            appState.dice.lastCount--;
+            document.getElementById('diceCount').textContent = appState.dice.lastCount;
+            saveState();
+          }
+        });
+        
+        document.getElementById('rollDiceBtn').addEventListener('click', rollDice);
+        document.getElementById('flipCoinBtn').addEventListener('click', flipCoin);
+        document.getElementById('pickPlayerBtn').addEventListener('click', pickRandomPlayer);
+        document.getElementById('pickNumberBtn').addEventListener('click', pickRandomNumber);
+        
+        document.getElementById('diceCount').textContent = appState.dice.lastCount;
+        renderHistory();
+      }
+
+      function rollDice() {
+        const diceType = appState.dice.lastType;
+        const count = appState.dice.lastCount;
+        const sides = parseInt(diceType.substring(1));
+        
+        const rollBtn = document.getElementById('rollDiceBtn');
+        const resultDisplay = document.getElementById('diceResultDisplay');
+        const resultSum = document.getElementById('diceResultSum');
+        const resultDetails = document.getElementById('diceResultDetails');
+        
+        // Disable button and add shake animation
+        rollBtn.disabled = true;
+        rollBtn.style.opacity = '0.6';
+        rollBtn.classList.add('button-rolling');
+        
+        // Show loading state
+        resultDisplay.style.display = 'block';
+        resultSum.textContent = '🎲';
+        resultSum.classList.add('dice-rolling');
+        resultDetails.textContent = 'กำลังทอย...';
+        resultDetails.style.opacity = '0.6';
+        
+        // Calculate results
+        const rolls = [];
+        let sum = 0;
+        
+        for (let i = 0; i < count; i++) {
+          const roll = Math.floor(Math.random() * sides) + 1;
+          rolls.push(roll);
+          sum += roll;
+        }
+        
+        // Show results after animation
+        setTimeout(() => {
+          resultSum.textContent = sum;
+          resultSum.classList.remove('dice-rolling');
+          resultSum.classList.add('dice-result-animate');
+          
+          resultDetails.textContent = `${count}${diceType}: [${rolls.join(', ')}]`;
+          resultDetails.style.opacity = '1';
+          resultDetails.classList.add('dice-result-animate');
+          
+          // Re-enable button
+          rollBtn.disabled = false;
+          rollBtn.style.opacity = '1';
+          rollBtn.classList.remove('button-rolling');
+          
+          // Remove animation class after it completes
+          setTimeout(() => {
+            resultSum.classList.remove('dice-result-animate');
+            resultDetails.classList.remove('dice-result-animate');
+          }, 400);
+          
+          // Add to history
+          appState.dice.history.unshift({
+            type: diceType,
+            count: count,
+            rolls: rolls,
+            sum: sum,
+            time: new Date().toLocaleTimeString('th-TH')
+          });
+          
+          if (appState.dice.history.length > 10) {
+            appState.dice.history = appState.dice.history.slice(0, 10);
+          }
+          
+          saveState();
+          renderHistory();
+        }, 600);
+      }
+
+      function flipCoin() {
+        const coinResultEl = document.getElementById('coinResult');
+        const flipBtn = document.getElementById('flipCoinBtn');
+        
+        // Disable button and add pulse animation
+        flipBtn.disabled = true;
+        flipBtn.style.opacity = '0.6';
+        flipBtn.classList.add('button-flipping');
+        
+        // Show flipping animation
+        coinResultEl.textContent = '🪙';
+        coinResultEl.className = 'coin-flipping';
+        
+        // Determine result
+        const result = Math.random() < 0.5 ? 'หัว (Heads)' : 'ก้อย (Tails)';
+        const emoji = result.includes('หัว') ? '👑' : '⭕';
+        
+        // Show result after animation
+        setTimeout(() => {
+          coinResultEl.textContent = `${emoji} ${result}`;
+          coinResultEl.className = 'result-appear';
+          
+          // Re-enable button
+          flipBtn.disabled = false;
+          flipBtn.style.opacity = '1';
+          flipBtn.classList.remove('button-flipping');
+        }, 1000);
+      }
+
+      function pickRandomPlayer() {
+        const resultEl = document.getElementById('randomResult');
+        
+        if (appState.players.length === 0) {
+          resultEl.textContent = '❌ ยังไม่มีผู้เล่น';
+          resultEl.style.color = '#EF4444';
+          return;
+        }
+        
+        // Animate before showing result
+        resultEl.textContent = '🎲';
+        resultEl.className = 'coin-flipping';
+        
+        const randomPlayer = appState.players[Math.floor(Math.random() * appState.players.length)];
+        
+        setTimeout(() => {
+          resultEl.textContent = `🎯 ${randomPlayer.name}`;
+          resultEl.style.color = randomPlayer.color;
+          resultEl.className = 'result-appear';
+        }, 500);
+      }
+
+      function pickRandomNumber() {
+        const minInput = document.getElementById('minNumber');
+        const maxInput = document.getElementById('maxNumber');
+        const resultEl = document.getElementById('randomResult');
+        
+        const minNum = parseInt(minInput.value);
+        const maxNum = parseInt(maxInput.value);
+        
+        // Validate input
+        if (isNaN(minNum) || isNaN(maxNum)) {
+          resultEl.textContent = '❌ กรุณาใส่ตัวเลข';
+          resultEl.style.color = '#EF4444';
+          return;
+        }
+        
+        if (minNum >= maxNum) {
+          resultEl.textContent = '❌ ต่ำสุดต้องน้อยกว่าสูงสุด';
+          resultEl.style.color = '#EF4444';
+          return;
+        }
+        
+        // Generate random number
+        const random = Math.floor(Math.random() * (maxNum - minNum + 1)) + minNum;
+        
+        // Animate result
+        resultEl.textContent = '🎲';
+        resultEl.className = 'coin-flipping';
+        
+        setTimeout(() => {
+          resultEl.textContent = `🎯 ${random}`;
+          resultEl.style.color = '#3B82F6';
+          resultEl.className = 'result-appear';
+        }, 500);
+      }
+
+      function renderHistory() {
+        const list = document.getElementById('historyList');
+        
+        if (appState.dice.history.length === 0) {
+          list.innerHTML = '<div class="empty-state"><p>ยังไม่มีประวัติการทอย</p></div>';
+          return;
+        }
+        
+        list.innerHTML = appState.dice.history.map(h => `
+          <div class="history-item">
+            <div style="display: flex; justify-content: space-between;">
+              <span><strong>${h.sum}</strong> - ${h.count}${h.type}: [${h.rolls.join(', ')}]</span>
+              <span style="color: #64748B;">${h.time}</span>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // Reset
+      function initReset() {
+        document.getElementById('resetBtn').addEventListener('click', () => {
+          if (confirm('ต้องการรีเซ็ตข้อมูลทั้งหมด?')) {
+            appState = {
+              players: [],
+              tracker: { mode: 'life', startingValue: 20 },
+              turn: { order: [], currentIndex: 0, round: 1, autoRound: true },
+              dice: { lastType: 'd6', lastCount: 2, history: [] },
+              ui: { activeTab: 'players' }
+            };
+            saveState();
+            location.reload();
+          }
+        });
+      }
+
+      // Storage
+      function saveState() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+      }
+
+      function loadState() {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          try {
+            appState = JSON.parse(saved);
+          } catch (e) {
+            console.error('Failed to load state:', e);
+          }
+        }
+      }
+
+      // Make functions globally accessible
+      window.updatePlayerName = updatePlayerName;
+      window.updatePlayerColor = updatePlayerColor;
+      window.removePlayer = removePlayer;
+      window.updateLife = updateLife;
+      window.moveTurnOrder = moveTurnOrder;
+    </script>
+  </body>
+</html>
+

@@ -383,6 +383,33 @@ h3 {
   opacity: 0.6;
 }
 
+/* Beta Badge */
+.beta-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(238, 90, 111, 0.4);
+  animation: pulse-beta 2s ease-in-out infinite;
+}
+
+@keyframes pulse-beta {
+  0%, 100% {
+    box-shadow: 0 2px 8px rgba(238, 90, 111, 0.4);
+  }
+  50% {
+    box-shadow: 0 2px 12px rgba(238, 90, 111, 0.6);
+  }
+}
+
 .game-thumbnail {
   width: 100%;
   aspect-ratio: 5 / 4;

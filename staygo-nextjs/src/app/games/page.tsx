@@ -82,8 +82,10 @@ export default function GamesPage() {
             </article>
 
             <article className="game-card">
-              <div className="game-thumbnail" style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '200px' }}>
-                <div style={{ fontSize: '80px', textAlign: 'center' }}>🎲</div>
+              <span className="beta-badge">Beta</span>
+              <div className="game-thumbnail game-thumbnail-hover">
+                <img src="/assets/image/dice-rouge-cover-1.png" alt="Dice rougelike" className="thumbnail-default" />
+                <img src="/assets/image/dice-rouge-cover-2.png" alt="Dice rougelike" className="thumbnail-hover" />
               </div>
               <div className="game-info">
                 <h3 className="game-title">Dice Roguelike</h3>

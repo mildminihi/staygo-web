@@ -120,6 +120,21 @@ export default function Home() {
                 </div>
               </div>
             </article>
+
+            <article className="game-card">
+              <span className="beta-badge">Beta</span>
+              <div className="game-thumbnail game-thumbnail-hover">
+                <img src="/assets/image/dice-rouge-cover-1.png" alt="Dice rougelike" className="thumbnail-default" />
+                <img src="/assets/image/dice-rouge-cover-2.png" alt="Dice rougelike" className="thumbnail-hover" />
+              </div>
+              <div className="game-info">
+                <h3 className="game-title">Dice Roguelike</h3>
+                <p className="game-meta">ทอยเต๋าผจญภัยใน Dungeon</p>
+                <div className="game-actions">
+                  <a href="/games/dice-rougelike/" className="button button-primary button-md">เล่นเกม</a>
+                </div>
+              </div>
+            </article>
           </div>
         </div>
       </section>

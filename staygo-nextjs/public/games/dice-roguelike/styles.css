@@ -960,16 +960,152 @@ body {
     color: var(--pixel-danger);
 }
 
-.gameover-stats {
+/* Victory Screen Styles */
+.victory-content {
+    text-align: left;
+}
+
+.victory-subtitle {
+    font-size: 16px;
+    text-align: center;
+    color: var(--pixel-secondary);
+    margin-bottom: 32px;
+}
+
+.victory-section-title {
+    font-size: 14px;
+    color: var(--pixel-accent);
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+.victory-stats {
+    background: var(--pixel-surface);
+    border: 3px solid var(--pixel-border-bright);
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.stat-label {
+    font-size: 10px;
+    color: var(--pixel-text-dim);
+}
+
+.stat-value {
+    font-size: 18px;
+    color: var(--pixel-accent);
+    font-weight: bold;
+}
+
+.victory-progression {
+    background: var(--pixel-surface);
+    border: 3px solid var(--pixel-border-bright);
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.progression-summary {
+    display: flex;
+    justify-content: space-around;
+    gap: 16px;
+}
+
+.progression-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.progression-icon {
+    font-size: 24px;
+}
+
+.progression-label {
+    font-size: 9px;
+    color: var(--pixel-text-dim);
+}
+
+.progression-value {
+    font-size: 16px;
+    color: var(--pixel-secondary);
+    font-weight: bold;
+}
+
+.victory-items {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.victory-perks,
+.victory-skills {
+    background: var(--pixel-surface);
+    border: 3px solid var(--pixel-border-bright);
+    padding: 20px;
+}
+
+.items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.item-badge {
+    background: var(--pixel-surface-2);
+    border: 2px solid var(--pixel-border-bright);
+    padding: 8px 12px;
+    font-size: 10px;
+    text-align: left;
+}
+
+.item-badge-name {
+    color: var(--pixel-accent);
+    font-weight: bold;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.item-badge-desc {
+    color: var(--pixel-text-dim);
+    font-size: 8px;
+    line-height: 1.4;
+}
+
+/* Defeat Content */
+.defeat-content .gameover-stats {
     background: var(--pixel-surface);
     border: 3px solid var(--pixel-border-bright);
     padding: 24px;
     margin-bottom: 32px;
-    font-size: 12px;
+    text-align: left;
 }
 
-.gameover-stats p {
+.defeat-content .gameover-stats p {
+    font-size: 12px;
     margin: 12px 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.defeat-content .gameover-stats span {
+    color: var(--pixel-accent);
+    font-weight: bold;
 }
 
 .gameover-buttons {
@@ -1357,6 +1493,29 @@ body {
         min-height: 64px;
         font-size: 13px;
         font-weight: bold;
+    }
+    
+    /* Victory screen mobile adjustments */
+    .victory-items {
+        grid-template-columns: 1fr;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .progression-summary {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .victory-section-title {
+        font-size: 12px;
+    }
+    
+    .stat-value {
+        font-size: 16px;
     }
 }
 

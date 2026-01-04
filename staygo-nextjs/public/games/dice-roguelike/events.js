@@ -384,6 +384,11 @@ function buyShopItem(item, gameState) {
         };
     }
 
+    // Update stats (first purchase in shop)
+    if (!gameState.stats.shopsVisited) {
+        gameState.stats.shopsVisited = 0;
+    }
+    
     // Spend gold
     gameState.spendGold(item.price);
 

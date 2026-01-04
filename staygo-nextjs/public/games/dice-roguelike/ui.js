@@ -718,9 +718,8 @@ class UIManager {
     // ========== GAME OVER SCREEN ==========
     showGameOverScreen(victory) {
         const gameOverTitle = document.getElementById('gameOverTitle');
-        const finalFloor = document.getElementById('finalFloor');
-        const finalGold = document.getElementById('finalGold');
-        const finalKills = document.getElementById('finalKills');
+        const victoryContent = document.getElementById('victoryContent');
+        const defeatContent = document.getElementById('defeatContent');
         const retryBtn = document.getElementById('retryBtn');
         const mainMenuBtn = document.getElementById('mainMenuBtn');
 
@@ -729,9 +728,23 @@ class UIManager {
             gameOverTitle.className = `gameover-title ${victory ? 'victory' : 'defeat'}`;
         }
 
-        if (finalFloor) finalFloor.textContent = gameState.currentFloor;
-        if (finalGold) finalGold.textContent = gameState.player.gold;
-        if (finalKills) finalKills.textContent = gameState.stats.enemiesDefeated;
+        // Show/hide appropriate content
+        if (victoryContent) victoryContent.style.display = victory ? 'block' : 'none';
+        if (defeatContent) defeatContent.style.display = victory ? 'none' : 'block';
+
+        if (victory) {
+            // Populate victory screen
+            this.populateVictoryScreen();
+        } else {
+            // Populate defeat screen
+            const finalFloor = document.getElementById('finalFloor');
+            const finalGold = document.getElementById('finalGold');
+            const finalKills = document.getElementById('finalKills');
+            
+            if (finalFloor) finalFloor.textContent = gameState.currentFloor;
+            if (finalGold) finalGold.textContent = gameState.player.gold;
+            if (finalKills) finalKills.textContent = gameState.stats.enemiesDefeated;
+        }
 
         if (retryBtn) {
             retryBtn.onclick = () => {
@@ -750,6 +763,67 @@ class UIManager {
         }
 
         this.showScreen('gameOverScreen');
+    }
+
+    populateVictoryScreen() {
+        // Stats
+        const victoryTurns = document.getElementById('victoryTurns');
+        const victoryKills = document.getElementById('victoryKills');
+        const victoryDamage = document.getElementById('victoryDamage');
+        const victoryGold = document.getElementById('victoryGold');
+
+        if (victoryTurns) victoryTurns.textContent = gameState.stats.turnsPlayed || 0;
+        if (victoryKills) victoryKills.textContent = gameState.stats.enemiesDefeated || 0;
+        if (victoryDamage) victoryDamage.textContent = gameState.stats.damageDealt || 0;
+        if (victoryGold) victoryGold.textContent = gameState.stats.goldEarned || 0;
+
+        // Progression
+        const victoryFights = document.getElementById('victoryFights');
+        const victoryShops = document.getElementById('victoryShops');
+        const victoryEvents = document.getElementById('victoryEvents');
+
+        if (victoryFights) victoryFights.textContent = gameState.stats.fightsCompleted || 0;
+        if (victoryShops) victoryShops.textContent = gameState.stats.shopsVisited || 0;
+        if (victoryEvents) victoryEvents.textContent = gameState.stats.eventsCompleted || 0;
+
+        // Perks
+        const victoryPerksList = document.getElementById('victoryPerksList');
+        if (victoryPerksList) {
+            victoryPerksList.innerHTML = '';
+            if (gameState.perks.length === 0) {
+                victoryPerksList.innerHTML = '<p style="font-size: 10px; color: var(--pixel-text-dim); text-align: center;">ไม่มี Perks</p>';
+            } else {
+                gameState.perks.forEach(perk => {
+                    const badge = document.createElement('div');
+                    badge.className = 'item-badge';
+                    badge.innerHTML = `
+                        <span class="item-badge-name">${perk.name}</span>
+                        <span class="item-badge-desc">${perk.description}</span>
+                    `;
+                    victoryPerksList.appendChild(badge);
+                });
+            }
+        }
+
+        // Skills (show all skills that were acquired, even if used)
+        const victorySkillsList = document.getElementById('victorySkillsList');
+        if (victorySkillsList) {
+            victorySkillsList.innerHTML = '';
+            // We need to track acquired skills in stats
+            if (!gameState.stats.skillsAcquired || gameState.stats.skillsAcquired.length === 0) {
+                victorySkillsList.innerHTML = '<p style="font-size: 10px; color: var(--pixel-text-dim); text-align: center;">ไม่มี Skills</p>';
+            } else {
+                gameState.stats.skillsAcquired.forEach(skill => {
+                    const badge = document.createElement('div');
+                    badge.className = 'item-badge';
+                    badge.innerHTML = `
+                        <span class="item-badge-name">${skill.name}</span>
+                        <span class="item-badge-desc">${skill.description}</span>
+                    `;
+                    victorySkillsList.appendChild(badge);
+                });
+            }
+        }
     }
 
     showMainMenu() {

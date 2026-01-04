@@ -46,7 +46,12 @@ class GameState {
             damageDealt: 0,
             damageTaken: 0,
             floorsCleared: 0,
-            goldEarned: 0
+            goldEarned: 0,
+            fightsCompleted: 0,
+            shopsVisited: 0,
+            eventsCompleted: 0,
+            turnsPlayed: 0,
+            skillsAcquired: [] // Track all skills acquired during the run
         };
 
         // Game state
@@ -321,6 +326,12 @@ class GameState {
 
     addSkill(skill) {
         this.skills.push(skill);
+        // Track acquired skills for victory screen
+        this.stats.skillsAcquired.push({
+            id: skill.id,
+            name: skill.name,
+            description: skill.description
+        });
     }
 
     // Check victory condition
@@ -458,6 +469,10 @@ class GameController {
     // Enter combat
     enterCombat(enemy) {
         gameState.inCombat = true;
+        
+        // Reset charge energy to 0 at start of each combat
+        gameState.player.energy = 0;
+        
         combatManager.startCombat(enemy);
         
         getUI().showScreen('combatScreen');
@@ -520,6 +535,13 @@ class GameController {
             const result = skill.effect(gameState, combatManager);
             console.log(`Used skill: ${skill.name}`, result);
 
+            // Remove skill after use (one-time use)
+            const skillIndex = gameState.skills.findIndex(s => s.id === skill.id);
+            if (skillIndex !== -1) {
+                gameState.skills.splice(skillIndex, 1);
+                console.log(`Removed skill: ${skill.name}`);
+            }
+
             // Show visual feedback (could add animation here)
             this.showSkillFeedback(skill, result);
 
@@ -573,9 +595,23 @@ class GameController {
 
     // Combat victory
     onCombatVictory() {
+        // Check if this was the final boss (floor 10 boss)
+        const wasFinalBoss = combatManager.currentEnemy && 
+                            combatManager.currentEnemy.isBoss && 
+                            gameState.currentFloor >= 10;
+        
         combatManager.endCombat(true);
         
-        // Show rewards
+        // Update stats
+        gameState.stats.fightsCompleted++;
+        
+        // If defeated final boss, show victory immediately
+        if (wasFinalBoss) {
+            this.gameOver(true);
+            return;
+        }
+        
+        // Otherwise, show rewards
         const numRewards = gameState.hasPerk('fortunate') ? 4 : 3;
         const rewards = getRandomRewards(numRewards);
         getUI().showRewardScreen(rewards);
@@ -623,6 +659,9 @@ class GameController {
         const result = executeEventChoice(event, choiceIndex, gameState);
         
         if (result && result.success) {
+            // Update stats
+            gameState.stats.eventsCompleted++;
+            
             // Show result message (could add a modal)
             console.log(result.message);
             
@@ -636,6 +675,9 @@ class GameController {
 
     // Start shop
     startShop() {
+        // Update stats
+        gameState.stats.shopsVisited++;
+        
         const inventory = generateShopInventory();
         getUI().showShopScreen(inventory);
     }

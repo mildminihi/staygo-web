@@ -142,25 +142,20 @@ class MapGenerator {
             for (let lane = 0; lane < currentFloor.length; lane++) {
                 const node = currentFloor[lane];
                 
-                // Each node can connect to 1-3 adjacent lanes on next floor
-                const possibleConnections = [];
+                // Connection rules: 1 to 3 adjacent lanes
+                // Lane 0 (left) → connects to lanes 0, 1
+                // Lane 1 (center) → connects to lanes 0, 1, 2 (all)
+                // Lane 2 (right) → connects to lanes 1, 2
                 
-                // Can always connect to same lane
-                possibleConnections.push(lane);
-                
-                // Can connect to adjacent lanes
-                if (lane > 0) possibleConnections.push(lane - 1);
-                if (lane < this.lanes - 1) possibleConnections.push(lane + 1);
-
-                // Always connect to at least same lane, then randomly add 0-2 more
-                node.connections = [lane]; // Guarantee same lane connection
-                
-                // Add additional connections
-                const otherConnections = possibleConnections.filter(l => l !== lane);
-                if (otherConnections.length > 0 && rng.chance(0.7)) {
-                    const numExtra = rng.randomInt(1, otherConnections.length);
-                    const extraConns = rng.sample(otherConnections, numExtra);
-                    node.connections = [...node.connections, ...extraConns];
+                if (lane === 0) {
+                    // Left lane: can go to left (0) or center (1)
+                    node.connections = [0, 1];
+                } else if (lane === 1) {
+                    // Center lane: can go to all lanes (0, 1, 2)
+                    node.connections = [0, 1, 2];
+                } else if (lane === 2) {
+                    // Right lane: can go to center (1) or right (2)
+                    node.connections = [1, 2];
                 }
             }
         }
@@ -194,7 +189,15 @@ class MapGenerator {
         if (!node || node.visited) return false;
 
         node.visited = true;
-        // Don't set available = false, so other nodes in same floor stay clickable
+        
+        // After visiting a node, disable all other nodes in the same floor
+        // This prevents going back to previous nodes once you've progressed
+        const currentFloor = this.map[floor];
+        for (const floorNode of currentFloor) {
+            if (floorNode.lane !== lane) {
+                floorNode.available = false;
+            }
+        }
 
         // Make connected nodes on next floor available
         if (floor < this.map.length - 1) {

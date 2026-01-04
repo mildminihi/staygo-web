@@ -444,6 +444,11 @@ class CombatManager {
 
     // Full turn execution
     executeTurn() {
+        // Track turns played
+        if (gameState && gameState.stats) {
+            gameState.stats.turnsPlayed++;
+        }
+        
         // Player acts first
         const playerResults = this.executePlayerTurn();
         

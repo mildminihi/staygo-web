@@ -333,8 +333,8 @@
                 <div class="help-content">
                     <div class="help-section">
                         <h3>🎲 การต่อสู้</h3>
-                        <p>ทอยลูกเต๋า 5 ลูก แล้ววางไปในช่อง Attack, Block, Heal หรือ Charge</p>
-                        <p>คุณสามารถทอยใหม่ได้ 2 ครั้งต่อเทิร์น</p>
+                        <p>ทอยลูกเต๋า 5 ลูก เสร็จแล้วเลือกไปวางในช่อง Attack, Block, Heal หรือ Charge</p>
+                        <p>คุณสามารถทอยใหม่ได้ 2 ครั้งต่อเทิร์นโดยเลือกลูกที่จะทอยใหม่ได้</p>
                     </div>
                     <div class="help-section">
                         <h3>🃏 Combo ของลูกเต๋า</h3>
@@ -364,11 +364,73 @@
         <div id="gameOverScreen" class="game-screen">
             <div class="gameover-container">
                 <h2 id="gameOverTitle" class="gameover-title">Game Over</h2>
-                <div class="gameover-stats">
-                    <p>Floor Reached: <span id="finalFloor">0</span></p>
-                    <p>Gold Earned: <span id="finalGold">0</span></p>
-                    <p>Enemies Defeated: <span id="finalKills">0</span></p>
+                <div id="victoryContent" class="victory-content" style="display: none;">
+                    <p class="victory-subtitle">🎉 คุณชนะแล้ว! 🎉</p>
+                    
+                    <div class="victory-stats">
+                        <h3 class="victory-section-title">📊 สถิติการเล่น</h3>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <span class="stat-label">รอบที่เล่น:</span>
+                                <span class="stat-value" id="victoryTurns">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">ศัตรูที่เอาชนะ:</span>
+                                <span class="stat-value" id="victoryKills">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">ความเสียหายที่สร้าง:</span>
+                                <span class="stat-value" id="victoryDamage">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">ทองที่ได้:</span>
+                                <span class="stat-value" id="victoryGold">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="victory-progression">
+                        <h3 class="victory-section-title">🎯 ความก้าวหน้า</h3>
+                        <div class="progression-summary">
+                            <div class="progression-item">
+                                <span class="progression-icon">⚔️</span>
+                                <span class="progression-label">การต่อสู้:</span>
+                                <span class="progression-value" id="victoryFights">0</span>
+                            </div>
+                            <div class="progression-item">
+                                <span class="progression-icon">🏪</span>
+                                <span class="progression-label">ร้านค้า:</span>
+                                <span class="progression-value" id="victoryShops">0</span>
+                            </div>
+                            <div class="progression-item">
+                                <span class="progression-icon">❓</span>
+                                <span class="progression-label">เหตุการณ์:</span>
+                                <span class="progression-value" id="victoryEvents">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="victory-items">
+                        <div class="victory-perks">
+                            <h3 class="victory-section-title">✨ Perks ที่ได้</h3>
+                            <div id="victoryPerksList" class="items-list"></div>
+                        </div>
+                        
+                        <div class="victory-skills">
+                            <h3 class="victory-section-title">⚡ Skills ที่ใช้</h3>
+                            <div id="victorySkillsList" class="items-list"></div>
+                        </div>
+                    </div>
                 </div>
+
+                <div id="defeatContent" class="defeat-content">
+                    <div class="gameover-stats">
+                        <p>Floor Reached: <span id="finalFloor">0</span></p>
+                        <p>Gold Earned: <span id="finalGold">0</span></p>
+                        <p>Enemies Defeated: <span id="finalKills">0</span></p>
+                    </div>
+                </div>
+
                 <div class="gameover-buttons">
                     <button id="retryBtn" class="pixel-btn pixel-btn-primary">Try Again</button>
                     <button id="mainMenuBtn" class="pixel-btn">Main Menu</button>

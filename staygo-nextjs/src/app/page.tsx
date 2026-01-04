@@ -131,7 +131,7 @@ export default function Home() {
                 <h3 className="game-title">Dice Roguelike</h3>
                 <p className="game-meta">ทอยเต๋าผจญภัยใน Dungeon</p>
                 <div className="game-actions">
-                  <a href="/games/dice-rougelike/" className="button button-primary button-md">เล่นเกม</a>
+                  <a href="/games/dice-roguelike/" className="button button-primary button-md">เล่นเกม</a>
                 </div>
               </div>
             </article>

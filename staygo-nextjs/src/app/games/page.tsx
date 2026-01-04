@@ -3,8 +3,8 @@ import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'เกมปาร์ตี้ทั้งหมด - STAYGO',
-  description: 'รวมเกมปาร์ตี้สนุกๆ เล่นฟรีบนเว็บ Reveal Board, ลูปนรกหมกมุ่น, จับคู่อีโมจิ และอื่นๆ อีกมากมาย',
-  keywords: 'เกมปาร์ตี้, เกมออนไลน์ฟรี, Reveal Board, เกมเปิดไพ่, เกมจับคู่',
+  description: 'รวมเกมปาร์ตี้สนุกๆ เล่นฟรีบนเว็บ Reveal Board, ลูปนรกหมกมุ่น, จับคู่อีโมจิ, Dice Roguelike และอื่นๆ อีกมากมาย',
+  keywords: 'เกมปาร์ตี้, เกมออนไลน์ฟรี, Reveal Board, เกมเปิดไพ่, เกมจับคู่, Roguelike, เกมลูกเต๋า',
   openGraph: {
     title: 'เกมปาร์ตี้ทั้งหมด - STAYGO',
     description: 'รวมเกมปาร์ตี้สนุกๆ เล่นฟรีบนเว็บ',
@@ -64,6 +64,20 @@ export default function GamesPage() {
                 <p className="game-description">จับคู่อีโมจิให้ถูกต้อง เลือกระดับความยากและโหมดจับเวลา</p>
                 <div className="game-actions">
                   <a href="/games/emoji-match/" className="button button-primary button-md">เล่นเกม</a>
+                </div>
+              </div>
+            </article>
+
+            <article className="game-card">
+              <div className="game-thumbnail" style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '200px' }}>
+                <div style={{ fontSize: '80px', textAlign: 'center' }}>🎲</div>
+              </div>
+              <div className="game-info">
+                <h3 className="game-title">Dice Roguelike</h3>
+                <p className="game-meta">1 Player • เกมกลยุทธ์</p>
+                <p className="game-description">เกมผจญภัยด้วยลูกเต๋า วางแผนการต่อสู้แบบเทิร์นเบส รวบรวมไอเทมและเอาชนะบอส</p>
+                <div className="game-actions">
+                  <a href="/games/dice-roguelike/" className="button button-primary button-md">เล่นเกม</a>
                 </div>
               </div>
             </article>

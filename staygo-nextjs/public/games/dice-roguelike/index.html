@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Primary Meta Tags -->
+    <title>Dice Roguelike - เกมลูกเต๋าผจญภัย | STAYGO</title>
+    <meta name="title" content="Dice Roguelike - เกมลูกเต๋าผจญภัย | STAYGO" />
+    <meta name="description" content="เกมผจญภัยแนว Roguelike ด้วยลูกเต๋า วางแผนกลยุทธ์การต่อสู้ รวบรวมไอเทม และเอาชนะบอสเพื่อชัยชนะ" />
+    <meta name="keywords" content="Dice Roguelike, เกมลูกเต๋า, Roguelike, Turn-based, Strategy Game" />
+    <meta name="robots" content="index, follow" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://staygoch.com/games/dice-roguelike/" />
+    <meta property="og:title" content="Dice Roguelike - เกมลูกเต๋าผจญภัย | STAYGO" />
+    <meta property="og:description" content="เกมผจญภัยแนว Roguelike ด้วยลูกเต๋า วางแผนกลยุทธ์การต่อสู้" />
+    <meta property="og:image" content="https://staygoch.com/games/reveal-board/staygo-logo.png" />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://staygoch.com/games/dice-roguelike/" />
+    
+    <link rel="icon" type="image/png" href="../../games/reveal-board/staygo-logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../assets/css/site.css" />
+    <link rel="stylesheet" href="./styles.css" />
+    <script defer src="../../assets/js/config.js"></script>
+    <script defer src="../../assets/js/site.js"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../" class="logo-link">
+                    <img src="../../games/reveal-board/staygo-logo.png" alt="Staygo" class="logo" />
+                </a>
+                
+                <nav class="nav" aria-label="เมนูหลัก">
+                    <a href="../../#play" class="nav-link active">Play</a>
+                    <a href="../../#tools" class="nav-link">Tools</a>
+                    <a href="../../#watch" class="nav-link">Watch & Play</a>
+                    <a href="../../about/" class="nav-link">About</a>
+                </nav>
+
+                <div class="header-actions">
+                    <a href="https://www.youtube.com/@STAYGO" target="_blank" rel="noopener noreferrer" class="icon-button" aria-label="YouTube">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
+                            <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+                        </svg>
+                    </a>
+                    <button id="menuToggle" class="icon-button" aria-label="เมนู">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="3" y1="12" x2="21" y2="12"></line>
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <line x1="3" y1="18" x2="21" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu">
+        <div class="mobile-menu-overlay"></div>
+        <div class="mobile-menu-content">
+            <div class="mobile-menu-header">
+                <h3 class="mobile-menu-title">ติดตามเรา</h3>
+                <button id="menuClose" class="mobile-menu-close" aria-label="ปิดเมนู">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <nav class="mobile-menu-nav">
+                <a href="https://www.youtube.com/@STAYGO" target="_blank" rel="noopener noreferrer" class="mobile-menu-link">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
+                        <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+                    </svg>
+                    <span>YouTube</span>
+                </a>
+                <a href="https://facebook.com/STAYG0" target="_blank" rel="noopener noreferrer" class="mobile-menu-link">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                    </svg>
+                    <span>Facebook</span>
+                </a>
+                <a href="https://instagram.com/staygo.official" target="_blank" rel="noopener noreferrer" class="mobile-menu-link">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                    </svg>
+                    <span>Instagram</span>
+                </a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Game Container -->
+    <div class="game-wrapper">
+        <!-- Main Menu Screen -->
+        <div id="mainMenu" class="game-screen active">
+            <div class="menu-container">
+                <h1 class="game-title">DICE<br/>ROGUELIKE</h1>
+                <p class="game-subtitle">ผจญภัยด้วยลูกเต๋า</p>
+                <div class="menu-buttons">
+                    <button id="newGameBtn" class="pixel-btn pixel-btn-primary">เริ่มเกมใหม่</button>
+                    <button id="continueBtn" class="pixel-btn pixel-btn-secondary" style="display: none;">เล่นต่อ</button>
+                    <button id="statsBtn" class="pixel-btn">สถิติ</button>
+                    <button id="howToPlayBtn" class="pixel-btn">วิธีเล่น</button>
+                </div>
+                <div class="seed-input-container">
+                    <label for="seedInput">Seed (เว้นว่างเพื่อสุ่ม):</label>
+                    <input type="text" id="seedInput" class="pixel-input" placeholder="ใส่ seed หรือเว้นว่าง">
+                </div>
+            </div>
+        </div>
+
+        <!-- Map Screen -->
+        <div id="mapScreen" class="game-screen">
+            <div class="map-container">
+                <div class="map-header">
+                    <div class="map-stats">
+                        <div class="stat-item">
+                            <span class="stat-icon">❤️</span>
+                            <span id="mapHp">50/50</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-icon">⚡</span>
+                            <span id="mapEnergy">3</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-icon">💰</span>
+                            <span id="mapGold">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-icon">📍</span>
+                            <span id="mapFloor">Floor 1</span>
+                        </div>
+                    </div>
+                    <button id="mapMenuBtn" class="pixel-btn-small">Menu</button>
+                </div>
+                <div id="mapGrid" class="map-grid"></div>
+            </div>
+        </div>
+
+        <!-- Combat Screen -->
+        <div id="combatScreen" class="game-screen">
+            <div class="combat-container">
+                <!-- Player Stats -->
+                <div class="combat-header">
+                    <div class="player-stats">
+                        <div class="stat-bar">
+                            <div class="stat-label">HP</div>
+                            <div class="stat-value-bar">
+                                <div id="playerHpBar" class="stat-fill hp-fill"></div>
+                                <span id="playerHp" class="stat-text">50/50</span>
+                            </div>
+                        </div>
+                        <div class="stat-bar">
+                            <div class="stat-label">Shield</div>
+                            <div class="stat-value-bar">
+                                <div id="playerShieldBar" class="stat-fill shield-fill"></div>
+                                <span id="playerShield" class="stat-text">0</span>
+                            </div>
+                        </div>
+                        <div class="stat-inline">
+                            <span class="stat-icon">⚡</span>
+                            <span id="playerEnergy">3</span>
+                        </div>
+                        <div class="stat-inline">
+                            <span class="stat-icon">🔄</span>
+                            <span id="rerollsLeft">2</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Enemy Display -->
+                <div class="enemy-container">
+                    <div class="enemy-card">
+                        <div id="enemyName" class="enemy-name">Goblin</div>
+                        <div id="enemySprite" class="enemy-sprite">👹</div>
+                        <div class="enemy-hp-bar">
+                            <div id="enemyHpBar" class="stat-fill hp-fill"></div>
+                            <span id="enemyHp" class="stat-text">30/30</span>
+                        </div>
+                        <div id="enemyIntent" class="enemy-intent">
+                            <span class="intent-icon">⚔️</span>
+                            <span class="intent-text">Attack 6</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dice Display -->
+                <div class="dice-container">
+                    <div id="diceArea" class="dice-area"></div>
+                    <button id="rollDiceBtn" class="pixel-btn pixel-btn-primary">Roll Dice</button>
+                    <button id="rerollBtn" class="pixel-btn" style="display: none;">Reroll Selected</button>
+                </div>
+
+                <!-- Allocation Slots -->
+                <div class="slots-container">
+                    <div class="slot-group">
+                        <div id="attackSlot" class="dice-slot" data-slot="attack">
+                            <div class="slot-header">
+                                <span class="slot-icon">⚔️</span>
+                                <span class="slot-name">Attack</span>
+                            </div>
+                            <div class="slot-dice"></div>
+                            <div class="slot-value">0 DMG</div>
+                        </div>
+                        <div id="blockSlot" class="dice-slot" data-slot="block">
+                            <div class="slot-header">
+                                <span class="slot-icon">🛡️</span>
+                                <span class="slot-name">Block</span>
+                            </div>
+                            <div class="slot-dice"></div>
+                            <div class="slot-value">0 Shield</div>
+                        </div>
+                        <div id="healSlot" class="dice-slot" data-slot="heal">
+                            <div class="slot-header">
+                                <span class="slot-icon">💚</span>
+                                <span class="slot-name">Heal</span>
+                            </div>
+                            <div class="slot-dice"></div>
+                            <div class="slot-value">0 HP</div>
+                        </div>
+                        <div id="chargeSlot" class="dice-slot" data-slot="charge">
+                            <div class="slot-header">
+                                <span class="slot-icon">⚡</span>
+                                <span class="slot-name">Charge</span>
+                            </div>
+                            <div class="slot-dice"></div>
+                            <div class="slot-value">+0 Energy</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Combat Actions -->
+                <div class="combat-actions">
+                    <button id="endTurnBtn" class="pixel-btn pixel-btn-primary" disabled>End Turn</button>
+                    <button id="useSkillBtn" class="pixel-btn">Skills</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reward Screen -->
+        <div id="rewardScreen" class="game-screen">
+            <div class="reward-container">
+                <h2 class="reward-title">Victory!</h2>
+                <div class="reward-info">
+                    <p>Gold: <span id="rewardGold">0</span></p>
+                    <p>Choose 1 Reward:</p>
+                </div>
+                <div id="rewardChoices" class="reward-choices"></div>
+                <button id="continueMapBtn" class="pixel-btn pixel-btn-primary">Continue</button>
+            </div>
+        </div>
+
+        <!-- Event Screen -->
+        <div id="eventScreen" class="game-screen">
+            <div class="event-container">
+                <h2 id="eventTitle" class="event-title">Event</h2>
+                <p id="eventDescription" class="event-description"></p>
+                <div id="eventChoices" class="event-choices"></div>
+            </div>
+        </div>
+
+        <!-- Shop Screen -->
+        <div id="shopScreen" class="game-screen">
+            <div class="shop-container">
+                <h2 class="shop-title">Shop</h2>
+                <div class="shop-header">
+                    <div class="shop-gold">
+                        <span class="stat-icon">💰</span>
+                        <span id="shopGold">0</span>
+                    </div>
+                </div>
+                <div id="shopItems" class="shop-items"></div>
+                <button id="leaveShopBtn" class="pixel-btn">Leave Shop</button>
+            </div>
+        </div>
+
+        <!-- Rest Screen -->
+        <div id="restScreen" class="game-screen">
+            <div class="rest-container">
+                <h2 class="rest-title">Rest</h2>
+                <p class="rest-description">Heal 25 HP</p>
+                <button id="restBtn" class="pixel-btn pixel-btn-primary">Rest</button>
+                <button id="skipRestBtn" class="pixel-btn">Skip</button>
+            </div>
+        </div>
+
+        <!-- Stats Screen -->
+        <div id="statsScreen" class="game-screen">
+            <div class="stats-container">
+                <h2 class="stats-title">Statistics</h2>
+                <div class="stats-content">
+                    <div class="stat-row">
+                        <span>Total Runs:</span>
+                        <span id="statTotalRuns">0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Victories:</span>
+                        <span id="statVictories">0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Best Floor:</span>
+                        <span id="statBestFloor">0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Win Rate:</span>
+                        <span id="statWinRate">0%</span>
+                    </div>
+                </div>
+                <h3 class="stats-subtitle">Run History</h3>
+                <div id="runHistory" class="run-history"></div>
+                <button id="closeStatsBtn" class="pixel-btn">Close</button>
+            </div>
+        </div>
+
+        <!-- How To Play Screen -->
+        <div id="howToPlayScreen" class="game-screen">
+            <div class="help-container">
+                <h2 class="help-title">วิธีเล่น</h2>
+                <div class="help-content">
+                    <div class="help-section">
+                        <h3>🎲 การต่อสู้</h3>
+                        <p>ทอยลูกเต๋า 5 ลูก แล้ววางไปในช่อง Attack, Block, Heal หรือ Charge</p>
+                        <p>คุณสามารถทอยใหม่ได้ 2 ครั้งต่อเทิร์น</p>
+                    </div>
+                    <div class="help-section">
+                        <h3>🃏 Combo ของลูกเต๋า</h3>
+                        <ul>
+                            <li>Pair (2 เหมือน) = 10 DMG</li>
+                            <li>Three of a Kind = 15 DMG</li>
+                            <li>Straight (5 ลำดับ) = 25 DMG</li>
+                            <li>Full House = 30 DMG</li>
+                            <li>Four of a Kind = 35 DMG</li>
+                            <li>Five of a Kind = 50 DMG</li>
+                        </ul>
+                    </div>
+                    <div class="help-section">
+                        <h3>🗺️ การเดินทาง</h3>
+                        <p>เลือกเส้นทางผ่าน 10 ชั้น เจอศัตรู, Event, Shop และ Boss</p>
+                    </div>
+                    <div class="help-section">
+                        <h3>⚡ Energy & Skills</h3>
+                        <p>ใช้ Charge slot เพื่อสะสม Energy สำหรับ Skills พิเศษ</p>
+                    </div>
+                </div>
+                <button id="closeHelpBtn" class="pixel-btn">Close</button>
+            </div>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div id="gameOverScreen" class="game-screen">
+            <div class="gameover-container">
+                <h2 id="gameOverTitle" class="gameover-title">Game Over</h2>
+                <div class="gameover-stats">
+                    <p>Floor Reached: <span id="finalFloor">0</span></p>
+                    <p>Gold Earned: <span id="finalGold">0</span></p>
+                    <p>Enemies Defeated: <span id="finalKills">0</span></p>
+                </div>
+                <div class="gameover-buttons">
+                    <button id="retryBtn" class="pixel-btn pixel-btn-primary">Try Again</button>
+                    <button id="mainMenuBtn" class="pixel-btn">Main Menu</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Scripts - Load in dependency order -->
+    <script src="./data.js"></script>
+    <script src="./rng.js"></script>
+    <script src="./enemies.js"></script>
+    <script src="./progression.js"></script>
+    <script src="./events.js"></script>
+    <script src="./map.js"></script>
+    <script src="./combat.js"></script>
+    <script src="./ui.js"></script>
+    <script src="./game.js"></script>
+</body>
+</html>
+

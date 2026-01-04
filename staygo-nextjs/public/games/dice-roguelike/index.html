@@ -375,6 +375,26 @@
                 </div>
             </div>
         </div>
+
+        <!-- Skills Modal -->
+        <div id="skillsModal" class="modal" style="display: none;">
+            <div class="modal-overlay"></div>
+            <div class="modal-content skills-modal">
+                <div class="modal-header">
+                    <h2 class="modal-title">Skills</h2>
+                    <button id="closeSkillsBtn" class="modal-close">✕</button>
+                </div>
+                <div class="modal-body">
+                    <div class="player-energy-display">
+                        <span class="stat-icon">⚡</span>
+                        <span>Energy: <span id="skillsModalEnergy">3</span></span>
+                    </div>
+                    <div id="skillsList" class="skills-list">
+                        <p class="no-skills-message">No skills learned yet.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Game Scripts - Load in dependency order -->

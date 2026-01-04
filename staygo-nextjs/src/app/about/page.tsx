@@ -3,10 +3,23 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'เกี่ยวกับเรา - STAYGO',
   description: 'ทำความรู้จักกับ STAYGO Channel และวัตถุประสงค์ของเว็บไซต์นี้',
+  icons: {
+    icon: '/games/reveal-board/staygo-logo.png',
+    shortcut: '/games/reveal-board/staygo-logo.png',
+    apple: '/games/reveal-board/staygo-logo.png',
+  },
   openGraph: {
     title: 'เกี่ยวกับเรา - STAYGO',
     description: 'ทำความรู้จักกับ STAYGO Channel และวัตถุประสงค์ของเว็บไซต์นี้',
     url: 'https://staygoch.com/about/',
+    images: [
+      {
+        url: 'https://staygoch.com/games/reveal-board/staygo-logo.png',
+        width: 512,
+        height: 512,
+        alt: 'STAYG0 Logo',
+      },
+    ],
   },
 };
 

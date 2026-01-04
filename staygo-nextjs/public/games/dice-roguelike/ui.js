@@ -406,8 +406,113 @@ class UIManager {
     }
 
     showSkillsMenu() {
-        // TODO: Implement skills menu
-        alert('Skills menu - to be implemented');
+        const modal = document.getElementById('skillsModal');
+        const skillsList = document.getElementById('skillsList');
+        const energyDisplay = document.getElementById('skillsModalEnergy');
+        const closeBtn = document.getElementById('closeSkillsBtn');
+
+        if (!modal || !skillsList) return;
+
+        // Update energy display
+        if (energyDisplay) {
+            energyDisplay.textContent = gameState.player.energy;
+        }
+
+        // Clear current skills list
+        skillsList.innerHTML = '';
+
+        // Check if player has any skills
+        if (!gameState.skills || gameState.skills.length === 0) {
+            skillsList.innerHTML = '<p class="no-skills-message">No skills learned yet.</p>';
+        } else {
+            // Create skill cards
+            gameState.skills.forEach(skill => {
+                const card = this.createSkillCard(skill);
+                skillsList.appendChild(card);
+            });
+        }
+
+        // Show modal
+        modal.style.display = 'flex';
+
+        // Setup close button
+        if (closeBtn) {
+            closeBtn.onclick = () => {
+                modal.style.display = 'none';
+            };
+        }
+
+        // Close on overlay click
+        const overlay = modal.querySelector('.modal-overlay');
+        if (overlay) {
+            overlay.onclick = () => {
+                modal.style.display = 'none';
+            };
+        }
+    }
+
+    createSkillCard(skill) {
+        const card = document.createElement('div');
+        card.className = 'skill-card';
+
+        // Determine if player can use this skill
+        const canUse = gameState.player.energy >= skill.energyCost;
+        card.classList.add(canUse ? 'can-use' : 'cannot-use');
+
+        // Skill header (name and cost)
+        const header = document.createElement('div');
+        header.className = 'skill-card-header';
+
+        const name = document.createElement('div');
+        name.className = `skill-name rarity-${skill.rarity}`;
+        name.textContent = skill.name;
+
+        const cost = document.createElement('div');
+        cost.className = 'skill-cost';
+        if (skill.energyCost === 999) {
+            cost.innerHTML = '<span class="stat-icon">⚡</span><span>ALL</span>';
+        } else {
+            cost.innerHTML = `<span class="stat-icon">⚡</span><span>${skill.energyCost}</span>`;
+        }
+
+        header.appendChild(name);
+        header.appendChild(cost);
+
+        // Skill description
+        const desc = document.createElement('div');
+        desc.className = 'skill-description';
+        desc.textContent = skill.description;
+
+        // Use button
+        const useBtn = document.createElement('button');
+        useBtn.className = 'skill-use-btn';
+        useBtn.textContent = 'Use Skill';
+        useBtn.disabled = !canUse;
+
+        if (canUse) {
+            useBtn.onclick = () => {
+                this.useSkill(skill);
+            };
+        }
+
+        card.appendChild(header);
+        card.appendChild(desc);
+        card.appendChild(useBtn);
+
+        return card;
+    }
+
+    useSkill(skill) {
+        // Close the modal first
+        const modal = document.getElementById('skillsModal');
+        if (modal) {
+            modal.style.display = 'none';
+        }
+
+        // Call game's useSkill function
+        if (window.game) {
+            window.game.useSkill(skill);
+        }
     }
 
     // ========== REWARD SCREEN ==========

@@ -342,7 +342,15 @@ class CombatManager {
             gameState.addEnergy(results.charge.energy);
         }
         if (results.attack && this.currentEnemy) {
-            const damageDealt = this.damageEnemy(results.attack.damage);
+            let finalDamage = results.attack.damage;
+
+            // Apply nextAttackMultiplier from Power Strike skill
+            if (gameState.nextAttackMultiplier) {
+                finalDamage = Math.floor(finalDamage * gameState.nextAttackMultiplier);
+                gameState.nextAttackMultiplier = null; // Reset after use
+            }
+
+            const damageDealt = this.damageEnemy(finalDamage);
             
             // Apply vampiric perk
             if (gameState && gameState.hasPerk('vampiric')) {

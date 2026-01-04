@@ -5,10 +5,23 @@ export const metadata: Metadata = {
   title: 'เกมปาร์ตี้ทั้งหมด - STAYGO',
   description: 'รวมเกมปาร์ตี้สนุกๆ เล่นฟรีบนเว็บ Reveal Board, ลูปนรกหมกมุ่น, จับคู่อีโมจิ, Dice Roguelike และอื่นๆ อีกมากมาย',
   keywords: 'เกมปาร์ตี้, เกมออนไลน์ฟรี, Reveal Board, เกมเปิดไพ่, เกมจับคู่, Roguelike, เกมลูกเต๋า',
+  icons: {
+    icon: '/games/reveal-board/staygo-logo.png',
+    shortcut: '/games/reveal-board/staygo-logo.png',
+    apple: '/games/reveal-board/staygo-logo.png',
+  },
   openGraph: {
     title: 'เกมปาร์ตี้ทั้งหมด - STAYGO',
     description: 'รวมเกมปาร์ตี้สนุกๆ เล่นฟรีบนเว็บ',
     url: 'https://staygoch.com/games/',
+    images: [
+      {
+        url: 'https://staygoch.com/games/reveal-board/staygo-logo.png',
+        width: 512,
+        height: 512,
+        alt: 'STAYG0 Logo',
+      },
+    ],
   },
 };
 

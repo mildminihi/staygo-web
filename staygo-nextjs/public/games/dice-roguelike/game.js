@@ -38,6 +38,7 @@ class GameState {
         this.inCombat = false;
         this.currentEnemy = null;
         this.combatRewardsGold = 0;
+        this.nextAttackMultiplier = null;
 
         // Stats
         this.stats = {
@@ -485,6 +486,89 @@ class GameController {
         // Reset for next turn
         combatManager.diceManager.reset();
         getUI().renderCombat();
+    }
+
+    // Use skill
+    useSkill(skill) {
+        if (!skill || !skill.effect) {
+            console.error('Invalid skill:', skill);
+            return;
+        }
+
+        // Check if player has enough energy
+        if (gameState.player.energy < skill.energyCost) {
+            console.log('Not enough energy to use skill');
+            return;
+        }
+
+        // Apply energy master perk (skills cost 1 less, min 1)
+        let actualCost = skill.energyCost;
+        if (gameState.hasPerk('energyMaster')) {
+            actualCost = Math.max(1, actualCost - 1);
+        }
+
+        // Special case for Thunderbolt (uses all energy)
+        if (skill.energyCost === 999) {
+            actualCost = gameState.player.energy;
+        }
+
+        // Spend energy
+        gameState.player.energy = Math.max(0, gameState.player.energy - actualCost);
+
+        // Execute skill effect
+        try {
+            const result = skill.effect(gameState, combatManager);
+            console.log(`Used skill: ${skill.name}`, result);
+
+            // Show visual feedback (could add animation here)
+            this.showSkillFeedback(skill, result);
+
+            // Update UI
+            getUI().renderCombat();
+
+            // Save state
+            gameState.saveCurrentRun();
+        } catch (error) {
+            console.error('Error executing skill:', error);
+            // Refund energy if skill failed
+            gameState.player.energy = Math.min(gameState.player.maxEnergy, gameState.player.energy + actualCost);
+        }
+    }
+
+    // Show skill feedback
+    showSkillFeedback(skill, result) {
+        // Create a temporary message element
+        const feedback = document.createElement('div');
+        feedback.style.cssText = `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 217, 255, 0.9);
+            color: #1a1a2e;
+            padding: 20px 40px;
+            border: 4px solid #fff;
+            font-family: 'Press Start 2P', sans-serif;
+            font-size: 14px;
+            z-index: 2000;
+            box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.5);
+            animation: skillPop 0.5s ease-out;
+        `;
+
+        let message = `${skill.name}!`;
+        if (result.damage) message += ` ${result.damage} DMG!`;
+        if (result.shield) message += ` +${result.shield} Shield!`;
+        if (result.heal) message += ` +${result.heal} HP!`;
+        if (result.energy) message += ` +${result.energy} Energy!`;
+        if (result.buff) message += ` ${result.buff}!`;
+
+        feedback.textContent = message;
+        document.body.appendChild(feedback);
+
+        // Remove after animation
+        setTimeout(() => {
+            feedback.remove();
+        }, 1500);
     }
 
     // Combat victory

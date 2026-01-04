@@ -1,0 +1,2 @@
+Logo is currently stored at games/reveal-board/staygo-logo.png and reused by other pages via a relative path.
+If you later want a dedicated global logo file, copy it into assets/ and update the <img src> paths.

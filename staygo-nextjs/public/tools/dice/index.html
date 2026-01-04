@@ -1,0 +1,533 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Primary Meta Tags -->
+    <title>ทอยลูกเต๋าออนไลน์ - เครื่องมือช่วยเล่นเกมกระดาน | STAYGO</title>
+    <meta name="title" content="ทอยลูกเต๋าออนไลน์ - เครื่องมือช่วยเล่นเกมกระดาน | STAYGO" />
+    <meta name="description" content="ทอยลูกเต๋าออนไลน์ฟรี รองรับ 1-10 ลูก มี 3D animation สมจริง เหมาะสำหรับเล่นเกมกระดาน เกมปาร์ตี้ และกิจกรรมต่างๆ" />
+    <meta name="keywords" content="ทอยลูกเต๋า, dice roller, ทอยลูกเต๋าออนไลน์, เครื่องมือเกมกระดาน" />
+    <meta name="robots" content="index, follow" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://staygoch.com/tools/dice/" />
+    <meta property="og:title" content="ทอยลูกเต๋าออนไลน์ - เครื่องมือช่วยเล่นเกมกระดาน | STAYGO" />
+    <meta property="og:description" content="ทอยลูกเต๋าออนไลน์ฟรี รองรับ 1-10 ลูก มี 3D animation สมจริง" />
+    <meta property="og:image" content="https://staygoch.com/games/reveal-board/staygo-logo.png" />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://staygoch.com/tools/dice/" />
+    
+    <link rel="icon" type="image/png" href="../../games/reveal-board/staygo-logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Kanit:wght@700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../assets/css/site.css" />
+    <script defer src="../../assets/js/config.js"></script>
+    <script defer src="../../assets/js/site.js"></script>
+  </head>
+  <body>
+    <header class="header">
+      <div class="container">
+        <div class="header-content">
+          <a href="../../" class="logo-link">
+            <img src="../../games/reveal-board/staygo-logo.png" alt="Staygo" class="logo" />
+          </a>
+          
+          <nav class="nav" aria-label="เมนูหลัก">
+            <a href="../../#play" class="nav-link">Play</a>
+            <a href="../../#tools" class="nav-link active">Tools</a>
+            <a href="../../#watch" class="nav-link">Watch & Play</a>
+            <a href="../../about/" class="nav-link">About</a>
+          </nav>
+
+          <div class="header-actions">
+            <a href="https://www.youtube.com/@STAYGO" target="_blank" rel="noopener noreferrer" class="icon-button" aria-label="YouTube">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
+                <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+              </svg>
+            </a>
+            <button id="menuToggle" class="icon-button" aria-label="เมนู">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu">
+      <div class="mobile-menu-header">
+        <span class="mobile-menu-title">เมนู</span>
+        <button id="menuClose" class="icon-button" aria-label="ปิดเมนู">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <nav class="mobile-nav">
+        <a href="../../#play" class="mobile-nav-link">Play</a>
+        <a href="../../#tools" class="mobile-nav-link">Tools</a>
+        <a href="../../#watch" class="mobile-nav-link">Watch & Play</a>
+        <a href="../../about/" class="mobile-nav-link">About</a>
+      </nav>
+    </div>
+
+    <main>
+      <section class="section">
+        <div class="container">
+          <div class="dice-header">
+            <h1 class="section-title">🎲 ทอยลูกเต๋า</h1>
+            <a href="../../#tools" class="button button-ghost button-sm">← กลับ</a>
+          </div>
+
+          <!-- Dice Display Area -->
+          <div class="dice-display-section">
+            <div class="dice-display-header">
+              <span class="dice-count-label">ลูกเต๋าที่เลือก (<span id="diceQueueCount">0</span>)</span>
+              <button class="button button-ghost button-sm" id="clearQueue" style="display: none;">ลบลูกเต๋าทั้งหมด</button>
+            </div>
+            <div class="dice-result-container" id="diceResultContainer">
+              <div class="dice-placeholder">
+                <div class="dice-placeholder-icon">🎲</div>
+                <p class="dice-placeholder-text">คลิกเพิ่มลูกเต๋าเพื่อเริ่มต้น</p>
+              </div>
+            </div>
+            <div class="dice-total" id="diceTotal"></div>
+          </div>
+
+          <button class="button button-primary button-lg dice-roll-button" id="rollButton" disabled style="margin-top: 16px; margin-bottom: 16px;">
+            🎲 ทอยลูกเต๋า
+          </button>
+
+          <!-- Controls Panel -->
+          <div class="dice-controls">
+            <div class="dice-control-section">
+              <h3 class="dice-section-title">เลือกลูกเต๋า</h3>
+              
+              <!-- Dice Type Tabs -->
+              <div class="dice-type-tabs">
+                <button class="dice-type-tab active" data-tab="standard">Standard Dice</button>
+                <button class="dice-type-tab" data-tab="custom">Custom Dice</button>
+              </div>
+
+              <!-- Standard Dice Panel -->
+              <div class="dice-type-panel active" id="standardPanel">
+                <div class="dice-type-grid">
+                  <button class="dice-type-button" data-faces="6">
+                    <span class="dice-type-label">D6</span>
+                    <span class="dice-type-desc">+ เพิ่ม</span>
+                  </button>
+                  <button class="dice-type-button" data-faces="3">
+                    <span class="dice-type-label">D3</span>
+                    <span class="dice-type-desc">+ เพิ่ม</span>
+                  </button>
+                  <button class="dice-type-button" data-faces="4">
+                    <span class="dice-type-label">D4</span>
+                    <span class="dice-type-desc">+ เพิ่ม</span>
+                  </button>
+                  <button class="dice-type-button" data-faces="8">
+                    <span class="dice-type-label">D8</span>
+                    <span class="dice-type-desc">+ เพิ่ม</span>
+                  </button>
+                  <button class="dice-type-button" data-faces="10">
+                    <span class="dice-type-label">D10</span>
+                    <span class="dice-type-desc">+ เพิ่ม</span>
+                  </button>
+                  <button class="dice-type-button" data-faces="12">
+                    <span class="dice-type-label">D12</span>
+                    <span class="dice-type-desc">+ เพิ่ม</span>
+                  </button>
+                  <button class="dice-type-button" data-faces="20">
+                    <span class="dice-type-label">D20</span>
+                    <span class="dice-type-desc">+ เพิ่ม</span>
+                  </button>
+                  <button class="dice-type-button" data-faces="100">
+                    <span class="dice-type-label">D100</span>
+                    <span class="dice-type-desc">+ เพิ่ม</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Custom Dice Panel -->
+              <div class="dice-type-panel" id="customPanel">
+                <div class="dice-custom-input">
+                  <label for="customFaces" class="dice-custom-label">
+                    <span>จำนวนหน้าของลูกเต๋า</span>
+                    <span class="dice-custom-sublabel">(2-999)</span>
+                  </label>
+                  <div style="display: flex; gap: 12px;">
+                    <input 
+                      type="number" 
+                      id="customFaces" 
+                      class="dice-number-input" 
+                      min="2" 
+                      max="999" 
+                      value="6"
+                      placeholder="ใส่จำนวนหน้า"
+                      style="flex: 1;"
+                    />
+                    <button class="button button-primary button-md" id="addCustomDice">+ เพิ่ม</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- History Section -->
+          <div class="dice-history-section">
+            <div class="dice-history-header">
+              <h3 class="dice-section-title">ประวัติการทอย</h3>
+              <button class="button button-outline button-sm" id="clearHistoryBtn">ล้างประวัติ</button>
+            </div>
+            <div class="dice-history-list" id="historyList">
+              <div class="dice-history-empty">
+                <p class="muted">ยังไม่มีประวัติการทอย</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Confirmation Modal -->
+    <div class="modal" id="confirmModal">
+      <div class="modal-overlay" id="modalOverlay"></div>
+      <div class="modal-content">
+        <h3 class="modal-title">ยืนยันการล้างประวัติ</h3>
+        <p class="modal-text">ต้องการล้างประวัติการทอยทั้งหมดจริงหรือไม่?</p>
+        <div class="modal-actions">
+          <button class="button button-outline button-md" id="cancelBtn">ยกเลิก</button>
+          <button class="button button-primary button-md" id="confirmBtn">ยืนยัน</button>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-logo">
+            <img src="../../games/reveal-board/staygo-logo.png" alt="Staygo" />
+          </div>
+          
+          <nav class="footer-links">
+            <a href="https://facebook.com/STAYG0" target="_blank" rel="noopener noreferrer">Facebook</a>
+            <a href="https://instagram.com/staygo.official" target="_blank" rel="noopener noreferrer">Instagram</a>
+            <a href="https://tiktok.com/@staygo.official" target="_blank" rel="noopener noreferrer">TikTok</a>
+            <a href="https://twitch.tv/staygogamming" target="_blank" rel="noopener noreferrer">Twitch</a>
+          </nav>
+          
+          <p class="footer-copy">© STAYGO 2025</p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      class DiceRoller {
+        constructor() {
+          this.diceQueue = [];
+          this.history = [];
+          this.isRolling = false;
+          
+          this.init();
+        }
+
+        init() {
+          // Dice type tabs
+          document.querySelectorAll('.dice-type-tab').forEach(tab => {
+            tab.addEventListener('click', (e) => this.switchTab(e.target.dataset.tab));
+          });
+
+          // Standard dice buttons - now adds to queue
+          document.querySelectorAll('.dice-type-button').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              const faces = parseInt(e.currentTarget.dataset.faces);
+              this.addDiceToQueue(faces, false);
+            });
+          });
+
+          // Custom dice button
+          document.getElementById('addCustomDice').addEventListener('click', () => {
+            const faces = parseInt(document.getElementById('customFaces').value) || 6;
+            if (faces >= 2 && faces <= 999) {
+              this.addDiceToQueue(faces, true);
+            }
+          });
+
+          // Clear queue
+          document.getElementById('clearQueue').addEventListener('click', () => this.clearQueue());
+
+          // Roll button
+          document.getElementById('rollButton').addEventListener('click', () => this.roll());
+
+          // History clear
+          document.getElementById('clearHistoryBtn').addEventListener('click', () => this.showClearConfirmation());
+          document.getElementById('cancelBtn').addEventListener('click', () => this.hideModal());
+          document.getElementById('confirmBtn').addEventListener('click', () => this.clearHistory());
+          document.getElementById('modalOverlay').addEventListener('click', () => this.hideModal());
+        }
+
+        switchTab(tab) {
+          // Update tabs
+          document.querySelectorAll('.dice-type-tab').forEach(t => t.classList.remove('active'));
+          document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+          
+          // Update panels
+          document.querySelectorAll('.dice-type-panel').forEach(p => p.classList.remove('active'));
+          document.getElementById(tab === 'standard' ? 'standardPanel' : 'customPanel').classList.add('active');
+        }
+
+        addDiceToQueue(faces, isCustom) {
+          this.diceQueue.push({ faces, isCustom });
+          this.renderQueue();
+        }
+
+        removeDiceFromQueue(index) {
+          this.diceQueue.splice(index, 1);
+          
+          // Check if we need to re-render or transition states
+          const container = document.getElementById('diceResultContainer');
+          const diceElements = container.querySelectorAll('.dice-item');
+          
+          // If dice are in revealed state, keep the results but update structure
+          if (diceElements.length > 0 && diceElements[0].classList.contains('revealed')) {
+            // Remove the specific dice element
+            if (diceElements[index]) {
+              diceElements[index].remove();
+            }
+            
+            // Update remaining dice indices
+            const remaining = container.querySelectorAll('.dice-item');
+            remaining.forEach((el, newIndex) => {
+              const removeBtn = el.querySelector('.dice-remove-btn');
+              if (removeBtn) {
+                removeBtn.dataset.index = newIndex;
+              }
+            });
+
+            // Update count and clear button visibility
+            document.getElementById('diceQueueCount').textContent = this.diceQueue.length;
+            const clearButton = document.getElementById('clearQueue');
+            const rollButton = document.getElementById('rollButton');
+            
+            if (this.diceQueue.length === 0) {
+              // Clear everything and show placeholder
+              container.innerHTML = `
+                <div class="dice-placeholder">
+                  <div class="dice-placeholder-icon">🎲</div>
+                  <p class="dice-placeholder-text">คลิกเพิ่มลูกเต๋าเพื่อเริ่มต้น</p>
+                </div>
+              `;
+              document.getElementById('diceTotal').innerHTML = '';
+              clearButton.style.display = 'none';
+              rollButton.disabled = true;
+            } else {
+              rollButton.disabled = false;
+            }
+          } else {
+            // Normal queue rendering
+            this.renderQueue();
+          }
+        }
+
+        clearQueue() {
+          if (this.diceQueue.length === 0) return;
+          this.diceQueue = [];
+          this.renderQueue();
+        }
+
+        renderQueue() {
+          const container = document.getElementById('diceResultContainer');
+          const countElement = document.getElementById('diceQueueCount');
+          const rollButton = document.getElementById('rollButton');
+          const clearButton = document.getElementById('clearQueue');
+          
+          countElement.textContent = this.diceQueue.length;
+
+          if (this.diceQueue.length === 0) {
+            container.innerHTML = `
+              <div class="dice-placeholder">
+                <div class="dice-placeholder-icon">🎲</div>
+                <p class="dice-placeholder-text">คลิกเพิ่มลูกเต๋าเพื่อเริ่มต้น</p>
+              </div>
+            `;
+            rollButton.disabled = true;
+            clearButton.style.display = 'none';
+            return;
+          }
+
+          rollButton.disabled = false;
+          clearButton.style.display = 'block';
+
+          // Render each die as a visual dice item
+          container.innerHTML = this.diceQueue.map((dice, index) => `
+            <div class="dice-item queued" data-index="${index}">
+              <button class="dice-remove-btn" data-index="${index}" title="ลบลูกเต๋านี้">×</button>
+              <div class="dice-face">?</div>
+              <div class="dice-type-badge">${dice.isCustom ? 'C' : ''}D${dice.faces}</div>
+            </div>
+          `).join('');
+
+          // Add remove handlers
+          container.querySelectorAll('.dice-remove-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              e.stopPropagation();
+              const index = parseInt(e.target.dataset.index);
+              this.removeDiceFromQueue(index);
+            });
+          });
+        }
+
+        async roll() {
+          if (this.isRolling || this.diceQueue.length === 0) return;
+          this.isRolling = true;
+
+          const results = [];
+          const container = document.getElementById('diceResultContainer');
+          const clearButton = document.getElementById('clearQueue');
+          
+          // Hide clear button during roll
+          clearButton.style.display = 'none';
+          
+          // Change queued dice to rolling state
+          const diceElements = container.querySelectorAll('.dice-item');
+          diceElements.forEach(el => {
+            el.classList.remove('queued');
+            el.classList.add('rolling');
+            // Remove the × button
+            const removeBtn = el.querySelector('.dice-remove-btn');
+            if (removeBtn) removeBtn.remove();
+          });
+
+          // Animate rolling
+          await new Promise(resolve => setTimeout(resolve, 100));
+
+          // Roll each die
+          for (let i = 0; i < this.diceQueue.length; i++) {
+            const dice = this.diceQueue[i];
+            const result = Math.floor(Math.random() * dice.faces) + 1;
+            results.push({ faces: dice.faces, isCustom: dice.isCustom, result });
+            
+            // Stagger the reveal
+            await new Promise(resolve => setTimeout(resolve, 150));
+            
+            const diceElement = diceElements[i];
+            diceElement.classList.remove('rolling');
+            diceElement.classList.add('revealed');
+            diceElement.querySelector('.dice-face').textContent = result;
+          }
+
+          // Calculate and show total
+          const total = results.reduce((sum, r) => sum + r.result, 0);
+          document.getElementById('diceTotal').innerHTML = `
+            <span class="dice-total-label">ผลรวม:</span>
+            <span class="dice-total-value">${total}</span>
+          `;
+
+          // Add to history
+          const historyItem = {
+            timestamp: new Date().toISOString(),
+            dice: this.diceQueue.map(d => ({ faces: d.faces, isCustom: d.isCustom })),
+            results: results.map(r => r.result),
+            total: total
+          };
+          
+          this.history.unshift(historyItem);
+          if (this.history.length > 50) this.history.pop();
+          
+          this.renderHistory();
+
+          // Add remove buttons back to revealed dice
+          diceElements.forEach((el, index) => {
+            const removeBtn = document.createElement('button');
+            removeBtn.className = 'dice-remove-btn';
+            removeBtn.dataset.index = index;
+            removeBtn.textContent = '×';
+            removeBtn.title = 'ลบลูกเต๋านี้';
+            removeBtn.addEventListener('click', (e) => {
+              e.stopPropagation();
+              const idx = parseInt(e.target.dataset.index);
+              this.removeDiceFromQueue(idx);
+            });
+            el.appendChild(removeBtn);
+          });
+
+          // Show clear button again
+          clearButton.style.display = 'block';
+          
+          this.isRolling = false;
+        }
+
+        renderHistory() {
+          const historyList = document.getElementById('historyList');
+          
+          if (this.history.length === 0) {
+            historyList.innerHTML = '<div class="dice-history-empty"><p class="muted">ยังไม่มีประวัติการทอย</p></div>';
+            return;
+          }
+
+          historyList.innerHTML = this.history.map((item) => {
+            const date = new Date(item.timestamp);
+            const timeStr = date.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            
+            // Group dice types for display
+            const diceGroups = {};
+            item.dice.forEach(dice => {
+              const key = `${dice.isCustom ? 'C' : ''}D${dice.faces}`;
+              diceGroups[key] = (diceGroups[key] || 0) + 1;
+            });
+            
+            const diceStr = Object.entries(diceGroups)
+              .map(([key, count]) => `${count}× ${key}`)
+              .join(' + ');
+            
+            return `
+              <div class="dice-history-item">
+                <div class="dice-history-header-row">
+                  <span class="dice-history-time">${timeStr}</span>
+                  <span class="dice-history-type">${diceStr}</span>
+                  <span class="dice-history-total">รวม: ${item.total}</span>
+                </div>
+                <div class="dice-history-results">
+                  ${item.results.map((r, i) => {
+                    const dice = item.dice[i];
+                    return `<span class="dice-history-result" title="${dice.isCustom ? 'C' : ''}D${dice.faces}">${r}</span>`;
+                  }).join('')}
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+
+        showClearConfirmation() {
+          if (this.history.length === 0) return;
+          document.getElementById('confirmModal').classList.add('active');
+        }
+
+        hideModal() {
+          document.getElementById('confirmModal').classList.remove('active');
+        }
+
+        clearHistory() {
+          this.history = [];
+          this.renderHistory();
+          this.hideModal();
+        }
+      }
+
+      // Initialize on page load
+      document.addEventListener('DOMContentLoaded', () => {
+        new DiceRoller();
+      });
+    </script>
+  </body>
+</html>

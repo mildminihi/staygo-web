@@ -1,99 +1,122 @@
-# STAYGO
+# STAYGO Website
 
-เว็บสำหรับช่อง YouTube "STAYGO" เพื่อรวมเกมและเครื่องมือที่เล่นได้บนเว็บ
+เว็บไซต์สำหรับเล่นเกมออนไลน์และเครื่องมือช่วยเล่นเกมต่างๆ จากช่อง STAYGO
 
-🌐 **Live Site:** https://staygoch.com
+🌐 **Live Site**: [https://staygoch.com](https://staygoch.com)
 
-## โครงสร้างโปรเจค
+## 📁 โครงสร้างโปรเจค
 
 ```
 staygo-web/
-├── index.html              # หน้าหลัก
-├── assets/
-│   ├── css/
-│   │   └── site.css       # Stylesheet หลัก
-│   ├── js/
-│   │   ├── config.js      # Configuration
-│   │   └── site.js        # JavaScript หลัก
-│   └── image/             # รูปภาพและ favicon
-├── games/
-│   ├── index.html         # หน้ารวมเกมทั้งหมด
-│   ├── cardloop/          # เกมทายไพ่ 4 คำถาม
-│   └── reveal-board/      # เกมกระดานเปิดช่อง
-└── tools/
-    ├── dice/              # เครื่องมือทอยลูกเต๋า
-    ├── timer/             # เครื่องมือตั้งเวลา
-    ├── team-randomizer/   # สุ่มทีม
-    └── scoreboard/        # ตารางคะแนน
+├── staygo-nextjs/          # 🚀 โปรเจค Next.js (ใช้อันนี้)
+│   ├── src/                # React components & pages
+│   ├── public/             # Static assets
+│   └── out/                # Build output (สำหรับ deploy)
+│
+├── _old-html/              # 📦 Backup ของเว็บไซต์ HTML เดิม
+│   ├── index.html
+│   ├── games/
+│   ├── tools/
+│   └── assets/
+│
+└── *.md                    # 📖 เอกสารต่างๆ
 ```
 
-## Features
+## 🚀 Quick Start
 
-### เกม (Games)
-- **Cardloop**: เกมทายไพ่ 52 ใบด้วย 4 คำถาม (สีแดง/ดำ, สูง/ต่ำ, อยู่ระหว่าง/นอกช่วง, ทายหน้าไพ่)
-- **Reveal Board**: เกมกระดานเปิดช่อง (ฝังจากไฟล์ local)
-
-### เครื่องมือ (Tools)
-- **Dice**: ทอยลูกเต๋า
-- **Timer**: ตั้งเวลาและจับเวลา
-- **Team Randomizer**: สุ่มแบ่งทีมด้วยชื่อสมาชิก รองรับ 3 โหมด (2-8 ทีม, จำนวนคนต่อทีม, แบ่งทีมอิสระ)
-- **Scoreboard**: ตารางคะแนนพร้อมแสดงสมาชิกในทีม รองรับข้อมูลจาก Team Randomizer หรือป้อนเอง
-- **Tournament Bracket**: จัดสายการแข่งขัน Single/Double Elimination
-- **Competition Timer**: จับเวลาแข่งขันสำหรับ 2-8 ผู้เล่น
-- **Lucky Draw**: จับสลากออนไลน์ สุ่มรายการ
-
-## Run locally
-
-ตัวเว็บเป็น static files แนะนำรันผ่าน local server:
+### ติดตั้งและรัน
 
 ```bash
-# Node.js
-node dev-server.mjs
+# เข้าไปที่โปรเจค Next.js
+cd staygo-nextjs
 
-# หรือ Python
-python -m http.server 5173
+# ติดตั้ง dependencies
+npm install
+
+# รัน development server
+npm run dev
 ```
 
-แล้วเปิด `http://localhost:5173/`
+เปิดเบราว์เซอร์ที่ [http://localhost:3000](http://localhost:3000)
 
-## Deploy
+### Build สำหรับ Production
 
-เว็บนี้ใช้ custom domain: **staygoch.com** 🎉
-
-### GitHub Pages + Custom Domain
-
-1. สร้าง repository บน GitHub
-2. Push โค้ดขึ้น GitHub:
 ```bash
-git init
-git add .
-git commit -m "Initial commit"
-git remote add origin https://github.com/USERNAME/staygo-web.git
-git push -u origin main
+cd staygo-nextjs
+npm run build
 ```
 
-3. เปิดใช้ GitHub Pages:
-   - ไปที่ Settings → Pages
-   - Source: เลือก "Deploy from a branch"
-   - Branch: main → / (root)
-   - Custom domain จะถูกตั้งค่าอัตโนมัติจากไฟล์ `CNAME`
+ไฟล์ที่ build เสร็จจะอยู่ใน `staygo-nextjs/out/`
 
-4. ตั้งค่า DNS ที่ domain registrar (ดู [DNS-SETUP.md](DNS-SETUP.md))
+## 📚 เอกสารเพิ่มเติม
 
-5. เว็บจะทำงานที่ `https://staygoch.com`
+- **[Next.js README](./staygo-nextjs/README.md)** - คู่มือโปรเจค Next.js
+- **[Migration Guide](./staygo-nextjs/MIGRATION_GUIDE.md)** - รายละเอียดการ migrate จาก HTML → Next.js
+- **[Deployment Instructions](./staygo-nextjs/DEPLOYMENT_INSTRUCTIONS.md)** - วิธีการ deploy
+- **[DNS Setup](./DNS-SETUP.md)** - คำแนะนำตั้งค่า DNS
 
-**เอกสารเพิ่มเติม:**
-- [DEPLOYMENT.md](DEPLOYMENT.md) - คู่มือการ deploy
-- [DNS-SETUP.md](DNS-SETUP.md) - คู่มือตั้งค่า DNS
+## 🔄 การ Migrate
 
-## Tech Stack
+โปรเจคนี้ได้ทำการ migrate จาก static HTML ไปเป็น Next.js แล้ว:
 
-- **Frontend**: HTML5, CSS3, Vanilla JavaScript (ES6+)
-- **Styling**: CSS Custom Properties, Grid, Flexbox
-- **Fonts**: Inter, Kanit (Google Fonts)
-- **Deployment**: GitHub Pages with GitHub Actions
-- **Development**: Static site (no build step required)
+### ก่อน (HTML)
+- Static HTML files
+- No framework
+- Manual deployment
 
-## License
+### หลัง (Next.js) ✅
+- React components
+- TypeScript
+- Modern development workflow
+- Optimized build & SEO
+- GitHub Actions auto-deploy
 
-สร้างสำหรับช่อง YouTube "STAYGO" 🎮
+ไฟล์ HTML เดิมถูกย้ายไปยัง `_old-html/` เป็น backup แล้ว
+
+## 🎮 เกมและเครื่องมือ
+
+### เกม
+- เปิดแผ่นป้ายทายภาพ
+- ลูปนรกหมกมุ่น
+- จับคู่อีโมจิ
+
+### เครื่องมือ
+- ทอยลูกเต๋า
+- จับเวลา
+- สุ่มทีม
+- ตารางคะแนน
+- จัดสายการแข่งขัน
+- จับเวลาสำหรับแข่ง
+- จับสลาก
+- Host Tools
+
+## 🚀 Deployment
+
+โปรเจค deploy อัตโนมัติผ่าน GitHub Actions เมื่อ push ไปที่ `main` branch
+
+ดูรายละเอียดใน [DEPLOYMENT_INSTRUCTIONS.md](./staygo-nextjs/DEPLOYMENT_INSTRUCTIONS.md)
+
+## 🛠️ เทคโนโลยีที่ใช้
+
+- **Next.js 16** - React Framework
+- **TypeScript** - Type-safe JavaScript
+- **React 19** - UI Library
+- **Static Export** - สำหรับ GitHub Pages
+- **GitHub Actions** - CI/CD
+
+## 📝 License
+
+© STAYGO 2025
+
+## 🤝 Contact
+
+ติดต่อทีมงาน STAYGO ผ่านช่องทาง:
+- YouTube: [@STAYGO](https://www.youtube.com/@STAYGO)
+- Facebook: [STAYG0](https://facebook.com/STAYG0)
+- Instagram: [@staygo.official](https://instagram.com/staygo.official)
+- TikTok: [@staygo.official](https://tiktok.com/@staygo.official)
+- Twitch: [staygogamming](https://twitch.tv/staygogamming)
+
+---
+
+**โปรเจคหลัก:** `staygo-nextjs/` 📂

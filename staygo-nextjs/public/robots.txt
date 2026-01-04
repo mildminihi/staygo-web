@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://staygoch.com/sitemap.xml
+
+# Crawl-delay
+Crawl-delay: 10
+

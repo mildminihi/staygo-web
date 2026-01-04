@@ -1,0 +1,592 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Primary Meta Tags -->
+    <title>จับเวลาออนไลน์ - Countdown & Stopwatch | STAYGO</title>
+    <meta name="title" content="จับเวลาออนไลน์ - Countdown & Stopwatch | STAYGO" />
+    <meta name="description" content="เครื่องจับเวลาออนไลน์ มีทั้งโหมดนับถอยหลังและจับเวลา พร้อม Lap time สำหรับเล่นเกมและกิจกรรมต่างๆ" />
+    <meta name="keywords" content="จับเวลา, countdown timer, stopwatch, นับถอยหลัง, เครื่องมือเล่นเกม" />
+    <meta name="robots" content="index, follow" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://staygoch.com/tools/timer/" />
+    <meta property="og:title" content="จับเวลาออนไลน์ - Countdown & Stopwatch | STAYGO" />
+    <meta property="og:description" content="เครื่องจับเวลาออนไลน์ มีทั้งโหมดนับถอยหลังและจับเวลา พร้อม Lap time" />
+    <meta property="og:image" content="https://staygoch.com/games/reveal-board/staygo-logo.png" />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://staygoch.com/tools/timer/" />
+    
+    <link rel="icon" type="image/png" href="../../games/reveal-board/staygo-logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Kanit:wght@700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../assets/css/site.css" />
+    <script defer src="../../assets/js/config.js"></script>
+    <script defer src="../../assets/js/site.js"></script>
+  </head>
+  <body>
+    <header class="header">
+      <div class="container">
+        <div class="header-content">
+          <a href="../../" class="logo-link">
+            <img src="../../games/reveal-board/staygo-logo.png" alt="Staygo" class="logo" />
+          </a>
+          
+          <nav class="nav" aria-label="เมนูหลัก">
+            <a href="../../#play" class="nav-link">Play</a>
+            <a href="../../#tools" class="nav-link active">Tools</a>
+            <a href="../../#watch" class="nav-link">Watch & Play</a>
+            <a href="../../about/" class="nav-link">About</a>
+          </nav>
+
+          <div class="header-actions">
+            <a href="https://www.youtube.com/@STAYGO" target="_blank" rel="noopener noreferrer" class="icon-button" aria-label="YouTube">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
+                <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+              </svg>
+            </a>
+            <button id="menuToggle" class="icon-button" aria-label="เมนู">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu">
+      <div class="mobile-menu-header">
+        <span class="mobile-menu-title">เมนู</span>
+        <button id="menuClose" class="icon-button" aria-label="ปิดเมนู">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <nav class="mobile-nav">
+        <a href="../../#play" class="mobile-nav-link">Play</a>
+        <a href="../../#tools" class="mobile-nav-link">Tools</a>
+        <a href="../../#watch" class="mobile-nav-link">Watch & Play</a>
+        <a href="../../about/" class="mobile-nav-link">About</a>
+      </nav>
+    </div>
+
+    <main>
+      <section class="section">
+        <div class="container">
+          <div class="timer-header">
+            <h1 class="section-title">⏱️ จับเวลา</h1>
+            <div class="timer-header-actions">
+              <button class="icon-button" id="fullscreenBtn" aria-label="เข้าโหมดเต็มจอ">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+                </svg>
+              </button>
+              <a href="../../#tools" class="button button-ghost button-sm">← กลับ</a>
+            </div>
+          </div>
+
+          <!-- Mode Tabs -->
+          <div class="timer-mode-tabs">
+            <button class="timer-mode-tab active" data-mode="countdown">
+              <span>⏳</span>
+              <span>นับถอยหลัง</span>
+            </button>
+            <button class="timer-mode-tab" data-mode="stopwatch">
+              <span>⏱️</span>
+              <span>จับเวลา</span>
+            </button>
+          </div>
+
+          <!-- Timer Display -->
+          <div class="timer-display-container" id="timerDisplay">
+            <div class="timer-display" id="timerValue">00:00:00</div>
+            <div class="timer-milliseconds" id="timerMs" style="display: none;">.000</div>
+          </div>
+
+          <!-- Countdown Mode -->
+          <div class="timer-mode-panel active" id="countdownPanel">
+            <!-- Preset Buttons -->
+            <div class="timer-presets">
+              <button class="timer-preset-btn" data-minutes="1">1 นาที</button>
+              <button class="timer-preset-btn" data-minutes="3">3 นาที</button>
+              <button class="timer-preset-btn" data-minutes="5">5 นาที</button>
+              <button class="timer-preset-btn" data-minutes="10">10 นาที</button>
+              <button class="timer-preset-btn" data-minutes="15">15 นาที</button>
+            </div>
+
+            <!-- Time Input -->
+            <div class="timer-input-group">
+              <div class="timer-input-field">
+                <label class="timer-input-label">ชั่วโมง</label>
+                <div class="timer-input-control">
+                  <button class="timer-input-btn" data-action="decrease" data-unit="hours">-</button>
+                  <input type="number" id="hoursInput" class="timer-input" min="0" max="23" value="0" />
+                  <button class="timer-input-btn" data-action="increase" data-unit="hours">+</button>
+                </div>
+              </div>
+              <div class="timer-input-field">
+                <label class="timer-input-label">นาที</label>
+                <div class="timer-input-control">
+                  <button class="timer-input-btn" data-action="decrease" data-unit="minutes">-</button>
+                  <input type="number" id="minutesInput" class="timer-input" min="0" max="59" value="0" />
+                  <button class="timer-input-btn" data-action="increase" data-unit="minutes">+</button>
+                </div>
+              </div>
+              <div class="timer-input-field">
+                <label class="timer-input-label">วินาที</label>
+                <div class="timer-input-control">
+                  <button class="timer-input-btn" data-action="decrease" data-unit="seconds">-</button>
+                  <input type="number" id="secondsInput" class="timer-input" min="0" max="59" value="0" />
+                  <button class="timer-input-btn" data-action="increase" data-unit="seconds">+</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Countdown Controls -->
+            <div class="timer-controls">
+              <button class="button button-primary button-lg" id="countdownStartBtn">
+                <span class="timer-btn-icon">▶</span>
+                <span>เริ่ม</span>
+              </button>
+              <button class="button button-outline button-lg" id="countdownResetBtn">
+                <span class="timer-btn-icon">↻</span>
+                <span>รีเซ็ต</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Stopwatch Mode -->
+          <div class="timer-mode-panel" id="stopwatchPanel">
+            <!-- Stopwatch Controls -->
+            <div class="timer-controls">
+              <button class="button button-primary button-lg" id="stopwatchStartBtn">
+                <span class="timer-btn-icon">▶</span>
+                <span>เริ่ม</span>
+              </button>
+              <button class="button button-secondary button-lg" id="stopwatchLapBtn" disabled>
+                <span class="timer-btn-icon">🏁</span>
+                <span>Lap</span>
+              </button>
+              <button class="button button-outline button-lg" id="stopwatchResetBtn">
+                <span class="timer-btn-icon">↻</span>
+                <span>รีเซ็ต</span>
+              </button>
+            </div>
+
+            <!-- Lap List -->
+            <div class="timer-lap-section" id="lapSection">
+              <h3 class="timer-section-title">รอบที่บันทึก</h3>
+              <div class="timer-lap-list" id="lapList">
+                <div class="timer-lap-empty">
+                  <p class="muted">ยังไม่มีการบันทึกรอบ</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-logo">
+            <img src="../../games/reveal-board/staygo-logo.png" alt="Staygo" />
+          </div>
+          
+          <nav class="footer-links">
+            <a href="https://facebook.com/STAYG0" target="_blank" rel="noopener noreferrer">Facebook</a>
+            <a href="https://instagram.com/staygo.official" target="_blank" rel="noopener noreferrer">Instagram</a>
+            <a href="https://tiktok.com/@staygo.official" target="_blank" rel="noopener noreferrer">TikTok</a>
+            <a href="https://twitch.tv/staygogamming" target="_blank" rel="noopener noreferrer">Twitch</a>
+          </nav>
+          
+          <p class="footer-copy">© STAYGO 2025</p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      class TimerApp {
+        constructor() {
+          this.mode = 'countdown';
+          this.isRunning = false;
+          this.isPaused = false;
+          this.interval = null;
+          
+          // Countdown state
+          this.countdownTime = 0; // in milliseconds
+          this.countdownRemaining = 0;
+          
+          // Stopwatch state
+          this.stopwatchStart = 0;
+          this.stopwatchElapsed = 0;
+          this.laps = [];
+          
+          // Audio
+          this.beepSound = null;
+          this.finishSound = null;
+          this.createSounds();
+          
+          this.init();
+        }
+
+        createSounds() {
+          // Create beep sound for lap (short beep)
+          const beepCtx = new (window.AudioContext || window.webkitAudioContext)();
+          this.beepSound = () => {
+            const oscillator = beepCtx.createOscillator();
+            const gainNode = beepCtx.createGain();
+            oscillator.connect(gainNode);
+            gainNode.connect(beepCtx.destination);
+            oscillator.frequency.value = 800;
+            oscillator.type = 'sine';
+            gainNode.gain.setValueAtTime(0.3, beepCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, beepCtx.currentTime + 0.1);
+            oscillator.start(beepCtx.currentTime);
+            oscillator.stop(beepCtx.currentTime + 0.1);
+          };
+
+          // Create finish sound for countdown (longer, different tone)
+          const finishCtx = new (window.AudioContext || window.webkitAudioContext)();
+          this.finishSound = () => {
+            const oscillator = finishCtx.createOscillator();
+            const gainNode = finishCtx.createGain();
+            oscillator.connect(gainNode);
+            gainNode.connect(finishCtx.destination);
+            oscillator.frequency.value = 1000;
+            oscillator.type = 'sine';
+            gainNode.gain.setValueAtTime(0.3, finishCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, finishCtx.currentTime + 0.5);
+            oscillator.start(finishCtx.currentTime);
+            oscillator.stop(finishCtx.currentTime + 0.5);
+            
+            // Second beep
+            setTimeout(() => {
+              const osc2 = finishCtx.createOscillator();
+              const gain2 = finishCtx.createGain();
+              osc2.connect(gain2);
+              gain2.connect(finishCtx.destination);
+              osc2.frequency.value = 1200;
+              osc2.type = 'sine';
+              gain2.gain.setValueAtTime(0.3, finishCtx.currentTime);
+              gain2.gain.exponentialRampToValueAtTime(0.01, finishCtx.currentTime + 0.5);
+              osc2.start(finishCtx.currentTime);
+              osc2.stop(finishCtx.currentTime + 0.5);
+            }, 200);
+          };
+        }
+
+        init() {
+          // Mode tabs
+          document.querySelectorAll('.timer-mode-tab').forEach(tab => {
+            tab.addEventListener('click', (e) => this.switchMode(e.currentTarget.dataset.mode));
+          });
+
+          // Preset buttons
+          document.querySelectorAll('.timer-preset-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              const minutes = parseInt(e.currentTarget.dataset.minutes);
+              this.setPreset(minutes);
+            });
+          });
+
+          // Time input controls
+          document.querySelectorAll('.timer-input-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              const action = e.currentTarget.dataset.action;
+              const unit = e.currentTarget.dataset.unit;
+              this.adjustTime(unit, action === 'increase' ? 1 : -1);
+            });
+          });
+
+          // Input fields
+          ['hours', 'minutes', 'seconds'].forEach(unit => {
+            const input = document.getElementById(`${unit}Input`);
+            input.addEventListener('change', () => this.updateCountdownTime());
+          });
+
+          // Countdown controls
+          document.getElementById('countdownStartBtn').addEventListener('click', () => this.toggleCountdown());
+          document.getElementById('countdownResetBtn').addEventListener('click', () => this.resetCountdown());
+
+          // Stopwatch controls
+          document.getElementById('stopwatchStartBtn').addEventListener('click', () => this.toggleStopwatch());
+          document.getElementById('stopwatchLapBtn').addEventListener('click', () => this.recordLap());
+          document.getElementById('stopwatchResetBtn').addEventListener('click', () => this.resetStopwatch());
+
+          // Fullscreen
+          document.getElementById('fullscreenBtn').addEventListener('click', () => this.toggleFullscreen());
+        }
+
+        switchMode(mode) {
+          this.stop();
+          this.mode = mode;
+          
+          // Update tabs
+          document.querySelectorAll('.timer-mode-tab').forEach(t => t.classList.remove('active'));
+          document.querySelector(`[data-mode="${mode}"]`).classList.add('active');
+          
+          // Update panels
+          document.querySelectorAll('.timer-mode-panel').forEach(p => p.classList.remove('active'));
+          document.getElementById(mode === 'countdown' ? 'countdownPanel' : 'stopwatchPanel').classList.add('active');
+          
+          // Reset display
+          if (mode === 'countdown') {
+            this.updateDisplay(0, false);
+          } else {
+            this.updateDisplay(0, true);
+          }
+        }
+
+        setPreset(minutes) {
+          document.getElementById('hoursInput').value = 0;
+          document.getElementById('minutesInput').value = minutes;
+          document.getElementById('secondsInput').value = 0;
+          this.updateCountdownTime();
+        }
+
+        adjustTime(unit, delta) {
+          const input = document.getElementById(`${unit}Input`);
+          const current = parseInt(input.value) || 0;
+          const max = unit === 'hours' ? 23 : 59;
+          const newValue = Math.max(0, Math.min(max, current + delta));
+          input.value = newValue;
+          this.updateCountdownTime();
+        }
+
+        updateCountdownTime() {
+          const hours = parseInt(document.getElementById('hoursInput').value) || 0;
+          const minutes = parseInt(document.getElementById('minutesInput').value) || 0;
+          const seconds = parseInt(document.getElementById('secondsInput').value) || 0;
+          
+          this.countdownTime = (hours * 3600 + minutes * 60 + seconds) * 1000;
+          this.countdownRemaining = this.countdownTime;
+          this.updateDisplay(this.countdownTime, false);
+        }
+
+        toggleCountdown() {
+          if (this.isRunning) {
+            this.pauseCountdown();
+          } else {
+            this.startCountdown();
+          }
+        }
+
+        startCountdown() {
+          if (this.countdownTime === 0) return;
+          
+          this.isRunning = true;
+          const startBtn = document.getElementById('countdownStartBtn');
+          startBtn.innerHTML = '<span class="timer-btn-icon">⏸</span><span>หยุด</span>';
+          
+          const startTime = Date.now();
+          const initialRemaining = this.countdownRemaining;
+          
+          this.interval = setInterval(() => {
+            const elapsed = Date.now() - startTime;
+            this.countdownRemaining = Math.max(0, initialRemaining - elapsed);
+            
+            this.updateDisplay(this.countdownRemaining, false);
+            
+            // Add warning effect when < 10 seconds
+            if (this.countdownRemaining <= 10000 && this.countdownRemaining > 0) {
+              document.getElementById('timerDisplay').classList.add('timer-warning');
+            } else {
+              document.getElementById('timerDisplay').classList.remove('timer-warning');
+            }
+            
+            if (this.countdownRemaining === 0) {
+              this.finishCountdown();
+            }
+          }, 10);
+        }
+
+        pauseCountdown() {
+          this.isRunning = false;
+          clearInterval(this.interval);
+          const startBtn = document.getElementById('countdownStartBtn');
+          startBtn.innerHTML = '<span class="timer-btn-icon">▶</span><span>ดำเนินการต่อ</span>';
+        }
+
+        resetCountdown() {
+          this.stop();
+          this.countdownRemaining = this.countdownTime;
+          this.updateDisplay(this.countdownTime, false);
+          const startBtn = document.getElementById('countdownStartBtn');
+          startBtn.innerHTML = '<span class="timer-btn-icon">▶</span><span>เริ่ม</span>';
+        }
+
+        finishCountdown() {
+          this.stop();
+          document.getElementById('timerDisplay').classList.add('timer-finished');
+          this.finishSound();
+          
+          setTimeout(() => {
+            alert('⏰ หมดเวลา!');
+            document.getElementById('timerDisplay').classList.remove('timer-finished');
+            this.resetCountdown();
+          }, 500);
+        }
+
+        toggleStopwatch() {
+          if (this.isRunning) {
+            this.pauseStopwatch();
+          } else {
+            this.startStopwatch();
+          }
+        }
+
+        startStopwatch() {
+          this.isRunning = true;
+          const startBtn = document.getElementById('stopwatchStartBtn');
+          const lapBtn = document.getElementById('stopwatchLapBtn');
+          
+          startBtn.innerHTML = '<span class="timer-btn-icon">⏸</span><span>หยุด</span>';
+          lapBtn.disabled = false;
+          
+          this.stopwatchStart = Date.now() - this.stopwatchElapsed;
+          
+          this.interval = setInterval(() => {
+            this.stopwatchElapsed = Date.now() - this.stopwatchStart;
+            this.updateDisplay(this.stopwatchElapsed, true);
+          }, 10);
+        }
+
+        pauseStopwatch() {
+          this.isRunning = false;
+          clearInterval(this.interval);
+          const startBtn = document.getElementById('stopwatchStartBtn');
+          startBtn.innerHTML = '<span class="timer-btn-icon">▶</span><span>ดำเนินการต่อ</span>';
+        }
+
+        resetStopwatch() {
+          this.stop();
+          this.stopwatchElapsed = 0;
+          this.laps = [];
+          this.updateDisplay(0, true);
+          this.renderLaps();
+          
+          const startBtn = document.getElementById('stopwatchStartBtn');
+          const lapBtn = document.getElementById('stopwatchLapBtn');
+          startBtn.innerHTML = '<span class="timer-btn-icon">▶</span><span>เริ่ม</span>';
+          lapBtn.disabled = true;
+        }
+
+        recordLap() {
+          if (!this.isRunning) return;
+          
+          this.beepSound();
+          
+          const lapTime = this.stopwatchElapsed;
+          const previousLap = this.laps.length > 0 ? this.laps[this.laps.length - 1].time : 0;
+          const split = lapTime - previousLap;
+          
+          this.laps.push({
+            number: this.laps.length + 1,
+            time: lapTime,
+            split: split
+          });
+          
+          this.renderLaps();
+        }
+
+        renderLaps() {
+          const lapList = document.getElementById('lapList');
+          
+          if (this.laps.length === 0) {
+            lapList.innerHTML = '<div class="timer-lap-empty"><p class="muted">ยังไม่มีการบันทึกรอบ</p></div>';
+            return;
+          }
+
+          lapList.innerHTML = this.laps.map(lap => `
+            <div class="timer-lap-item">
+              <span class="timer-lap-number">Lap ${lap.number}</span>
+              <span class="timer-lap-split">${this.formatTime(lap.split, true)}</span>
+              <span class="timer-lap-time">${this.formatTime(lap.time, true)}</span>
+            </div>
+          `).reverse().join('');
+        }
+
+        stop() {
+          this.isRunning = false;
+          if (this.interval) {
+            clearInterval(this.interval);
+            this.interval = null;
+          }
+        }
+
+        updateDisplay(ms, showMs = false) {
+          const formatted = this.formatTime(ms, showMs);
+          const parts = formatted.split('.');
+          
+          document.getElementById('timerValue').textContent = parts[0];
+          
+          if (showMs && parts[1]) {
+            document.getElementById('timerMs').textContent = '.' + parts[1];
+            document.getElementById('timerMs').style.display = 'inline';
+          } else {
+            document.getElementById('timerMs').style.display = 'none';
+          }
+        }
+
+        formatTime(ms, includeMs = false) {
+          const totalSeconds = Math.floor(ms / 1000);
+          const hours = Math.floor(totalSeconds / 3600);
+          const minutes = Math.floor((totalSeconds % 3600) / 60);
+          const seconds = totalSeconds % 60;
+          const milliseconds = Math.floor((ms % 1000) / 10);
+          
+          const hh = hours.toString().padStart(2, '0');
+          const mm = minutes.toString().padStart(2, '0');
+          const ss = seconds.toString().padStart(2, '0');
+          const ms2 = milliseconds.toString().padStart(2, '0');
+          
+          if (includeMs) {
+            return `${hh}:${mm}:${ss}.${ms2}`;
+          }
+          return `${hh}:${mm}:${ss}`;
+        }
+
+        toggleFullscreen() {
+          const elem = document.documentElement;
+          
+          if (!document.fullscreenElement) {
+            if (elem.requestFullscreen) {
+              elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) {
+              elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) {
+              elem.msRequestFullscreen();
+            }
+          } else {
+            if (document.exitFullscreen) {
+              document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) {
+              document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) {
+              document.msExitFullscreen();
+            }
+          }
+        }
+      }
+
+      // Initialize on page load
+      document.addEventListener('DOMContentLoaded', () => {
+        new TimerApp();
+      });
+    </script>
+  </body>
+</html>

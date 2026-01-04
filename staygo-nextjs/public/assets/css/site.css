@@ -3828,11 +3828,20 @@ h3 {
   }
 
   .timer-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .timer-card {
+    padding: 16px;
   }
 
   .timer-display {
-    font-size: 32px;
+    font-size: 28px;
+  }
+
+  .timer-player-name {
+    font-size: 14px;
   }
 
   .setup-card {

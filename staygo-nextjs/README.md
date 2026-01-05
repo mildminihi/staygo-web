@@ -156,5 +156,5 @@ npm run build
 
 ติดต่อทีมงาน STAYGO ผ่านช่องทาง:
 - YouTube: [@STAYGO](https://www.youtube.com/@STAYGO)
-- Facebook: [STAYG0](https://facebook.com/STAYG0)
+- Facebook: [STAYGO](https://facebook.com/STAYGO)
 - Instagram: [@staygo.official](https://instagram.com/staygo.official)

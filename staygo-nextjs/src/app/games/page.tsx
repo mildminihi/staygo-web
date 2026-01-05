@@ -19,7 +19,7 @@ export const metadata: Metadata = {
         url: 'https://staygoch.com/games/reveal-board/staygo-logo.png',
         width: 512,
         height: 512,
-        alt: 'STAYG0 Logo',
+        alt: 'STAYGO Logo',
       },
     ],
   },

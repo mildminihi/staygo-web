@@ -7,7 +7,7 @@ export default function Home() {
         <div className="container">
           <div className="hero-content">
             <div className="hero-text">
-              <h1 className="hero-title">เว็บไซต์ของ STAYG0 Channel</h1>
+              <h1 className="hero-title">เว็บไซต์ของ STAYGO Channel</h1>
               <p className="hero-subtitle">เกมเล่นบนเว็บ & เครื่องมือช่วยเล่นเกม</p>
               
               <div className="hero-actions">
@@ -179,7 +179,7 @@ export default function Home() {
               ></iframe>
             </div>
             <div className="watch-content">
-              <p className="watch-description">ฝากกดไลค์ กดติดตามพวกเรา STAYG0 ด้วยนะครับ</p>
+              <p className="watch-description">ฝากกดไลค์ กดติดตามพวกเรา STAYGO ด้วยนะครับ</p>
               <a href="https://www.youtube.com/@STAYGO" target="_blank" rel="noopener noreferrer" className="button button-primary button-lg">▶ ดูวิดีโอทั้งหมด</a>
             </div>
           </div>

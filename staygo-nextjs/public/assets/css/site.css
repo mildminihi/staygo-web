@@ -3894,7 +3894,6 @@ h3 {
 }
 
 .item-input-group {
-  display: flex;
   gap: 12px;
 }
 

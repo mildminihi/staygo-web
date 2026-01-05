@@ -8,7 +8,7 @@ export default function Footer() {
           </div>
           
           <nav className="footer-links">
-            <a href="https://facebook.com/STAYGO" target="_blank" rel="noopener noreferrer">Facebook</a>
+            <a href="https://facebook.com/STAYG0" target="_blank" rel="noopener noreferrer">Facebook</a>
             <a href="https://instagram.com/staygo.official" target="_blank" rel="noopener noreferrer">Instagram</a>
             <a href="https://tiktok.com/@staygo.official" target="_blank" rel="noopener noreferrer">TikTok</a>
             <a href="https://twitch.tv/staygogamming" target="_blank" rel="noopener noreferrer">Twitch</a>

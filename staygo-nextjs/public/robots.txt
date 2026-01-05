@@ -1,9 +1,6 @@
+# Allow all search engines
 User-agent: *
 Allow: /
 
-# Sitemaps
+# Sitemap location
 Sitemap: https://staygoch.com/sitemap.xml
-
-# Crawl-delay
-Crawl-delay: 10
-

@@ -55,12 +55,51 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Structured data for search engines
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "STAYGO",
+    "url": "https://staygoch.com",
+    "logo": "https://staygoch.com/games/reveal-board/staygo-logo.png",
+    "description": "เว็บไซต์สำหรับเล่นเกมออนไลน์และเครื่องมือช่วยเล่นเกมต่างๆ จากช่อง STAYGO",
+    "sameAs": [
+      "https://www.youtube.com/@STAYGO"
+    ]
+  };
+
+  const websiteStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "STAYGO",
+    "url": "https://staygoch.com",
+    "description": "เว็บไซต์เกมและเครื่องมือสำหรับเล่นเกม",
+    "publisher": {
+      "@type": "Organization",
+      "name": "STAYGO",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://staygoch.com/games/reveal-board/staygo-logo.png"
+      }
+    }
+  };
+
   return (
     <html lang="th">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="canonical" href="https://staygoch.com/" />
+        
+        {/* Structured Data for Search Engines */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteStructuredData) }}
+        />
       </head>
       <body className={`${inter.variable} ${kanit.variable}`}>
         <Header />

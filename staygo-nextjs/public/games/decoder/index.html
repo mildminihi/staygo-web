@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Primary Meta Tags -->
+    <title>ถอดรหัสตัวเลข - Decoder Game | STAYGO</title>
+    <meta name="title" content="ถอดรหัสตัวเลข - Decoder Game | STAYGO" />
+    <meta name="description" content="เกมทายตัวเลขสุดท้าทาย ใช้ logic และเดาให้ได้ภายใน 8 ครั้ง" />
+    <meta name="keywords" content="เกมทายตัวเลข, Mastermind, Logic Game, Number Game, Decoder" />
+    <meta name="robots" content="index, follow" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://staygoch.com/games/decoder/" />
+    <meta property="og:title" content="ถอดรหัสตัวเลข - Decoder Game | STAYGO" />
+    <meta property="og:description" content="เกมทายตัวเลขสุดท้าทาย ใช้ logic และเดาให้ได้ภายใน 8 ครั้ง" />
+    <meta property="og:image" content="https://staygoch.com/games/reveal-board/staygo-logo.png" />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://staygoch.com/games/decoder/" />
+    
+    <link rel="icon" type="image/png" href="../../games/reveal-board/staygo-logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Kanit:wght@700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../assets/css/site.css" />
+    <link rel="stylesheet" href="./styles.css" />
+    <script defer src="../../assets/js/config.js"></script>
+    <script defer src="../../assets/js/site.js"></script>
+    <style>
+        body {
+            background: #F9FAFB;
+            min-height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../" class="logo-link">
+                    <img src="../../games/reveal-board/staygo-logo.png" alt="Staygo" class="logo" />
+                </a>
+                
+                <nav class="nav" aria-label="เมนูหลัก">
+                    <a href="../../#play" class="nav-link active">Play</a>
+                    <a href="../../#tools" class="nav-link">Tools</a>
+                    <a href="../../#watch" class="nav-link">Watch & Play</a>
+                    <a href="../../about/" class="nav-link">About</a>
+                </nav>
+
+                <div class="header-actions">
+                    <a href="https://www.youtube.com/@STAYGO" target="_blank" rel="noopener noreferrer" class="icon-button" aria-label="YouTube">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
+                            <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+                        </svg>
+                    </a>
+                    <button id="menuToggle" class="icon-button" aria-label="เมนู">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="3" y1="12" x2="21" y2="12"></line>
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <line x1="3" y1="18" x2="21" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu">
+        <div class="mobile-menu-overlay"></div>
+        <div class="mobile-menu-content">
+            <div class="mobile-menu-header">
+                <h3 class="mobile-menu-title">ติดตามเรา</h3>
+                <button id="menuClose" class="mobile-menu-close" aria-label="ปิดเมนู">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <nav class="mobile-menu-nav">
+                <a href="https://www.youtube.com/@STAYGO" target="_blank" rel="noopener noreferrer" class="mobile-menu-link">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
+                        <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+                    </svg>
+                    <span>YouTube</span>
+                </a>
+                <a href="https://facebook.com/STAYG0" target="_blank" rel="noopener noreferrer" class="mobile-menu-link">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                    </svg>
+                    <span>Facebook</span>
+                </a>
+                <a href="https://instagram.com/staygo.official" target="_blank" rel="noopener noreferrer" class="mobile-menu-link">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                    </svg>
+                    <span>Instagram</span>
+                </a>
+                <a href="https://tiktok.com/@staygo.official" target="_blank" rel="noopener noreferrer" class="mobile-menu-link">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                    </svg>
+                    <span>TikTok</span>
+                </a>
+                <a href="https://twitch.tv/staygogamming" target="_blank" rel="noopener noreferrer" class="mobile-menu-link">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"/>
+                    </svg>
+                    <span>Twitch</span>
+                </a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Game Container -->
+    <main class="decoder-main">
+        <div class="decoder-container">
+            
+            <!-- Setup Screen -->
+            <div id="setupScreen" class="screen active">
+                <div class="setup-content">
+                    <h1 class="game-title">ถอดรหัสตัวเลข</h1>
+                    <p class="game-subtitle">Decoder Game</p>
+                    
+                    <div class="instructions-panel">
+                        <h3>วิธีเล่น</h3>
+                        <p>ทายตัวเลขลับภายใน 8 ครั้ง</p>
+                        <div class="color-guide">
+                            <div class="guide-item">
+                                <div class="color-box green"></div>
+                                <span>เลขถูก ตำแหน่งถูก</span>
+                            </div>
+                            <div class="guide-item">
+                                <div class="color-box yellow"></div>
+                                <span>เลขถูก ตำแหน่งผิด</span>
+                            </div>
+                            <div class="guide-item">
+                                <div class="color-box red"></div>
+                                <span>ไม่มีเลขนี้</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="difficulty-selection">
+                        <h3>เลือกความยาก</h3>
+                        <div class="difficulty-buttons">
+                            <button class="difficulty-btn" data-difficulty="easy" data-digits="3">
+                                <span class="difficulty-name">ง่าย</span>
+                                <span class="difficulty-desc">3 หลัก</span>
+                            </button>
+                            <button class="difficulty-btn active" data-difficulty="medium" data-digits="4">
+                                <span class="difficulty-name">ปานกลาง</span>
+                                <span class="difficulty-desc">4 หลัก</span>
+                            </button>
+                            <button class="difficulty-btn" data-difficulty="hard" data-digits="5">
+                                <span class="difficulty-name">ยาก</span>
+                                <span class="difficulty-desc">5 หลัก</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <button id="startGameBtn" class="game-btn game-btn-primary">
+                        เริ่มเกม
+                    </button>
+                </div>
+            </div>
+
+            <!-- Playing Screen -->
+            <div id="playingScreen" class="screen">
+                <div class="playing-content">
+                    <!-- Game Header -->
+                    <div class="game-header">
+                        <div class="header-stats">
+                            <div class="stat-item">
+                                <span class="stat-icon">⏱️</span>
+                                <span id="timer" class="stat-value">00:00</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-icon">🎯</span>
+                                <span id="attempts" class="stat-value">0 / 8</span>
+                            </div>
+                            <div class="stat-item">
+                                <span id="difficultyBadge" class="difficulty-badge">Medium</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Current Input Area -->
+                    <div class="input-area">
+                        <h3 class="input-title">ใส่ตัวเลข</h3>
+                        <div id="digitInputs" class="digit-inputs">
+                            <!-- Digit input boxes will be generated by JS -->
+                        </div>
+                        <div class="input-controls">
+                            <button id="clearBtn" class="game-btn game-btn-secondary">ล้าง</button>
+                            <button id="submitBtn" class="game-btn game-btn-primary">ส่งคำตอบ</button>
+                        </div>
+                    </div>
+
+                    <!-- Guess History -->
+                    <div class="history-area">
+                        <h3 class="history-title">ประวัติการทาย</h3>
+                        <div id="guessHistory" class="guess-history">
+                            <p class="empty-message">ยังไม่มีการทาย</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- End Screen -->
+            <div id="endScreen" class="screen">
+                <div class="end-content">
+                    <h1 id="endTitle" class="end-title">Victory!</h1>
+                    
+                    <div class="secret-reveal">
+                        <h3>รหัสลับคือ</h3>
+                        <div id="secretNumber" class="secret-display"></div>
+                    </div>
+                    
+                    <div class="final-stats">
+                        <div class="stat-card">
+                            <div class="stat-card-label">คะแนน</div>
+                            <div id="finalScore" class="stat-card-value">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-card-label">เวลา</div>
+                            <div id="finalTime" class="stat-card-value">00:00</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-card-label">ครั้งที่ทาย</div>
+                            <div id="finalAttempts" class="stat-card-value">0</div>
+                        </div>
+                    </div>
+                    
+                    <div class="end-buttons">
+                        <button id="playAgainBtn" class="game-btn game-btn-primary">
+                            เล่นอีกครั้ง
+                        </button>
+                        <button id="changeDifficultyBtn" class="game-btn game-btn-secondary">
+                            เปลี่ยนความยาก
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="../../games/reveal-board/staygo-logo.png" alt="Staygo" />
+                </div>
+                <nav class="footer-links">
+                    <a href="https://facebook.com/STAYG0" target="_blank" rel="noopener noreferrer">Facebook</a>
+                    <a href="https://instagram.com/staygo.official" target="_blank" rel="noopener noreferrer">Instagram</a>
+                    <a href="https://tiktok.com/@staygo.official" target="_blank" rel="noopener noreferrer">TikTok</a>
+                    <a href="https://twitch.tv/staygogamming" target="_blank" rel="noopener noreferrer">Twitch</a>
+                </nav>
+                <p class="footer-copy">© STAYGO 2025</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Game Scripts -->
+    <script src="./game.js"></script>
+    <script src="./ui.js"></script>
+</body>
+</html>

@@ -59,6 +59,20 @@
     <priority>0.8</priority>
   </url>
   
+  <url>
+    <loc>https://staygoch.com/games/emoji-combo/</loc>
+    <lastmod>2026-01-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <url>
+    <loc>https://staygoch.com/games/decoder/</loc>
+    <lastmod>2026-01-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
   <!-- Tools -->
   <url>
     <loc>https://staygoch.com/tools/dice/</loc>

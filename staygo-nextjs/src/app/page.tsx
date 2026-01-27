@@ -135,6 +135,20 @@ export default function Home() {
                 </div>
               </div>
             </article>
+
+            <article className="game-card">
+              <div className="game-thumbnail game-thumbnail-hover">
+                <img src="/assets/image/decoder-cover-1.png" alt="ถอดรหัสตัวเลข" className="thumbnail-default" />
+                <img src="/assets/image/decoder-cover-2.png" alt="ถอดรหัสตัวเลข" className="thumbnail-hover" />
+              </div>
+              <div className="game-info">
+                <h3 className="game-title">ถอดรหัสตัวเลข</h3>
+                <p className="game-meta">ทายตัวเลขลับภายใน 8 ครั้ง</p>
+                <div className="game-actions">
+                  <a href="/games/decoder/" className="button button-primary button-md">เล่นเกม</a>
+                </div>
+              </div>
+            </article>
           </div>
         </div>
       </section>

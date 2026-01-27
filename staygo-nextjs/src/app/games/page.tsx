@@ -97,6 +97,21 @@ export default function GamesPage() {
               </div>
             </article>
 
+            <article className="game-card">
+              <div className="game-thumbnail game-thumbnail-hover">
+                <img src="/assets/image/decoder-cover-1.png" alt="ถอดรหัสตัวเลข" className="thumbnail-default" />
+                <img src="/assets/image/decoder-cover-2.png" alt="ถอดรหัสตัวเลข" className="thumbnail-hover" />
+              </div>
+              <div className="game-info">
+                <h3 className="game-title">ถอดรหัสตัวเลข</h3>
+                <p className="game-meta">1 Player • เกมปริศนา</p>
+                <p className="game-description">ใช้ logic ทายตัวเลขลับภายใน 8 ครั้ง ด้วยระบบสีที่บอกคำใบ้ เหมือน Mastermind</p>
+                <div className="game-actions">
+                  <a href="/games/decoder/" className="button button-primary button-md">เล่นเกม</a>
+                </div>
+              </div>
+            </article>
+
             {/* Placeholder for future games */}
             <article className="game-card" style={{ opacity: 0.6, pointerEvents: 'none' }}>
               <div className="game-thumbnail">

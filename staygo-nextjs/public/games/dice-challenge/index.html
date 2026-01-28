@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Primary Meta Tags -->
+    <title>เกมทอยเต๋า - Dice Challenge | STAYGO</title>
+    <meta name="title" content="เกมทอยเต๋า - Dice Challenge | STAYGO" />
+    <meta name="description" content="เกมทอยเต๋า d6 เลือกแผ่นป้ายและทอยเต๋าเพื่อเก็บแต้ม รองรับโหมดปกติและโหมด Team" />
+    <meta name="keywords" content="เกมทอยเต๋า, Dice Game, d6, เกมลูกเต๋า, Dice Challenge" />
+    <meta name="robots" content="index, follow" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://staygoch.com/games/dice-challenge/" />
+    <meta property="og:title" content="เกมทอยเต๋า - Dice Challenge | STAYGO" />
+    <meta property="og:description" content="เกมทอยเต๋า d6 เลือกแผ่นป้ายและทอยเต๋าเพื่อเก็บแต้ม" />
+    <meta property="og:image" content="https://staygoch.com/games/reveal-board/staygo-logo.png" />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://staygoch.com/games/dice-challenge/" />
+    
+    <link rel="icon" type="image/png" href="../../games/reveal-board/staygo-logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Kanit:wght@700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../assets/css/site.css" />
+    <link rel="stylesheet" href="./styles.css" />
+    <script defer src="../../assets/js/config.js"></script>
+    <script defer src="../../assets/js/site.js"></script>
+    <style>
+        body {
+            background: #F9FAFB;
+            min-height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../" class="logo-link">
+                    <img src="../../games/reveal-board/staygo-logo.png" alt="Staygo" class="logo" />
+                </a>
+                
+                <nav class="nav" aria-label="เมนูหลัก">
+                    <a href="../../#play" class="nav-link active">Play</a>
+                    <a href="../../#tools" class="nav-link">Tools</a>
+                    <a href="../../#watch" class="nav-link">Watch & Play</a>
+                    <a href="../../about/" class="nav-link">About</a>
+                </nav>
+
+                <div class="header-actions">
+                    <a href="https://www.youtube.com/@STAYGO" target="_blank" rel="noopener noreferrer" class="icon-button" aria-label="YouTube">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
+                            <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+                        </svg>
+                    </a>
+                    <button id="menuToggle" class="icon-button" aria-label="เมนู">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="3" y1="12" x2="21" y2="12"></line>
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <line x1="3" y1="18" x2="21" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu">
+        <div class="mobile-menu-overlay"></div>
+        <div class="mobile-menu-content">
+            <div class="mobile-menu-header">
+                <h3 class="mobile-menu-title">ติดตามเรา</h3>
+                <button id="menuClose" class="mobile-menu-close" aria-label="ปิดเมนู">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <nav class="mobile-menu-nav">
+                <a href="https://www.youtube.com/@STAYGO" target="_blank" rel="noopener noreferrer" class="mobile-menu-link">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
+                        <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+                    </svg>
+                    <span>YouTube</span>
+                </a>
+                <a href="https://facebook.com/STAYG0" target="_blank" rel="noopener noreferrer" class="mobile-menu-link">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                    </svg>
+                    <span>Facebook</span>
+                </a>
+                <a href="https://instagram.com/staygo.official" target="_blank" rel="noopener noreferrer" class="mobile-menu-link">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                    </svg>
+                    <span>Instagram</span>
+                </a>
+                <a href="https://tiktok.com/@staygo.official" target="_blank" rel="noopener noreferrer" class="mobile-menu-link">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                    </svg>
+                    <span>TikTok</span>
+                </a>
+                <a href="https://twitch.tv/staygogamming" target="_blank" rel="noopener noreferrer" class="mobile-menu-link">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"/>
+                    </svg>
+                    <span>Twitch</span>
+                </a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Game Container -->
+    <main class="dice-challenge-main">
+        <div class="dice-challenge-container">
+            
+            <!-- Setup Screen -->
+            <div id="setupScreen" class="screen active">
+                <div class="setup-content">
+                    <h1 class="game-title">เกมทอยเต๋า</h1>
+                    <p class="game-subtitle">Dice Challenge</p>
+                    
+                    <div class="setup-section">
+                        <h3 class="section-title">เลือกโหมด</h3>
+                        <div class="mode-buttons">
+                            <button class="mode-btn active" data-mode="normal">
+                                <span class="mode-name">โหมดปกติ</span>
+                                <span class="mode-desc">ทอยเต๋าและนับแต้มเอง</span>
+                            </button>
+                            <button class="mode-btn" data-mode="team">
+                                <span class="mode-name">โหมดทีม</span>
+                                <span class="mode-desc">แต่ละทีมผลัดกันเลือกแผ่นป้าย</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="teamCountSection" class="setup-section" style="display: none;">
+                        <h3 class="section-title">จำนวนทีม</h3>
+                        <div class="team-count-input-wrapper">
+                            <input 
+                                type="number" 
+                                id="teamCountInput" 
+                                class="team-count-input" 
+                                min="2" 
+                                max="10"
+                                placeholder="2"
+                                value="2"
+                            />
+                            <span class="team-count-label">ทีม</span>
+                        </div>
+                    </div>
+                    
+                    <div class="setup-section">
+                        <h3 class="section-title">เลือกจำนวนลูกเต๋า</h3>
+                        <div class="dice-count-buttons">
+                            <button class="dice-count-btn active" data-count="1">
+                                <span class="dice-count-number">1</span>
+                            </button>
+                            <button class="dice-count-btn" data-count="2">
+                                <span class="dice-count-number">2</span>
+                            </button>
+                            <button class="dice-count-btn" data-count="3">
+                                <span class="dice-count-number">3</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <button id="startGameBtn" class="game-btn game-btn-primary">
+                        เริ่มเกม
+                    </button>
+                </div>
+            </div>
+
+            <!-- Game Screen (Normal Mode) -->
+            <div id="gameScreenNormal" class="screen">
+                <div class="game-content">
+                    <div class="game-header">
+                        <h2 class="game-screen-title">เลือกแผ่นป้ายและทอยเต๋า</h2>
+                        <button id="backToSetupBtn" class="back-btn">← กลับไปตั้งค่า</button>
+                    </div>
+                    
+                    <div id="cardGrid" class="card-grid">
+                        <!-- Cards will be rendered here -->
+                    </div>
+                    
+                    <div class="dice-section">
+                        <div id="selectedCardDisplay" class="selected-card-display" style="display: none;">
+                            <h3>แผ่นป้ายที่เลือก</h3>
+                            <div id="selectedCardInfo" class="selected-card-info"></div>
+                        </div>
+                        
+                        <div class="dice-controls">
+                            <button id="rollDiceBtn" class="game-btn game-btn-primary" disabled>
+                                🎲 ทอยเต๋า
+                            </button>
+                        </div>
+                        
+                        <div id="diceDisplay" class="dice-display" style="display: none;">
+                            <div id="diceResults" class="dice-results"></div>
+                            <div id="diceSum" class="dice-sum"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game Screen (Team Mode) -->
+            <div id="gameScreenTeam" class="screen">
+                <div class="game-content">
+                    <div class="game-header">
+                        <h2 class="game-screen-title">โหมดทีม</h2>
+                        <button id="backToSetupBtnTeam" class="back-btn">← กลับไปตั้งค่า</button>
+                    </div>
+                    
+                    <div id="currentTeamDisplay" class="current-team-display">
+                        <div class="current-team-name">ทีม <span id="currentTeamNumber">1</span></div>
+                        <div class="current-team-score">คะแนน: <span id="currentTeamScoreValue">0</span></div>
+                    </div>
+                    
+                    <div id="teamsScoreboard" class="teams-scoreboard">
+                        <h3>คะแนนทุกทีม</h3>
+                        <div id="teamsScoreList" class="teams-score-list"></div>
+                    </div>
+                    
+                    <div id="cardGridTeam" class="card-grid">
+                        <!-- Cards will be rendered here -->
+                    </div>
+                    
+                    <div class="team-section">
+                        <div id="selectedCardDisplayTeam" class="selected-card-display" style="display: none;">
+                            <h3>แผ่นป้ายที่เลือก</h3>
+                            <div id="selectedCardInfoTeam" class="selected-card-info"></div>
+                        </div>
+                        
+                        <div class="player-count-section">
+                            <div class="section-header">
+                                <h3>จำนวนคนที่ทอยได้ตรงตามเงื่อนไข</h3>
+                            </div>
+                            
+                            <div class="player-count-input-wrapper">
+                                <input 
+                                    type="number" 
+                                    id="playerCountInput" 
+                                    class="player-count-input" 
+                                    min="0" 
+                                    placeholder="0"
+                                    value="0"
+                                />
+                                <div class="player-count-info">
+                                    <span id="cardPointsDisplay" class="card-points-display">0</span>
+                                    <span class="multiply-symbol">×</span>
+                                    <span id="playerCountDisplay" class="player-count-display">0</span>
+                                    <span class="equals-symbol">=</span>
+                                    <span id="calculatedPoints" class="calculated-points">0</span>
+                                    <span class="points-label">แต้ม</span>
+                                </div>
+                            </div>
+                            
+                            <div class="team-controls">
+                                <button id="addScoreBtn" class="game-btn game-btn-primary" disabled>
+                                    บันทึกคะแนน
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="../../games/reveal-board/staygo-logo.png" alt="Staygo" />
+                </div>
+                <nav class="footer-links">
+                    <a href="https://facebook.com/STAYG0" target="_blank" rel="noopener noreferrer">Facebook</a>
+                    <a href="https://instagram.com/staygo.official" target="_blank" rel="noopener noreferrer">Instagram</a>
+                    <a href="https://tiktok.com/@staygo.official" target="_blank" rel="noopener noreferrer">TikTok</a>
+                    <a href="https://twitch.tv/staygogamming" target="_blank" rel="noopener noreferrer">Twitch</a>
+                </nav>
+                <p class="footer-copy">© STAYGO 2025</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Game Scripts -->
+    <script src="./cards.js"></script>
+    <script src="./game.js"></script>
+    <script src="./ui.js"></script>
+</body>
+</html>

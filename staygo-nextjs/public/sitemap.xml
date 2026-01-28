@@ -73,6 +73,13 @@
     <priority>0.7</priority>
   </url>
   
+  <url>
+    <loc>https://staygoch.com/games/dice-challenge/</loc>
+    <lastmod>2026-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
   <!-- Tools -->
   <url>
     <loc>https://staygoch.com/tools/dice/</loc>

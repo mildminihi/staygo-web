@@ -149,6 +149,21 @@ export default function Home() {
                 </div>
               </div>
             </article>
+
+            <article className="game-card">
+              <div className="game-thumbnail">
+                <div style={{ background: '#3B82F6', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '200px', fontSize: '80px', color: 'white' }}>
+                  🎲
+                </div>
+              </div>
+              <div className="game-info">
+                <h3 className="game-title">เกมทอยเต๋า</h3>
+                <p className="game-meta">เลือกแผ่นป้ายและทอยเต๋าเพื่อเก็บแต้ม</p>
+                <div className="game-actions">
+                  <a href="/games/dice-challenge/" className="button button-primary button-md">เล่นเกม</a>
+                </div>
+              </div>
+            </article>
           </div>
         </div>
       </section>

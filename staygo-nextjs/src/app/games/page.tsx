@@ -112,6 +112,22 @@ export default function GamesPage() {
               </div>
             </article>
 
+            <article className="game-card">
+              <div className="game-thumbnail">
+                <div style={{ background: '#3B82F6', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '200px', fontSize: '80px', color: 'white' }}>
+                  🎲
+                </div>
+              </div>
+              <div className="game-info">
+                <h3 className="game-title">เกมทอยเต๋า</h3>
+                <p className="game-meta">Multiplayer • เกมทอยเต๋า</p>
+                <p className="game-description">เลือกแผ่นป้ายและทอยเต๋า d6 เพื่อเก็บแต้ม รองรับโหมดปกติและโหมด Team สำหรับจัดกิจกรรม</p>
+                <div className="game-actions">
+                  <a href="/games/dice-challenge/" className="button button-primary button-md">เล่นเกม</a>
+                </div>
+              </div>
+            </article>
+
             {/* Placeholder for future games */}
             <article className="game-card" style={{ opacity: 0.6, pointerEvents: 'none' }}>
               <div className="game-thumbnail">

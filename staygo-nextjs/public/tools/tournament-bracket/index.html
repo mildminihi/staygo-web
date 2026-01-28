@@ -7,15 +7,15 @@
     <!-- Primary Meta Tags -->
     <title>จัดสายการแข่งขัน - Tournament Bracket Generator | STAYGO</title>
     <meta name="title" content="จัดสายการแข่งขัน - Tournament Bracket Generator | STAYGO" />
-    <meta name="description" content="สร้างสายการแข่งขันอัตโนมัติ รองรับ Single & Double Elimination บันทึกผลการแข่งขันได้ เหมาะสำหรับจัดทัวร์นาเม้นต์" />
-    <meta name="keywords" content="จัดสายการแข่งขัน, tournament bracket, single elimination, double elimination" />
+    <meta name="description" content="สร้างสายการแข่งขันอัตโนมัติ รองรับ Single Elimination, Double Elimination และ Round Robin (เจอกันทุกคน) บันทึกผลการแข่งขันได้ เหมาะสำหรับจัดทัวร์นาเม้นต์" />
+    <meta name="keywords" content="จัดสายการแข่งขัน, tournament bracket, single elimination, double elimination, round robin, เจอกันทุกคน" />
     <meta name="robots" content="index, follow" />
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://staygoch.com/tools/tournament-bracket/" />
     <meta property="og:title" content="จัดสายการแข่งขัน - Tournament Bracket Generator | STAYGO" />
-    <meta property="og:description" content="สร้างสายการแข่งขันอัตโนมัติ รองรับ Single & Double Elimination" />
+    <meta property="og:description" content="สร้างสายการแข่งขันอัตโนมัติ รองรับ Single Elimination, Double Elimination และ Round Robin" />
     <meta property="og:image" content="https://staygoch.com/games/reveal-board/staygo-logo.png" />
     
     <!-- Canonical URL -->
@@ -195,6 +195,66 @@
 
       .bracket-section.grand-final .bracket-section-title {
         color: var(--secondary);
+      }
+
+      /* Round Robin Specific Styles */
+      .roundrobin-standings-container {
+        background: var(--surface);
+        border-radius: var(--radius-lg);
+        padding: 24px;
+        margin-bottom: 24px;
+        box-shadow: var(--shadow-sm);
+        position: sticky;
+        top: 20px;
+        z-index: 10;
+      }
+
+      .roundrobin-matches-container {
+        background: var(--surface);
+        border-radius: var(--radius-lg);
+        padding: 24px;
+        box-shadow: var(--shadow-sm);
+      }
+
+      .roundrobin-matches-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+      }
+
+      .roundrobin-round-card {
+        background: var(--surface-2);
+        border: 2px solid var(--border);
+        border-radius: var(--radius-sm);
+        padding: 16px;
+      }
+
+      .roundrobin-round-header {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 12px;
+        padding-bottom: 8px;
+        border-bottom: 2px solid var(--border);
+        text-align: center;
+      }
+
+      .roundrobin-round-matches {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      @media (max-width: 768px) {
+        .roundrobin-matches-grid {
+          grid-template-columns: 1fr;
+        }
+        
+        .roundrobin-standings-container {
+          position: relative;
+          top: 0;
+        }
       }
 
       .bracket-round {
@@ -406,6 +466,20 @@
         background: var(--primary);
         border-color: var(--primary);
         color: white;
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-sm);
+      }
+
+      .bracket-draw-button {
+        background: var(--warning);
+        border-color: var(--warning);
+        color: white;
+      }
+
+      .bracket-draw-button:hover {
+        background: var(--warning);
+        border-color: var(--warning);
+        opacity: 0.9;
         transform: translateY(-2px);
         box-shadow: var(--shadow-sm);
       }
@@ -658,6 +732,10 @@
                   <input type="radio" name="mode" value="double" />
                   <span>Double Elimination</span>
                 </label>
+                <label class="bracket-mode-option">
+                  <input type="radio" name="mode" value="roundrobin" />
+                  <span>เจอกันทุกคน (Round Robin)</span>
+                </label>
               </div>
             </div>
 
@@ -774,6 +852,7 @@
           <div class="bracket-modal-winner-buttons">
             <button id="modalWinner1" class="bracket-winner-button">ผู้เล่น 1</button>
             <button id="modalWinner2" class="bracket-winner-button">ผู้เล่น 2</button>
+            <button id="modalDraw" class="bracket-winner-button bracket-draw-button" style="display: none;">เสมอ</button>
           </div>
           <div class="bracket-modal-actions">
             <button id="modalCancelWinner" class="button button-ghost button-md" style="width: 100%;">ยกเลิก</button>
@@ -828,6 +907,7 @@
           document.getElementById('modalCancelScore').addEventListener('click', () => this.closeModal());
           document.getElementById('modalWinner1').addEventListener('click', () => this.saveWinnerResult(1));
           document.getElementById('modalWinner2').addEventListener('click', () => this.saveWinnerResult(2));
+          document.getElementById('modalDraw').addEventListener('click', () => this.saveDrawResult());
           document.getElementById('modalCancelWinner').addEventListener('click', () => this.closeModal());
           document.querySelector('.bracket-modal-overlay').addEventListener('click', () => this.closeModal());
         }
@@ -855,8 +935,10 @@
 
           if (this.mode === 'single') {
             this.bracket = this.generateSingleElimination(this.participants);
-          } else {
+          } else if (this.mode === 'double') {
             this.bracket = this.generateDoubleElimination(this.participants);
+          } else if (this.mode === 'roundrobin') {
+            this.bracket = this.generateRoundRobin(this.participants);
           }
 
           // Process BYE matches after bracket is created
@@ -871,6 +953,11 @@
         processBYEMatches() {
           // Process BYE matches in order, round by round
           // ไม่ auto-advance ในรอบ final - ต้องให้ผู้ใช้เลือกผู้ชนะเอง
+          
+          if (this.bracket.mode === 'roundrobin') {
+            // Round-robin doesn't have BYEs
+            return;
+          }
           
           if (this.bracket.mode === 'single') {
             const finalRoundIndex = this.bracket.rounds.length - 1;
@@ -1041,13 +1128,102 @@
           };
         }
 
+        generateRoundRobin(participants) {
+          // Round-robin: everyone plays everyone once
+          const matches = [];
+          const n = participants.length;
+          
+          // Generate all possible pairs
+          for (let i = 0; i < n; i++) {
+            for (let j = i + 1; j < n; j++) {
+              matches.push({
+                id: `rr-m${matches.length}`,
+                participant1: participants[i],
+                participant2: participants[j],
+                score1: null,
+                score2: null,
+                winner: null
+              });
+            }
+          }
+          
+          // Organize matches into rounds (try to minimize concurrent matches)
+          // Simple approach: distribute matches evenly across rounds
+          const rounds = [];
+          const matchesPerRound = Math.ceil(n / 2);
+          const totalRounds = Math.ceil(matches.length / matchesPerRound);
+          
+          for (let r = 0; r < totalRounds; r++) {
+            const roundMatches = [];
+            for (let m = 0; m < matchesPerRound && (r * matchesPerRound + m) < matches.length; m++) {
+              roundMatches.push(matches[r * matchesPerRound + m]);
+            }
+            if (roundMatches.length > 0) {
+              rounds.push({
+                name: `รอบที่ ${r + 1}`,
+                matches: roundMatches
+              });
+            }
+          }
+          
+          return {
+            mode: 'roundrobin',
+            rounds: rounds,
+            allMatches: matches,
+            standings: this.calculateStandings(matches, participants)
+          };
+        }
+
+        calculateStandings(matches, participants) {
+          const standings = participants.map(p => ({
+            name: p,
+            wins: 0,
+            losses: 0,
+            draws: 0,
+            points: 0
+          }));
+          
+          matches.forEach(match => {
+            if (!match.winner) return;
+            
+            const p1Index = standings.findIndex(s => s.name === match.participant1);
+            const p2Index = standings.findIndex(s => s.name === match.participant2);
+            
+            if (match.winner === match.participant1) {
+              standings[p1Index].wins++;
+              standings[p1Index].points += 3;
+              standings[p2Index].losses++;
+            } else if (match.winner === match.participant2) {
+              standings[p2Index].wins++;
+              standings[p2Index].points += 3;
+              standings[p1Index].losses++;
+            } else if (match.winner === 'draw') {
+              standings[p1Index].draws++;
+              standings[p1Index].points += 1;
+              standings[p2Index].draws++;
+              standings[p2Index].points += 1;
+            }
+          });
+          
+          // Sort by points (descending), then wins, then losses
+          standings.sort((a, b) => {
+            if (b.points !== a.points) return b.points - a.points;
+            if (b.wins !== a.wins) return b.wins - a.wins;
+            return a.losses - b.losses;
+          });
+          
+          return standings;
+        }
+
         renderBracket() {
           if (!this.bracket) return;
 
           if (this.bracket.mode === 'single') {
             this.renderSingleElimination();
-          } else {
+          } else if (this.bracket.mode === 'double') {
             this.renderDoubleElimination();
+          } else if (this.bracket.mode === 'roundrobin') {
+            this.renderRoundRobin();
           }
         }
 
@@ -1211,6 +1387,143 @@
           this.bracketContainer.appendChild(gfSection);
         }
 
+        renderRoundRobin() {
+          this.bracketContainer.innerHTML = '';
+          
+          // Standings Container (Separate, Sticky)
+          const standingsContainer = document.createElement('div');
+          standingsContainer.className = 'roundrobin-standings-container';
+          
+          const standingsTitle = document.createElement('div');
+          standingsTitle.className = 'bracket-section-title';
+          standingsTitle.textContent = '📊 ตารางคะแนน';
+          standingsTitle.style.marginBottom = '16px';
+          standingsContainer.appendChild(standingsTitle);
+          
+          const standingsTable = document.createElement('table');
+          standingsTable.style.width = '100%';
+          standingsTable.style.borderCollapse = 'collapse';
+          standingsTable.style.background = 'var(--surface-2)';
+          standingsTable.style.borderRadius = 'var(--radius-sm)';
+          standingsTable.style.overflow = 'hidden';
+          
+          // Table header
+          const thead = document.createElement('thead');
+          const headerRow = document.createElement('tr');
+          headerRow.style.background = 'var(--surface-2)';
+          ['อันดับ', 'ชื่อ', 'ชนะ', 'เสมอ', 'แพ้', 'คะแนน'].forEach(text => {
+            const th = document.createElement('th');
+            th.textContent = text;
+            th.style.padding = '12px';
+            th.style.textAlign = 'left';
+            th.style.fontWeight = '600';
+            th.style.fontSize = '14px';
+            if (text === 'อันดับ' || text === 'คะแนน') {
+              th.style.textAlign = 'center';
+            }
+            headerRow.appendChild(th);
+          });
+          thead.appendChild(headerRow);
+          standingsTable.appendChild(thead);
+          
+          // Table body
+          const tbody = document.createElement('tbody');
+          this.bracket.standings.forEach((standing, index) => {
+            const row = document.createElement('tr');
+            row.style.borderBottom = '1px solid var(--border)';
+            row.style.background = index % 2 === 0 ? 'var(--surface)' : 'var(--surface-2)';
+            
+            const rank = document.createElement('td');
+            rank.textContent = index + 1;
+            rank.style.padding = '12px';
+            rank.style.textAlign = 'center';
+            rank.style.fontWeight = '700';
+            rank.style.fontSize = '16px';
+            if (index === 0) {
+              rank.style.color = 'var(--success)';
+            }
+            row.appendChild(rank);
+            
+            const name = document.createElement('td');
+            name.textContent = standing.name;
+            name.style.padding = '12px';
+            name.style.fontWeight = '500';
+            row.appendChild(name);
+            
+            const wins = document.createElement('td');
+            wins.textContent = standing.wins;
+            wins.style.padding = '12px';
+            wins.style.textAlign = 'center';
+            row.appendChild(wins);
+            
+            const draws = document.createElement('td');
+            draws.textContent = standing.draws;
+            draws.style.padding = '12px';
+            draws.style.textAlign = 'center';
+            row.appendChild(draws);
+            
+            const losses = document.createElement('td');
+            losses.textContent = standing.losses;
+            losses.style.padding = '12px';
+            losses.style.textAlign = 'center';
+            row.appendChild(losses);
+            
+            const points = document.createElement('td');
+            points.textContent = standing.points;
+            points.style.padding = '12px';
+            points.style.textAlign = 'center';
+            points.style.fontWeight = '700';
+            points.style.fontSize = '16px';
+            if (index === 0) {
+              points.style.color = 'var(--success)';
+            }
+            row.appendChild(points);
+            
+            tbody.appendChild(row);
+          });
+          standingsTable.appendChild(tbody);
+          standingsContainer.appendChild(standingsTable);
+          this.bracketContainer.appendChild(standingsContainer);
+          
+          // Matches Container (Separate, Scrollable)
+          const matchesContainer = document.createElement('div');
+          matchesContainer.className = 'roundrobin-matches-container';
+          
+          const matchesTitle = document.createElement('div');
+          matchesTitle.className = 'bracket-section-title';
+          matchesTitle.textContent = '⚽ การแข่งขัน';
+          matchesTitle.style.marginBottom = '0';
+          matchesContainer.appendChild(matchesTitle);
+          
+          const matchesGrid = document.createElement('div');
+          matchesGrid.className = 'roundrobin-matches-grid';
+          
+          this.bracket.rounds.forEach((round, roundIndex) => {
+            const roundCard = document.createElement('div');
+            roundCard.className = 'roundrobin-round-card';
+            
+            const roundHeader = document.createElement('div');
+            roundHeader.className = 'roundrobin-round-header';
+            roundHeader.textContent = round.name;
+            roundCard.appendChild(roundHeader);
+            
+            const roundMatches = document.createElement('div');
+            roundMatches.className = 'roundrobin-round-matches';
+            
+            round.matches.forEach(match => {
+              const matchDiv = this.createMatchElement(match);
+              matchDiv.style.minWidth = 'auto';
+              roundMatches.appendChild(matchDiv);
+            });
+            
+            roundCard.appendChild(roundMatches);
+            matchesGrid.appendChild(roundCard);
+          });
+          
+          matchesContainer.appendChild(matchesGrid);
+          this.bracketContainer.appendChild(matchesContainer);
+        }
+
         createMatchElement(match) {
           const matchDiv = document.createElement('div');
           matchDiv.className = 'bracket-match';
@@ -1249,7 +1562,10 @@
               p1Div.appendChild(p1Score);
             }
 
-            if (match.winner === p1) {
+            if (match.winner === 'draw') {
+              p1Div.style.background = 'var(--warning)';
+              p1Div.style.color = 'white';
+            } else if (match.winner === p1) {
               p1Div.classList.add('winner');
             } else if (match.winner) {
               p1Div.classList.add('loser');
@@ -1275,7 +1591,10 @@
               p2Div.appendChild(p2Score);
             }
 
-            if (match.winner === p2) {
+            if (match.winner === 'draw') {
+              p2Div.style.background = 'var(--warning)';
+              p2Div.style.color = 'white';
+            } else if (match.winner === p2) {
               p2Div.classList.add('winner');
             } else if (match.winner) {
               p2Div.classList.add('loser');
@@ -1337,6 +1656,14 @@
             
             document.getElementById('modalWinner1').textContent = p1;
             document.getElementById('modalWinner2').textContent = p2;
+            
+            // Show draw button only for round-robin mode
+            const drawButton = document.getElementById('modalDraw');
+            if (this.bracket.mode === 'roundrobin') {
+              drawButton.style.display = 'flex';
+            } else {
+              drawButton.style.display = 'none';
+            }
           }
 
           this.matchModal.classList.add('active');
@@ -1351,7 +1678,8 @@
           const score1 = parseInt(document.getElementById('modalP1Score').value) || 0;
           const score2 = parseInt(document.getElementById('modalP2Score').value) || 0;
 
-          if (score1 === score2) {
+          // Allow draws in round-robin mode
+          if (score1 === score2 && this.bracket.mode !== 'roundrobin') {
             alert('คะแนนต้องไม่เท่ากัน กรุณากรอกใหม่');
             return;
           }
@@ -1360,7 +1688,12 @@
           if (match) {
             match.score1 = score1;
             match.score2 = score2;
-            match.winner = score1 > score2 ? match.participant1 : match.participant2;
+            
+            if (score1 === score2 && this.bracket.mode === 'roundrobin') {
+              match.winner = 'draw';
+            } else {
+              match.winner = score1 > score2 ? match.participant1 : match.participant2;
+            }
             
             this.advanceWinner(match);
             this.renderBracket();
@@ -1383,8 +1716,25 @@
           this.closeModal();
         }
 
+        saveDrawResult() {
+          const match = this.findMatch(this.currentMatchId);
+          if (match && this.bracket.mode === 'roundrobin') {
+            match.winner = 'draw';
+            match.score1 = null;
+            match.score2 = null;
+            
+            this.advanceWinner(match);
+            this.renderBracket();
+            this.checkComplete();
+          }
+
+          this.closeModal();
+        }
+
         findMatch(matchId) {
-          if (this.bracket.mode === 'single') {
+          if (this.bracket.mode === 'roundrobin') {
+            return this.bracket.allMatches.find(m => m.id === matchId);
+          } else if (this.bracket.mode === 'single') {
             for (const round of this.bracket.rounds) {
               const match = round.matches.find(m => m.id === matchId);
               if (match) return match;
@@ -1415,7 +1765,10 @@
         advanceWinner(match) {
           if (!match.winner) return;
 
-          if (this.bracket.mode === 'single') {
+          if (this.bracket.mode === 'roundrobin') {
+            // Round-robin: update standings
+            this.bracket.standings = this.calculateStandings(this.bracket.allMatches, this.participants);
+          } else if (this.bracket.mode === 'single') {
             // Single Elimination: advance winner to next round
             const currentRoundIndex = parseInt(match.id.split('-')[0].substring(1));
             const matchIndex = parseInt(match.id.split('-')[1].substring(1));
@@ -1585,7 +1938,19 @@
           let rank2 = null;
           let rank3 = null;
 
-          if (this.bracket.mode === 'single') {
+          if (this.bracket.mode === 'roundrobin') {
+            // Round-robin: check if all matches are completed
+            const allMatchesCompleted = this.bracket.allMatches.every(m => m.winner);
+            if (allMatchesCompleted && this.bracket.standings.length > 0) {
+              champion = this.bracket.standings[0].name;
+              if (this.bracket.standings.length > 1) {
+                rank2 = this.bracket.standings[1].name;
+              }
+              if (this.bracket.standings.length > 2) {
+                rank3 = this.bracket.standings[2].name;
+              }
+            }
+          } else if (this.bracket.mode === 'single') {
             const finalMatch = this.bracket.rounds[this.bracket.rounds.length - 1].matches[0];
             // ต้องมี winner จริงๆ ในรอบ final ถึงจะแสดงเป็นแชมป์
             if (finalMatch && finalMatch.winner) {

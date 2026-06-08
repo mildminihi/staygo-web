@@ -14,6 +14,7 @@ const I18N = {
 
         btnCreate: "🎮 สร้างกระดาน",
         btnReset: "🔄 รีเซ็ต",
+        btnRevealAll: "👁️ เปิดทั้งหมด",
         btnNext: "➡️ รูปถัดไป",
         btnFullscreenEnter: "⛶ เต็มจอ",
         btnFullscreenExit: "⛶ ออกจากเต็มจอ",
@@ -65,6 +66,7 @@ const I18N = {
 
         btnCreate: "🎮 Create Board",
         btnReset: "🔄 Reset",
+        btnRevealAll: "👁️ Reveal All",
         btnNext: "➡️ Next Image",
         btnFullscreenEnter: "⛶ Fullscreen",
         btnFullscreenExit: "⛶ Exit Fullscreen",
@@ -194,6 +196,7 @@ class RevealBoardGame {
         this.placeholder = document.getElementById('placeholder');
         this.statsPanel = document.getElementById('statsPanel');
         this.resetBtn = document.getElementById('resetBtn');
+        this.revealAllBtn = document.getElementById('revealAllBtn');
         this.nextBtn = document.getElementById('nextBtn');
         this.fullscreenBtn = document.getElementById('fullscreenBtn');
         
@@ -288,6 +291,7 @@ class RevealBoardGame {
         this.boardContainer.classList.add('active');
         this.statsPanel.style.display = 'flex';
         this.resetBtn.disabled = false;
+        this.revealAllBtn.disabled = false;
         
         // Enable next button if there are multiple images
         this.nextBtn.disabled = this.uploadedImages.length <= 1;
@@ -358,6 +362,24 @@ class RevealBoardGame {
 
         this.revealedTiles = 0;
         this.updateStats();
+    }
+
+    revealAll() {
+        // Reveal all tiles at once
+        const tiles = this.tilesOverlay.querySelectorAll('.tile');
+        tiles.forEach(tile => {
+            if (!tile.classList.contains('revealed')) {
+                tile.classList.add('revealed');
+            }
+        });
+
+        this.revealedTiles = this.totalTiles;
+        this.updateStats();
+
+        // Show completion message after a short delay
+        setTimeout(() => {
+            alert(t(getCurrentLang(), 'doneAllTiles'));
+        }, 500);
     }
 
     nextImage() {
@@ -439,6 +461,10 @@ function createBoard() {
 
 function resetBoard() {
     game.resetBoard();
+}
+
+function revealAll() {
+    game.revealAll();
 }
 
 function nextImage() {

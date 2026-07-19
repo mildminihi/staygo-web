@@ -39,6 +39,7 @@ class GameState {
         this.currentEnemy = null;
         this.combatRewardsGold = 0;
         this.nextAttackMultiplier = null;
+        this.rerollPenalty = 0; // Temporary reroll reduction from Lich King's Curse
 
         // Stats
         this.stats = {
@@ -307,6 +308,10 @@ class GameState {
         return this.perks.some(p => p.id === perkId);
     }
 
+    hasDiceMod(modId) {
+        return this.diceMods.some(m => m.id === modId);
+    }
+
     // Add item to inventory
     addDiceMod(mod) {
         this.diceMods.push(mod);
@@ -469,10 +474,15 @@ class GameController {
     // Enter combat
     enterCombat(enemy) {
         gameState.inCombat = true;
-        
+
         // Reset charge energy to 0 at start of each combat
         gameState.player.energy = 0;
-        
+
+        // Energized perk grants a flat energy boost at the start of every combat
+        if (gameState.hasPerk('energized')) {
+            gameState.addEnergy(2);
+        }
+
         combatManager.startCombat(enemy);
         
         getUI().showScreen('combatScreen');
@@ -482,10 +492,11 @@ class GameController {
     // Execute combat turn
     executeCombatTurn() {
         const result = combatManager.executeTurn();
-        
+
         // Update UI
         getUI().renderCombat();
-        
+        getUI().showTurnResults(result);
+
         // Check if enemy defeated
         if (result.enemyDefeated) {
             this.onCombatVictory();
@@ -510,20 +521,21 @@ class GameController {
             return;
         }
 
-        // Check if player has enough energy
-        if (gameState.player.energy < skill.energyCost) {
+        // Check if player has enough energy (999 = "uses all energy", just needs >0)
+        const isAllEnergyCost = skill.energyCost === 999;
+        if (isAllEnergyCost ? gameState.player.energy <= 0 : gameState.player.energy < skill.energyCost) {
             console.log('Not enough energy to use skill');
             return;
         }
 
-        // Apply energy master perk (skills cost 1 less, min 1)
+        // Apply efficient perk (skills cost 1 less, min 1)
         let actualCost = skill.energyCost;
-        if (gameState.hasPerk('energyMaster')) {
+        if (gameState.hasPerk('efficient') && !isAllEnergyCost) {
             actualCost = Math.max(1, actualCost - 1);
         }
 
         // Special case for Thunderbolt (uses all energy)
-        if (skill.energyCost === 999) {
+        if (isAllEnergyCost) {
             actualCost = gameState.player.energy;
         }
 

@@ -6,6 +6,7 @@ class DiceManager {
     constructor() {
         this.dice = []; // Array of die values (1-6)
         this.selectedDice = []; // Indices of selected dice
+        this.lockedDice = []; // Indices immune to reroll (Lock & Load mod)
         this.allocatedDice = {
             attack: [],
             block: [],
@@ -16,6 +17,13 @@ class DiceManager {
         this.maxRerolls = 2;
     }
 
+    // Effective max rerolls this turn, after temporary penalties (e.g. Lich King's Curse)
+    getEffectiveMaxRerolls() {
+        const base = gameState ? gameState.player.maxRerolls : this.maxRerolls;
+        const penalty = gameState ? (gameState.rerollPenalty || 0) : 0;
+        return Math.max(0, base - penalty);
+    }
+
     // Roll initial dice
     rollDice(count = 5) {
         const rng = getRNG();
@@ -23,14 +31,28 @@ class DiceManager {
         for (let i = 0; i < count; i++) {
             this.dice.push(rng.rollDie(6));
         }
-        
+
         // Apply dice mods
         if (gameState && gameState.applyDiceMods) {
             this.dice = gameState.applyDiceMods(this.dice);
         }
-        
+
+        // Lock & Load: the highest die is protected from being rerolled away
+        this.lockedDice = [];
+        if (gameState && gameState.hasDiceMod && gameState.hasDiceMod('lockHighest') && this.dice.length > 0) {
+            let bestIndex = 0;
+            for (let i = 1; i < this.dice.length; i++) {
+                if (this.dice[i] > this.dice[bestIndex]) bestIndex = i;
+            }
+            this.lockedDice = [bestIndex];
+        }
+
         this.selectedDice = [];
         this.rerollsUsed = 0;
+
+        // A Curse penalty only affects the turn it lands on
+        if (gameState) gameState.rerollPenalty = 0;
+
         return this.dice;
     }
 
@@ -48,16 +70,21 @@ class DiceManager {
         return true;
     }
 
+    isDieLocked(index) {
+        return this.lockedDice.includes(index);
+    }
+
     // Reroll selected dice
     rerollSelected() {
-        const maxRerolls = gameState ? gameState.player.maxRerolls : this.maxRerolls;
-        if (this.rerollsUsed >= maxRerolls) return false;
+        if (this.rerollsUsed >= this.getEffectiveMaxRerolls()) return false;
         if (this.selectedDice.length === 0) return false;
 
         const rng = getRNG();
+        let rerolledAny = false;
         for (const index of this.selectedDice) {
-            if (!this.isDieAllocated(index)) {
+            if (!this.isDieAllocated(index) && !this.isDieLocked(index)) {
                 this.dice[index] = rng.rollDie(6);
+                rerolledAny = true;
             }
         }
 
@@ -67,7 +94,7 @@ class DiceManager {
         }
 
         this.selectedDice = [];
-        this.rerollsUsed++;
+        if (rerolledAny) this.rerollsUsed++;
         return true;
     }
 
@@ -137,6 +164,7 @@ class DiceManager {
     reset() {
         this.dice = [];
         this.selectedDice = [];
+        this.lockedDice = [];
         this.allocatedDice = {
             attack: [],
             block: [],
@@ -149,10 +177,11 @@ class DiceManager {
 
 // Poker-style Matching Algorithm
 class DiceMatchingmatcher {
-    // Identify the best poker combination in a set of dice
+    // Identify the best poker combination in a set of dice.
+    // Handles any dice count (5 by default, 6 with the Perfect Balance mod).
     static identifyCombo(values) {
         if (!values || values.length === 0) {
-            return { type: 'none', value: 0, name: 'None' };
+            return { type: 'none', value: 0, name: 'None', multiplier: 0 };
         }
 
         // Count occurrences of each value
@@ -161,12 +190,25 @@ class DiceMatchingmatcher {
             counts[val] = (counts[val] || 0) + 1;
         }
 
+        const n = values.length;
         const sortedValues = values.slice().sort((a, b) => a - b);
         const uniqueCounts = Object.values(counts).sort((a, b) => b - a);
 
-        // Five of a Kind
-        if (uniqueCounts[0] === 5) {
-            return { type: 'five_kind', value: 50, name: 'Five of a Kind', multiplier: 50 };
+        const isStraight = n >= 5 && sortedValues.every((val, i) => {
+            if (i === 0) return true;
+            return val === sortedValues[i - 1] + 1;
+        });
+
+        // All dice matching (Five/Six of a Kind)
+        if (uniqueCounts[0] === n && n >= 5) {
+            return n >= 6
+                ? { type: 'six_kind', value: 65, name: 'Six of a Kind', multiplier: 65 }
+                : { type: 'five_kind', value: 50, name: 'Five of a Kind', multiplier: 50 };
+        }
+
+        // Four of a Kind + a pair (only possible with 6 dice)
+        if (uniqueCounts[0] === 4 && uniqueCounts[1] === 2) {
+            return { type: 'four_pair', value: 40, name: 'Four of a Kind + Pair', multiplier: 40 };
         }
 
         // Four of a Kind
@@ -174,25 +216,29 @@ class DiceMatchingmatcher {
             return { type: 'four_kind', value: 35, name: 'Four of a Kind', multiplier: 35 };
         }
 
+        // Double Triple (3 + 3, only possible with 6 dice)
+        if (uniqueCounts[0] === 3 && uniqueCounts[1] === 3) {
+            return { type: 'double_triple', value: 32, name: 'Double Triple', multiplier: 32 };
+        }
+
         // Full House (3 + 2)
         if (uniqueCounts[0] === 3 && uniqueCounts[1] === 2) {
             return { type: 'full_house', value: 30, name: 'Full House', multiplier: 30 };
         }
 
-        // Straight (5 consecutive)
-        if (values.length === 5) {
-            const isStraight = sortedValues.every((val, i) => {
-                if (i === 0) return true;
-                return val === sortedValues[i - 1] + 1;
-            });
-            if (isStraight) {
-                return { type: 'straight', value: 25, name: 'Straight', multiplier: 25 };
-            }
+        // Straight (5+ consecutive)
+        if (isStraight) {
+            return { type: 'straight', value: 25, name: 'Straight', multiplier: 25 };
         }
 
         // Three of a Kind
         if (uniqueCounts[0] === 3) {
             return { type: 'three_kind', value: 15, name: 'Three of a Kind', multiplier: 15 };
+        }
+
+        // Two Pair
+        if (uniqueCounts[0] === 2 && uniqueCounts[1] === 2) {
+            return { type: 'two_pair', value: 18, name: 'Two Pair', multiplier: 18 };
         }
 
         // Pair (2 matching)
@@ -205,58 +251,86 @@ class DiceMatchingmatcher {
         return { type: 'none', value: sum, name: 'Single Dice', multiplier: sum };
     }
 
+    // Identify the best combo, optionally allowing one die to count as any value
+    // (Wild Dice mod). Tries every single-die substitution and keeps the best result.
+    static identifyBestCombo(values, allowWild) {
+        const base = this.identifyCombo(values);
+        if (!allowWild || !values || values.length === 0) return base;
+
+        let best = base;
+        for (let i = 0; i < values.length; i++) {
+            for (let v = 1; v <= 6; v++) {
+                if (v === values[i]) continue;
+                const trial = values.slice();
+                trial[i] = v;
+                const combo = this.identifyCombo(trial);
+                if (combo.multiplier > best.multiplier) {
+                    best = { ...combo, wild: true };
+                }
+            }
+        }
+        return best;
+    }
+
+    static hasWildDice() {
+        return !!(typeof gameState !== 'undefined' && gameState && gameState.hasDiceMod && gameState.hasDiceMod('wildDice'));
+    }
+
     // Calculate damage/effect for attack slot
     static calculateAttack(values) {
-        const combo = this.identifyCombo(values);
+        const combo = this.identifyBestCombo(values, this.hasWildDice());
         return {
             damage: combo.multiplier,
             combo: combo.name,
-            type: combo.type
+            type: combo.type,
+            wild: !!combo.wild
         };
     }
 
     // Calculate shield for block slot
     static calculateBlock(values) {
-        const combo = this.identifyCombo(values);
-        // Block uses half the value of attack combos
+        const combo = this.identifyBestCombo(values, this.hasWildDice());
+        // Block uses 60% of attack value
         const shieldValue = Math.floor(combo.multiplier * 0.6);
         return {
             shield: shieldValue,
             combo: combo.name,
-            type: combo.type
+            type: combo.type,
+            wild: !!combo.wild
         };
     }
 
     // Calculate healing for heal slot
     static calculateHeal(values) {
-        const combo = this.identifyCombo(values);
+        const combo = this.identifyBestCombo(values, this.hasWildDice());
         // Heal uses 40% of attack value
         const healValue = Math.floor(combo.multiplier * 0.4);
         return {
             heal: healValue,
             combo: combo.name,
-            type: combo.type
+            type: combo.type,
+            wild: !!combo.wild
         };
     }
 
     // Calculate energy for charge slot
     static calculateCharge(values) {
         // Charge slot: each die = 1 energy, combos give bonus
-        const combo = this.identifyCombo(values);
+        const combo = this.identifyBestCombo(values, this.hasWildDice());
         let energy = values.length; // Base: 1 energy per die
-        
+
         // Bonus energy for combos
-        if (combo.type === 'pair') energy += 1;
-        if (combo.type === 'three_kind') energy += 2;
-        if (combo.type === 'straight') energy += 3;
-        if (combo.type === 'full_house') energy += 3;
-        if (combo.type === 'four_kind') energy += 4;
-        if (combo.type === 'five_kind') energy += 5;
-        
+        const bonuses = {
+            pair: 1, two_pair: 2, three_kind: 2, straight: 3, full_house: 3,
+            double_triple: 4, four_kind: 4, four_pair: 5, five_kind: 5, six_kind: 6
+        };
+        energy += bonuses[combo.type] || 0;
+
         return {
             energy: energy,
             combo: combo.name,
-            type: combo.type
+            type: combo.type,
+            wild: !!combo.wild
         };
     }
 }
@@ -342,21 +416,27 @@ class CombatManager {
             gameState.addEnergy(results.charge.energy);
         }
         if (results.attack && this.currentEnemy) {
-            let finalDamage = results.attack.damage;
+            // Enemy telegraphed a Dodge this turn - the attack whiffs entirely
+            if (this.enemyIntent && this.enemyIntent.id === 'dodge') {
+                results.attack.dodged = true;
+                results.attack.damage = 0;
+            } else {
+                let finalDamage = results.attack.damage;
 
-            // Apply nextAttackMultiplier from Power Strike skill
-            if (gameState.nextAttackMultiplier) {
-                finalDamage = Math.floor(finalDamage * gameState.nextAttackMultiplier);
-                gameState.nextAttackMultiplier = null; // Reset after use
-            }
+                // Apply nextAttackMultiplier from Power Strike skill
+                if (gameState.nextAttackMultiplier) {
+                    finalDamage = Math.floor(finalDamage * gameState.nextAttackMultiplier);
+                    gameState.nextAttackMultiplier = null; // Reset after use
+                }
 
-            const damageDealt = this.damageEnemy(finalDamage);
-            
-            // Apply vampiric perk
-            if (gameState && gameState.hasPerk('vampiric')) {
-                const vampiricHeal = Math.floor(damageDealt / 20) * 2;
-                if (vampiricHeal > 0) {
-                    gameState.heal(vampiricHeal);
+                const damageDealt = this.damageEnemy(finalDamage);
+
+                // Apply vampiric perk
+                if (gameState && gameState.hasPerk('vampiric')) {
+                    const vampiricHeal = Math.floor(damageDealt / 20) * 2;
+                    if (vampiricHeal > 0) {
+                        gameState.heal(vampiricHeal);
+                    }
                 }
             }
         }
@@ -375,7 +455,12 @@ class CombatManager {
 
         switch (this.enemyIntent.action) {
             case 'attack':
-                gameState.takeDamage(this.enemyIntent.value);
+                // Swiftness perk: chance to fully dodge the incoming attack
+                if (gameState.hasPerk('swiftness') && getRNG().chance(0.15)) {
+                    result.dodged = true;
+                } else {
+                    result.actualDamage = gameState.takeDamage(this.enemyIntent.value);
+                }
                 break;
             case 'block':
                 // Enemy gains shield (not implemented in base system)

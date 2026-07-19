@@ -122,7 +122,7 @@ const PERKS = {
         rarity: 'common',
         onAcquire: (gameState) => {
             gameState.player.energy += 2;
-        }
+        } // Also applied at the start of every combat, see GameController.enterCombat
     },
 
     goldFinder: {
@@ -165,7 +165,7 @@ const PERKS = {
         id: 'swiftness',
         name: 'Swiftness',
         type: 'perk',
-        description: 'Always act first (player turn before enemy calculates)',
+        description: '15% chance to fully dodge an enemy attack',
         rarity: 'uncommon',
         onAcquire: null
     },
@@ -354,9 +354,20 @@ function getRandomDiceMods(count = 1) {
     return rng.sample(mods, count);
 }
 
+// Perks with no onAcquire effect are flat on/off flags (checked via hasPerk) -
+// owning a second copy does nothing, so avoid offering ones already owned
+// unless the pool is too small to fill the request without them.
 function getRandomPerks(count = 1) {
     const rng = getRNG();
-    const perks = getAllPerks();
+    let perks = getAllPerks();
+
+    if (typeof gameState !== 'undefined' && gameState) {
+        const notOwnedOrStackable = perks.filter(p => p.onAcquire || !gameState.hasPerk(p.id));
+        if (notOwnedOrStackable.length >= count) {
+            perks = notOwnedOrStackable;
+        }
+    }
+
     return rng.sample(perks, count);
 }
 
@@ -369,12 +380,21 @@ function getRandomSkills(count = 1) {
 // Get random reward (mixed types)
 function getRandomRewards(count = 3) {
     const rng = getRNG();
-    const allItems = [
+    let allItems = [
         ...getAllDiceMods(),
         ...getAllPerks(),
         ...getAllSkills()
     ];
-    
+
+    if (typeof gameState !== 'undefined' && gameState) {
+        const notOwnedOrStackable = allItems.filter(item =>
+            item.type !== 'perk' || item.onAcquire || !gameState.hasPerk(item.id)
+        );
+        if (notOwnedOrStackable.length >= count) {
+            allItems = notOwnedOrStackable;
+        }
+    }
+
     return rng.sample(allItems, count);
 }
 
@@ -391,12 +411,17 @@ function canUseSkill(skill, gameState) {
     const hasSkill = gameState.skills.some(s => s.id === skill.id);
     if (!hasSkill) return false;
     
+    // 999 = "uses all energy", just needs >0
+    if (skill.energyCost === 999) {
+        return gameState.player.energy > 0;
+    }
+
     // Check energy cost (with efficient perk)
     let cost = skill.energyCost;
     if (gameState.hasPerk('efficient') && cost > 1) {
         cost = Math.max(1, cost - 1);
     }
-    
+
     return gameState.player.energy >= cost;
 }
 

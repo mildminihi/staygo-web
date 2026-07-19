@@ -145,6 +145,7 @@
                             <span id="mapFloor">Floor 1</span>
                         </div>
                     </div>
+                    <button id="mapInventoryBtn" class="pixel-btn-small">Inventory</button>
                     <button id="mapMenuBtn" class="pixel-btn-small">Menu</button>
                 </div>
                 <div id="mapGrid" class="map-grid"></div>
@@ -184,7 +185,7 @@
 
                 <!-- Enemy Display -->
                 <div class="enemy-container">
-                    <div class="enemy-card">
+                    <div id="enemyCard" class="enemy-card">
                         <div id="enemyName" class="enemy-name">Goblin</div>
                         <div id="enemySprite" class="enemy-sprite">👹</div>
                         <div class="enemy-hp-bar">
@@ -201,6 +202,7 @@
                 <!-- Dice Display -->
                 <div class="dice-container">
                     <div id="diceArea" class="dice-area"></div>
+                    <div id="dicePreview" class="dice-preview"></div>
                     <button id="rollDiceBtn" class="pixel-btn pixel-btn-primary">Roll Dice</button>
                     <button id="rerollBtn" class="pixel-btn" style="display: none;">Reroll Selected</button>
                 </div>
@@ -340,6 +342,7 @@
                         <h3>🃏 Combo ของลูกเต๋า</h3>
                         <ul>
                             <li>Pair (2 เหมือน) = 10 DMG</li>
+                            <li>Two Pair = 18 DMG</li>
                             <li>Three of a Kind = 15 DMG</li>
                             <li>Straight (5 ลำดับ) = 25 DMG</li>
                             <li>Full House = 30 DMG</li>
@@ -434,6 +437,25 @@
                 <div class="gameover-buttons">
                     <button id="retryBtn" class="pixel-btn pixel-btn-primary">Try Again</button>
                     <button id="mainMenuBtn" class="pixel-btn">Main Menu</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Inventory Modal -->
+        <div id="inventoryModal" class="modal" style="display: none;">
+            <div class="modal-overlay"></div>
+            <div class="modal-content skills-modal">
+                <div class="modal-header">
+                    <h2 class="modal-title">Inventory</h2>
+                    <button id="closeInventoryBtn" class="modal-close">✕</button>
+                </div>
+                <div class="modal-body">
+                    <h3 class="stats-subtitle">🎲 Dice Mods</h3>
+                    <div id="inventoryDiceMods" class="items-list"></div>
+                    <h3 class="stats-subtitle">✨ Perks</h3>
+                    <div id="inventoryPerks" class="items-list"></div>
+                    <h3 class="stats-subtitle">⚡ Skills</h3>
+                    <div id="inventorySkills" class="items-list"></div>
                 </div>
             </div>
         </div>

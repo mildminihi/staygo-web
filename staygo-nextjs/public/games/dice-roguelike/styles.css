@@ -453,6 +453,18 @@ body {
     text-align: center;
 }
 
+.dice-preview {
+    min-height: 20px;
+    margin: 8px 0 12px;
+    font-size: 11px;
+    color: var(--pixel-text-dim);
+    letter-spacing: 0.5px;
+}
+
+.dice-preview.has-preview {
+    color: var(--pixel-accent);
+}
+
 .dice-area {
     display: flex;
     gap: 12px;
@@ -466,6 +478,7 @@ body {
 }
 
 .die {
+    position: relative;
     width: 64px;
     height: 64px;
     background: #fff;
@@ -496,6 +509,20 @@ body {
 .die.in-slot {
     opacity: 0.5;
     cursor: not-allowed;
+}
+
+.die.locked {
+    border-color: gold;
+    box-shadow: 0 0 0 2px gold, 2px 2px 0 rgba(0, 0, 0, 0.3);
+}
+
+.die.locked::after {
+    content: '🔒';
+    position: absolute;
+    top: -10px;
+    right: -8px;
+    font-size: 14px;
+    filter: drop-shadow(1px 1px 0 #000);
 }
 
 /* Allocation Slots */

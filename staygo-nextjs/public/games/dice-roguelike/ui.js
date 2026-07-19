@@ -107,6 +107,60 @@ class UIManager {
         if (mapMenuBtn) {
             mapMenuBtn.addEventListener('click', () => this.showMainMenu());
         }
+
+        const mapInventoryBtn = document.getElementById('mapInventoryBtn');
+        if (mapInventoryBtn) {
+            mapInventoryBtn.addEventListener('click', () => this.showInventoryModal());
+        }
+
+        const closeInventoryBtn = document.getElementById('closeInventoryBtn');
+        const inventoryModal = document.getElementById('inventoryModal');
+        if (closeInventoryBtn && inventoryModal) {
+            closeInventoryBtn.addEventListener('click', () => {
+                inventoryModal.style.display = 'none';
+            });
+            const overlay = inventoryModal.querySelector('.modal-overlay');
+            if (overlay) {
+                overlay.addEventListener('click', () => {
+                    inventoryModal.style.display = 'none';
+                });
+            }
+        }
+    }
+
+    showInventoryModal() {
+        const modal = document.getElementById('inventoryModal');
+        if (!modal) return;
+
+        this.renderItemList('inventoryDiceMods', gameState.diceMods, 'No dice mods yet.');
+        this.renderItemList('inventoryPerks', gameState.perks, 'No perks yet.');
+        this.renderItemList('inventorySkills', gameState.skills, 'No skills yet.');
+
+        modal.style.display = 'flex';
+    }
+
+    renderItemList(containerId, items, emptyMessage) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+
+        container.innerHTML = '';
+        if (!items || items.length === 0) {
+            const empty = document.createElement('p');
+            empty.style.cssText = 'font-size: 10px; color: var(--pixel-text-dim); text-align: center;';
+            empty.textContent = emptyMessage;
+            container.appendChild(empty);
+            return;
+        }
+
+        items.forEach(item => {
+            const badge = document.createElement('div');
+            badge.className = 'item-badge';
+            badge.innerHTML = `
+                <span class="item-badge-name">${item.name}</span>
+                <span class="item-badge-desc">${item.description}</span>
+            `;
+            container.appendChild(badge);
+        });
     }
 
     renderMap() {
@@ -163,7 +217,7 @@ class UIManager {
         const mapFloor = document.getElementById('mapFloor');
 
         if (mapHp) mapHp.textContent = `${gameState.player.hp}/${gameState.player.maxHp}`;
-        if (mapEnergy) mapEnergy.textContent = gameState.player.energy;
+        if (mapEnergy) mapEnergy.textContent = `${gameState.player.energy}/${gameState.player.maxEnergy}`;
         if (mapGold) mapGold.textContent = gameState.player.gold;
         if (mapFloor) mapFloor.textContent = `Floor ${gameState.currentFloor}`;
     }
@@ -226,9 +280,9 @@ class UIManager {
         if (playerHpBar) playerHpBar.style.width = `${hpPercent}%`;
         if (playerShield) playerShield.textContent = gameState.player.shield;
         if (playerShieldBar) playerShieldBar.style.width = `${shieldPercent}%`;
-        if (playerEnergy) playerEnergy.textContent = gameState.player.energy;
+        if (playerEnergy) playerEnergy.textContent = `${gameState.player.energy}/${gameState.player.maxEnergy}`;
         
-        const rerollsRemaining = gameState.player.maxRerolls - combatManager.diceManager.rerollsUsed;
+        const rerollsRemaining = Math.max(0, combatManager.diceManager.getEffectiveMaxRerolls() - combatManager.diceManager.rerollsUsed);
         if (rerollsLeft) rerollsLeft.textContent = rerollsRemaining;
     }
 
@@ -265,6 +319,7 @@ class UIManager {
 
         diceArea.innerHTML = '';
         const dice = combatManager.diceManager.dice;
+        const rolling = this.rollingIndices || [];
 
         dice.forEach((value, index) => {
             const dieDiv = document.createElement('div');
@@ -277,6 +332,17 @@ class UIManager {
                 dieDiv.classList.add('selected');
             }
 
+            // Lock & Load mod: highest die is protected from rerolls
+            if (combatManager.diceManager.isDieLocked(index)) {
+                dieDiv.classList.add('locked');
+                dieDiv.title = 'Locked — immune to reroll';
+            }
+
+            // Freshly rolled/rerolled dice get a little flip animation
+            if (rolling.includes(index)) {
+                dieDiv.classList.add('dice-rolling');
+            }
+
             // Check if allocated
             if (combatManager.diceManager.isDieAllocated(index)) {
                 dieDiv.classList.add('in-slot');
@@ -286,6 +352,27 @@ class UIManager {
 
             diceArea.appendChild(dieDiv);
         });
+
+        this.rollingIndices = null;
+        this.updateDicePreview();
+    }
+
+    // Live preview of the combo currently-selected (unallocated) dice would form
+    updateDicePreview() {
+        const preview = document.getElementById('dicePreview');
+        if (!preview) return;
+
+        const selected = combatManager.diceManager.selectedDice;
+        if (selected.length === 0) {
+            preview.textContent = '';
+            preview.classList.remove('has-preview');
+            return;
+        }
+
+        const values = selected.map(i => combatManager.diceManager.dice[i]);
+        const combo = DiceMatchingmatcher.identifyBestCombo(values, DiceMatchingmatcher.hasWildDice());
+        preview.textContent = `${values.join(' + ')} → ${combo.name} (${combo.multiplier})${combo.wild ? ' ✨' : ''}`;
+        preview.classList.add('has-preview');
     }
 
     onDieClick(index) {
@@ -370,7 +457,7 @@ class UIManager {
 
         const hasRolled = combatManager.diceManager.dice.length > 0;
         const hasSelected = combatManager.diceManager.selectedDice.length > 0;
-        const canReroll = combatManager.diceManager.rerollsUsed < gameState.player.maxRerolls;
+        const canReroll = combatManager.diceManager.rerollsUsed < combatManager.diceManager.getEffectiveMaxRerolls();
         const allAllocated = combatManager.diceManager.allDiceAllocated();
 
         if (rollDiceBtn) {
@@ -388,12 +475,15 @@ class UIManager {
     onRollDice() {
         const diceCount = gameState ? gameState.player.diceCount : 5;
         combatManager.diceManager.rollDice(diceCount);
+        this.rollingIndices = combatManager.diceManager.dice.map((_, i) => i);
         this.renderDice();
         this.updateCombatButtons();
     }
 
     onReroll() {
+        const rerolledIndices = [...combatManager.diceManager.selectedDice];
         if (combatManager.diceManager.rerollSelected()) {
+            this.rollingIndices = rerolledIndices;
             this.renderDice();
             this.updateCombatButtons();
         }
@@ -402,6 +492,82 @@ class UIManager {
     onEndTurn() {
         if (window.game) {
             window.game.executeCombatTurn();
+        }
+    }
+
+    // ========== COMBAT FEEDBACK / JUICE ==========
+
+    // Spawn a floating +/- number that rises and fades over an anchor element
+    spawnFloatingText(anchorElId, text, className) {
+        const anchor = document.getElementById(anchorElId);
+        if (!anchor) return;
+
+        const rect = anchor.getBoundingClientRect();
+        const el = document.createElement('div');
+        el.className = className;
+        el.textContent = text;
+        el.style.position = 'fixed';
+        el.style.left = `${rect.left + rect.width / 2}px`;
+        el.style.top = `${rect.top}px`;
+        el.style.transform = 'translateX(-50%)';
+
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 1500);
+    }
+
+    // Briefly apply a CSS animation class to an element, restarting it if already playing
+    flashElement(elId, className, duration = 400) {
+        const el = document.getElementById(elId);
+        if (!el) return;
+        el.classList.remove(className);
+        void el.offsetWidth; // force reflow so the animation restarts
+        el.classList.add(className);
+        setTimeout(() => el.classList.remove(className), duration);
+    }
+
+    // Turn a combat result (from CombatManager.executeTurn) into visual feedback
+    showTurnResults(turnResult) {
+        if (!turnResult || !turnResult.playerResults) return;
+        const { playerResults, enemyResults } = turnResult;
+
+        // Attack
+        if (playerResults.attack) {
+            if (playerResults.attack.dodged) {
+                this.spawnFloatingText('enemySprite', 'MISS!', 'damage-number');
+            } else if (playerResults.attack.damage > 0) {
+                this.spawnFloatingText('enemySprite', `-${playerResults.attack.damage}`, 'damage-number');
+                this.flashElement('enemySprite', 'hit-flash');
+                this.flashElement('enemyCard', 'shake');
+                if (playerResults.attack.type && !['none', 'pair'].includes(playerResults.attack.type)) {
+                    this.spawnFloatingText('enemyName', playerResults.attack.combo + (playerResults.attack.wild ? ' ✨' : ''), 'combo-effect');
+                }
+            }
+        }
+
+        // Block / Heal / Charge
+        if (playerResults.block && playerResults.block.shield > 0) {
+            this.spawnFloatingText('playerShield', `+${playerResults.block.shield}`, 'shield-number');
+        }
+        if (playerResults.heal && playerResults.heal.heal > 0) {
+            this.spawnFloatingText('playerHp', `+${playerResults.heal.heal}`, 'heal-number');
+            this.flashElement('combatScreen', 'heal-flash');
+        }
+        if (playerResults.charge && playerResults.charge.energy > 0) {
+            this.spawnFloatingText('playerEnergy', `+${playerResults.charge.energy}`, 'energy-number');
+        }
+
+        // Enemy turn
+        if (enemyResults) {
+            if (enemyResults.dodged) {
+                this.spawnFloatingText('playerHp', 'DODGED!', 'shield-number');
+            } else if (enemyResults.action === 'attack' && enemyResults.actualDamage > 0) {
+                this.spawnFloatingText('playerHp', `-${enemyResults.actualDamage}`, 'damage-number');
+                this.flashElement('combatScreen', 'hit-flash');
+                this.flashElement('combatScreen', 'shake');
+            } else if (enemyResults.action === 'heal' && enemyResults.value > 0) {
+                this.spawnFloatingText('enemySprite', `+${enemyResults.value}`, 'heal-number');
+                this.flashElement('enemySprite', 'heal-flash');
+            }
         }
     }
 
@@ -455,8 +621,10 @@ class UIManager {
         const card = document.createElement('div');
         card.className = 'skill-card';
 
-        // Determine if player can use this skill
-        const canUse = gameState.player.energy >= skill.energyCost;
+        // Determine if player can use this skill (999 = "uses all energy", just needs >0)
+        const canUse = skill.energyCost === 999
+            ? gameState.player.energy > 0
+            : gameState.player.energy >= skill.energyCost;
         card.classList.add(canUse ? 'can-use' : 'cannot-use');
 
         // Skill header (name and cost)

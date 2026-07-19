@@ -115,13 +115,14 @@ const EnemyAI = {
                 text: `Attack ${damage}`
             };
         } else if (chance < 0.85) {
-            // 15% dodge (no action)
+            // 15% dodge - negates the player's attack this same turn
             return {
                 action: 'special',
+                id: 'dodge',
                 value: 0,
                 icon: '💨',
                 text: 'Dodge',
-                effect: () => {} // Player attacks miss this turn
+                effect: () => {} // Handled directly in CombatManager.executePlayerTurn
             };
         } else {
             // 15% quick strike
@@ -216,14 +217,15 @@ const EnemyAI = {
                 }
             };
         } else {
-            // Curse - reduce max rerolls
+            // Curse - reduces your rerolls by 1 next turn
             return {
                 action: 'special',
-                value: 0,
+                id: 'curse',
+                value: 1,
                 icon: '👻',
-                text: 'Curse',
+                text: 'Curse (-1 Reroll)',
                 effect: (gs) => {
-                    // Effect handled in combat
+                    gs.rerollPenalty = (gs.rerollPenalty || 0) + 1;
                 }
             };
         }

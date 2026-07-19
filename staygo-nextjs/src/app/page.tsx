@@ -164,6 +164,22 @@ export default function Home() {
                 </div>
               </div>
             </article>
+
+            <article className="game-card">
+              <span className="beta-badge">Beta</span>
+              <div className="game-thumbnail">
+                <div style={{ background: '#14161C', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '200px', fontSize: '80px', color: 'white' }}>
+                  📜
+                </div>
+              </div>
+              <div className="game-info">
+                <h3 className="game-title">Dungeon Ledger</h3>
+                <p className="game-meta">สุ่มฮีโร่ ลุยดันเจี้ยนแบบ auto-battle</p>
+                <div className="game-actions">
+                  <a href="/games/dungeon-ledger/" className="button button-primary button-md">เล่นเกม</a>
+                </div>
+              </div>
+            </article>
           </div>
         </div>
       </section>

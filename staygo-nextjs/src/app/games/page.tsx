@@ -128,6 +128,23 @@ export default function GamesPage() {
               </div>
             </article>
 
+            <article className="game-card">
+              <span className="beta-badge">Beta</span>
+              <div className="game-thumbnail">
+                <div style={{ background: '#14161C', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '200px', fontSize: '80px', color: 'white' }}>
+                  📜
+                </div>
+              </div>
+              <div className="game-info">
+                <h3 className="game-title">Dungeon Ledger</h3>
+                <p className="game-meta">1 Player • เกม Idle ผจญภัย</p>
+                <p className="game-description">สุ่มฮีโร่ ลุยดันเจี้ยนแบบ auto-battle เก็บไอเทม ตีเสริมพลัง แล้วบันทึกทุกการต่อสู้ลงในสมุดบัญชี</p>
+                <div className="game-actions">
+                  <a href="/games/dungeon-ledger/" className="button button-primary button-md">เล่นเกม</a>
+                </div>
+              </div>
+            </article>
+
             {/* Placeholder for future games */}
             <article className="game-card" style={{ opacity: 0.6, pointerEvents: 'none' }}>
               <div className="game-thumbnail">

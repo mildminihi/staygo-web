@@ -1,0 +1,661 @@
+/* Dungeon Ledger — dark fantasy ledger theme */
+
+:root {
+    --dl-bg: #14161C;
+    --dl-panel: #1B1E27;
+    --dl-panel-2: #101218;
+    --dl-border: #2A2E3A;
+    --dl-text: #E8E6DF;
+    --dl-muted: #8B8F9C;
+    --dl-muted-2: #5A5F6B;
+    --dl-gold: #D4A94F;
+    --dl-blue: #5B8DEF;
+    --dl-purple: #A25BEF;
+    --dl-red: #D9534F;
+    --dl-green: #6FCF97;
+    --dl-common: #9098A8;
+}
+
+.dl-main {
+    background: var(--dl-bg);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 24px 16px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.dl-app {
+    width: 100%;
+    max-width: 448px;
+    color: var(--dl-text);
+}
+
+.dl-app .mono {
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.dl-app ::-webkit-scrollbar {
+    width: 6px;
+}
+
+.dl-app ::-webkit-scrollbar-thumb {
+    background: var(--dl-border);
+    border-radius: 3px;
+}
+
+/* Header */
+.dl-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.dl-header-title {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    font-family: 'Kanit', sans-serif;
+}
+
+.dl-header-sub {
+    font-size: 12px;
+    color: var(--dl-muted);
+    margin-top: 2px;
+}
+
+/* Topbar */
+.dl-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 8px;
+    padding: 8px 12px;
+    margin-bottom: 12px;
+    background: var(--dl-panel);
+    border: 1px solid var(--dl-border);
+    font-size: 14px;
+}
+
+.dl-topbar-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Tabs */
+.dl-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 12px;
+}
+
+.dl-tab {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 8px 4px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    background: var(--dl-panel);
+    color: var(--dl-muted);
+    border: 1px solid var(--dl-border);
+    cursor: pointer;
+}
+
+.dl-tab.active {
+    background: var(--dl-gold);
+    color: var(--dl-bg);
+    border-color: var(--dl-gold);
+}
+
+/* Generic panel */
+.dl-panel {
+    background: var(--dl-panel);
+    border: 1px solid var(--dl-border);
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 8px;
+}
+
+/* Bars */
+.dl-bar {
+    height: 8px;
+    border-radius: 999px;
+    overflow: hidden;
+    background: var(--dl-border);
+}
+
+.dl-bar-fill {
+    height: 100%;
+    transition: width 0.3s;
+}
+
+/* Monster row */
+.dl-row-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4px;
+}
+
+.dl-monster-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dl-monster-emoji {
+    font-size: 22px;
+}
+
+.dl-monster-name {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.dl-monster-meta {
+    font-size: 11px;
+    color: var(--dl-muted);
+}
+
+.dl-hp-value {
+    font-size: 11px;
+    color: var(--dl-muted);
+}
+
+/* Team row */
+.dl-team-icons {
+    display: flex;
+    gap: 4px;
+}
+
+.dl-team-icons span {
+    font-size: 18px;
+}
+
+.dl-empty-note {
+    font-size: 12px;
+    color: var(--dl-muted);
+}
+
+/* Log */
+.dl-log {
+    background: var(--dl-panel-2);
+    border: 1px solid var(--dl-border);
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 12px;
+    height: 180px;
+    overflow-y: auto;
+    font-size: 12px;
+}
+
+.dl-log-entry {
+    margin-bottom: 2px;
+    color: var(--dl-gold);
+}
+
+.dl-log-entry.log-win { color: var(--dl-green); }
+.dl-log-entry.log-defeat { color: var(--dl-red); }
+.dl-log-entry.log-dmg { color: #D98787; }
+.dl-log-entry.log-atk { color: var(--dl-muted); }
+.dl-log-entry.log-sys { color: var(--dl-gold); }
+.dl-log-entry.log-info { color: var(--dl-gold); }
+
+/* Actions / buttons */
+.dl-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.dl-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    background: var(--dl-border);
+    color: var(--dl-text);
+}
+
+.dl-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.dl-btn-primary {
+    background: var(--dl-gold);
+    color: var(--dl-bg);
+    flex: 1;
+}
+
+.dl-btn-primary:disabled {
+    background: var(--dl-border);
+    color: var(--dl-muted);
+}
+
+.dl-btn-blue {
+    background: var(--dl-blue);
+    color: #0E1116;
+}
+
+.dl-btn-blue:disabled {
+    background: var(--dl-border);
+    color: var(--dl-muted);
+}
+
+.dl-btn-ghost {
+    background: var(--dl-panel);
+    border: 1px solid var(--dl-border);
+    color: var(--dl-muted);
+    padding: 8px 12px;
+}
+
+/* Hero grid */
+.dl-hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.dl-hero-card {
+    background: var(--dl-panel);
+    border: 1px solid var(--dl-border);
+    border-radius: 8px;
+    padding: 8px;
+}
+
+.dl-hero-card.in-team {
+    border-color: var(--dl-gold);
+}
+
+.dl-hero-card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.dl-hero-emoji {
+    font-size: 20px;
+}
+
+.dl-hero-rarity {
+    font-size: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    text-transform: uppercase;
+}
+
+.dl-hero-name {
+    font-size: 12px;
+    font-weight: 700;
+    margin-top: 4px;
+}
+
+.dl-hero-stat {
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--dl-muted);
+}
+
+.dl-hero-set {
+    font-size: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 2px;
+}
+
+.dl-hero-slots {
+    display: flex;
+    gap: 4px;
+    margin-top: 4px;
+}
+
+.dl-slot {
+    font-size: 12px;
+    border-radius: 4px;
+    padding: 0 4px;
+    background: var(--dl-panel-2);
+    border: 1px solid var(--dl-border);
+    opacity: 0.35;
+}
+
+.dl-slot.filled {
+    opacity: 1;
+}
+
+.dl-hero-actions {
+    display: flex;
+    gap: 4px;
+    margin-top: 8px;
+}
+
+.dl-hero-assign-btn {
+    flex: 1;
+    font-size: 11px;
+    padding: 4px 0;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    background: var(--dl-border);
+    color: var(--dl-text);
+}
+
+.dl-hero-assign-btn.active {
+    background: var(--dl-gold);
+    color: var(--dl-bg);
+}
+
+.dl-hero-level-btn {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    font-size: 11px;
+    padding: 4px 6px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    font-family: 'JetBrains Mono', monospace;
+    background: var(--dl-border);
+    color: var(--dl-gold);
+}
+
+.dl-hero-level-btn:disabled {
+    color: var(--dl-muted-2);
+    cursor: not-allowed;
+}
+
+/* Items */
+.dl-note {
+    font-size: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--dl-muted-2);
+    margin-bottom: 8px;
+    padding: 0 4px;
+}
+
+.dl-item-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.dl-item-card {
+    background: var(--dl-panel);
+    border: 1px solid var(--dl-border);
+    border-radius: 8px;
+    padding: 8px;
+}
+
+.dl-item-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.dl-item-icon-name {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dl-item-emoji {
+    font-size: 20px;
+}
+
+.dl-item-name {
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.dl-item-enchant {
+    color: var(--dl-gold);
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.dl-item-rarity {
+    font-size: 10px;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.dl-item-gear-stats {
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--dl-muted);
+    text-align: right;
+}
+
+.dl-item-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 8px;
+}
+
+.dl-item-status {
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--dl-muted);
+}
+
+.dl-enchant-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    font-family: 'JetBrains Mono', monospace;
+    background: var(--dl-border);
+    color: var(--dl-gold);
+}
+
+.dl-enchant-btn:disabled {
+    color: var(--dl-muted-2);
+    cursor: not-allowed;
+}
+
+.dl-enchant-feedback {
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    margin-top: 4px;
+}
+
+.dl-enchant-feedback.ok { color: var(--dl-green); }
+.dl-enchant-feedback.fail { color: var(--dl-red); }
+
+.dl-item-hero-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 8px;
+}
+
+.dl-item-hero-hint {
+    font-size: 10px;
+    color: var(--dl-muted-2);
+}
+
+.dl-item-hero-btn {
+    font-size: 11px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    border: 1px solid var(--dl-border);
+    cursor: pointer;
+    background: var(--dl-panel-2);
+    color: var(--dl-text);
+}
+
+.dl-item-hero-btn.equipped {
+    background: var(--dl-gold);
+    color: var(--dl-bg);
+}
+
+/* Gacha */
+.dl-gacha-panel {
+    text-align: center;
+    padding: 16px;
+    margin-bottom: 12px;
+}
+
+.dl-gacha-title {
+    font-size: 14px;
+    font-weight: 800;
+    margin-bottom: 4px;
+}
+
+.dl-gacha-sub {
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--dl-muted);
+    margin-bottom: 12px;
+}
+
+.dl-gacha-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.dl-gacha-btn {
+    flex: 1;
+    padding: 8px 0;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    border: none;
+    cursor: pointer;
+}
+
+.dl-rarity-legend {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--dl-muted);
+    margin-bottom: 12px;
+    padding: 0 4px;
+}
+
+.dl-pulls-panel {
+    background: var(--dl-panel-2);
+    border: 1px solid var(--dl-border);
+    border-radius: 8px;
+    padding: 12px;
+}
+
+.dl-pulls-title {
+    font-size: 12px;
+    color: var(--dl-muted);
+    margin-bottom: 8px;
+}
+
+.dl-pulls-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.dl-pull-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 4px 8px;
+    border-radius: 6px;
+    border: 1px solid var(--dl-border);
+}
+
+.dl-pull-card span:first-child {
+    font-size: 18px;
+}
+
+.dl-pull-card span:last-child {
+    font-size: 10px;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+/* Game over overlay */
+.dl-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 11, 15, 0.82);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    padding: 16px;
+}
+
+.dl-gameover-modal {
+    background: var(--dl-panel);
+    border: 1px solid var(--dl-border);
+    border-radius: 12px;
+    padding: 24px;
+    max-width: 360px;
+    width: 100%;
+    text-align: center;
+}
+
+.dl-gameover-title {
+    font-family: 'Kanit', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--dl-red);
+    margin-bottom: 12px;
+}
+
+.dl-gameover-banish {
+    font-size: 13px;
+    color: var(--dl-muted);
+    margin-bottom: 16px;
+    line-height: 1.5;
+}
+
+.dl-gameover-banish strong {
+    color: var(--dl-text);
+}
+
+.dl-gameover-stats {
+    background: var(--dl-panel-2);
+    border: 1px solid var(--dl-border);
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 16px;
+    text-align: left;
+}
+
+.dl-gameover-stat-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    padding: 4px 0;
+    color: var(--dl-muted);
+}
+
+.dl-gameover-stat-row span:last-child {
+    color: var(--dl-gold);
+}
+
+@media (max-width: 480px) {
+    .dl-main {
+        padding: 16px 12px;
+    }
+}

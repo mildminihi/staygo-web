@@ -79,7 +79,14 @@
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
-  
+
+  <url>
+    <loc>https://staygoch.com/games/dungeon-ledger/</loc>
+    <lastmod>2026-07-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
   <!-- Tools -->
   <url>
     <loc>https://staygoch.com/tools/dice/</loc>

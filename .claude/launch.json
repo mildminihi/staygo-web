@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "staygo-nextjs-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "staygo-nextjs", "run", "dev"],
+      "port": 3000
+    }
+  ]
+}

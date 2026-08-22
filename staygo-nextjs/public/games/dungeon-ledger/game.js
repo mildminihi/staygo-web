@@ -48,6 +48,14 @@
 
     var ENCHANT_MAX = 15;
 
+    var SELL_VALUE = { common: 8, rare: 20, epic: 45, legendary: 90 };
+
+    function sellPrice(item) {
+        var tmpl = itemTemplateById(item.templateId);
+        var base = SELL_VALUE[tmpl.rarity] || 5;
+        return Math.round(base * (1 + item.enchant * 0.25));
+    }
+
     var TABS = [
         { id: "dungeon", label: "Dungeon", icon: "⚔️" },
         { id: "heroes", label: "Heroes", icon: "📦" },
@@ -191,6 +199,7 @@
             log: [{ t: "sys", text: "You stand at the dungeon entrance. Recruit a team to begin." }],
             inventory: [],
             enchantFeedback: {},
+            pendingSell: {},
             deepestRoom: 1,
             goldEarned: 0,
             totalRecruited: 0,
@@ -209,6 +218,7 @@
     }
 
     var feedbackTimers = {};
+    var pendingSellTimers = {};
     var tickTimer = null;
 
     function computeItemsByUid() {
@@ -329,6 +339,8 @@
         if (tickTimer) { clearTimeout(tickTimer); tickTimer = null; }
         Object.keys(feedbackTimers).forEach(function (uid) { clearTimeout(feedbackTimers[uid]); });
         feedbackTimers = {};
+        Object.keys(pendingSellTimers).forEach(function (uid) { clearTimeout(pendingSellTimers[uid]); });
+        pendingSellTimers = {};
         state = createInitialState();
         render();
     }
@@ -363,6 +375,48 @@
         var hero = state.owned[item.equippedTo];
         if (hero) hero.equipment[tmpl.slot] = null;
         item.equippedTo = null;
+        render();
+    }
+
+    function requestSell(uid) {
+        if (pendingSellTimers[uid]) clearTimeout(pendingSellTimers[uid]);
+        state.pendingSell[uid] = true;
+        pendingSellTimers[uid] = setTimeout(function () {
+            delete state.pendingSell[uid];
+            delete pendingSellTimers[uid];
+            render();
+        }, 4000);
+        render();
+    }
+
+    function cancelSell(uid) {
+        if (pendingSellTimers[uid]) { clearTimeout(pendingSellTimers[uid]); delete pendingSellTimers[uid]; }
+        delete state.pendingSell[uid];
+        render();
+    }
+
+    function confirmSell(uid) {
+        var itemsByUid = computeItemsByUid();
+        var item = itemsByUid[uid];
+        if (!item) return;
+        if (pendingSellTimers[uid]) { clearTimeout(pendingSellTimers[uid]); delete pendingSellTimers[uid]; }
+        delete state.pendingSell[uid];
+
+        var tmpl = itemTemplateById(item.templateId);
+        if (item.equippedTo) {
+            var hero = state.owned[item.equippedTo];
+            if (hero) hero.equipment[tmpl.slot] = null;
+        }
+        var price = sellPrice(item);
+        state.gold += price;
+
+        var idx = -1;
+        for (var i = 0; i < state.inventory.length; i++) {
+            if (state.inventory[i].uid === uid) { idx = i; break; }
+        }
+        if (idx !== -1) state.inventory.splice(idx, 1);
+
+        addLog("💰 Sold " + tmpl.name + " +" + item.enchant + " for " + price + " gold.", "sys");
         render();
     }
 
@@ -617,6 +671,8 @@
             var gearHp = tmpl.hp ? Math.round(tmpl.hp * (1 + item.enchant * 0.15)) : 0;
             var feedback = state.enchantFeedback[item.uid];
             var maxed = item.enchant >= ENCHANT_MAX;
+            var price = sellPrice(item);
+            var sellPending = !!state.pendingSell[item.uid];
 
             var heroBtns = ownedIds.length === 0
                 ? '<span class="dl-item-hero-hint">recruit heroes to equip</span>'
@@ -643,9 +699,15 @@
                     '</div>' +
                     '<div class="dl-item-row">' +
                         '<div class="dl-item-status">' + (equippedHero ? ('equipped: ' + equippedHero.name) : 'unequipped') + '</div>' +
-                        '<button class="dl-enchant-btn" data-action="enchant" data-uid="' + item.uid + '" ' + ((state.gold < eCost || maxed) ? 'disabled' : '') + '>' +
-                            '🔨 ' + (maxed ? 'maxed' : (eCost + 'g · ' + Math.round(chance * 100) + '%')) +
-                        '</button>' +
+                        '<div class="dl-item-row-actions">' +
+                            '<button class="dl-enchant-btn" data-action="enchant" data-uid="' + item.uid + '" ' + ((state.gold < eCost || maxed) ? 'disabled' : '') + '>' +
+                                '🔨 ' + (maxed ? 'maxed' : (eCost + 'g · ' + Math.round(chance * 100) + '%')) +
+                            '</button>' +
+                            (sellPending
+                                ? '<button class="dl-sell-btn confirm" data-action="sell-confirm" data-uid="' + item.uid + '">✔ +' + price + 'g?</button>' +
+                                  '<button class="dl-sell-btn cancel" data-action="sell-cancel" data-uid="' + item.uid + '">✕</button>'
+                                : '<button class="dl-sell-btn" data-action="sell-request" data-uid="' + item.uid + '">💰 Sell ' + price + 'g</button>') +
+                        '</div>' +
                     '</div>' +
                     (feedback ? '<div class="dl-enchant-feedback ' + (feedback.ok ? 'ok' : 'fail') + '">' + esc(feedback.msg) + '</div>' : '') +
                     '<div class="dl-item-hero-list">' + heroBtns + '</div>' +
@@ -654,7 +716,7 @@
         }).join('');
 
         return (
-            '<div class="dl-note">Equip 2+ items of the same rarity on one hero for a set bonus. Enchanting is safe below +4 — risk of failure (and setback past +7) increases above that.</div>' +
+            '<div class="dl-note">Equip 2+ items of the same rarity on one hero for a set bonus. Enchanting is safe below +4 — risk of failure (and setback past +7) increases above that. Selling an item unequips and removes it for good — click Sell twice to confirm.</div>' +
             '<div class="dl-item-list">' + itemsHtml + '</div>'
         );
     }
@@ -807,6 +869,12 @@
             else equipItem(uid, heroId);
         } else if (action === 'enchant') {
             doEnchant(btn.getAttribute('data-uid'));
+        } else if (action === 'sell-request') {
+            requestSell(btn.getAttribute('data-uid'));
+        } else if (action === 'sell-confirm') {
+            confirmSell(btn.getAttribute('data-uid'));
+        } else if (action === 'sell-cancel') {
+            cancelSell(btn.getAttribute('data-uid'));
         } else if (action === 'pull') {
             doPull(parseInt(btn.getAttribute('data-count'), 10));
         }

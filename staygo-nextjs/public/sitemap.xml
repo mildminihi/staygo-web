@@ -87,6 +87,13 @@
     <priority>0.7</priority>
   </url>
 
+  <url>
+    <loc>https://staygoch.com/games/ouroboros/</loc>
+    <lastmod>2026-08-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
   <!-- Tools -->
   <url>
     <loc>https://staygoch.com/tools/dice/</loc>

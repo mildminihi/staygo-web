@@ -470,6 +470,34 @@
     cursor: not-allowed;
 }
 
+.dl-item-row-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.dl-sell-btn {
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    font-family: 'JetBrains Mono', monospace;
+    background: var(--dl-border);
+    color: var(--dl-green);
+}
+
+.dl-sell-btn.confirm {
+    background: var(--dl-green);
+    color: var(--dl-bg);
+}
+
+.dl-sell-btn.cancel {
+    background: var(--dl-border);
+    color: var(--dl-red);
+    padding: 4px 7px;
+}
+
 .dl-enchant-feedback {
     font-size: 11px;
     font-family: 'JetBrains Mono', monospace;

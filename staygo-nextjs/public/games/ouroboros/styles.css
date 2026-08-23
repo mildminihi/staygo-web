@@ -424,9 +424,27 @@ h1.display {
     z-index: 5;
 }
 
-.token.eaten {
+.token.eaten,
+.token-tail.eaten {
     opacity: 0;
     transform: scale(.2) rotate(25deg);
+}
+
+/* the snake's tail — a dimmer, smaller marker left behind at the tile a
+   player stood on before their most recent move, until the next round
+   catches it up to the head. Makes a catch legible: the tail is still
+   visibly sitting where the hunter's head just arrived. */
+.token-tail {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--token-color, var(--gold));
+    opacity: .45;
+    border: 1.5px solid rgba(11, 15, 14, .5);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .4);
+    transition: left .22s ease, top .22s ease, opacity .3s ease, transform .3s ease;
+    z-index: 4;
 }
 
 .die-btn {

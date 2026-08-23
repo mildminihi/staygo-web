@@ -60,6 +60,24 @@ const SPECIAL_TILES = {
 /* ---------- 4. BOARD ---------- */
 function boardSizeFor(playerCount){ return playerCount <= 3 ? 32 : 24; }
 
+/* ---------- 4a. SHRINKING RING ----------
+   With a big board and a max roll of 6, two survivors can circle each other
+   forever without ever landing on the same tile. Every few rounds the ring
+   contracts by one "layer" (4 tiles) down to a floor, so a stalled game is
+   forced toward collisions instead of running on indefinitely. */
+const SHRINK_EVERY_ROUNDS = 6;
+const SHRINK_STEP = 4;
+const MIN_BOARD_SIZE = 12;
+
+function isShrinkRound(round){
+  return round > 1 && round % SHRINK_EVERY_ROUNDS === 0;
+}
+
+function shrinkNoticeHTML(round){
+  if(!isShrinkRound(round)) return '';
+  return '<p class="sub" style="color:var(--gold-bright);margin-top:8px;">🌀 วงแหวนหดตัวลงในรอบนี้ — ระวังโดนกินง่ายขึ้น!</p>';
+}
+
 // returns ordered [{row,col}] tracing the perimeter of an NxN grid, ring length = 4N-4
 function ringPositions(n){
   const pts = [];
@@ -126,6 +144,16 @@ function resolveTurnPure(allPlayers, boardTiles, boardSize, direction, picks){
     p.dice.forEach(d=>{ if(d.cooldown>0) d.cooldown--; });
   });
 
+  // a shield only protects for one round after the round it's picked up on
+  // — age it down the same way dice cooldowns are, and expire it outright
+  // once its count reaches 0 if it was never actually used to block a bite.
+  aliveBefore.forEach(p=>{
+    if(p.shieldRounds > 0){
+      p.shieldRounds--;
+      if(p.shieldRounds === 0) p.shield = false;
+    }
+  });
+
   // paths[id] records every tile a player's token visits this round, in
   // order (starting with where they stood before resolving) — used to
   // animate the walk step-by-step instead of snapping straight to the end.
@@ -154,18 +182,30 @@ function resolveTurnPure(allPlayers, boardTiles, boardSize, direction, picks){
 
   const log = [];
   const eaten = new Set();
+  // tracks anyone whose shield already absorbed a hit this round, so the
+  // convergence pass below (which runs on final positions) can't then
+  // re-catch and eat the very same near-miss a second time — a shield is
+  // one save per round, not "survive pass-1 just to die to pass-2".
+  const shieldedThisRound = new Set();
   aliveBefore.forEach(mover=>{
     aliveBefore.forEach(target=>{
       if(mover.id===target.id) return;
       if(eaten.has(target.id)) return;
       if(destinations[mover.id] === startPos[target.id]){
-        if(target.shield){ target.shield=false; log.push(`${target.name} ใช้โล่ปกป้องตัวเองจาก ${mover.name}`); }
+        if(target.shield){ target.shield=false; target.shieldRounds=0; shieldedThisRound.add(target.id); log.push(`${target.name} ใช้โล่ปกป้องตัวเองจาก ${mover.name}`); }
         else { eaten.add(target.id); log.push(`${mover.name} กิน ${target.name} ที่ช่อง ${startPos[target.id]}`); }
       }
     });
   });
 
   eaten.forEach(id=>{ const p = allPlayers.find(x=>x.id===id); if(p) p.alive=false; });
+
+  // a target eaten this way never actually got to move — the hunter's head
+  // arrived exactly on the tile they started the round on, catching them
+  // mid-transition. Freeze their walk path at that starting tile so the
+  // animation doesn't show them strolling off to their own destination
+  // first, which is exactly what made a catch look nonsensical before.
+  eaten.forEach(id=>{ if(paths[id]) paths[id] = [paths[id][0]]; });
 
   const survivors = allPlayers.filter(p=>p.alive);
 
@@ -187,7 +227,7 @@ function resolveTurnPure(allPlayers, boardTiles, boardSize, direction, picks){
     if(!tileKey || !landedFresh) return;
     switch(tileKey){
       case 'skip': p.skipNext=true; log.push(`${p.name} ตกช่องหยุดพัก ⏭️`); break;
-      case 'shield': p.shield=true; log.push(`${p.name} ได้รับโล่กันกิน 🛡️`); break;
+      case 'shield': p.shield=true; p.shieldRounds=2; log.push(`${p.name} ได้รับโล่กันกิน 🛡️ (ใช้ได้แค่รอบหน้า)`); break;
       case 'back': { const newPos = stepPlayer(p, -1, 3); p.pos = newPos; log.push(`${p.name} ถอยหลัง 3 ช่อง`); break; }
       case 'swap': {
         const ahead = survivors
@@ -213,6 +253,45 @@ function resolveTurnPure(allPlayers, boardTiles, boardSize, direction, picks){
         break;
       }
     }
+  });
+
+  // two or more survivors can also independently converge on the exact same
+  // tile this round — one that wasn't anyone's original spot, so the pass
+  // above never catches it. That's still a collision: whoever covered more
+  // ground to get there started farther back and caught up to the other(s).
+  // An exact tie in distance travelled is a mutual near-miss, not a kill —
+  // and a shield still protects its holder here just like it does above.
+  const stillAlive = allPlayers.filter(p=>p.alive);
+  const byFinalTile = {};
+  stillAlive.forEach(p=>{ (byFinalTile[p.pos] = byFinalTile[p.pos] || []).push(p); });
+  Object.values(byFinalTile).forEach(group=>{
+    if(group.length < 2) return;
+    const traveled = p => (((p.pos - startPos[p.id]) * newDirection) % n + n) % n;
+    const dists = group.map(p => ({ p, d: traveled(p) }));
+    const maxD = Math.max(...dists.map(x=>x.d));
+    const chasers = dists.filter(x=>x.d===maxD);
+    if(chasers.length !== 1){
+      log.push(`${group.map(x=>x.name).join(' กับ ')} เดินมาชนกันพอดี แต่ไม่มีใครไล่ทันใครกว่ากัน`);
+      return;
+    }
+    const winner = chasers[0].p;
+    group.forEach(p=>{
+      if(p.id === winner.id) return;
+      if(shieldedThisRound.has(p.id)) return; // already spent their one save this round
+      if(p.shield){ p.shield=false; p.shieldRounds=0; shieldedThisRound.add(p.id); log.push(`${p.name} ใช้โล่ปกป้องตัวเองจาก ${winner.name}`); return; }
+      p.alive = false;
+      log.push(`${winner.name} ไล่ตามทันแล้วกิน ${p.name} ที่ช่อง ${p.pos}`);
+    });
+  });
+
+  // the token's "body" is every tile it visited this round, tail-end to
+  // head-end — it stays laid out that way until the next round's catch-up
+  // step coils it back into a single point. This is what makes a catch
+  // legible: an eaten player's body is still visibly sitting across the
+  // tiles they walked, right up to the tile the hunter's head arrived at,
+  // even though the head itself had already visibly moved off of it.
+  allPlayers.filter(p=>p.alive).forEach(p=>{
+    p.trail = paths[p.id] && paths[p.id].length ? paths[p.id] : [p.pos];
   });
 
   return { log, direction: newDirection, paths };
@@ -272,12 +351,12 @@ Screens.home = () => {
   el.innerHTML = `
     <div class="eyebrow">เกมกระดาน · 2–6 คน</div>
     <h1 class="display">Ouroboros</h1>
-    <p class="sub">วนรอบ ไล่ล่า กินกัน — รอดคนสุดท้ายคือผู้ชนะ</p>
+    <p class="sub">งูกินหาง เป็นทั้งผู้ล่าและผู้ถูกล่า — รอดคนสุดท้ายคือผู้ชนะ</p>
   `;
   el.appendChild(renderHowTo());
   const btn = document.createElement('button');
   btn.className='primary'; btn.style.marginTop='20px';
-  btn.textContent='เริ่มตั้งเกม';
+  btn.textContent='เริ่มเกม';
   btn.onclick = () => { state.screen='mode'; render(); };
   el.appendChild(btn);
   return el;
@@ -329,7 +408,7 @@ Screens.setup = () => {
 
 function mkPlayer(i){
   return { id:'p'+i, name:'', color:PLAYER_COLORS[i%PLAYER_COLORS.length],
-           pos:0, alive:true, shield:false, skipNext:false,
+           pos:0, trail:[0], alive:true, shield:false, shieldRounds:0, skipNext:false,
            dice: DICE_ORDER.map(k=>({key:k, cooldown:0})) };
 }
 
@@ -376,7 +455,7 @@ function startLocalGame(){
   state.boardSize = boardSizeFor(state.players.length);
   state.boardTiles = buildBoard(state.boardSize, Date.now() & 0xffffffff);
   const step = state.boardSize / state.players.length;
-  state.players.forEach((p,i)=> p.pos = Math.floor(i*step));
+  state.players.forEach((p,i)=>{ p.pos = Math.floor(i*step); p.trail = [p.pos]; });
   state.direction = 1; state.round = 0; state.mode='local'; state.log=[];
   beginPickingPhase();
 }
@@ -388,6 +467,25 @@ function beginPickingPhase(){
   state.picks = {};
   // dice cooldowns are aged down inside resolveTurnPure (once per resolved
   // round) — not here, so a die stays locked for the whole round after use.
+
+  // the snake's body coils back into a single point right as a new round
+  // begins — see the note in resolveTurnPure for why it lags a round behind
+  // instead.
+  state.players.forEach(p=>{ if(p.alive) p.trail = [p.pos]; });
+
+  if(isShrinkRound(state.round) && state.boardSize > MIN_BOARD_SIZE){
+    const newSize = Math.max(MIN_BOARD_SIZE, state.boardSize - SHRINK_STEP);
+    state.boardTiles = buildBoard(newSize, Date.now() & 0xffffffff);
+    state.players.forEach(p=>{
+      if(p.alive){
+        p.pos = Math.round(p.pos * newSize / state.boardSize) % newSize;
+        p.trail = [p.pos];
+      }
+    });
+    state.boardSize = newSize;
+    state.log.push(`🌀 วงแหวนหดตัวลง! เหลือ ${newSize} ช่อง`);
+  }
+
   state.turnOrder = alivePlayers().filter(p=>!p.skipNext).map(p=>p.id);
   state.pickIndex = 0;
   state.phase = state.turnOrder.length ? 'passing' : 'reveal';
@@ -423,7 +521,7 @@ function renderPassScreen(){
   }
 
   const el = document.createElement('div'); el.className='card';
-  el.innerHTML = `<div class="eyebrow">รอบที่ ${state.round} · ${p.name}</div><h2 class="display">เลือกลูกเต๋า</h2>`;
+  el.innerHTML = `<div class="eyebrow">รอบที่ ${state.round} · ${p.name}</div><h2 class="display">เลือกลูกเต๋า</h2>${shrinkNoticeHTML(state.round)}`;
   const grid = document.createElement('div'); grid.className='row'; grid.style.marginTop='16px';
   p.dice.forEach(d=>{
     const def = DICE_TYPES[d.key];
@@ -540,6 +638,27 @@ function renderBoardGeneric(boardTiles, boardSize, playersArr){
   const wrap = document.createElement('div'); wrap.className='grid-wrap';
   const { board, pts, cell } = buildBoardShell(boardTiles, boardSize);
 
+  // a lingering "body" across every tile walked this round — see
+  // resolveTurnPure for why it's a round behind — makes a catch legible:
+  // an eaten player's body is still visibly laid out across the tiles they
+  // walked, right up to the tile the hunter's head just arrived at, even
+  // once their own head has moved off of it.
+  const bodyByTile = {};
+  playersArr.filter(p=>p.alive && Array.isArray(p.trail) && p.trail.length > 1)
+    .forEach(p=>{
+      p.trail.slice(0, -1).forEach(idx=>{ (bodyByTile[idx] = bodyByTile[idx]||[]).push(p); });
+    });
+  Object.entries(bodyByTile).forEach(([idx,ps])=>{
+    ps.forEach((p,j)=>{
+      const pt = pts[idx];
+      const seg = document.createElement('div');
+      seg.className='token-tail'; seg.style.setProperty('--token-color', p.color);
+      seg.style.left = (pt.col*cell + cell/2 - 8 + j*6)+'px';
+      seg.style.top = (pt.row*cell + cell/2 - 8 - j*6)+'px';
+      board.appendChild(seg);
+    });
+  });
+
   // group players by tile to offset overlapping tokens
   const byTile = {};
   playersArr.filter(p=>p.alive).forEach(p=>{ (byTile[p.pos] = byTile[p.pos]||[]).push(p); });
@@ -592,10 +711,28 @@ function animateTokenWalk({ boardTiles, boardSize, paths, players, headerHTML, k
     tokenEls[p.id] = tok;
   });
 
+  // the body grows by one segment every step, left behind at the tile the
+  // head just vacated — a segment is only ever added once, the moment its
+  // player actually steps off of it, and it never moves again for the rest
+  // of the walk (only the head keeps moving).
+  const bodyEls = {};
+  players.forEach(p=>{ bodyEls[p.id] = []; });
+  function addBodySegment(p, tileIdx){
+    const pt = pts[tileIdx];
+    const seg = document.createElement('div');
+    seg.className = 'token-tail';
+    seg.style.setProperty('--token-color', p.color);
+    seg.style.left = (pt.col*cell + cell/2 - 8) + 'px';
+    seg.style.top = (pt.row*cell + cell/2 - 8) + 'px';
+    board.appendChild(seg);
+    bodyEls[p.id].push(seg);
+  }
+
   function positionTokens(step){
     const byTile = {};
     players.forEach(p=>{
       const path = paths[p.id] || [0];
+      if(step >= 1 && step < path.length) addBodySegment(p, path[step-1]);
       const idx = path[Math.min(step, path.length - 1)];
       (byTile[idx] = byTile[idx] || []).push(p.id);
     });
@@ -621,21 +758,23 @@ function animateTokenWalk({ boardTiles, boardSize, paths, players, headerHTML, k
     if(step < maxLen){
       setTimeout(tick, STEP_MS);
     } else {
-      setTimeout(()=> playEatenReveal(board, killLog, eatenIds, tokenEls, onDone), STEP_MS);
+      setTimeout(()=> playEatenReveal(board, killLog, eatenIds, tokenEls, bodyEls, onDone), STEP_MS);
     }
   }
   setTimeout(tick, STEP_MS);
 }
 
 // after everyone's finished walking: shrink/fade out whoever got eaten right
-// where they stand, and flash a callout in the dead center of the board
-// naming who ate whom. Skipped entirely if nobody was eaten this round.
-function playEatenReveal(board, killLog, eatenIds, tokenEls, onDone){
+// where they stand (head and tail together), and flash a callout in the
+// dead center of the board naming who ate whom. Skipped entirely if nobody
+// was eaten this round.
+function playEatenReveal(board, killLog, eatenIds, tokenEls, bodyEls, onDone){
   if(!killLog.length && !eatenIds.length){ onDone(); return; }
 
   eatenIds.forEach(id=>{
     const tok = tokenEls[id];
     if(tok) tok.classList.add('eaten');
+    (bodyEls[id] || []).forEach(seg => seg.classList.add('eaten'));
   });
 
   if(killLog.length){
@@ -770,7 +909,7 @@ async function initFirebaseAndJoinRoom(code, name){
   const count = snap.exists() ? Object.keys(snap.val()).length : 0;
   state.online = { fb:db, code, myId, isHost:false, role:'player' };
   await db.ref(`rooms/${code}/players/${myId}`).set({
-    name, color:PLAYER_COLORS[count%PLAYER_COLORS.length], pos:0, alive:true, shield:false, skipNext:false,
+    name, color:PLAYER_COLORS[count%PLAYER_COLORS.length], pos:0, trail:[0], alive:true, shield:false, shieldRounds:0, skipNext:false,
     dice: Object.fromEntries(DICE_ORDER.map(k=>[k,{cooldown:0}]))
   });
   listenRoom(db, code);
@@ -937,7 +1076,11 @@ async function startOnlineGame(){
   const boardTiles = buildBoard(boardSize, Date.now() & 0xffffffff);
   const step = boardSize/ids.length;
   const updates = { phase:'picking', round:1, boardSize, boardTiles, direction:1, log:[] };
-  ids.forEach((id,i)=>{ updates['players/'+id+'/pos'] = Math.floor(i*step); });
+  ids.forEach((id,i)=>{
+    const pos = Math.floor(i*step);
+    updates['players/'+id+'/pos'] = pos;
+    updates['players/'+id+'/trail'] = [pos]; // coiled at spawn, no body yet
+  });
   await db.ref('rooms/'+code).update(updates);
   await db.ref('rooms/'+code+'/picks').set(null);
 }
@@ -973,7 +1116,8 @@ function renderBoardPicking(data){
   const eligibleIds = Object.keys(data.players||{}).filter(id => { const p=data.players[id]; return p.alive && !p.skipNext; });
   el.innerHTML = `<div class="eyebrow">รอบที่ ${data.round} · ห้อง ${state.online.code}</div>
     <div class="board-head-row"><h2 class="display">รอผู้เล่นเลือกลูกเต๋า</h2>${renderDirectionPill(data.direction)}</div>
-    <p class="sub">ผู้เล่นแต่ละคนกำลังเลือกลูกเต๋าบนมือถือของตัวเอง — จอนี้จะไม่โชว์ว่าใครเลือกอะไรจนกว่าจะเปิดพร้อมกัน</p>`;
+    <p class="sub">ผู้เล่นแต่ละคนกำลังเลือกลูกเต๋าบนมือถือของตัวเอง — จอนี้จะไม่โชว์ว่าใครเลือกอะไรจนกว่าจะเปิดพร้อมกัน</p>
+    ${shrinkNoticeHTML(data.round)}`;
   el.appendChild(renderOnlineWaitingList(data, eligibleIds));
   el.appendChild(renderLeaveRoomButton());
   return el;
@@ -1009,7 +1153,7 @@ function renderOnlinePicking(data){
   const picks = data.picks || {};
   const iHavePicked = !!picks[myId];
 
-  el.innerHTML = `<div class="eyebrow">รอบที่ ${data.round} · ห้อง ${state.online.code}</div><h2 class="display">เลือกลูกเต๋า</h2>`;
+  el.innerHTML = `<div class="eyebrow">รอบที่ ${data.round} · ห้อง ${state.online.code}</div><h2 class="display">เลือกลูกเต๋า</h2>${shrinkNoticeHTML(data.round)}`;
 
   if(!me || !me.alive){
     const p = document.createElement('p'); p.className='sub'; p.textContent = 'คุณถูกกินไปแล้ว รอดูผลจนจบเกม';
@@ -1079,7 +1223,7 @@ async function resolveOnlineRound(){
     const pd = data.players[id];
     return {
       id, name: pd.name, color: pd.color, pos: pd.pos, alive: pd.alive,
-      shield: !!pd.shield, skipNext: !!pd.skipNext,
+      shield: !!pd.shield, shieldRounds: pd.shieldRounds || 0, skipNext: !!pd.skipNext,
       dice: DICE_ORDER.map(k => ({ key:k, cooldown: (pd.dice && pd.dice[k] && pd.dice[k].cooldown) || 0 })),
     };
   });
@@ -1089,8 +1233,10 @@ async function resolveOnlineRound(){
   const updates = { direction: result.direction, phase: 'resolved' };
   playersArr.forEach(p=>{
     updates['players/'+p.id+'/pos'] = p.pos;
+    updates['players/'+p.id+'/trail'] = p.trail;
     updates['players/'+p.id+'/alive'] = p.alive;
     updates['players/'+p.id+'/shield'] = p.shield;
+    updates['players/'+p.id+'/shieldRounds'] = p.shieldRounds;
     updates['players/'+p.id+'/skipNext'] = p.skipNext;
     const diceObj = {};
     p.dice.forEach(d=>{ diceObj[d.key] = { cooldown: d.cooldown }; });
@@ -1153,10 +1299,35 @@ async function beginOnlinePickingPhase(){
   const db = state.online.fb, code = state.online.code;
   const data = state.onlineRoomData;
   const ids = Object.keys(data.players);
-  const updates = { round: (data.round||0)+1, phase: 'picking' };
+  const nextRound = (data.round||0)+1;
+  const updates = { round: nextRound, phase: 'picking' };
   // dice cooldowns are aged down inside resolveOnlineRound/resolveTurnPure
   // (once per resolved round) — not here, so a die stays locked for the
   // whole round after use.
+
+  // the snake's body coils back into a single point right as a new round
+  // begins — see the note in resolveTurnPure for why it lags a round behind
+  // instead.
+  ids.forEach(id=>{
+    const pd = data.players[id];
+    if(pd.alive) updates['players/'+id+'/trail'] = [pd.pos];
+  });
+
+  if(isShrinkRound(nextRound) && data.boardSize > MIN_BOARD_SIZE){
+    const oldSize = data.boardSize;
+    const newSize = Math.max(MIN_BOARD_SIZE, oldSize - SHRINK_STEP);
+    updates.boardSize = newSize;
+    updates.boardTiles = buildBoard(newSize, Date.now() & 0xffffffff);
+    ids.forEach(id=>{
+      const pd = data.players[id];
+      if(!pd.alive) return;
+      const newPos = Math.round(pd.pos * newSize / oldSize) % newSize;
+      updates['players/'+id+'/pos'] = newPos;
+      updates['players/'+id+'/trail'] = [newPos]; // stays coiled through the shrink
+    });
+    updates['log'] = (data.log||[]).concat([`🌀 วงแหวนหดตัวลง! เหลือ ${newSize} ช่อง`]).slice(-80);
+  }
+
   let anyEligible = false;
   ids.forEach(id=>{
     const pd = data.players[id];
@@ -1175,8 +1346,10 @@ async function restartOnlineRoom(){
   const updates = { phase:'lobby', round:0, direction:1, boardTiles:[], boardSize:24, log:[] };
   ids.forEach(id=>{
     updates['players/'+id+'/pos']=0;
+    updates['players/'+id+'/trail']=[0];
     updates['players/'+id+'/alive']=true;
     updates['players/'+id+'/shield']=false;
+    updates['players/'+id+'/shieldRounds']=0;
     updates['players/'+id+'/skipNext']=false;
     DICE_ORDER.forEach(k=>{ updates['players/'+id+'/dice/'+k+'/cooldown']=0; });
   });

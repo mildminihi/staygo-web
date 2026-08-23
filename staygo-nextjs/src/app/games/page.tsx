@@ -146,7 +146,6 @@ export default function GamesPage() {
             </article>
 
             <article className="game-card">
-              <span className="beta-badge">Beta</span>
               <div className="game-thumbnail">
                 <div style={{ background: '#0b0f0e', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '200px', fontSize: '80px', color: '#c8993f' }}>
                   🐍

@@ -182,7 +182,6 @@ export default function Home() {
             </article>
 
             <article className="game-card">
-              <span className="beta-badge">Beta</span>
               <div className="game-thumbnail">
                 <div style={{ background: '#0b0f0e', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '200px', fontSize: '80px', color: '#c8993f' }}>
                   🐍
@@ -190,7 +189,7 @@ export default function Home() {
               </div>
               <div className="game-info">
                 <h3 className="game-title">Ouroboros</h3>
-                <p className="game-meta">วนรอบ ไล่ล่า กินกัน รอดคนสุดท้ายชนะ</p>
+                <p className="game-meta">งูกินหาง เป็นทั้งผู้ล่าและผู้ถูกล่า รอดคนสุดท้ายชนะ</p>
                 <div className="game-actions">
                   <a href="/games/ouroboros/" className="button button-primary button-md">เล่นเกม</a>
                 </div>

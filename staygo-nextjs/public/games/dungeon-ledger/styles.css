@@ -1,23 +1,26 @@
 /* Dungeon Ledger — dark fantasy ledger theme */
 
 :root {
-    --dl-bg: #14161C;
-    --dl-panel: #1B1E27;
-    --dl-panel-2: #101218;
-    --dl-border: #2A2E3A;
-    --dl-text: #E8E6DF;
-    --dl-muted: #8B8F9C;
-    --dl-muted-2: #5A5F6B;
-    --dl-gold: #D4A94F;
-    --dl-blue: #5B8DEF;
-    --dl-purple: #A25BEF;
-    --dl-red: #D9534F;
-    --dl-green: #6FCF97;
-    --dl-common: #9098A8;
+    --dl-bg: #F7F8FA;
+    --dl-panel: #FFFFFF;
+    --dl-panel-2: #F3F4F6;
+    --dl-border: #E5E7EB;
+    --dl-text: #111827;
+    --dl-muted: #6B7280;
+    --dl-muted-2: #9CA3AF;
+    --dl-gold: #CA8A04;
+    --dl-blue: #3B82F6;
+    --dl-purple: #9333EA;
+    --dl-red: #DC2626;
+    --dl-green: #16A34A;
+    --dl-common: #6B7280;
 }
 
 .dl-main {
-    background: var(--dl-bg);
+    background:
+        radial-gradient(circle at 20% -10%, rgba(59, 130, 246, .07), transparent 50%),
+        radial-gradient(circle at 80% -10%, rgba(250, 204, 21, .08), transparent 50%),
+        var(--dl-bg);
     min-height: 100vh;
     display: flex;
     justify-content: center;
@@ -75,6 +78,7 @@
     margin-bottom: 12px;
     background: var(--dl-panel);
     border: 1px solid var(--dl-border);
+    box-shadow: 0 1px 2px rgba(17, 24, 39, .05);
     font-size: 14px;
 }
 
@@ -110,7 +114,7 @@
 
 .dl-tab.active {
     background: var(--dl-gold);
-    color: var(--dl-bg);
+    color: #111827;
     border-color: var(--dl-gold);
 }
 
@@ -121,6 +125,7 @@
     border-radius: 8px;
     padding: 12px;
     margin-bottom: 8px;
+    box-shadow: 0 1px 2px rgba(17, 24, 39, .05);
 }
 
 /* Bars */
@@ -203,7 +208,7 @@
 
 .dl-log-entry.log-win { color: var(--dl-green); }
 .dl-log-entry.log-defeat { color: var(--dl-red); }
-.dl-log-entry.log-dmg { color: #D98787; }
+.dl-log-entry.log-dmg { color: #DC2626; }
 .dl-log-entry.log-atk { color: var(--dl-muted); }
 .dl-log-entry.log-sys { color: var(--dl-gold); }
 .dl-log-entry.log-info { color: var(--dl-gold); }
@@ -237,7 +242,7 @@
 
 .dl-btn-primary {
     background: var(--dl-gold);
-    color: var(--dl-bg);
+    color: #111827;
     flex: 1;
 }
 
@@ -356,7 +361,7 @@
 
 .dl-hero-assign-btn.active {
     background: var(--dl-gold);
-    color: var(--dl-bg);
+    color: #111827;
 }
 
 .dl-hero-level-btn {
@@ -489,7 +494,7 @@
 
 .dl-sell-btn.confirm {
     background: var(--dl-green);
-    color: var(--dl-bg);
+    color: #111827;
 }
 
 .dl-sell-btn.cancel {
@@ -534,7 +539,7 @@
 
 .dl-item-hero-btn.equipped {
     background: var(--dl-gold);
-    color: var(--dl-bg);
+    color: #111827;
 }
 
 /* Gacha */
@@ -624,7 +629,7 @@
 .dl-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(10, 11, 15, 0.82);
+    background: rgba(17, 24, 39, 0.55);
     display: flex;
     align-items: center;
     justify-content: center;

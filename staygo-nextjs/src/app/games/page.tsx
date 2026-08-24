@@ -131,7 +131,7 @@ export default function GamesPage() {
             <article className="game-card">
               <span className="beta-badge">Beta</span>
               <div className="game-thumbnail">
-                <div style={{ background: '#14161C', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '200px', fontSize: '80px', color: 'white' }}>
+                <div style={{ background: '#CA8A04', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '200px', fontSize: '80px', color: 'white' }}>
                   📜
                 </div>
               </div>
@@ -147,7 +147,7 @@ export default function GamesPage() {
 
             <article className="game-card">
               <div className="game-thumbnail">
-                <div style={{ background: '#0b0f0e', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '200px', fontSize: '80px', color: '#c8993f' }}>
+                <div style={{ background: '#3B82F6', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '200px', fontSize: '80px', color: 'white' }}>
                   🐍
                 </div>
               </div>
@@ -157,6 +157,22 @@ export default function GamesPage() {
                 <p className="game-description">วนรอบบนกระดาน เลือกลูกเต๋าแบบปิดหน้าจอ ไล่กินคู่แข่ง รอดคนสุดท้ายคือผู้ชนะ เล่นแบบส่งต่ออุปกรณ์เดียวหรือห้องออนไลน์</p>
                 <div className="game-actions">
                   <a href="/games/ouroboros/" className="button button-primary button-md">เล่นเกม</a>
+                </div>
+              </div>
+            </article>
+
+            <article className="game-card">
+              <div className="game-thumbnail">
+                <div style={{ background: '#FACC15', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '200px', fontSize: '80px', color: '#111827' }}>
+                  🔍
+                </div>
+              </div>
+              <div className="game-info">
+                <h3 className="game-title">Zoom Quiz</h3>
+                <p className="game-meta">Multiplayer • เกมทายภาพ</p>
+                <p className="game-description">สร้างเกมทายภาพของตัวเอง ใส่รูปแล้วเพิ่มตัวเลือกช่วยทายได้ ภาพจะซูมเข้าสุดแล้วค่อยๆ ซูมออก ให้ทุกคนช่วยกันทาย</p>
+                <div className="game-actions">
+                  <a href="/games/zoom-quiz/" className="button button-primary button-md">เล่นเกม</a>
                 </div>
               </div>
             </article>

@@ -15,10 +15,10 @@
     ];
 
     var RARITY_COLOR = {
-        common: "#9098A8",
-        rare: "#5B8DEF",
-        epic: "#A25BEF",
-        legendary: "#D4A94F",
+        common: "#6B7280",
+        rare: "#3B82F6",
+        epic: "#9333EA",
+        legendary: "#CA8A04",
     };
     var RARITY_WEIGHT = { common: 60, rare: 30, epic: 8, legendary: 2 };
 
@@ -746,7 +746,7 @@
                 '<div class="dl-gacha-title">RECRUITMENT RITE</div>' +
                 '<div class="dl-gacha-sub">pity ' + state.pity + '/10 — guaranteed Epic+ at 10</div>' +
                 '<div class="dl-gacha-actions">' +
-                    '<button class="dl-gacha-btn" data-action="pull" data-count="1" ' + (pull1Disabled ? 'disabled' : '') + ' style="background:' + (pull1Disabled ? 'var(--dl-border)' : 'var(--dl-gold)') + ';color:' + (pull1Disabled ? 'var(--dl-muted)' : 'var(--dl-bg)') + ';">' +
+                    '<button class="dl-gacha-btn" data-action="pull" data-count="1" ' + (pull1Disabled ? 'disabled' : '') + ' style="background:' + (pull1Disabled ? 'var(--dl-border)' : 'var(--dl-gold)') + ';color:' + (pull1Disabled ? 'var(--dl-muted)' : '#111827') + ';">' +
                         'Pull x1 · 100 💎' +
                     '</button>' +
                     '<button class="dl-gacha-btn" data-action="pull" data-count="10" ' + (pull10Disabled ? 'disabled' : '') + ' style="background:' + (pull10Disabled ? 'var(--dl-border)' : 'var(--dl-blue)') + ';color:' + (pull10Disabled ? 'var(--dl-muted)' : '#0E1116') + ';">' +

@@ -4,28 +4,28 @@
 
 /* Design Tokens - Pixel Art Theme */
 :root {
-    --pixel-bg: #1a1a2e;
-    --pixel-surface: #16213e;
-    --pixel-surface-2: #0f3460;
-    
-    --pixel-text: #eee;
-    --pixel-text-dim: #94a1b2;
-    --pixel-text-inverse: #1a1a2e;
-    
-    --pixel-primary: #e94560;
-    --pixel-primary-dark: #c81e3c;
-    --pixel-secondary: #f39c12;
-    --pixel-accent: #00d9ff;
-    
-    --pixel-success: #2ecc71;
-    --pixel-warning: #f39c12;
-    --pixel-danger: #e74c3c;
-    
-    --pixel-border: #0f3460;
-    --pixel-border-bright: #00d9ff;
-    
-    --pixel-shadow: 4px 4px 0 rgba(0, 0, 0, 0.5);
-    --pixel-shadow-lg: 6px 6px 0 rgba(0, 0, 0, 0.5);
+    --pixel-bg: #F7F8FA;
+    --pixel-surface: #FFFFFF;
+    --pixel-surface-2: #F3F4F6;
+
+    --pixel-text: #111827;
+    --pixel-text-dim: #6B7280;
+    --pixel-text-inverse: #111827;
+
+    --pixel-primary: #3B82F6;
+    --pixel-primary-dark: #2563EB;
+    --pixel-secondary: #FACC15;
+    --pixel-accent: #3B82F6;
+
+    --pixel-success: #16A34A;
+    --pixel-warning: #CA8A04;
+    --pixel-danger: #DC2626;
+
+    --pixel-border: #E5E7EB;
+    --pixel-border-bright: #3B82F6;
+
+    --pixel-shadow: 4px 4px 0 rgba(17, 24, 39, 0.15);
+    --pixel-shadow-lg: 6px 6px 0 rgba(17, 24, 39, 0.15);
 }
 
 * {
@@ -34,7 +34,10 @@
 }
 
 body {
-    background: var(--pixel-bg);
+    background:
+        radial-gradient(circle at 15% -10%, rgba(59, 130, 246, .07), transparent 45%),
+        radial-gradient(circle at 85% -10%, rgba(250, 204, 21, .08), transparent 45%),
+        var(--pixel-bg);
     color: var(--pixel-text);
     font-family: 'Press Start 2P', 'Inter', sans-serif;
     font-size: 12px;
@@ -101,7 +104,7 @@ body {
 .pixel-btn-primary:hover,
 .pixel-btn-secondary:hover {
     transform: translate(2px, 2px);
-    box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
+    box-shadow: 2px 2px 0 rgba(17, 24, 39, 0.15);
 }
 
 .pixel-btn:active,
@@ -116,7 +119,7 @@ body {
     .pixel-btn,
     .pixel-btn-primary,
     .pixel-btn-secondary {
-        -webkit-tap-highlight-color: rgba(0, 217, 255, 0.3);
+        -webkit-tap-highlight-color: rgba(59, 130, 246, 0.3);
     }
     
     .pixel-btn:active,
@@ -316,7 +319,7 @@ body {
 .map-node-event { border-color: var(--pixel-secondary); }
 .map-node-shop { border-color: var(--pixel-accent); }
 .map-node-rest { border-color: var(--pixel-success); }
-.map-node-boss { border-color: var(--pixel-primary); box-shadow: 0 0 15px var(--pixel-primary); }
+.map-node-boss { border-color: var(--pixel-danger); box-shadow: 0 0 15px var(--pixel-danger); }
 
 /* ===========================
    Combat Screen
@@ -1592,7 +1595,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(17, 24, 39, 0.55);
     backdrop-filter: blur(4px);
 }
 

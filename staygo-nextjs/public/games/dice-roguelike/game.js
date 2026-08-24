@@ -578,14 +578,14 @@ class GameController {
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(0, 217, 255, 0.9);
-            color: #1a1a2e;
+            background: rgba(59, 130, 246, 0.95);
+            color: #111827;
             padding: 20px 40px;
             border: 4px solid #fff;
             font-family: 'Press Start 2P', sans-serif;
             font-size: 14px;
             z-index: 2000;
-            box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.5);
+            box-shadow: 6px 6px 0 rgba(17, 24, 39, 0.25);
             animation: skillPop 0.5s ease-out;
         `;
 

@@ -213,10 +213,20 @@ function renderQuestionCard(q, i){
 function startQuiz(){
   state.screen = 'play';
   state.currentIndex = 0;
-  beginQuestion();
+  beginQuestionReady();
 }
 
 /* ---------- play screen ---------- */
+
+// Lands on the question with the image hidden and the timer not running yet,
+// so nobody can peek before the host is ready to start this question.
+function beginQuestionReady(){
+  state.phase = 'ready';
+  state.elapsedMs = 0;
+  state.paused = false;
+  state.lastFrameTime = null;
+  render();
+}
 
 function beginQuestion(){
   state.phase = 'guessing';
@@ -330,7 +340,7 @@ Screens.play = () => {
   const head = document.createElement('div'); head.className = 'zq-play-head';
   const h = document.createElement('h2'); h.className = 'display';
   const promptLabel = (state.promptText && state.promptText.trim()) || DEFAULT_PROMPT;
-  h.textContent = state.phase === 'revealed' ? 'เฉลย!' : promptLabel;
+  h.textContent = state.phase === 'revealed' ? 'เฉลย!' : (state.phase === 'ready' ? 'พร้อมแล้วหรือยัง?' : promptLabel);
   const durationMs = state.duration * 1000;
   const remainingMs = durationMs - state.elapsedMs;
   const timer = document.createElement('div');
@@ -341,16 +351,23 @@ Screens.play = () => {
 
   const frame = document.createElement('div'); frame.className = 'zq-frame'; frame.id = 'zqFrame';
   if (state.phase === 'revealed') frame.classList.add('zq-revealed');
-  const img = document.createElement('img'); img.id = 'zqImage'; img.src = q.url; img.alt = '';
-  img.style.transform = `scale(${currentScale()})`;
-  frame.appendChild(img);
-  if (state.paused && state.phase === 'guessing') {
-    const badge = document.createElement('div'); badge.className = 'zq-paused-badge'; badge.textContent = '⏸ หยุดชั่วคราว';
-    frame.appendChild(badge);
+  if (state.phase === 'ready') {
+    frame.classList.add('zq-hidden-frame');
+    const cover = document.createElement('div'); cover.className = 'zq-ready-cover';
+    cover.innerHTML = `<div class="zq-ready-icon">🙈</div><div class="zq-ready-text">ภาพจะซ่อนไว้จนกว่าจะกดเริ่ม</div>`;
+    frame.appendChild(cover);
+  } else {
+    const img = document.createElement('img'); img.id = 'zqImage'; img.src = q.url; img.alt = '';
+    img.style.transform = `scale(${currentScale()})`;
+    frame.appendChild(img);
+    if (state.paused && state.phase === 'guessing') {
+      const badge = document.createElement('div'); badge.className = 'zq-paused-badge'; badge.textContent = '⏸ หยุดชั่วคราว';
+      frame.appendChild(badge);
+    }
   }
   el.appendChild(frame);
 
-  if (q.choices.length) {
+  if (state.phase !== 'ready' && q.choices.length) {
     const hint = document.createElement('div'); hint.className = 'zq-choices-hint';
     q.choices.forEach(c => {
       const pill = document.createElement('span'); pill.className = 'zq-choice-pill';
@@ -368,7 +385,12 @@ Screens.play = () => {
   }
 
   const actions = document.createElement('div'); actions.className = 'zq-actions';
-  if (state.phase === 'guessing') {
+  if (state.phase === 'ready') {
+    const startBtn = document.createElement('button'); startBtn.className = 'primary';
+    startBtn.textContent = '▶ เริ่มข้อนี้';
+    startBtn.onclick = beginQuestion;
+    actions.appendChild(startBtn);
+  } else if (state.phase === 'guessing') {
     const pauseBtn = document.createElement('button'); pauseBtn.className = 'ghost';
     pauseBtn.disabled = remainingMs <= 0 && !state.paused;
     pauseBtn.textContent = state.paused ? '▶ ทำต่อ' : '⏸ หยุดซูม';
@@ -411,7 +433,7 @@ Screens.summary = () => {
 
   const again = document.createElement('button'); again.className = 'primary'; again.style.width = '100%';
   again.textContent = '🔁 เล่นชุดเดิมอีกครั้ง';
-  again.onclick = () => { state.confirmingClear = false; state.currentIndex = 0; state.screen = 'play'; beginQuestion(); };
+  again.onclick = () => { state.confirmingClear = false; state.currentIndex = 0; state.screen = 'play'; beginQuestionReady(); };
   el.appendChild(again);
 
   const editBtn = document.createElement('button'); editBtn.className = 'ghost'; editBtn.style.cssText = 'width:100%;margin-top:10px;';

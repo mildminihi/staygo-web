@@ -1,4 +1,7 @@
 import Link from 'next/link';
+import WebGameCard from '@/components/WebGameCard';
+import { HOME_GAME_LIMIT, WEB_GAMES } from '@/data/webGames';
+import { HOME_TOOL_LIMIT, TOOLS } from '@/data/tools';
 
 export default function Home() {
   return (
@@ -25,53 +28,18 @@ export default function Home() {
 
       <section className="section section-light" id="tools">
         <div className="container">
-          <h2 className="section-title">เครื่องมือช่วยเล่นเกม</h2>
-          
+          <div className="section-header">
+            <h2 className="section-title">เครื่องมือช่วยเล่นเกม</h2>
+            <Link href="/tools/" className="link-more">ดูทั้งหมด ({TOOLS.length}) →</Link>
+          </div>
+
           <div className="tools-grid">
-            <a href="/tools/dice/" className="tool-button">
-              <div className="tool-icon">🎲</div>
-              <span className="tool-label">ทอยลูกเต๋า</span>
-            </a>
-            
-            <a href="/tools/timer/" className="tool-button">
-              <div className="tool-icon">⏱️</div>
-              <span className="tool-label">นับเวลาถอยหลัง/จับเวลา</span>
-            </a>
-            
-            <a href="/tools/team-randomizer/" className="tool-button">
-              <div className="tool-icon">💡</div>
-              <span className="tool-label">สุ่มทีม</span>
-            </a>
-            
-            <a href="/tools/scoreboard/" className="tool-button">
-              <div className="tool-icon">📊</div>
-              <span className="tool-label">ตารางคะแนน</span>
-            </a>
-            
-            <a href="/tools/tournament-bracket/" className="tool-button">
-              <div className="tool-icon">🏆</div>
-              <span className="tool-label">จัดสายการแข่งขัน</span>
-            </a>
-            
-            <a href="/tools/competition-timer/" className="tool-button">
-              <div className="tool-icon">⏱️</div>
-              <span className="tool-label">จับเวลาสำหรับแข่ง</span>
-            </a>
-            
-            <a href="/tools/lucky-draw/" className="tool-button">
-              <div className="tool-icon">🎲</div>
-              <span className="tool-label">จับสลาก</span>
-            </a>
-            
-            <a href="/tools/whiteboard/" className="tool-button">
-              <div className="tool-icon">🖍️</div>
-              <span className="tool-label">ไวท์บอร์ด</span>
-            </a>
-            
-            <a href="/tools/host-tools/" className="tool-button">
-              <div className="tool-icon">🎮</div>
-              <span className="tool-label">Host Tools</span>
-            </a>
+            {TOOLS.slice(0, HOME_TOOL_LIMIT).map((tool) => (
+              <a key={tool.href} href={tool.href} className="tool-button">
+                <div className="tool-icon">{tool.icon}</div>
+                <span className="tool-label">{tool.label}</span>
+              </a>
+            ))}
           </div>
         </div>
       </section>
@@ -80,141 +48,13 @@ export default function Home() {
         <div className="container">
           <div className="section-header">
             <h2 className="section-title">เกมเล่นบนเว็บ</h2>
-            <Link href="/games" className="link-more">ดูทั้งหมด →</Link>
+            <Link href="/games/" className="link-more">ดูทั้งหมด ({WEB_GAMES.length}) →</Link>
           </div>
 
           <div className="game-grid">
-            <article className="game-card">
-              <div className="game-thumbnail game-thumbnail-hover">
-                <img src="/assets/image/reveal-cover-1.png" alt="Guess the Picture" className="thumbnail-default" />
-                <img src="/assets/image/reveal-cover-2.png" alt="Guess the Picture" className="thumbnail-hover" />
-              </div>
-              <div className="game-info">
-                <h3 className="game-title">เปิดแผ่นป้ายทายภาพ</h3>
-                <p className="game-meta">เปิดแผ่นป้ายทีละช่องเพื่อทายภาพ</p>
-                <div className="game-actions">
-                  <a href="/games/reveal-board/" className="button button-primary button-md">เล่นเกม</a>
-                </div>
-              </div>
-            </article>
-
-            <article className="game-card">
-              <div className="game-thumbnail game-thumbnail-hover">
-                <img src="/assets/image/cardloop-cover-1.png" alt="Cardloop" className="thumbnail-default" />
-                <img src="/assets/image/cardloop-cover-2.png" alt="Cardloop" className="thumbnail-hover" />
-              </div>
-              <div className="game-info">
-                <h3 className="game-title">ลูปนรกหมกมุ่น</h3>
-                <p className="game-meta">ตอบคำถาม 4 ข้อติดเพื่อชนะ</p>
-                <div className="game-actions">
-                  <a href="/games/cardloop/" className="button button-primary button-md">เล่นเกม</a>
-                </div>
-              </div>
-            </article>
-
-            <article className="game-card">
-              <div className="game-thumbnail game-thumbnail-hover">
-                <img src="/assets/image/match-cover-1.png" alt="จับคู่อีโมจิ" className="thumbnail-default" />
-                <img src="/assets/image/match-cover-2.png" alt="จับคู่อีโมจิ" className="thumbnail-hover" />
-              </div>
-              <div className="game-info">
-                <h3 className="game-title">จับคู่อีโมจิ</h3>
-                <p className="game-meta">จับคู่อีโมจิให้ถูกต้อง</p>
-                <div className="game-actions">
-                  <a href="/games/emoji-match/" className="button button-primary button-md">เล่นเกม</a>
-                </div>
-              </div>
-            </article>
-
-            <article className="game-card">
-              <span className="beta-badge">Beta</span>
-              <div className="game-thumbnail game-thumbnail-hover">
-                <img src="/assets/image/dice-rouge-cover-1.png" alt="Dice rougelike" className="thumbnail-default" />
-                <img src="/assets/image/dice-rouge-cover-2.png" alt="Dice rougelike" className="thumbnail-hover" />
-              </div>
-              <div className="game-info">
-                <h3 className="game-title">Dice Roguelike</h3>
-                <p className="game-meta">ทอยเต๋าผจญภัยใน Dungeon</p>
-                <div className="game-actions">
-                  <a href="/games/dice-roguelike/" className="button button-primary button-md">เล่นเกม</a>
-                </div>
-              </div>
-            </article>
-
-            <article className="game-card">
-              <div className="game-thumbnail game-thumbnail-hover">
-                <img src="/assets/image/decoder-cover-1.png" alt="ถอดรหัสตัวเลข" className="thumbnail-default" />
-                <img src="/assets/image/decoder-cover-2.png" alt="ถอดรหัสตัวเลข" className="thumbnail-hover" />
-              </div>
-              <div className="game-info">
-                <h3 className="game-title">ถอดรหัสตัวเลข</h3>
-                <p className="game-meta">ทายตัวเลขลับภายใน 8 ครั้ง</p>
-                <div className="game-actions">
-                  <a href="/games/decoder/" className="button button-primary button-md">เล่นเกม</a>
-                </div>
-              </div>
-            </article>
-
-            <article className="game-card">
-              <div className="game-thumbnail">
-                <div style={{ background: '#3B82F6', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '200px', fontSize: '80px', color: 'white' }}>
-                  🎲
-                </div>
-              </div>
-              <div className="game-info">
-                <h3 className="game-title">เกมทอยเต๋า</h3>
-                <p className="game-meta">เลือกแผ่นป้ายและทอยเต๋าเพื่อเก็บแต้ม</p>
-                <div className="game-actions">
-                  <a href="/games/dice-challenge/" className="button button-primary button-md">เล่นเกม</a>
-                </div>
-              </div>
-            </article>
-
-            <article className="game-card">
-              <span className="beta-badge">Beta</span>
-              <div className="game-thumbnail">
-                <div style={{ background: '#CA8A04', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '200px', fontSize: '80px', color: 'white' }}>
-                  📜
-                </div>
-              </div>
-              <div className="game-info">
-                <h3 className="game-title">Dungeon Ledger</h3>
-                <p className="game-meta">สุ่มฮีโร่ ลุยดันเจี้ยนแบบ auto-battle</p>
-                <div className="game-actions">
-                  <a href="/games/dungeon-ledger/" className="button button-primary button-md">เล่นเกม</a>
-                </div>
-              </div>
-            </article>
-
-            <article className="game-card">
-              <div className="game-thumbnail">
-                <div style={{ background: '#3B82F6', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '200px', fontSize: '80px', color: 'white' }}>
-                  🐍
-                </div>
-              </div>
-              <div className="game-info">
-                <h3 className="game-title">Ouroboros</h3>
-                <p className="game-meta">งูกินหาง เป็นทั้งผู้ล่าและผู้ถูกล่า รอดคนสุดท้ายชนะ</p>
-                <div className="game-actions">
-                  <a href="/games/ouroboros/" className="button button-primary button-md">เล่นเกม</a>
-                </div>
-              </div>
-            </article>
-
-            <article className="game-card">
-              <div className="game-thumbnail">
-                <div style={{ background: '#FACC15', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '200px', fontSize: '80px', color: '#111827' }}>
-                  🔍
-                </div>
-              </div>
-              <div className="game-info">
-                <h3 className="game-title">Zoom Quiz</h3>
-                <p className="game-meta">สร้าง quiz ภาพซูมของตัวเอง แล้วให้เพื่อนทาย</p>
-                <div className="game-actions">
-                  <a href="/games/zoom-quiz/" className="button button-primary button-md">เล่นเกม</a>
-                </div>
-              </div>
-            </article>
+            {WEB_GAMES.slice(0, HOME_GAME_LIMIT).map((game) => (
+              <WebGameCard key={game.href} game={game} />
+            ))}
           </div>
         </div>
       </section>

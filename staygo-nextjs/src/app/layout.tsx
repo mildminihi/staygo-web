@@ -90,6 +90,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="canonical" href="https://staygoch.com/" />
+        <script src="/assets/js/analytics.js" defer></script>
         
         {/* Structured Data for Search Engines */}
         <script

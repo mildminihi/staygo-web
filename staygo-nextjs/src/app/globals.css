@@ -542,6 +542,13 @@ h3 {
   color: var(--text);
 }
 
+.tool-description {
+  font-size: 13px;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.5;
+}
+
 /* Watch & Play Section */
 .watch-hero {
   display: grid;
@@ -4764,5 +4771,412 @@ h3 {
 
   .bracket-champion-name {
     font-size: 28px;
+  }
+}
+
+/* ===== How to Play (วิธีเล่นบอร์ดเกม) ===== */
+.htp-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.htp-search {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  height: 44px;
+  padding: 0 16px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 16px;
+  font-family: inherit;
+}
+
+.htp-search:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+.htp-chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.htp-chip {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-muted);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: 'Kanit', sans-serif;
+  cursor: pointer;
+  transition: all 0.15s ease-out;
+}
+
+.htp-chip:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.htp-chip.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--text-inverse);
+}
+
+.htp-empty {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 48px 0;
+}
+
+.htp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.htp-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.15s ease-out;
+}
+
+.htp-card:hover {
+  border-color: var(--primary);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.htp-thumb {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+
+.htp-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.htp-play {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(239, 68, 68, 0.92);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  padding-left: 2px;
+}
+
+.htp-card-body {
+  padding: 14px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.htp-card-title {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--text);
+}
+
+.htp-card-alt {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.htp-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.htp-tag {
+  background: #EFF6FF;
+  color: var(--primary-hover);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 10px;
+  border-radius: 999px;
+}
+
+.htp-meta {
+  margin: auto 0 0;
+  padding-top: 6px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+/* Detail page */
+.htp-detail {
+  max-width: 860px;
+}
+
+.htp-detail-header {
+  margin: 20px 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.htp-detail-title {
+  font-size: 36px;
+}
+
+.htp-detail-alt {
+  margin: 0;
+  font-size: 18px;
+  color: var(--text-muted);
+}
+
+.htp-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.htp-stat {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.htp-stat-label {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.htp-stat-value {
+  font-family: 'Kanit', sans-serif;
+  font-weight: 600;
+  font-size: 17px;
+}
+
+.htp-video-block {
+  margin-bottom: 24px;
+}
+
+.htp-video-label {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.htp-video {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: #000;
+}
+
+.htp-video iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.htp-video-note {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.htp-video-note a {
+  color: var(--primary);
+}
+
+.htp-content {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px 28px;
+}
+
+.htp-content h2 {
+  font-size: 20px;
+  margin: 20px 0 8px;
+}
+
+.htp-content h2:first-child {
+  margin-top: 0;
+}
+
+.htp-content p {
+  margin: 0;
+  line-height: 1.7;
+}
+
+.htp-content ol {
+  margin: 0 0 20px;
+  padding-left: 22px;
+  line-height: 1.7;
+}
+
+.htp-content li + li {
+  margin-top: 6px;
+}
+
+@media (max-width: 768px) {
+  .htp-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .htp-card-body {
+    padding: 10px 12px 12px;
+  }
+
+  .htp-card-title {
+    font-size: 16px;
+  }
+
+  .htp-detail-title {
+    font-size: 28px;
+  }
+
+  .htp-content {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .htp-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .htp-stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* How to Play: YouTube CTAs + related games */
+.htp-btn-youtube {
+  background: #FF0000;
+  color: #fff;
+}
+
+.htp-btn-youtube:hover {
+  background: #CC0000;
+  box-shadow: var(--shadow-sm);
+}
+
+.htp-video-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  margin-top: 12px;
+}
+
+.htp-video-actions .htp-video-note {
+  margin: 0;
+}
+
+.htp-subscribe {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #FFF5F5;
+  border: 1px solid #FECACA;
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  margin-bottom: 24px;
+}
+
+.htp-subscribe-logo {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: contain;
+  background: #fff;
+  flex-shrink: 0;
+}
+
+.htp-subscribe-text {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.htp-subscribe-text strong {
+  font-family: 'Kanit', sans-serif;
+  font-size: 17px;
+}
+
+.htp-subscribe-text span {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.htp-related {
+  margin-top: 40px;
+}
+
+.htp-related-title {
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+
+.htp-related-grid {
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+}
+
+@media (max-width: 768px) {
+  .htp-related-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .htp-subscribe {
+    flex-wrap: wrap;
+  }
+
+  .htp-subscribe .button {
+    width: 100%;
+  }
+
+  .htp-video-actions .button {
+    width: 100%;
   }
 }

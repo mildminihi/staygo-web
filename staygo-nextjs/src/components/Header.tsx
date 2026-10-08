@@ -30,9 +30,10 @@ export default function Header() {
             </Link>
             
             <nav className="nav" aria-label="เมนูหลัก">
-              <Link href="/#play" className="nav-link">Play</Link>
-              <Link href="/#tools" className="nav-link">Tools</Link>
+              <Link href="/games/" className="nav-link">Play</Link>
+              <Link href="/tools/" className="nav-link">Tools</Link>
               <Link href="/#watch" className="nav-link">Watch & Play</Link>
+              <Link href="/how-to-play/" className="nav-link">How to Play</Link>
               <Link href="/about" className="nav-link">About</Link>
             </nav>
 
@@ -69,6 +70,13 @@ export default function Header() {
             </button>
           </div>
           <nav className="mobile-menu-nav">
+            <Link href="/how-to-play/" className="mobile-menu-link" onClick={closeMenu}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+              </svg>
+              <span>วิธีเล่นบอร์ดเกม</span>
+            </Link>
             <a href="https://www.youtube.com/@STAYGO" target="_blank" rel="noopener noreferrer" className="mobile-menu-link" onClick={closeMenu}>
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>

@@ -1,0 +1,794 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
+    <!-- Primary Meta Tags -->
+    <title>กระดาน JinxO ออนไลน์ - ใช้แทนกระดานจริง | STAYGO</title>
+    <meta name="title" content="กระดาน JinxO ออนไลน์ - ใช้แทนกระดานจริง | STAYGO" />
+    <meta name="description" content="กระดานจดคำตอบและคะแนนสำหรับเล่นเกม JinxO บนมือถือ ไม่ต้องพกกระดานจริง เขียนคำตอบ 3x3 วงกลม กากบาท ดาว Jinx และคำนวณโบนัสแถว/คอลัมน์ให้อัตโนมัติ" />
+    <meta name="keywords" content="JinxO, Dito, กระดาน JinxO, จดคะแนน, บอร์ดเกม, เกมปาร์ตี้" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://staygoch.com/games/jinxo-board/" />
+    <meta property="og:title" content="กระดาน JinxO ออนไลน์ - ใช้แทนกระดานจริง | STAYGO" />
+    <meta property="og:description" content="กระดานจดคำตอบและคะแนนสำหรับเล่นเกม JinxO บนมือถือ ไม่ต้องพกกระดานจริง" />
+    <meta property="og:image" content="https://staygoch.com/games/reveal-board/staygo-logo.png" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://staygoch.com/games/jinxo-board/" />
+
+    <link rel="icon" type="image/png" href="../../games/reveal-board/staygo-logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Kanit:wght@500;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../assets/css/site.css" />
+    <script defer src="../../assets/js/config.js"></script>
+    <script defer src="../../assets/js/site.js"></script>
+
+    <style>
+      .jx-wrap {
+        max-width: 560px;
+        margin: 0 auto;
+        padding: 16px 16px 40px;
+      }
+
+      .jx-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+
+      .jx-head h1 {
+        font-size: 28px;
+      }
+
+      .jx-head h1 span { color: var(--primary); }
+
+      .jx-player {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 12px;
+      }
+
+      .jx-player input {
+        flex: 1;
+        min-width: 0;
+        height: 44px;
+        padding: 0 14px;
+        border: 2px solid var(--border);
+        border-radius: var(--radius-sm);
+        font: 600 16px 'Kanit', sans-serif;
+        background: var(--surface);
+        color: var(--text);
+      }
+
+      .jx-player input:focus { outline: none; border-color: var(--primary); }
+
+      /* ---------- Round tabs ---------- */
+      .jx-rounds {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+        background: var(--surface-2);
+        padding: 4px;
+        border-radius: var(--radius-md);
+        margin-bottom: 12px;
+      }
+
+      .jx-round-tab {
+        height: 40px;
+        border: 0;
+        border-radius: var(--radius-sm);
+        background: transparent;
+        font: 700 15px 'Kanit', sans-serif;
+        color: var(--text-muted);
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .jx-round-tab.active {
+        background: var(--surface);
+        color: var(--text);
+        box-shadow: var(--shadow-sm);
+      }
+
+      .jx-round-tab small {
+        font: 600 12px 'Inter', sans-serif;
+        color: var(--primary);
+        margin-left: 4px;
+      }
+
+      /* ---------- Board ---------- */
+      .jx-board {
+        background: #FDE68A;
+        border-radius: var(--radius-lg);
+        padding: 12px;
+        box-shadow: var(--shadow-md);
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr)) 44px;
+        grid-template-rows: repeat(3, auto) 36px;
+        gap: 8px;
+      }
+
+      .jx-cell {
+        position: relative;
+        background: var(--surface);
+        border-radius: var(--radius-sm);
+        border: 2px solid #1F2937;
+        aspect-ratio: 1 / 1.05;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      .jx-cell textarea {
+        flex: 1;
+        width: 100%;
+        min-height: 0;
+        border: 0;
+        resize: none;
+        background: transparent;
+        padding: 18px 6px 4px;
+        font: 600 16px/1.25 'Kanit', sans-serif;
+        color: var(--text);
+        text-align: center;
+        display: flex;
+        position: relative;
+        z-index: 1;
+      }
+
+      .jx-cell textarea:focus { outline: none; }
+      .jx-cell:focus-within { border-color: var(--primary); }
+
+      /* hand-drawn style marks */
+      .jx-mark {
+        position: absolute;
+        inset: 14px 6px 40px;
+        pointer-events: none;
+        z-index: 2;
+        display: none;
+      }
+
+      .jx-cell.circle .jx-mark.circle,
+      .jx-cell.cross .jx-mark.cross { display: block; }
+
+      .jx-mark.circle {
+        border: 3px solid #2563EB;
+        border-radius: 50%;
+        transform: rotate(-4deg);
+      }
+
+      .jx-mark.cross::before,
+      .jx-mark.cross::after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 90%;
+        height: 3px;
+        background: #EF4444;
+        border-radius: 3px;
+      }
+
+      .jx-mark.cross::before { transform: translate(-50%, -50%) rotate(35deg); }
+      .jx-mark.cross::after { transform: translate(-50%, -50%) rotate(-35deg); }
+
+      .jx-cell.cross textarea { color: var(--text-muted); }
+
+      .jx-star {
+        position: absolute;
+        top: 3px;
+        right: 4px;
+        width: 22px;
+        height: 22px;
+        z-index: 3;
+        pointer-events: none;
+        color: #9CA3AF;
+      }
+
+      .jx-star svg { width: 100%; height: 100%; display: block; }
+      .jx-star path { fill: transparent; stroke: currentColor; stroke-width: 1.6; stroke-linejoin: round; }
+      .jx-cell.jinx .jx-star { color: #D97706; }
+      .jx-cell.jinx .jx-star path { fill: #FACC15; }
+
+      .jx-actions {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        border-top: 1.5px dashed var(--border-strong);
+        flex-shrink: 0;
+        position: relative;
+        z-index: 3;
+        background: var(--surface);
+      }
+
+      .jx-act {
+        height: 34px;
+        border: 0;
+        background: transparent;
+        font-size: 16px;
+        font-weight: 800;
+        cursor: pointer;
+        color: var(--text-muted);
+        padding: 0;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .jx-act + .jx-act { border-left: 1px solid var(--border); }
+      .jx-act:active { background: var(--surface-2); }
+      .jx-act[data-act="circle"] { color: #2563EB; }
+      .jx-act[data-act="jinx"] { color: #D97706; }
+      .jx-act[data-act="cross"] { color: #EF4444; }
+      .jx-act.on { background: var(--surface-2); box-shadow: inset 0 -3px 0 currentColor; }
+
+      /* bonus badges */
+      .jx-bonus {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .jx-bonus span {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: 2px dashed #92400E;
+        color: #92400E;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font: 800 16px 'Kanit', sans-serif;
+        background: rgba(255, 255, 255, 0.4);
+        transition: transform 0.15s, background 0.15s;
+      }
+
+      .jx-bonus.got span {
+        border: 2px solid #1F2937;
+        background: #1F2937;
+        color: #FACC15;
+        transform: scale(1.08);
+      }
+
+      .jx-corner {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font: 700 11px 'Inter', sans-serif;
+        color: #92400E;
+        text-align: center;
+        line-height: 1.1;
+      }
+
+      /* ---------- Round summary ---------- */
+      .jx-summary {
+        margin-top: 12px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        padding: 12px 14px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr) auto;
+        gap: 8px;
+        align-items: center;
+        font-size: 13px;
+        color: var(--text-muted);
+      }
+
+      .jx-summary b {
+        display: block;
+        font: 800 20px 'Kanit', sans-serif;
+        color: var(--text);
+      }
+
+      .jx-summary .jx-sum-total b { color: var(--primary); font-size: 26px; }
+
+      /* ---------- Score sheet ---------- */
+      .jx-scores {
+        margin-top: 16px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 16px;
+        box-shadow: var(--shadow-sm);
+      }
+
+      .jx-scores h2 {
+        font-size: 20px;
+        margin-bottom: 12px;
+      }
+
+      .jx-score-row {
+        display: grid;
+        grid-template-columns: 1fr 96px;
+        align-items: center;
+        gap: 12px;
+        padding: 8px 0;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .jx-score-row:last-child { border-bottom: 0; }
+
+      .jx-score-label {
+        font: 700 16px 'Kanit', sans-serif;
+      }
+
+      .jx-score-label small {
+        display: block;
+        font: 500 12px 'Inter', sans-serif;
+        color: var(--text-muted);
+      }
+
+      .jx-score-label button {
+        border: 0;
+        background: none;
+        padding: 0;
+        font: 600 12px 'Inter', sans-serif;
+        color: var(--primary);
+        cursor: pointer;
+        text-decoration: underline;
+      }
+
+      .jx-score-input {
+        width: 100%;
+        height: 48px;
+        border: 2px solid #1F2937;
+        border-radius: var(--radius-sm);
+        text-align: center;
+        font: 800 22px 'Kanit', sans-serif;
+        color: var(--text);
+        background: var(--surface);
+        -moz-appearance: textfield;
+      }
+
+      .jx-score-input::-webkit-outer-spin-button,
+      .jx-score-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+      .jx-score-input:focus { outline: none; border-color: var(--primary); }
+      .jx-score-input.manual { background: #FEF9C3; }
+
+      .jx-score-row.total .jx-score-label { font-size: 20px; }
+      .jx-score-total {
+        height: 56px;
+        border-radius: var(--radius-sm);
+        background: #1F2937;
+        color: #FACC15;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font: 800 28px 'Kanit', sans-serif;
+      }
+
+      .jx-footer {
+        margin-top: 16px;
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .jx-footer .button { flex: 1; min-width: 140px; }
+
+      .jx-help {
+        margin-top: 16px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        padding: 4px 16px;
+        font-size: 14px;
+        color: var(--text-muted);
+      }
+
+      .jx-help summary {
+        cursor: pointer;
+        padding: 10px 0;
+        font-weight: 700;
+        color: var(--text);
+      }
+
+      .jx-help ul { padding-left: 18px; margin: 0 0 12px; }
+      .jx-help li { margin-bottom: 4px; }
+
+      .jx-note {
+        margin-top: 12px;
+        font-size: 12px;
+        color: var(--text-muted);
+        text-align: center;
+      }
+
+      @media (max-width: 420px) {
+        .jx-wrap { padding: 12px 12px 32px; }
+        .jx-board { padding: 8px; gap: 6px; grid-template-columns: repeat(3, minmax(0, 1fr)) 38px; }
+        .jx-bonus span { width: 32px; height: 32px; font-size: 15px; }
+        .jx-cell textarea { font-size: 15px; padding-top: 20px; }
+        .jx-head h1 { font-size: 24px; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <div class="container">
+        <div class="header-content">
+          <a href="../../" class="logo-link">
+            <img src="../../games/reveal-board/staygo-logo.png" alt="Staygo" class="logo" />
+          </a>
+
+          <nav class="nav" aria-label="เมนูหลัก">
+            <a href="../../#play" class="nav-link active">Play</a>
+            <a href="../../#tools" class="nav-link">Tools</a>
+            <a href="../../#watch" class="nav-link">Watch & Play</a>
+            <a href="../../about/" class="nav-link">About</a>
+          </nav>
+
+          <div class="header-actions">
+            <a href="https://www.youtube.com/@STAYGO" target="_blank" rel="noopener noreferrer" class="icon-button" aria-label="YouTube">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
+                <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+              </svg>
+            </a>
+            <button id="menuToggle" class="icon-button" aria-label="เมนู">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu">
+      <div class="mobile-menu-header">
+        <span class="mobile-menu-title">เมนู</span>
+        <button id="menuClose" class="icon-button" aria-label="ปิดเมนู">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <nav class="mobile-nav">
+        <a href="../../#play" class="mobile-nav-link">Play</a>
+        <a href="../../#tools" class="mobile-nav-link">Tools</a>
+        <a href="../../#watch" class="mobile-nav-link">Watch & Play</a>
+        <a href="../../about/" class="mobile-nav-link">About</a>
+      </nav>
+    </div>
+
+    <main class="jx-wrap">
+      <div class="jx-head">
+        <h1>กระดาน <span>JinxO</span></h1>
+        <a href="../" class="button button-ghost button-sm">← กลับ</a>
+      </div>
+
+      <div class="jx-player">
+        <input id="playerName" type="text" maxlength="24" placeholder="ชื่อผู้เล่น" aria-label="ชื่อผู้เล่น" autocomplete="off" />
+      </div>
+
+      <div class="jx-rounds" role="tablist" aria-label="รอบ">
+        <button class="jx-round-tab" data-round="0" role="tab">รอบ 1<small></small></button>
+        <button class="jx-round-tab" data-round="1" role="tab">รอบ 2<small></small></button>
+        <button class="jx-round-tab" data-round="2" role="tab">รอบ 3<small></small></button>
+      </div>
+
+      <div class="jx-board" id="board" aria-label="กระดานคำตอบ 3x3"></div>
+
+      <div class="jx-summary" aria-live="polite">
+        <div>วงกลม<b id="sumCircle">0</b></div>
+        <div>ดาว Jinx<b id="sumJinx">0</b></div>
+        <div>โบนัส<b id="sumBonus">0</b></div>
+        <div class="jx-sum-total">รอบนี้<b id="sumRound">0</b></div>
+      </div>
+
+      <section class="jx-scores">
+        <h2>ช่องคะแนน</h2>
+        <div id="scoreRows"></div>
+        <div class="jx-score-row total">
+          <div class="jx-score-label">รวม</div>
+          <div class="jx-score-total" id="grandTotal">0</div>
+        </div>
+      </section>
+
+      <div class="jx-footer">
+        <button class="button button-outline button-md" id="clearRoundBtn">ล้างกระดานรอบนี้</button>
+        <button class="button button-primary button-md" id="newGameBtn">เริ่มเกมใหม่</button>
+      </div>
+
+      <details class="jx-help">
+        <summary>วิธีใช้ & การนับแต้ม</summary>
+        <ul>
+          <li>แตะในช่องเพื่อเขียนคำตอบ (รอบละ 3 หัวข้อ หัวข้อละ 3 คำตอบ = 9 ช่อง)</li>
+          <li><b style="color:#2563EB">○</b> ตอบตรงกับคนอื่น = 1 แต้ม</li>
+          <li><b style="color:#D97706">★</b> Jinx! ตรงกับอีก<u>แค่คนเดียว</u> = วงกลม 1 + ดาว 2 = 3 แต้ม</li>
+          <li><b style="color:#EF4444">✕</b> ไม่มีใครตรง = 0 แต้ม</li>
+          <li>วงกลมครบทั้งแถว/คอลัมน์ ได้โบนัสตามตัวเลขที่ขอบกระดาน</li>
+          <li>คะแนนแต่ละรอบคำนวณให้อัตโนมัติ ถ้าอยากแก้เองพิมพ์ทับในช่องคะแนนได้เลย</li>
+          <li>เล่น 3 รอบ ใครแต้มรวมมากสุดชนะ</li>
+        </ul>
+      </details>
+
+      <p class="jx-note">กระดานช่วยเล่นที่ STAYGO ทำขึ้นเอง ไม่ใช่ผลิตภัณฑ์ทางการของ JinxO / Tabletoys Games</p>
+    </main>
+
+    <script>
+      (() => {
+        const STORAGE_KEY = 'staygo-jinxo-board-v1';
+        // Bonus printed on the board edges: rows score 3/2/1 top to bottom,
+        // columns score 1/2/3 left to right (top-right box feeds both 3s).
+        const ROW_BONUS = [3, 2, 1];
+        const COL_BONUS = [1, 2, 3];
+        const ROUNDS = 3;
+
+        const STAR_SVG = '<svg viewBox="0 0 24 24"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z"/></svg>';
+
+        const emptyRound = () => ({
+          cells: Array.from({ length: 9 }, () => ({ text: '', mark: '', jinx: false })),
+          manual: null
+        });
+
+        let state = {
+          player: '',
+          current: 0,
+          rounds: Array.from({ length: ROUNDS }, emptyRound)
+        };
+
+        const boardEl = document.getElementById('board');
+        const scoreRowsEl = document.getElementById('scoreRows');
+
+        // ---------- Persistence ----------
+        function load() {
+          try {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (!raw) return;
+            const data = JSON.parse(raw);
+            if (data && Array.isArray(data.rounds) && data.rounds.length === ROUNDS) state = data;
+          } catch (e) { /* ignore */ }
+        }
+
+        function save() {
+          try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) { /* ignore */ }
+        }
+
+        // ---------- Scoring ----------
+        function calc(round) {
+          const c = round.cells;
+          const circled = (i) => c[i].mark === 'circle';
+          let circles = 0, jinx = 0, bonus = 0;
+          const rowsGot = [], colsGot = [];
+          c.forEach((cell) => {
+            if (cell.mark === 'circle') {
+              circles++;
+              if (cell.jinx) jinx++;
+            }
+          });
+          for (let r = 0; r < 3; r++) {
+            const got = circled(r * 3) && circled(r * 3 + 1) && circled(r * 3 + 2);
+            rowsGot.push(got);
+            if (got) bonus += ROW_BONUS[r];
+          }
+          for (let col = 0; col < 3; col++) {
+            const got = circled(col) && circled(col + 3) && circled(col + 6);
+            colsGot.push(got);
+            if (got) bonus += COL_BONUS[col];
+          }
+          return { circles, jinx, bonus, rowsGot, colsGot, total: circles + jinx * 2 + bonus };
+        }
+
+        function roundScore(i) {
+          const r = state.rounds[i];
+          return r.manual !== null && r.manual !== '' ? Number(r.manual) || 0 : calc(r).total;
+        }
+
+        // ---------- Board ----------
+        function buildBoard() {
+          boardEl.innerHTML = '';
+          for (let r = 0; r < 3; r++) {
+            for (let col = 0; col < 3; col++) {
+              const i = r * 3 + col;
+              const cell = document.createElement('div');
+              cell.className = 'jx-cell';
+              cell.dataset.index = i;
+              cell.innerHTML = `
+                <span class="jx-star" aria-hidden="true">${STAR_SVG}</span>
+                <span class="jx-mark circle" aria-hidden="true"></span>
+                <span class="jx-mark cross" aria-hidden="true"></span>
+                <textarea maxlength="40" rows="2" aria-label="คำตอบช่อง ${i + 1}" autocomplete="off" autocapitalize="off" spellcheck="false"></textarea>
+                <div class="jx-actions">
+                  <button class="jx-act" data-act="circle" aria-label="ตรงกับคนอื่น">○</button>
+                  <button class="jx-act" data-act="jinx" aria-label="Jinx ตรงกับอีกคนเดียว">★</button>
+                  <button class="jx-act" data-act="cross" aria-label="ไม่มีใครตรง">✕</button>
+                </div>`;
+              boardEl.appendChild(cell);
+            }
+            const rb = document.createElement('div');
+            rb.className = 'jx-bonus';
+            rb.dataset.row = r;
+            rb.innerHTML = `<span>${ROW_BONUS[r]}</span>`;
+            rb.title = `โบนัสแถว ${r + 1}`;
+            boardEl.appendChild(rb);
+          }
+          for (let col = 0; col < 3; col++) {
+            const cb = document.createElement('div');
+            cb.className = 'jx-bonus';
+            cb.dataset.col = col;
+            cb.innerHTML = `<span>${COL_BONUS[col]}</span>`;
+            cb.title = `โบนัสคอลัมน์ ${col + 1}`;
+            boardEl.appendChild(cb);
+          }
+          const corner = document.createElement('div');
+          corner.className = 'jx-corner';
+          corner.textContent = 'โบนัส';
+          boardEl.appendChild(corner);
+
+          boardEl.addEventListener('input', (e) => {
+            if (e.target.tagName !== 'TEXTAREA') return;
+            const i = Number(e.target.closest('.jx-cell').dataset.index);
+            state.rounds[state.current].cells[i].text = e.target.value;
+            save();
+          });
+
+          boardEl.addEventListener('click', (e) => {
+            const btn = e.target.closest('.jx-act');
+            if (!btn) return;
+            const i = Number(btn.closest('.jx-cell').dataset.index);
+            const cell = state.rounds[state.current].cells[i];
+            const act = btn.dataset.act;
+            if (act === 'circle') {
+              // Tapping again on a plain circle clears the mark.
+              if (cell.mark === 'circle' && !cell.jinx) cell.mark = '';
+              else { cell.mark = 'circle'; cell.jinx = false; }
+            } else if (act === 'jinx') {
+              if (cell.mark === 'circle' && cell.jinx) cell.jinx = false;
+              else { cell.mark = 'circle'; cell.jinx = true; }
+            } else if (act === 'cross') {
+              cell.mark = cell.mark === 'cross' ? '' : 'cross';
+              cell.jinx = false;
+            }
+            if (navigator.vibrate) navigator.vibrate(10);
+            save();
+            render();
+          });
+        }
+
+        // ---------- Score sheet ----------
+        function buildScoreRows() {
+          scoreRowsEl.innerHTML = '';
+          for (let i = 0; i < ROUNDS; i++) {
+            const row = document.createElement('div');
+            row.className = 'jx-score-row';
+            row.innerHTML = `
+              <div class="jx-score-label">รอบ ${i + 1}<small data-hint></small></div>
+              <input class="jx-score-input" type="number" inputmode="numeric" min="0" max="99" aria-label="คะแนนรอบ ${i + 1}" />`;
+            const input = row.querySelector('input');
+            input.addEventListener('input', () => {
+              const r = state.rounds[i];
+              const v = input.value.trim();
+              r.manual = v === '' || Number(v) === calc(r).total ? null : v;
+              save();
+              renderScores(input);
+            });
+            input.addEventListener('blur', () => renderScores());
+            row.querySelector('[data-hint]').addEventListener('click', (e) => {
+              if (e.target.tagName !== 'BUTTON') return;
+              state.rounds[i].manual = null;
+              save();
+              renderScores();
+            });
+            scoreRowsEl.appendChild(row);
+          }
+        }
+
+        function renderScores(skipInput) {
+          let total = 0;
+          [...scoreRowsEl.children].forEach((row, i) => {
+            const r = state.rounds[i];
+            const input = row.querySelector('input');
+            const hint = row.querySelector('[data-hint]');
+            const auto = calc(r).total;
+            const isManual = r.manual !== null && r.manual !== '';
+            if (input !== skipInput) input.value = isManual ? r.manual : (hasAnyMark(r) ? auto : '');
+            input.classList.toggle('manual', isManual);
+            hint.innerHTML = isManual
+              ? `แก้เอง (คำนวณได้ ${auto}) · <button type="button">ใช้ค่าอัตโนมัติ</button>`
+              : (hasAnyMark(r) ? 'คำนวณอัตโนมัติ' : '');
+            total += roundScore(i);
+          });
+          document.getElementById('grandTotal').textContent = total;
+          document.querySelectorAll('.jx-round-tab').forEach((tab, i) => {
+            const r = state.rounds[i];
+            tab.querySelector('small').textContent = hasAnyMark(r) || (r.manual !== null && r.manual !== '') ? `· ${roundScore(i)}` : '';
+          });
+        }
+
+        function hasAnyMark(r) {
+          return r.cells.some((c) => c.mark);
+        }
+
+        // ---------- Render ----------
+        function render() {
+          const round = state.rounds[state.current];
+          const res = calc(round);
+
+          boardEl.querySelectorAll('.jx-cell').forEach((el) => {
+            const i = Number(el.dataset.index);
+            const c = round.cells[i];
+            const ta = el.querySelector('textarea');
+            if (document.activeElement !== ta) ta.value = c.text;
+            el.classList.toggle('circle', c.mark === 'circle');
+            el.classList.toggle('cross', c.mark === 'cross');
+            el.classList.toggle('jinx', c.mark === 'circle' && c.jinx);
+            el.querySelector('[data-act="circle"]').classList.toggle('on', c.mark === 'circle' && !c.jinx);
+            el.querySelector('[data-act="jinx"]').classList.toggle('on', c.mark === 'circle' && c.jinx);
+            el.querySelector('[data-act="cross"]').classList.toggle('on', c.mark === 'cross');
+          });
+          boardEl.querySelectorAll('[data-row]').forEach((el) => {
+            el.classList.toggle('got', res.rowsGot[Number(el.dataset.row)]);
+          });
+          boardEl.querySelectorAll('[data-col]').forEach((el) => {
+            el.classList.toggle('got', res.colsGot[Number(el.dataset.col)]);
+          });
+
+          document.getElementById('sumCircle').textContent = res.circles;
+          document.getElementById('sumJinx').textContent = res.jinx;
+          document.getElementById('sumBonus').textContent = res.bonus;
+          document.getElementById('sumRound').textContent = res.total;
+
+          document.querySelectorAll('.jx-round-tab').forEach((tab, i) => {
+            tab.classList.toggle('active', i === state.current);
+            tab.setAttribute('aria-selected', String(i === state.current));
+          });
+
+          renderScores();
+        }
+
+        // ---------- Controls ----------
+        document.querySelectorAll('.jx-round-tab').forEach((tab) => {
+          tab.addEventListener('click', () => {
+            state.current = Number(tab.dataset.round);
+            save();
+            render();
+          });
+        });
+
+        const nameInput = document.getElementById('playerName');
+        nameInput.addEventListener('input', () => {
+          state.player = nameInput.value;
+          save();
+        });
+
+        document.getElementById('clearRoundBtn').addEventListener('click', () => {
+          const round = state.rounds[state.current];
+          if (!round.cells.some((c) => c.text || c.mark)) return;
+          if (!confirm(`ล้างคำตอบและเครื่องหมายของรอบ ${state.current + 1}?`)) return;
+          // Keep a manually-entered score; only the board is wiped.
+          round.cells = emptyRound().cells;
+          save();
+          render();
+        });
+
+        document.getElementById('newGameBtn').addEventListener('click', () => {
+          const used = state.rounds.some((r) => r.cells.some((c) => c.text || c.mark) || r.manual !== null);
+          if (used && !confirm('เริ่มเกมใหม่? คำตอบและคะแนนทั้ง 3 รอบจะถูกล้าง (ชื่อผู้เล่นยังอยู่)')) return;
+          state.rounds = Array.from({ length: ROUNDS }, emptyRound);
+          state.current = 0;
+          save();
+          render();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // ---------- Init ----------
+        load();
+        buildBoard();
+        buildScoreRows();
+        nameInput.value = state.player || '';
+        render();
+      })();
+    </script>
+  </body>
+</html>

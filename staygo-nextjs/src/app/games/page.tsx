@@ -177,6 +177,22 @@ export default function GamesPage() {
               </div>
             </article>
 
+            <article className="game-card">
+              <div className="game-thumbnail">
+                <div style={{ background: '#FACC15', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '200px', fontSize: '80px', color: '#111827' }}>
+                  ⭐
+                </div>
+              </div>
+              <div className="game-info">
+                <h3 className="game-title">กระดาน JinxO</h3>
+                <p className="game-meta">4–7 Players • กระดานช่วยเล่นบอร์ดเกม</p>
+                <p className="game-description">กระดาน 3x3 สำหรับเล่น JinxO บนมือถือแทนกระดานจริง เขียนคำตอบ วงกลม กากบาท ดาว Jinx พร้อมนับโบนัสและคะแนน 3 รอบให้อัตโนมัติ</p>
+                <div className="game-actions">
+                  <a href="/games/jinxo-board/" className="button button-primary button-md">เปิดกระดาน</a>
+                </div>
+              </div>
+            </article>
+
             {/* Placeholder for future games */}
             <article className="game-card" style={{ opacity: 0.6, pointerEvents: 'none' }}>
               <div className="game-thumbnail">

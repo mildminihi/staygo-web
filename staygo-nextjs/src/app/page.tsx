@@ -63,6 +63,11 @@ export default function Home() {
               <span className="tool-label">จับสลาก</span>
             </a>
             
+            <a href="/tools/whiteboard/" className="tool-button">
+              <div className="tool-icon">🖍️</div>
+              <span className="tool-label">ไวท์บอร์ด</span>
+            </a>
+            
             <a href="/tools/host-tools/" className="tool-button">
               <div className="tool-icon">🎮</div>
               <span className="tool-label">Host Tools</span>

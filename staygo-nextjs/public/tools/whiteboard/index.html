@@ -1,0 +1,1015 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+
+    <!-- Primary Meta Tags -->
+    <title>ไวท์บอร์ดออนไลน์ - วาดเขียนบนเว็บ | STAYGO</title>
+    <meta name="title" content="ไวท์บอร์ดออนไลน์ - วาดเขียนบนเว็บ | STAYGO" />
+    <meta name="description" content="ไวท์บอร์ดออนไลน์ฟรี วาดเขียนได้ทั้งบนคอมและมือถือ เปลี่ยนสีปากกา ปรับขนาด ยางลบ ย้อนกลับ และบันทึกเป็นรูปภาพลงเครื่องได้" />
+    <meta name="keywords" content="ไวท์บอร์ดออนไลน์, whiteboard online, กระดานวาดรูป, วาดรูปออนไลน์, เครื่องมือเกมกระดาน" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://staygoch.com/tools/whiteboard/" />
+    <meta property="og:title" content="ไวท์บอร์ดออนไลน์ - วาดเขียนบนเว็บ | STAYGO" />
+    <meta property="og:description" content="ไวท์บอร์ดออนไลน์ฟรี วาดเขียนได้ทั้งบนคอมและมือถือ บันทึกเป็นรูปภาพได้" />
+    <meta property="og:image" content="https://staygoch.com/games/reveal-board/staygo-logo.png" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://staygoch.com/tools/whiteboard/" />
+
+    <link rel="icon" type="image/png" href="../../games/reveal-board/staygo-logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Kanit:wght@700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../assets/css/site.css" />
+    <script defer src="../../assets/js/config.js"></script>
+
+    <style>
+      html, body {
+        height: 100%;
+        overflow: hidden;
+        overscroll-behavior: none;
+      }
+
+      body {
+        display: flex;
+        flex-direction: column;
+        -webkit-user-select: none;
+        user-select: none;
+        -webkit-touch-callout: none;
+      }
+
+      /* ---------- Top bar ---------- */
+      .wb-topbar {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        padding-top: max(8px, env(safe-area-inset-top));
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+        flex-shrink: 0;
+        z-index: 5;
+      }
+
+      .wb-logo {
+        height: 32px;
+        width: auto;
+        display: block;
+      }
+
+      .wb-title {
+        font-family: 'Kanit', sans-serif;
+        font-weight: 700;
+        font-size: 18px;
+        margin: 0 4px;
+        white-space: nowrap;
+      }
+
+      .wb-spacer { flex: 1; }
+
+      .wb-actions {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .wb-icon-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        min-width: 40px;
+        height: 40px;
+        padding: 0 10px;
+        border: 1px solid transparent;
+        border-radius: var(--radius-sm);
+        background: transparent;
+        color: var(--text);
+        font: 600 14px 'Inter', sans-serif;
+        cursor: pointer;
+        transition: background 0.15s, color 0.15s, border-color 0.15s;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .wb-icon-btn:hover { background: var(--surface-2); }
+      .wb-icon-btn:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 1px; }
+      .wb-icon-btn:disabled { opacity: 0.35; cursor: default; background: transparent; }
+      .wb-icon-btn svg { width: 20px; height: 20px; flex-shrink: 0; }
+
+      .wb-icon-btn.danger:hover { color: var(--danger); background: #FEF2F2; }
+
+      .wb-icon-btn.primary {
+        background: var(--primary);
+        color: var(--text-inverse);
+      }
+      .wb-icon-btn.primary:hover { background: var(--primary-hover); }
+
+      .wb-divider {
+        width: 1px;
+        height: 24px;
+        background: var(--border);
+        margin: 0 4px;
+      }
+
+      /* ---------- Canvas ---------- */
+      .wb-stage {
+        position: relative;
+        flex: 1;
+        min-height: 0;
+        overflow: hidden;
+        background: #FFFFFF;
+      }
+
+      .wb-stage.bg-grid {
+        background-color: #FFFFFF;
+        background-image:
+          linear-gradient(#E5E7EB 1px, transparent 1px),
+          linear-gradient(90deg, #E5E7EB 1px, transparent 1px);
+        background-size: 32px 32px;
+      }
+
+      .wb-stage.bg-dark { background: #1F2937; }
+
+      #board {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        touch-action: none;
+        cursor: crosshair;
+        display: block;
+      }
+
+      #board.eraser { cursor: none; }
+
+      .wb-cursor {
+        position: absolute;
+        left: 0;
+        top: 0;
+        border: 1.5px solid #111827;
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.9);
+        border-radius: 50%;
+        pointer-events: none;
+        display: none;
+        transform: translate(-50%, -50%);
+      }
+
+      /* ---------- Bottom toolbar ---------- */
+      .wb-toolbar {
+        position: absolute;
+        left: 50%;
+        bottom: max(16px, env(safe-area-inset-bottom));
+        transform: translateX(-50%);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-md);
+        max-width: calc(100% - 24px);
+        z-index: 4;
+      }
+
+      .wb-tool {
+        width: 44px;
+        height: 44px;
+        border-radius: var(--radius-sm);
+        border: 2px solid transparent;
+        background: var(--surface-2);
+        color: var(--text);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        flex-shrink: 0;
+        -webkit-tap-highlight-color: transparent;
+        transition: border-color 0.15s, background 0.15s;
+      }
+
+      .wb-tool svg { width: 22px; height: 22px; }
+      .wb-tool:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 1px; }
+      .wb-tool.active {
+        border-color: var(--primary);
+        background: #EFF6FF;
+        color: var(--primary);
+      }
+
+      .wb-colors {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .wb-swatch {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        border: 2px solid var(--surface);
+        box-shadow: 0 0 0 1px var(--border-strong);
+        cursor: pointer;
+        padding: 0;
+        flex-shrink: 0;
+        -webkit-tap-highlight-color: transparent;
+        transition: transform 0.12s, box-shadow 0.12s;
+      }
+
+      .wb-swatch:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 2px; }
+      .wb-swatch.active {
+        box-shadow: 0 0 0 2px var(--primary);
+        transform: scale(1.12);
+      }
+
+      .wb-swatch-custom {
+        position: relative;
+        background: conic-gradient(#EF4444, #F59E0B, #FACC15, #22C55E, #3B82F6, #8B5CF6, #EC4899, #EF4444);
+        overflow: hidden;
+      }
+
+      .wb-swatch-custom input {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+        border: 0;
+        padding: 0;
+      }
+
+      .wb-size {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0 4px;
+      }
+
+      .wb-size-dot {
+        width: 28px;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+
+      .wb-size-dot span {
+        display: block;
+        border-radius: 50%;
+        background: var(--text);
+      }
+
+      .wb-size input[type="range"] {
+        width: 110px;
+        accent-color: var(--primary);
+      }
+
+      /* Mobile popover for size + colors */
+      .wb-more-btn { display: none; }
+
+      .wb-popover {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: calc(max(16px, env(safe-area-inset-bottom)) + 72px);
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-md);
+        padding: 14px;
+        z-index: 6;
+        display: none;
+        width: min(320px, calc(100% - 24px));
+      }
+
+      .wb-popover.open { display: block; }
+
+      .wb-popover-label {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text-muted);
+        margin: 0 0 8px;
+      }
+
+      .wb-popover .wb-colors {
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 14px;
+      }
+
+      .wb-popover .wb-swatch { width: 36px; height: 36px; }
+      .wb-popover .wb-size input[type="range"] { flex: 1; width: auto; }
+
+      .wb-bg-options {
+        display: flex;
+        gap: 8px;
+      }
+
+      .wb-bg-option {
+        flex: 1;
+        height: 40px;
+        border-radius: var(--radius-sm);
+        border: 2px solid var(--border);
+        background: var(--surface);
+        font: 600 13px 'Inter', sans-serif;
+        color: var(--text);
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .wb-bg-option.active { border-color: var(--primary); color: var(--primary); }
+
+      /* Desktop-only background control inside toolbar */
+      .wb-toolbar .wb-bg-options .wb-bg-option {
+        flex: none;
+        width: 44px;
+        height: 44px;
+        padding: 0;
+        font-size: 18px;
+      }
+
+      /* ---------- Confirm dialog ---------- */
+      .wb-modal-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(17, 24, 39, 0.45);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 20;
+        padding: 16px;
+      }
+
+      .wb-modal-backdrop.open { display: flex; }
+
+      .wb-modal {
+        background: var(--surface);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-md);
+        padding: 24px;
+        width: min(360px, 100%);
+        text-align: center;
+      }
+
+      .wb-modal h2 {
+        font-size: 22px;
+        margin-bottom: 8px;
+      }
+
+      .wb-modal p {
+        color: var(--text-muted);
+        margin: 0 0 20px;
+      }
+
+      .wb-modal-actions {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+      }
+
+      .wb-toast {
+        position: fixed;
+        left: 50%;
+        top: 72px;
+        transform: translate(-50%, -12px);
+        background: var(--text);
+        color: var(--text-inverse);
+        padding: 10px 16px;
+        border-radius: 999px;
+        font-size: 14px;
+        font-weight: 600;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s, transform 0.2s;
+        z-index: 30;
+      }
+
+      .wb-toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+      }
+
+      /* ---------- Responsive ---------- */
+      @media (max-width: 760px) {
+        .wb-title { font-size: 16px; }
+        .wb-label-text { display: none; }
+        .wb-icon-btn { padding: 0 8px; }
+        .wb-toolbar .wb-colors,
+        .wb-toolbar .wb-size,
+        .wb-toolbar .wb-bg-wrap,
+        .wb-toolbar .wb-divider { display: none; }
+        .wb-more-btn { display: inline-flex; }
+        .wb-toolbar { gap: 8px; }
+      }
+
+      @media (max-width: 420px) {
+        .wb-title { display: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="wb-topbar">
+      <a href="../../#tools" class="wb-icon-btn" aria-label="กลับหน้าหลัก" title="กลับ">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </a>
+      <a href="../../" aria-label="STAYGO หน้าแรก">
+        <img src="../../games/reveal-board/staygo-logo.png" alt="Staygo" class="wb-logo" />
+      </a>
+      <h1 class="wb-title">ไวท์บอร์ด</h1>
+
+      <div class="wb-spacer"></div>
+
+      <div class="wb-actions">
+        <button class="wb-icon-btn" id="undoBtn" aria-label="ย้อนกลับ" title="ย้อนกลับ (Ctrl+Z)" disabled>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg>
+        </button>
+        <button class="wb-icon-btn" id="redoBtn" aria-label="ทำซ้ำ" title="ทำซ้ำ (Ctrl+Shift+Z)" disabled>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 14 5-5-5-5"/><path d="M20 9H9.5a5.5 5.5 0 0 0 0 11H13"/></svg>
+        </button>
+        <div class="wb-divider"></div>
+        <button class="wb-icon-btn danger" id="clearBtn" aria-label="ล้างกระดาน" title="ล้างกระดาน">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+          <span class="wb-label-text">ล้าง</span>
+        </button>
+        <button class="wb-icon-btn primary" id="saveBtn" aria-label="บันทึกรูปลงเครื่อง" title="บันทึกเป็นรูป PNG (Ctrl+S)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span class="wb-label-text">บันทึก</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="wb-stage" id="stage">
+      <canvas id="board" aria-label="พื้นที่วาด"></canvas>
+      <div class="wb-cursor" id="cursor"></div>
+
+      <div class="wb-toolbar" role="toolbar" aria-label="เครื่องมือวาด">
+        <button class="wb-tool active" data-tool="pen" aria-label="ปากกา" title="ปากกา (P)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+        </button>
+        <button class="wb-tool" data-tool="eraser" aria-label="ยางลบ" title="ยางลบ (E)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 21-4.3-4.3a1 1 0 0 1 0-1.4l10-10a1 1 0 0 1 1.4 0l5.6 5.6a1 1 0 0 1 0 1.4L13 19"/><path d="M22 21H7"/><path d="m5 11 9 9"/></svg>
+        </button>
+
+        <div class="wb-divider"></div>
+        <div class="wb-colors" data-color-group></div>
+
+        <div class="wb-divider"></div>
+        <div class="wb-size">
+          <div class="wb-size-dot"><span data-size-preview></span></div>
+          <label class="sr-only" for="sizeRange">ขนาดเส้น</label>
+          <input type="range" id="sizeRange" min="1" max="60" value="4" data-size-range />
+        </div>
+
+        <div class="wb-divider"></div>
+        <div class="wb-bg-wrap">
+          <div class="wb-bg-options" data-bg-group>
+            <button class="wb-bg-option" data-bg="plain" title="พื้นขาว" aria-label="พื้นขาว">⬜</button>
+            <button class="wb-bg-option" data-bg="grid" title="พื้นตาราง" aria-label="พื้นตาราง">▦</button>
+            <button class="wb-bg-option" data-bg="dark" title="กระดานดำ" aria-label="กระดานดำ">⬛</button>
+          </div>
+        </div>
+
+        <button class="wb-tool wb-more-btn" id="moreBtn" aria-label="สีและขนาด" aria-expanded="false">
+          <span id="moreSwatch" style="display:block;width:24px;height:24px;border-radius:50%;box-shadow:0 0 0 2px #fff, 0 0 0 3px var(--border-strong);"></span>
+        </button>
+      </div>
+
+      <!-- Mobile popover -->
+      <div class="wb-popover" id="popover">
+        <p class="wb-popover-label">สี</p>
+        <div class="wb-colors" data-color-group></div>
+        <p class="wb-popover-label">ขนาดเส้น</p>
+        <div class="wb-size" style="margin-bottom: 14px;">
+          <div class="wb-size-dot"><span data-size-preview></span></div>
+          <input type="range" min="1" max="60" value="4" aria-label="ขนาดเส้น" data-size-range />
+        </div>
+        <p class="wb-popover-label">พื้นหลัง</p>
+        <div class="wb-bg-options" data-bg-group>
+          <button class="wb-bg-option" data-bg="plain">ขาว</button>
+          <button class="wb-bg-option" data-bg="grid">ตาราง</button>
+          <button class="wb-bg-option" data-bg="dark">ดำ</button>
+        </div>
+      </div>
+    </main>
+
+    <div class="wb-modal-backdrop" id="confirmModal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+      <div class="wb-modal">
+        <h2 id="confirmTitle">ล้างกระดาน?</h2>
+        <p>ลบทุกอย่างบนกระดาน (กดย้อนกลับเพื่อเอาคืนได้)</p>
+        <div class="wb-modal-actions">
+          <button class="button button-outline button-md" id="cancelClear">ยกเลิก</button>
+          <button class="button button-primary button-md" id="confirmClear" style="background: var(--danger);">ล้างเลย</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="wb-toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script>
+      (() => {
+        const COLORS = ['#111827', '#EF4444', '#F59E0B', '#22C55E', '#3B82F6', '#8B5CF6', '#EC4899', '#FFFFFF'];
+        const BG = {
+          plain: '#FFFFFF',
+          grid: '#FFFFFF',
+          dark: '#1F2937'
+        };
+        const STORAGE_KEY = 'staygo-whiteboard-v1';
+
+        const stage = document.getElementById('stage');
+        const canvas = document.getElementById('board');
+        const ctx = canvas.getContext('2d');
+        const cursorEl = document.getElementById('cursor');
+        const undoBtn = document.getElementById('undoBtn');
+        const redoBtn = document.getElementById('redoBtn');
+        const popover = document.getElementById('popover');
+        const moreBtn = document.getElementById('moreBtn');
+        const moreSwatch = document.getElementById('moreSwatch');
+        const modal = document.getElementById('confirmModal');
+        const toastEl = document.getElementById('toast');
+
+        // Each action is either a stroke {type:'stroke', tool, color, size, points:[[x,y],...]}
+        // or {type:'clear'} so that clearing can be undone.
+        let actions = [];
+        let redoStack = [];
+        let current = null;
+        let activePointer = null;
+
+        const state = {
+          tool: 'pen',
+          color: COLORS[0],
+          size: 4,
+          eraserSize: 24,
+          bg: 'plain'
+        };
+
+        let dpr = 1;
+        let cssW = 0;
+        let cssH = 0;
+
+        // ---------- Persistence ----------
+        function load() {
+          try {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (!raw) return;
+            const data = JSON.parse(raw);
+            if (Array.isArray(data.actions)) actions = data.actions;
+            if (data.bg && BG[data.bg]) state.bg = data.bg;
+            if (data.color) state.color = data.color;
+            if (data.size) state.size = data.size;
+          } catch (e) { /* ignore */ }
+        }
+
+        let saveTimer = null;
+        function persist() {
+          clearTimeout(saveTimer);
+          saveTimer = setTimeout(() => {
+            try {
+              localStorage.setItem(STORAGE_KEY, JSON.stringify({
+                actions: visibleActions(),
+                bg: state.bg,
+                color: state.color,
+                size: state.size
+              }));
+            } catch (e) { /* storage full or blocked */ }
+          }, 300);
+        }
+
+        // Only what is visible after the last clear needs to be kept.
+        function visibleActions() {
+          let start = 0;
+          for (let i = actions.length - 1; i >= 0; i--) {
+            if (actions[i].type === 'clear') { start = i + 1; break; }
+          }
+          return actions.slice(start);
+        }
+
+        // ---------- Canvas sizing ----------
+        function resize() {
+          const rect = stage.getBoundingClientRect();
+          dpr = Math.min(window.devicePixelRatio || 1, 3);
+          cssW = rect.width;
+          cssH = rect.height;
+          canvas.width = Math.round(cssW * dpr);
+          canvas.height = Math.round(cssH * dpr);
+          redraw();
+        }
+
+        // ---------- Drawing ----------
+        function applyStyle(c, stroke) {
+          c.lineCap = 'round';
+          c.lineJoin = 'round';
+          c.lineWidth = stroke.size;
+          if (stroke.tool === 'eraser') {
+            c.globalCompositeOperation = 'destination-out';
+            c.strokeStyle = '#000';
+            c.fillStyle = '#000';
+          } else {
+            c.globalCompositeOperation = 'source-over';
+            c.strokeStyle = stroke.color;
+            c.fillStyle = stroke.color;
+          }
+        }
+
+        function drawStroke(c, stroke) {
+          const pts = stroke.points;
+          if (!pts.length) return;
+          applyStyle(c, stroke);
+          if (pts.length === 1) {
+            c.beginPath();
+            c.arc(pts[0][0], pts[0][1], stroke.size / 2, 0, Math.PI * 2);
+            c.fill();
+            return;
+          }
+          c.beginPath();
+          c.moveTo(pts[0][0], pts[0][1]);
+          for (let i = 1; i < pts.length - 1; i++) {
+            const mx = (pts[i][0] + pts[i + 1][0]) / 2;
+            const my = (pts[i][1] + pts[i + 1][1]) / 2;
+            c.quadraticCurveTo(pts[i][0], pts[i][1], mx, my);
+          }
+          const last = pts[pts.length - 1];
+          c.lineTo(last[0], last[1]);
+          c.stroke();
+        }
+
+        function renderActions(c, list) {
+          for (const a of list) {
+            if (a.type === 'clear') {
+              c.save();
+              c.setTransform(1, 0, 0, 1, 0, 0);
+              c.clearRect(0, 0, c.canvas.width, c.canvas.height);
+              c.restore();
+            } else {
+              drawStroke(c, a);
+            }
+          }
+          c.globalCompositeOperation = 'source-over';
+        }
+
+        function redraw() {
+          ctx.setTransform(1, 0, 0, 1, 0, 0);
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          renderActions(ctx, visibleActions());
+          if (current) drawStroke(ctx, current);
+          ctx.globalCompositeOperation = 'source-over';
+        }
+
+        // Draw only the newest segment of the in-progress stroke.
+        function drawSegment(stroke) {
+          const pts = stroke.points;
+          const n = pts.length;
+          applyStyle(ctx, stroke);
+          ctx.beginPath();
+          if (n < 3) {
+            ctx.moveTo(pts[0][0], pts[0][1]);
+            const mid = n === 2
+              ? [(pts[0][0] + pts[1][0]) / 2, (pts[0][1] + pts[1][1]) / 2]
+              : pts[0];
+            ctx.lineTo(mid[0], mid[1]);
+          } else {
+            const a = pts[n - 3], b = pts[n - 2], c = pts[n - 1];
+            ctx.moveTo((a[0] + b[0]) / 2, (a[1] + b[1]) / 2);
+            ctx.quadraticCurveTo(b[0], b[1], (b[0] + c[0]) / 2, (b[1] + c[1]) / 2);
+          }
+          ctx.stroke();
+          ctx.globalCompositeOperation = 'source-over';
+        }
+
+        function pointFromEvent(e) {
+          const rect = canvas.getBoundingClientRect();
+          return [
+            Math.round((e.clientX - rect.left) * 10) / 10,
+            Math.round((e.clientY - rect.top) * 10) / 10
+          ];
+        }
+
+        function currentSize() {
+          return state.tool === 'eraser' ? state.eraserSize : state.size;
+        }
+
+        canvas.addEventListener('pointerdown', (e) => {
+          if (e.button !== 0 && e.pointerType === 'mouse') return;
+          if (activePointer !== null) return; // ignore a second finger
+          closePopover();
+          activePointer = e.pointerId;
+          canvas.setPointerCapture(e.pointerId);
+          current = {
+            type: 'stroke',
+            tool: state.tool,
+            color: state.color,
+            size: currentSize(),
+            points: [pointFromEvent(e)]
+          };
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          drawStroke(ctx, current);
+          ctx.globalCompositeOperation = 'source-over';
+          e.preventDefault();
+        });
+
+        canvas.addEventListener('pointermove', (e) => {
+          updateCursor(e);
+          if (!current || e.pointerId !== activePointer) return;
+          const events = e.getCoalescedEvents ? e.getCoalescedEvents() : [e];
+          for (const ev of (events.length ? events : [e])) {
+            const p = pointFromEvent(ev);
+            const last = current.points[current.points.length - 1];
+            if (Math.abs(p[0] - last[0]) < 0.5 && Math.abs(p[1] - last[1]) < 0.5) continue;
+            current.points.push(p);
+            drawSegment(current);
+          }
+          e.preventDefault();
+        });
+
+        function endStroke(e) {
+          if (!current || e.pointerId !== activePointer) return;
+          actions.push(current);
+          redoStack = [];
+          current = null;
+          activePointer = null;
+          redraw();
+          updateHistoryButtons();
+          persist();
+        }
+
+        canvas.addEventListener('pointerup', endStroke);
+        canvas.addEventListener('pointercancel', endStroke);
+        canvas.addEventListener('pointerleave', () => { cursorEl.style.display = 'none'; });
+
+        function updateCursor(e) {
+          if (state.tool !== 'eraser' || e.pointerType !== 'mouse') {
+            cursorEl.style.display = 'none';
+            return;
+          }
+          const p = pointFromEvent(e);
+          const s = state.eraserSize;
+          cursorEl.style.display = 'block';
+          cursorEl.style.width = s + 'px';
+          cursorEl.style.height = s + 'px';
+          cursorEl.style.left = p[0] + 'px';
+          cursorEl.style.top = p[1] + 'px';
+        }
+
+        // ---------- History ----------
+        function undo() {
+          if (!actions.length) return;
+          redoStack.push(actions.pop());
+          redraw();
+          updateHistoryButtons();
+          persist();
+        }
+
+        function redo() {
+          if (!redoStack.length) return;
+          actions.push(redoStack.pop());
+          redraw();
+          updateHistoryButtons();
+          persist();
+        }
+
+        function updateHistoryButtons() {
+          undoBtn.disabled = actions.length === 0;
+          redoBtn.disabled = redoStack.length === 0;
+        }
+
+        function clearBoard() {
+          if (!visibleActions().length) return;
+          actions.push({ type: 'clear' });
+          redoStack = [];
+          redraw();
+          updateHistoryButtons();
+          persist();
+          toast('ล้างกระดานแล้ว');
+        }
+
+        // ---------- Save as PNG ----------
+        function saveImage() {
+          const out = document.createElement('canvas');
+          out.width = canvas.width;
+          out.height = canvas.height;
+          const o = out.getContext('2d');
+          o.fillStyle = BG[state.bg];
+          o.fillRect(0, 0, out.width, out.height);
+          if (state.bg === 'grid') {
+            o.strokeStyle = '#E5E7EB';
+            o.lineWidth = dpr;
+            const step = 32 * dpr;
+            o.beginPath();
+            for (let x = 0; x <= out.width; x += step) { o.moveTo(x + 0.5 * dpr, 0); o.lineTo(x + 0.5 * dpr, out.height); }
+            for (let y = 0; y <= out.height; y += step) { o.moveTo(0, y + 0.5 * dpr); o.lineTo(out.width, y + 0.5 * dpr); }
+            o.stroke();
+          }
+          o.drawImage(canvas, 0, 0);
+
+          const d = new Date();
+          const pad = (n) => String(n).padStart(2, '0');
+          const name = `whiteboard-${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}-${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}.png`;
+
+          out.toBlob(async (blob) => {
+            if (!blob) { toast('บันทึกไม่สำเร็จ'); return; }
+            const file = new File([blob], name, { type: 'image/png' });
+            // On phones, the share sheet lets people "Save Image" straight to the photo library.
+            const isTouch = matchMedia('(pointer: coarse)').matches;
+            if (isTouch && navigator.canShare && navigator.canShare({ files: [file] })) {
+              try {
+                await navigator.share({ files: [file], title: 'Whiteboard' });
+                return;
+              } catch (err) {
+                if (err && err.name === 'AbortError') return;
+              }
+            }
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = name;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
+            toast('บันทึกรูปแล้ว');
+          }, 'image/png');
+        }
+
+        // ---------- UI wiring ----------
+        function buildColorGroups() {
+          document.querySelectorAll('[data-color-group]').forEach((group) => {
+            group.innerHTML = '';
+            COLORS.forEach((c) => {
+              const b = document.createElement('button');
+              b.className = 'wb-swatch';
+              b.style.background = c;
+              b.dataset.color = c;
+              b.setAttribute('aria-label', 'สี ' + c);
+              b.addEventListener('click', () => setColor(c));
+              group.appendChild(b);
+            });
+            const custom = document.createElement('label');
+            custom.className = 'wb-swatch wb-swatch-custom';
+            custom.title = 'เลือกสีเอง';
+            const input = document.createElement('input');
+            input.type = 'color';
+            input.setAttribute('aria-label', 'เลือกสีเอง');
+            input.addEventListener('input', () => setColor(input.value));
+            custom.appendChild(input);
+            group.appendChild(custom);
+          });
+        }
+
+        function setColor(c) {
+          state.color = c;
+          if (state.tool === 'eraser') setTool('pen');
+          syncUI();
+          persist();
+        }
+
+        function setTool(t) {
+          state.tool = t;
+          canvas.classList.toggle('eraser', t === 'eraser');
+          if (t !== 'eraser') cursorEl.style.display = 'none';
+          syncUI();
+        }
+
+        function setSize(v) {
+          v = Number(v);
+          if (state.tool === 'eraser') state.eraserSize = v;
+          else state.size = v;
+          syncUI();
+          persist();
+        }
+
+        function setBg(bg) {
+          state.bg = bg;
+          stage.classList.toggle('bg-grid', bg === 'grid');
+          stage.classList.toggle('bg-dark', bg === 'dark');
+          // Swap the default ink so it stays visible on the new background.
+          if (bg === 'dark' && state.color === '#111827') state.color = '#FFFFFF';
+          if (bg !== 'dark' && state.color === '#FFFFFF') state.color = '#111827';
+          syncUI();
+          persist();
+        }
+
+        function syncUI() {
+          document.querySelectorAll('[data-tool]').forEach((b) => {
+            b.classList.toggle('active', b.dataset.tool === state.tool);
+          });
+          document.querySelectorAll('.wb-swatch[data-color]').forEach((b) => {
+            b.classList.toggle('active', state.tool === 'pen' && b.dataset.color.toLowerCase() === state.color.toLowerCase());
+          });
+          const isPreset = COLORS.some((c) => c.toLowerCase() === state.color.toLowerCase());
+          document.querySelectorAll('.wb-swatch-custom').forEach((el) => {
+            el.classList.toggle('active', state.tool === 'pen' && !isPreset);
+            if (!isPreset) el.style.background = state.color;
+            else el.style.background = '';
+          });
+          const size = currentSize();
+          document.querySelectorAll('[data-size-range]').forEach((r) => { r.value = size; });
+          document.querySelectorAll('[data-size-preview]').forEach((s) => {
+            const d = Math.max(3, Math.min(28, size));
+            s.style.width = d + 'px';
+            s.style.height = d + 'px';
+            s.style.background = state.tool === 'eraser' ? 'transparent' : state.color;
+            s.style.border = state.tool === 'eraser' || state.color.toLowerCase() === '#ffffff' ? '1.5px solid #6B7280' : 'none';
+          });
+          document.querySelectorAll('[data-bg]').forEach((b) => {
+            b.classList.toggle('active', b.dataset.bg === state.bg);
+          });
+          moreSwatch.style.background = state.tool === 'eraser' ? 'var(--surface-2)' : state.color;
+        }
+
+        function toggleTool(t) {
+          // Tapping the active tool on mobile opens the options popover.
+          if (state.tool === t && matchMedia('(max-width: 760px)').matches) {
+            togglePopover();
+            return;
+          }
+          setTool(t);
+        }
+
+        document.querySelectorAll('[data-tool]').forEach((b) => {
+          b.addEventListener('click', () => toggleTool(b.dataset.tool));
+        });
+        document.querySelectorAll('[data-size-range]').forEach((r) => {
+          r.addEventListener('input', () => setSize(r.value));
+        });
+        document.querySelectorAll('[data-bg]').forEach((b) => {
+          b.addEventListener('click', () => setBg(b.dataset.bg));
+        });
+
+        function togglePopover() {
+          const open = !popover.classList.contains('open');
+          popover.classList.toggle('open', open);
+          moreBtn.setAttribute('aria-expanded', String(open));
+        }
+
+        function closePopover() {
+          popover.classList.remove('open');
+          moreBtn.setAttribute('aria-expanded', 'false');
+        }
+
+        moreBtn.addEventListener('click', togglePopover);
+        undoBtn.addEventListener('click', undo);
+        redoBtn.addEventListener('click', redo);
+        document.getElementById('saveBtn').addEventListener('click', saveImage);
+
+        document.getElementById('clearBtn').addEventListener('click', () => {
+          if (!visibleActions().length) return;
+          modal.classList.add('open');
+          document.getElementById('confirmClear').focus();
+        });
+        document.getElementById('cancelClear').addEventListener('click', () => modal.classList.remove('open'));
+        document.getElementById('confirmClear').addEventListener('click', () => {
+          modal.classList.remove('open');
+          clearBoard();
+        });
+        modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('open'); });
+
+        document.addEventListener('keydown', (e) => {
+          if (e.target instanceof HTMLInputElement && e.target.type !== 'range') return;
+          const mod = e.ctrlKey || e.metaKey;
+          const key = e.key.toLowerCase();
+          if (key === 'escape') { modal.classList.remove('open'); closePopover(); return; }
+          if (mod && key === 'z' && !e.shiftKey) { e.preventDefault(); undo(); }
+          else if (mod && (key === 'y' || (key === 'z' && e.shiftKey))) { e.preventDefault(); redo(); }
+          else if (mod && key === 's') { e.preventDefault(); saveImage(); }
+          else if (!mod && key === 'p') setTool('pen');
+          else if (!mod && key === 'e') setTool('eraser');
+          else if (!mod && key === '[') setSize(Math.max(1, currentSize() - 2));
+          else if (!mod && key === ']') setSize(Math.min(60, currentSize() + 2));
+        });
+
+        let toastTimer = null;
+        function toast(msg) {
+          toastEl.textContent = msg;
+          toastEl.classList.add('show');
+          clearTimeout(toastTimer);
+          toastTimer = setTimeout(() => toastEl.classList.remove('show'), 1600);
+        }
+
+        // Prevent iOS pinch / double-tap zoom while drawing.
+        document.addEventListener('gesturestart', (e) => e.preventDefault());
+        document.addEventListener('dblclick', (e) => e.preventDefault());
+
+        // ---------- Init ----------
+        load();
+        buildColorGroups();
+        setBg(state.bg);
+        setTool('pen');
+        updateHistoryButtons();
+        new ResizeObserver(resize).observe(stage);
+        resize();
+      })();
+    </script>
+  </body>
+</html>

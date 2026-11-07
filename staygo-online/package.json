@@ -1,0 +1,15 @@
+{
+  "name": "staygo-online",
+  "private": true,
+  "type": "module",
+  "description": "STAYGO! online + ลุ้นจั่ว: shared engine, tests, Firebase backend",
+  "scripts": {
+    "test": "node --test engine/engine.test.ts",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "build:web": "tsc engine/engine.ts --target es2020 --module es2020 --strict --removeComments false --outDir ../staygo-nextjs/public/assets/js/staygo-engine",
+    "build": "npm run build:web && npm --prefix functions run build"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}

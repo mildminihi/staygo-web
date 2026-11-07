@@ -109,4 +109,22 @@ export const WEB_GAMES: WebGame[] = [
     cover: { emoji: '⭐', background: '#FACC15', color: '#111827' },
     cta: 'เปิดกระดาน',
   },
+  {
+    href: '/staygo/',
+    title: 'STAYGO! ออนไลน์',
+    meta: '2–5 Players • เกมการ์ดออนไลน์',
+    short: 'เรียงแถว S-T-A-Y-G-O ให้ครบก่อนเพื่อน คนละเครื่อง',
+    description: 'เกมการ์ด STAYGO! เล่นออนไลน์กับเพื่อนคนละเครื่อง สร้างห้องแล้วแชร์รหัส เรียงแถว S T A Y G O ให้ครบก่อนใคร ใช้พลัง Swap Take Again Yolo Got Oops! แกล้งกันได้เต็มที่',
+    cover: { emoji: '🃏', background: '#1A9BF0' },
+    beta: true,
+    cta: 'สร้าง / เข้าห้อง',
+  },
+  {
+    href: '/games/lunjua/',
+    title: 'ลุ้นจั่ว',
+    meta: '2–6 Players • เกมเสี่ยงดวง',
+    short: 'เปิดการ์ดทีละใบ เก็บ STAYGO ให้ครบ ตัวซ้ำ = ระเบิด!',
+    description: 'เกมเสี่ยงดวงด้วยการ์ด STAYGO เล่นบนเครื่องเดียว เปิดการ์ดทีละใบเก็บตัวอักษร S T A Y G O ให้ครบก่อนใคร แต่ถ้าเปิดได้ตัวซ้ำในเทิร์นเดียว ระเบิด! มีโหมดจอใหญ่สำหรับเปิดให้ทุกคนดู',
+    cover: { emoji: '💥', background: '#FFC21A', color: '#231F20' },
+  },
 ];

@@ -1,0 +1,29 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "rooms": {
+      "$roomId": {
+        "meta":   { ".read": "auth != null" },
+        "seats": {
+          ".read": "auth != null",
+          "$i": {
+            "online": {
+              ".write": "auth != null && data.parent().child('uid').val() === auth.uid",
+              ".validate": "newData.isBoolean()"
+            },
+            "offlineAt": {
+              ".write": "auth != null && data.parent().child('uid').val() === auth.uid",
+              ".validate": "newData.isNumber() && newData.val() <= now"
+            }
+          }
+        },
+        "public": { ".read": "auth != null" },
+        "private": {
+          "$uid": { ".read": "auth != null && auth.uid === $uid" }
+        },
+        "secret": { ".read": false }
+      }
+    }
+  }
+}

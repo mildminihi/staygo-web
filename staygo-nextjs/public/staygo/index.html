@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>STAYGO! ออนไลน์ - เกมการ์ดเรียงตัวอักษรกับเพื่อน | STAYGO</title>
+    <meta name="title" content="STAYGO! ออนไลน์ - เกมการ์ดเรียงตัวอักษรกับเพื่อน | STAYGO" />
+    <meta name="description" content="เล่นเกมการ์ด STAYGO! ออนไลน์กับเพื่อน 2–5 คน คนละเครื่อง เรียงแถว S T A Y G O ให้ครบก่อนใคร ใช้พลัง Swap Take Again Yolo Got Oops! แกล้งเพื่อน สร้างห้องแล้วแชร์รหัสได้เลย" />
+    <meta name="keywords" content="STAYGO, เกมการ์ดออนไลน์, เกมเล่นกับเพื่อน, เกมปาร์ตี้ออนไลน์, บอร์ดเกมออนไลน์" />
+    <meta name="robots" content="index, follow" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://staygoch.com/staygo/" />
+    <meta property="og:title" content="STAYGO! ออนไลน์ - มาเล่นด้วยกัน" />
+    <meta property="og:description" content="เกมการ์ดเรียง S T A Y G O กับเพื่อน 2–5 คน คนละเครื่อง" />
+    <meta property="og:image" content="https://staygoch.com/games/reveal-board/staygo-logo.png" />
+    <link rel="canonical" href="https://staygoch.com/staygo/" />
+    <link rel="icon" type="image/png" href="/games/reveal-board/staygo-logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Mitr:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Kanit:wght@700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/assets/css/site.css" />
+    <link rel="stylesheet" href="/assets/css/staygo-cards.css" />
+    <link rel="stylesheet" href="./styles.css" />
+    <script defer src="/assets/js/config.js"></script>
+    <script defer src="/assets/js/site.js"></script>
+    <script src="/assets/js/analytics.js" defer></script>
+    <script src="/assets/js/staygo-cta.js" defer></script>
+  </head>
+  <body class="sg-page">
+    <header class="header">
+      <div class="container">
+        <div class="header-content">
+          <a href="/" class="logo-link">
+            <img src="/games/reveal-board/staygo-logo.png" alt="Staygo" class="logo" />
+          </a>
+
+          <nav class="nav" aria-label="เมนูหลัก">
+            <a href="/#play" class="nav-link active">Play</a>
+            <a href="/#tools" class="nav-link">Tools</a>
+            <a href="/#watch" class="nav-link">Watch & Play</a>
+            <a href="/about/" class="nav-link">About</a>
+          </nav>
+
+          <div class="header-actions">
+            <a href="https://www.youtube.com/@STAYGO" target="_blank" rel="noopener noreferrer" class="icon-button" aria-label="YouTube">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
+                <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+              </svg>
+            </a>
+            <button id="menuToggle" class="icon-button" aria-label="เมนู">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu">
+      <div class="mobile-menu-header">
+        <span class="mobile-menu-title">เมนู</span>
+        <button id="menuClose" class="icon-button" aria-label="ปิดเมนู">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <nav class="mobile-nav">
+        <a href="/#play" class="mobile-nav-link">Play</a>
+        <a href="/#tools" class="mobile-nav-link">Tools</a>
+        <a href="/#watch" class="mobile-nav-link">Watch & Play</a>
+        <a href="/about/" class="mobile-nav-link">About</a>
+      </nav>
+    </div>
+
+    <main class="sgo">
+      <div id="devbar" class="devbar" hidden></div>
+
+      <!-- Firebase not configured yet -->
+      <section id="screen-config" class="narrow" hidden>
+        <div class="sgo-hero">
+          <h1 class="sg-logo"><span>S</span><span>T</span><span>A</span><span>Y</span><span>G</span><span>O</span>!</h1>
+          <p>โหมดออนไลน์กำลังจะมาเร็วๆ นี้</p>
+        </div>
+        <div class="sg-panel center">
+          <p>ระหว่างนี้ลองเล่น <b>ลุ้นจั่ว</b> ด้วยการ์ดชุดเดียวกัน บนเครื่องเดียวกับเพื่อนได้เลย</p>
+          <a class="sg-btn blue block" href="/games/lunjua/">เล่น ลุ้นจั่ว</a>
+        </div>
+      </section>
+
+      <!-- Home: create or join -->
+      <section id="screen-home" class="narrow" hidden>
+        <div class="sgo-hero">
+          <h1 class="sg-logo"><span>S</span><span>T</span><span>A</span><span>Y</span><span>G</span><span>O</span>!</h1>
+          <p>ออนไลน์ · 2–5 คน · คนละเครื่อง<br />เรียงแถว S → T → A → Y → G → O ให้ครบก่อนใคร</p>
+        </div>
+        <div class="sg-panel stack">
+          <label class="field"><span>ชื่อของคุณ</span><input id="nameInput" class="sg-input" maxlength="16" placeholder="เช่น มายด์" autocomplete="nickname" /></label>
+          <button id="createBtn" class="sg-btn blue block">สร้างห้องใหม่</button>
+          <div class="or"><span>หรือเข้าห้องเพื่อน</span></div>
+          <div class="join">
+            <input id="codeInput" class="sg-input code" maxlength="4" placeholder="รหัส 4 ตัว" autocomplete="off" autocapitalize="characters" aria-label="รหัสห้อง" />
+            <button id="joinBtn" class="sg-btn yellow">เข้าห้อง</button>
+          </div>
+        </div>
+        <p class="muted center">อยู่ด้วยกันเครื่องเดียว? ลอง <a href="/games/lunjua/">ลุ้นจั่ว</a> (เล่นได้ทันที ไม่ต้องสร้างห้อง)</p>
+        <details class="sg-panel rules">
+          <summary>วิธีเล่น STAYGO!</summary>
+          <p><b>เป้าหมาย:</b> เรียงการ์ดตรงหน้าให้ครบ S → T → A → Y → G → O แล้วกด <b>STAYGO!</b> ภายใน 5 วินาที</p>
+          <p><b>ในเทิร์นของคุณ:</b> จั่ว 1 ใบ แล้วเล่น 1 ใบ เลือกได้ว่าจะ</p>
+          <ul>
+            <li><b>วางต่อแถว</b> — ต้องเป็นตัวถัดไปที่แถวต้องการ (การ์ด STAYGO ใช้แทนตัวไหนก็ได้)</li>
+            <li><b>ทิ้งตัวอักษรเพื่อใช้พลัง</b></li>
+            <li><b>เล่นการ์ดแอคชัน</b> STAY หรือ GO!</li>
+          </ul>
+          <p>จบเทิร์นถ้ามือเกิน 6 ใบ ต้องทิ้งให้เหลือ 6</p>
+          <table class="powers">
+            <tr><td><b>S</b> Swap</td><td>สุ่มการ์ด 1 ใบจากเป้าหมาย แล้วเลือกการ์ด 1 ใบให้เขาคืน</td></tr>
+            <tr><td><b>T</b> Take</td><td>จั่ว 2 ใบ</td></tr>
+            <tr><td><b>A</b> Again</td><td>เล่นเพิ่มอีก 2 ใบ (ใช้ A ซ้อนไม่ได้)</td></tr>
+            <tr><td><b>Y</b> Yolo</td><td>เลือก 2 คน (รวมตัวเองได้) ให้สลับมือกัน</td></tr>
+            <tr><td><b>G</b> Got</td><td>ขโมยการ์ด 1 ใบแบบสุ่ม</td></tr>
+            <tr><td><b>O</b> Oops!</td><td>เป้าหมายเอาการ์ดใบสุดท้ายในแถวคืนเข้ามือ</td></tr>
+            <tr><td><b>STAY</b></td><td>เป้าหมายข้ามเทิร์นถัดไป</td></tr>
+            <tr><td><b>GO!</b></td><td>ทุกคนส่งการ์ดทั้งมือไปทางซ้าย</td></tr>
+          </table>
+          <p><b>กองจั่วหมด:</b> เล่นต่อจนวนกลับมาถึงคนที่ทำให้กองหมด แถวยาวสุดชนะ (เสมอ: การ์ดในมือน้อยกว่าชนะ)</p>
+        </details>
+      </section>
+
+      <!-- Lobby -->
+      <section id="screen-lobby" class="narrow" hidden>
+        <div class="sg-panel center stack">
+          <p class="muted">รหัสห้อง</p>
+          <div id="lobbyCode" class="room-code">----</div>
+          <button id="copyBtn" class="sg-btn small">🔗 แชร์ลิงก์ <span id="shareLink" class="link"></span></button>
+        </div>
+        <div class="sg-panel">
+          <h2 class="h2">ผู้เล่น</h2>
+          <ul id="seatList" class="seats"></ul>
+          <p id="lobbyWait" class="muted center"></p>
+          <button id="startBtn" class="sg-btn blue block">เริ่มเกม</button>
+          <button id="leaveBtn" class="sg-btn small block ghost">ออกจากห้อง</button>
+        </div>
+      </section>
+
+      <!-- Game -->
+      <section id="screen-game" class="game" hidden>
+        <div class="topbar">
+          <span class="chip">ห้อง <b id="gCode"></b></span>
+          <span class="chip" title="กองจั่ว">🂠 <b id="gDeck">0</b></span>
+          <span class="chip discard" title="กองทิ้ง (ใบบนสุด)"><span id="gDiscard"></span></span>
+          <span id="gTurn" class="turn"></span>
+          <button id="gLeave" class="sg-btn small">ออก</button>
+        </div>
+        <p id="gEndAt" class="endat" hidden></p>
+
+        <div id="opponents" class="opps"></div>
+
+        <div id="banner" class="banner" aria-live="polite" hidden></div>
+
+        <div id="meBox" class="me">
+          <div class="me-head">
+            <b id="myName"></b> <span class="tag you">คุณ</span>
+            <span id="mySkip" class="tag red" hidden>โดน STAY</span>
+            <span id="handCount" class="muted right"></span>
+          </div>
+          <div id="myRow" class="my-row"></div>
+          <div id="hand" class="hand"></div>
+          <div id="actions" class="actions" hidden></div>
+        </div>
+
+        <details class="sg-panel log-box" open>
+          <summary>เกิดอะไรขึ้นบ้าง</summary>
+          <ul id="log" class="log"></ul>
+        </details>
+      </section>
+
+      <!-- Target picker -->
+      <div id="targetSheet" class="sheet" hidden>
+        <div class="sheet-card sg-panel" role="dialog" aria-modal="true" aria-labelledby="targetTitle">
+          <div class="sheet-head"><span id="targetCard"></span><h3 id="targetTitle"></h3></div>
+          <div id="targetList" class="targets"></div>
+          <p id="targetHint" class="muted center"></p>
+          <div class="sheet-actions">
+            <button id="targetCancel" class="sg-btn">ยกเลิก</button>
+            <button id="targetConfirm" class="sg-btn blue" hidden>ยืนยัน</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Shout window -->
+      <div id="shoutOverlay" class="shout" hidden>
+        <div class="shout-card">
+          <p id="shoutWho"></p>
+          <button id="shoutBtn" class="shout-btn">STAYGO!</button>
+          <div class="shout-time"><b id="shoutTime">5.0</b> วินาที</div>
+          <div class="shout-track"><div id="shoutBar" class="shout-bar"></div></div>
+        </div>
+      </div>
+
+      <!-- End -->
+      <div id="endOverlay" class="sheet" hidden>
+        <div class="sheet-card sg-panel center">
+          <p id="endTitle" class="muted"></p>
+          <h2 id="endWinner" class="winner"></h2>
+          <p id="endReason" class="muted small"></p>
+          <p id="endStats" class="stats"></p>
+          <ol id="endTable" class="end-table"></ol>
+          <div class="sheet-actions">
+            <button id="againBtn" class="sg-btn blue">เล่นอีกรอบ</button>
+            <p id="againWait" class="muted">รอเจ้าของห้องเริ่มรอบใหม่…</p>
+            <button id="homeBtn" class="sg-btn">ออกจากห้อง</button>
+          </div>
+          <div data-staygo-cta="staygo"></div>
+        </div>
+      </div>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

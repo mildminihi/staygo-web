@@ -5,16 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 
     <!-- Primary Meta Tags -->
-    <title>กระดาน JinxO ออนไลน์ - ใช้แทนกระดานจริง | STAYGO</title>
-    <meta name="title" content="กระดาน JinxO ออนไลน์ - ใช้แทนกระดานจริง | STAYGO" />
-    <meta name="description" content="กระดานจดคำตอบและคะแนนสำหรับเล่นเกม JinxO บนมือถือ ไม่ต้องพกกระดานจริง เขียนคำตอบ 3x3 วงกลม กากบาท ดาว Jinx และคำนวณโบนัสแถว/คอลัมน์ให้อัตโนมัติ" />
-    <meta name="keywords" content="JinxO, Dito, กระดาน JinxO, จดคะแนน, บอร์ดเกม, เกมปาร์ตี้" />
+    <title>กระดานจดแต้มสำหรับเกม JinxO - ใช้แทนกระดานจริง | STAYGO</title>
+    <meta name="title" content="กระดานจดแต้มสำหรับเกม JinxO - ใช้แทนกระดานจริง | STAYGO" />
+    <meta name="description" content="เครื่องมือเสริมสำหรับเล่นเกม JinxO: กระดานจดคำตอบและคะแนนบนมือถือ ใช้คู่กับเกมตัวจริง เขียนคำตอบ 3x3 วงกลม กากบาท ดาว Jinx และคำนวณโบนัสแถว/คอลัมน์ให้อัตโนมัติ" />
+    <meta name="keywords" content="JinxO, Dito, กระดานจดแต้ม JinxO, จดคะแนน, บอร์ดเกม, เกมปาร์ตี้" />
     <meta name="robots" content="index, follow" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://staygoch.com/games/jinxo-board/" />
-    <meta property="og:title" content="กระดาน JinxO ออนไลน์ - ใช้แทนกระดานจริง | STAYGO" />
+    <meta property="og:title" content="กระดานจดแต้มสำหรับเกม JinxO - ใช้แทนกระดานจริง | STAYGO" />
     <meta property="og:description" content="กระดานจดคำตอบและคะแนนสำหรับเล่นเกม JinxO บนมือถือ ไม่ต้องพกกระดานจริง" />
     <meta property="og:image" content="https://staygoch.com/games/reveal-board/staygo-logo.png" />
 
@@ -49,6 +49,7 @@
       }
 
       .jx-head h1 span { color: var(--primary); }
+      .jx-head .button { white-space: nowrap; flex-shrink: 0; }
 
       .jx-player {
         display: flex;
@@ -392,6 +393,22 @@
       .jx-help ul { padding-left: 18px; margin: 0 0 12px; }
       .jx-help li { margin-bottom: 4px; }
 
+      .jx-notice {
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+        background: #EFF6FF;
+        border: 1px solid #BFDBFE;
+        border-radius: var(--radius-md);
+        padding: 10px 14px;
+        margin-bottom: 12px;
+        font-size: 14px;
+        line-height: 1.45;
+        color: var(--text);
+      }
+
+      .jx-notice a { color: var(--primary-hover); font-weight: 600; }
+
       .jx-note {
         margin-top: 12px;
         font-size: 12px;
@@ -464,9 +481,14 @@
 
     <main class="jx-wrap">
       <div class="jx-head">
-        <h1>กระดาน <span>JinxO</span></h1>
+        <h1>กระดานจดแต้มสำหรับ <span>JinxO</span></h1>
         <a href="../" class="button button-ghost button-sm">← กลับ</a>
       </div>
+
+      <p class="jx-notice">
+        <span aria-hidden="true">ℹ️</span>
+        <span>หน้านี้ใช้แทนแค่กระดานผู้เล่น ต้องใช้คู่กับเกม <b>JinxO</b> ตัวจริง (การ์ดหัวข้อมาจากกล่องเกม) · <a href="https://www.spiel-des-jahres.de/en/games/dito-jinxo/" target="_blank" rel="noopener noreferrer">ดูข้อมูลเกม</a></span>
+      </p>
 
       <div class="jx-player">
         <input id="playerName" type="text" maxlength="24" placeholder="ชื่อผู้เล่น" aria-label="ชื่อผู้เล่น" autocomplete="off" />
@@ -514,7 +536,7 @@
         </ul>
       </details>
 
-      <p class="jx-note">กระดานช่วยเล่นที่ STAYGO ทำขึ้นเอง ไม่ใช่ผลิตภัณฑ์ทางการของ JinxO / Tabletoys Games</p>
+      <p class="jx-note">เครื่องมือเสริมที่ STAYGO ทำขึ้นเอง ไม่ใช่ผลิตภัณฑ์ทางการและไม่ได้มีส่วนเกี่ยวข้องกับ JinxO / Tabletoys Games · ใช้คู่กับเกม JinxO ตัวจริงเท่านั้น</p>
     </main>
 
     <script>

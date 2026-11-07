@@ -594,6 +594,8 @@ function renderBoardScreen(){
       h.style.color='var(--gold-bright)'; h.style.marginTop='16px';
       h.textContent = winner ? `${winner.name} คือผู้รอดชีวิตคนสุดท้าย 🐍` : 'ไม่มีผู้รอดชีวิต';
       el.appendChild(h);
+      const cta = document.createElement('div'); cta.setAttribute('data-staygo-cta', 'ouroboros');
+      el.appendChild(cta);
       const again = document.createElement('button');
       again.className='primary'; again.style.marginTop='10px';
       again.textContent='เล่นใหม่'; again.onclick = ()=>{ state = {...state, screen:'setup', players:[], log:[]}; render(); };
@@ -1278,6 +1280,8 @@ function renderOnlineResolved(data){
     const h = document.createElement('h3'); h.className='display'; h.style.color='var(--gold-bright)'; h.style.marginTop='16px';
     h.textContent = winner ? `${winner.name} คือผู้รอดชีวิตคนสุดท้าย 🐍` : 'ไม่มีผู้รอดชีวิต';
     el.appendChild(h);
+    const cta = document.createElement('div'); cta.setAttribute('data-staygo-cta', 'ouroboros');
+    el.appendChild(cta);
     if(state.online.isHost){
       const again = document.createElement('button'); again.className='primary'; again.style.marginTop='10px';
       again.textContent='เริ่มห้องใหม่'; again.onclick = restartOnlineRoom;

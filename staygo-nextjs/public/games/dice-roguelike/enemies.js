@@ -240,8 +240,8 @@ const ENEMIES = {
         name: 'Goblin',
         sprite: '👹',
         maxHp: 30,
-        minDamage: 5,
-        maxDamage: 8,
+        minDamage: 4,
+        maxDamage: 7,
         ai: EnemyAI.aggressive,
         goldReward: [15, 25],
         tier: 1
@@ -252,8 +252,8 @@ const ENEMIES = {
         name: 'Orc Warrior',
         sprite: '🗿',
         maxHp: 50,
-        minDamage: 10,
-        maxDamage: 12,
+        minDamage: 9,
+        maxDamage: 11,
         ai: EnemyAI.defensive,
         goldReward: [20, 30],
         tier: 2
@@ -264,8 +264,8 @@ const ENEMIES = {
         name: 'Skeleton',
         sprite: '💀',
         maxHp: 25,
-        minDamage: 6,
-        maxDamage: 8,
+        minDamage: 5,
+        maxDamage: 7,
         ai: EnemyAI.healer,
         goldReward: [12, 20],
         tier: 1
@@ -288,8 +288,8 @@ const ENEMIES = {
         name: 'Bat Swarm',
         sprite: '🦇',
         maxHp: 35,
-        minDamage: 8,
-        maxDamage: 10,
+        minDamage: 7,
+        maxDamage: 9,
         ai: EnemyAI.evasive,
         goldReward: [18, 28],
         tier: 2

@@ -14,13 +14,13 @@ class GameState {
         
         // Player stats
         this.player = {
-            hp: 50,
-            maxHp: 50,
+            hp: 65,
+            maxHp: 65,
             shield: 0,
             energy: 3,
             maxEnergy: 3,
             gold: 0,
-            maxRerolls: 2,
+            maxRerolls: 3,
             diceCount: 5
         };
 

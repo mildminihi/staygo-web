@@ -5,12 +5,12 @@
 const GAME_CONFIG = {
     // Player starting stats
     player: {
-        startingHp: 50,
-        startingMaxHp: 50,
+        startingHp: 65,
+        startingMaxHp: 65,
         startingEnergy: 3,
         startingMaxEnergy: 3,
         startingGold: 0,
-        maxRerolls: 2
+        maxRerolls: 3
     },
 
     // Combat

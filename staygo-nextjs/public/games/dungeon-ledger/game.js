@@ -790,6 +790,7 @@
                         statRow('Heroes Lost', state.heroesLost) +
                         statRow('Monsters Defeated', state.monstersDefeated) +
                     '</div>' +
+                    '<div data-staygo-cta="dungeon-ledger"></div>' +
                     '<button class="dl-btn dl-btn-primary" data-action="dismiss-gameover" style="width:100%;">Continue the Ledger</button>' +
                 '</div>' +
             '</div>'

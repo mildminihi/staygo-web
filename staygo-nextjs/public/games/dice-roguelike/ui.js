@@ -171,16 +171,21 @@ class UIManager {
         const map = getMap();
         if (!map || !map.map) return;
 
+        // Track each node's DOM element so we can draw path lines between
+        // floors afterward, using their real rendered positions.
+        const nodeElements = {};
+
         // Render floors from top to bottom (floor 10 to 1)
         for (let floor = map.floors - 1; floor >= 0; floor--) {
             const floorNodes = map.map[floor];
             const rowDiv = document.createElement('div');
             rowDiv.className = 'map-row';
+            nodeElements[floor] = {};
 
             for (const node of floorNodes) {
                 const nodeDiv = document.createElement('div');
                 nodeDiv.className = `map-node map-node-${node.type}`;
-                
+
                 if (node.visited) nodeDiv.classList.add('node-visited');
                 if (node.available && !node.visited) nodeDiv.classList.add('node-available');
                 if (!node.available && !node.visited) nodeDiv.classList.add('node-locked');
@@ -201,13 +206,65 @@ class UIManager {
                 }
 
                 rowDiv.appendChild(nodeDiv);
+                nodeElements[floor][node.lane] = nodeDiv;
             }
 
             mapGrid.appendChild(rowDiv);
         }
 
+        this.drawMapConnections(map, nodeElements);
+
         // Update stats display
         this.updateMapStats();
+    }
+
+    // Draws an SVG line between every node and the next-floor nodes it
+    // connects to, so the map reads as an actual branching path instead of
+    // disconnected rows of boxes.
+    drawMapConnections(map, nodeElements) {
+        const mapGrid = document.getElementById('mapGrid');
+        if (!mapGrid) return;
+
+        const svgNS = 'http://www.w3.org/2000/svg';
+        const svg = document.createElementNS(svgNS, 'svg');
+        svg.setAttribute('class', 'map-connections');
+
+        const gridRect = mapGrid.getBoundingClientRect();
+        svg.setAttribute('width', gridRect.width);
+        svg.setAttribute('height', gridRect.height);
+        svg.setAttribute('viewBox', `0 0 ${gridRect.width} ${gridRect.height}`);
+
+        for (let floor = 0; floor < map.floors - 1; floor++) {
+            const floorNodes = map.map[floor];
+            for (const node of floorNodes) {
+                const fromEl = nodeElements[floor] && nodeElements[floor][node.lane];
+                if (!fromEl) continue;
+                const fromRect = fromEl.getBoundingClientRect();
+                const fromX = fromRect.left + fromRect.width / 2 - gridRect.left;
+                const fromY = fromRect.top + fromRect.height / 2 - gridRect.top;
+
+                (node.connections || []).forEach(lane => {
+                    const toEl = nodeElements[floor + 1] && nodeElements[floor + 1][lane];
+                    if (!toEl) return;
+                    const toRect = toEl.getBoundingClientRect();
+                    const toX = toRect.left + toRect.width / 2 - gridRect.left;
+                    const toY = toRect.top + toRect.height / 2 - gridRect.top;
+
+                    const nextNode = map.map[floor + 1][lane];
+                    const traveled = node.visited && nextNode && (nextNode.visited || nextNode.available);
+
+                    const line = document.createElementNS(svgNS, 'line');
+                    line.setAttribute('x1', fromX);
+                    line.setAttribute('y1', fromY);
+                    line.setAttribute('x2', toX);
+                    line.setAttribute('y2', toY);
+                    line.setAttribute('class', 'map-connector' + (traveled ? ' map-connector-traveled' : ''));
+                    svg.appendChild(line);
+                });
+            }
+        }
+
+        mapGrid.insertBefore(svg, mapGrid.firstChild);
     }
 
     updateMapStats() {
@@ -313,6 +370,30 @@ class UIManager {
         }
     }
 
+    // Builds a classic 6-sided pip-dot face (3x3 grid) instead of a plain number,
+    // so the dice actually look like dice rather than labeled squares.
+    buildDieFace(value) {
+        const PIP_LAYOUTS = {
+            1: [[2, 2]],
+            2: [[1, 1], [3, 3]],
+            3: [[1, 1], [2, 2], [3, 3]],
+            4: [[1, 1], [1, 3], [3, 1], [3, 3]],
+            5: [[1, 1], [1, 3], [2, 2], [3, 1], [3, 3]],
+            6: [[1, 1], [1, 3], [2, 1], [2, 3], [3, 1], [3, 3]]
+        };
+        const face = document.createElement('div');
+        face.className = 'die-face';
+        const positions = PIP_LAYOUTS[value] || [];
+        positions.forEach(([row, col]) => {
+            const pip = document.createElement('span');
+            pip.className = 'die-pip';
+            pip.style.gridRow = String(row);
+            pip.style.gridColumn = String(col);
+            face.appendChild(pip);
+        });
+        return face;
+    }
+
     renderDice() {
         const diceArea = document.getElementById('diceArea');
         if (!diceArea) return;
@@ -324,7 +405,7 @@ class UIManager {
         dice.forEach((value, index) => {
             const dieDiv = document.createElement('div');
             dieDiv.className = 'die';
-            dieDiv.textContent = value;
+            dieDiv.appendChild(this.buildDieFace(value));
             dieDiv.dataset.index = index;
 
             // Check if selected
@@ -379,6 +460,17 @@ class UIManager {
         combatManager.diceManager.toggleSelectDie(index);
         this.renderDice();
         this.updateCombatButtons();
+        this.updateSlotTargets();
+    }
+
+    // Pulses every allocation slot while dice are selected, so it's obvious
+    // that tapping a slot below is how you place the dice you just picked.
+    updateSlotTargets() {
+        const hasSelection = combatManager.diceManager.selectedDice.length > 0;
+        ['attack', 'block', 'heal', 'charge'].forEach(slotName => {
+            const slot = document.getElementById(`${slotName}Slot`);
+            if (slot) slot.classList.toggle('slot-target', hasSelection);
+        });
     }
 
     updateSlots() {
@@ -447,6 +539,7 @@ class UIManager {
             this.renderDice();
             this.updateSlots();
             this.updateCombatButtons();
+            this.updateSlotTargets();
         }
     }
 
@@ -478,6 +571,7 @@ class UIManager {
         this.rollingIndices = combatManager.diceManager.dice.map((_, i) => i);
         this.renderDice();
         this.updateCombatButtons();
+        this.updateSlotTargets();
     }
 
     onReroll() {
@@ -486,6 +580,7 @@ class UIManager {
             this.rollingIndices = rerolledIndices;
             this.renderDice();
             this.updateCombatButtons();
+            this.updateSlotTargets();
         }
     }
 

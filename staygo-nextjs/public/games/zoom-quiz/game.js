@@ -429,6 +429,7 @@ Screens.summary = () => {
     <div class="eyebrow" style="text-align:center;">จบเกมแล้ว</div>
     <h1 class="display" style="text-align:center;">เล่นครบ ${state.questions.length} ข้อ</h1>
     <p class="sub" style="text-align:center;">อย่าลืมนับคะแนนที่จดไว้ ใครตอบถูกเยอะสุดคือผู้ชนะ 🎉</p>
+    <div data-staygo-cta="zoom-quiz"></div>
   `;
 
   const again = document.createElement('button'); again.className = 'primary'; again.style.width = '100%';

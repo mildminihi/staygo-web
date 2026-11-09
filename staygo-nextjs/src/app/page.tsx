@@ -3,13 +3,12 @@ import WebGameCard from '@/components/WebGameCard';
 import { HOME_GAME_LIMIT, WEB_GAMES } from '@/data/webGames';
 import { HOME_TOOL_LIMIT, TOOLS } from '@/data/tools';
 import { BOARD_GAMES } from '@/data/boardgames';
-import GameCard from './how-to-play/GameCard';
+import LatestClip from '@/components/LatestClip';
+import PlaylistTabs from '@/components/PlaylistTabs';
+import { channelTabs } from '@/data/youtube';
 
-const SUBSCRIBE_URL = 'https://www.youtube.com/@STAYGO?sub_confirmation=1';
-
-// boardgames.ts เรียงจากคลิปใหม่ไปเก่า ลงคลิปใหม่แล้วเพิ่มเกมไว้บนสุด หน้าแรกจะอัปเดตเอง
-const [latestClip, ...olderClips] = BOARD_GAMES;
-const moreClips = olderClips.slice(0, 4);
+// คลิปล่าสุดและเพลย์ลิสต์ดึงจาก YouTube ตอน build (ดู src/data/playlists.ts)
+const TABS = channelTabs();
 
 export default function Home() {
   return (
@@ -93,40 +92,17 @@ export default function Home() {
         <div className="container">
           <div className="section-header">
             <h2 className="section-title">คลิปล่าสุดจากช่อง</h2>
+            <Link href="/watch/" className="link-more">ดูทุกรายการ →</Link>
+          </div>
+
+          <LatestClip />
+
+          <h3 className="yt-section-title">รายการจากช่อง STAYGO</h3>
+          <PlaylistTabs tabs={TABS} />
+
+          <p className="yt-more-links">
             <Link href="/how-to-play/" className="link-more">ดูวิธีเล่นบอร์ดเกมทั้งหมด ({BOARD_GAMES.length}) →</Link>
-          </div>
-
-          <div className="watch-hero">
-            <div className="watch-illustration">
-              <iframe
-                width="560"
-                height="315"
-                src={`https://www.youtube-nocookie.com/embed/${latestClip.videos[0].id}`}
-                title={`${latestClip.name} | STAYGO`}
-                frameBorder="0"
-                loading="lazy"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                referrerPolicy="strict-origin-when-cross-origin"
-                allowFullScreen
-              ></iframe>
-            </div>
-            <div className="watch-content">
-              <span className="watch-eyebrow">คลิปใหม่ล่าสุด</span>
-              <h3 className="watch-title">{latestClip.name}</h3>
-              <p className="watch-description">{latestClip.summary}</p>
-              <div className="watch-actions">
-                <a href={SUBSCRIBE_URL} target="_blank" rel="noopener noreferrer" className="button button-lg htp-btn-youtube">🔔 ติดตามช่อง</a>
-                <a href="https://www.youtube.com/@STAYGO/videos" target="_blank" rel="noopener noreferrer" className="button button-outline button-lg">▶ ดูวิดีโอทั้งหมด</a>
-              </div>
-              <Link href={`/how-to-play/${latestClip.slug}/`} className="link-more">อ่านวิธีเล่น {latestClip.name} →</Link>
-            </div>
-          </div>
-
-          <div className="htp-grid">
-            {moreClips.map((game) => (
-              <GameCard key={game.slug} game={game} />
-            ))}
-          </div>
+          </p>
         </div>
       </section>
     </main>

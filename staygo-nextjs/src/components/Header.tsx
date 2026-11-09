@@ -32,7 +32,7 @@ export default function Header() {
             <nav className="nav" aria-label="เมนูหลัก">
               <Link href="/games/" className="nav-link">Play</Link>
               <Link href="/tools/" className="nav-link">Tools</Link>
-              <Link href="/#watch" className="nav-link">Watch & Play</Link>
+              <Link href="/watch/" className="nav-link">Watch & Play</Link>
               <Link href="/how-to-play/" className="nav-link">How to Play</Link>
               <Link href="/about" className="nav-link">About</Link>
             </nav>

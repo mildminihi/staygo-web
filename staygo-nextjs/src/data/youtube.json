@@ -1,0 +1,274 @@
+{
+  "updatedAt": "2026-11-09T00:00:00Z",
+  "source": "snapshot",
+  "latest": [
+    {
+      "id": "avtvQ2pKuTA",
+      "title": "เก็บเพชร เรียงแต้ม | PZZLE | STAYgo Boardgame",
+      "publishedAt": "2026-11-08T00:00:00Z"
+    },
+    {
+      "id": "fBvP265dXpY",
+      "title": "ฉันคือใครใน JoJo's Bizarre Adventure | STAYgo เอาวะลองดู",
+      "publishedAt": "2026-10-26T00:00:00Z"
+    },
+    {
+      "id": "hnqnrrWVUBw",
+      "title": "เหลี่ยมฮิปโป บิดยีราฟ | บอตสวานา | STAYgo Boardgame",
+      "publishedAt": "2026-10-19T00:00:00Z"
+    },
+    {
+      "id": "OLHplAMHLY4",
+      "title": "ไปเลย!...ฉันเลือนาย | Pokémon Plakoro | STAYgo แก๊งค์ซ่า Challenge",
+      "publishedAt": "2026-10-10T00:00:00Z"
+    },
+    {
+      "id": "_xBnVRgvdJg",
+      "title": "เรื่องนี้ กูว่ามึง!!! | Sounds Like You จับคู่ รู้ใจ | STAYgo Boardgame",
+      "publishedAt": "2026-09-10T00:00:00Z"
+    },
+    {
+      "id": "FwdbZ1KRoGk",
+      "title": "ฮีโร่รวมพลัง | Marvel United x Spiderman | STAYgo Boardgame",
+      "publishedAt": "2026-09-10T00:00:00Z"
+    },
+    {
+      "id": "nVfD0Z6qIYk",
+      "title": "ราชา...แพ้โจร? | ศึกชิงบัลลังก์ (Emblems) | STAYgo Boardgame",
+      "publishedAt": "2026-09-10T00:00:00Z"
+    },
+    {
+      "id": "LwU0Srv4hjA",
+      "title": "แกรนด์ไลน์ไม่โหด...แต่เพื่อนโหดกว่า | 5 Minute One Piece | STAYgo Boardgame",
+      "publishedAt": "2026-08-11T00:00:00Z"
+    },
+    {
+      "id": "hhAK6b-40FY",
+      "title": "เหลี่ยมมมมมจัด | Dirty Work (เหลี่ยมสัตว์) | STAYgo Boardgame",
+      "publishedAt": "2026-08-11T00:00:00Z"
+    },
+    {
+      "id": "0BYL_hJqHk8",
+      "title": "แบรกแตก แหกทุกตัว | Hot Streak | STAYgo Boardgame",
+      "publishedAt": "2026-07-12T00:00:00Z"
+    },
+    {
+      "id": "tWjv1BZHXwo",
+      "title": "โคตรจะมึงเลย | That's You | STAYgo Boardgames",
+      "publishedAt": "2026-07-12T00:00:00Z"
+    },
+    {
+      "id": "TjAVPm0BxCA",
+      "title": "รู้ใจนัก ก็มาอยู่ด้วยกัน | โค้ดเนมส์ (Codename) | STAYgo Boardgame",
+      "publishedAt": "2026-06-12T00:00:00Z"
+    }
+  ],
+  "playlists": {
+    "boardgame": {
+      "id": "PLG20mBG6czamQSIVdji-enijsr0oXadk-",
+      "total": 297,
+      "videos": [
+        {
+          "id": "avtvQ2pKuTA",
+          "title": "เก็บเพชร เรียงแต้ม | PZZLE | STAYgo Boardgame",
+          "publishedAt": "2026-11-08T00:00:00Z"
+        },
+        {
+          "id": "hnqnrrWVUBw",
+          "title": "เหลี่ยมฮิปโป บิดยีราฟ | บอตสวานา | STAYgo Boardgame",
+          "publishedAt": "2026-10-19T00:00:00Z"
+        },
+        {
+          "id": "_xBnVRgvdJg",
+          "title": "เรื่องนี้ กูว่ามึง!!! | Sounds Like You จับคู่ รู้ใจ | STAYgo Boardgame",
+          "publishedAt": "2026-09-10T00:00:00Z"
+        },
+        {
+          "id": "FwdbZ1KRoGk",
+          "title": "ฮีโร่รวมพลัง | Marvel United x Spiderman | STAYgo Boardgame",
+          "publishedAt": "2026-09-10T00:00:00Z"
+        },
+        {
+          "id": "nVfD0Z6qIYk",
+          "title": "ราชา...แพ้โจร? | ศึกชิงบัลลังก์ (Emblems) | STAYgo Boardgame",
+          "publishedAt": "2026-09-10T00:00:00Z"
+        },
+        {
+          "id": "LwU0Srv4hjA",
+          "title": "แกรนด์ไลน์ไม่โหด...แต่เพื่อนโหดกว่า | 5 Minute One Piece | STAYgo Boardgame",
+          "publishedAt": "2026-08-11T00:00:00Z"
+        },
+        {
+          "id": "hhAK6b-40FY",
+          "title": "เหลี่ยมมมมมจัด | Dirty Work (เหลี่ยมสัตว์) | STAYgo Boardgame",
+          "publishedAt": "2026-08-11T00:00:00Z"
+        },
+        {
+          "id": "0BYL_hJqHk8",
+          "title": "แบรกแตก แหกทุกตัว | Hot Streak | STAYgo Boardgame",
+          "publishedAt": "2026-07-12T00:00:00Z"
+        },
+        {
+          "id": "tWjv1BZHXwo",
+          "title": "โคตรจะมึงเลย | That's You | STAYgo Boardgames",
+          "publishedAt": "2026-07-12T00:00:00Z"
+        },
+        {
+          "id": "TjAVPm0BxCA",
+          "title": "รู้ใจนัก ก็มาอยู่ด้วยกัน | โค้ดเนมส์ (Codename) | STAYgo Boardgame",
+          "publishedAt": "2026-06-12T00:00:00Z"
+        },
+        {
+          "id": "R1Lqqi087r8",
+          "title": "เราพวกกันมั้ย? สงสัยจะไม่ | Here to Slay | STAYgo Boardgame",
+          "publishedAt": "2026-06-12T00:00:00Z"
+        },
+        {
+          "id": "3VMoBtYc7t8",
+          "title": "บิดแล้วรวย ซวยแล้วมึง | BID แล้วรวย For Sale | STAYgo Boardgame",
+          "publishedAt": "2026-05-13T00:00:00Z"
+        }
+      ]
+    },
+    "challenge": {
+      "id": "PLG20mBG6czalQt2B94Ml8TqAQfvPRZhfU",
+      "total": 4,
+      "videos": [
+        {
+          "id": "OLHplAMHLY4",
+          "title": "ไปเลย!...ฉันเลือนาย | Pokémon Plakoro | STAYgo แก๊งค์ซ่า Challenge",
+          "publishedAt": "2026-10-10T00:00:00Z"
+        },
+        {
+          "id": "zOwUp4zP2qw",
+          "title": "แก๊งนี้ไปตีแบดท่ายาก | Badminton Challenge | STAYgo แก๊งซ่า Challenge",
+          "publishedAt": "2025-11-09T00:00:00Z"
+        },
+        {
+          "id": "uEoApJ0quuw",
+          "title": "แก๊งนี้จะเป็นโปรเบลดเดอร์ | Beyblade X | STAYgo แก๊งซ่า Challenge",
+          "publishedAt": "2025-11-09T00:00:00Z"
+        },
+        {
+          "id": "OHOl5hsBh-I",
+          "title": "แก๊งนี้อยากเป็นเบลดเดอร์ 3..2..1..GO! SHOOT!!! | Beyblade X | STAYgo แก๊งซ่า Challenge",
+          "publishedAt": "2025-11-09T00:00:00Z"
+        }
+      ]
+    },
+    "stackgo": {
+      "id": "PLG20mBG6czamZSiOgxFev0vhWe2ol5Lam",
+      "total": 3,
+      "videos": [
+        {
+          "id": "dJcWXq7kLqc",
+          "title": "ข้าวหน้าหมูย่างชุ่มฉ่ำ | OHACHI Sumiyaki Butadon | stayGO สะแตกโก",
+          "publishedAt": "2026-02-12T00:00:00Z"
+        },
+        {
+          "id": "C6pKfF7iK1o",
+          "title": "ร้านนี้ต้องลอง ราเมนอันดับ1 | Menya Itto Ramen | stayGO สะแตกโก",
+          "publishedAt": "2025-11-09T00:00:00Z"
+        },
+        {
+          "id": "sRRCUad2450",
+          "title": "บุฟเฟ่ต์อาหารญี่ปุ่น ที่มีทุกอย่าง | Jirafu Sushi & Beer Bar | stayGO สะแตกโก",
+          "publishedAt": "2025-11-09T00:00:00Z"
+        }
+      ]
+    },
+    "aowa": {
+      "id": "PLG20mBG6czanI9BkKuIhlYlsAf8tJwkaC",
+      "total": 5,
+      "videos": [
+        {
+          "id": "fBvP265dXpY",
+          "title": "ฉันคือใครใน JoJo's Bizarre Adventure | STAYgo เอาวะลองดู",
+          "publishedAt": "2026-10-26T00:00:00Z"
+        },
+        {
+          "id": "BJfvtKTyqPM",
+          "title": "คุ้นๆนะ แต่จำชื่อไม่ได้!!! | ทายเพลงจากอนิเมะ | STAYgo เอาวะลองดู",
+          "publishedAt": "2026-01-13T00:00:00Z"
+        },
+        {
+          "id": "NdLumF9Hf7o",
+          "title": "เป็นผู้ชาย...มี 3 เวอร์ชั่น? | เปิดแผ่นป้าย MCU | STAYgo เอาวะลองดู",
+          "publishedAt": "2025-11-09T00:00:00Z"
+        },
+        {
+          "id": "KtYvlF0C8-k",
+          "title": "อ๋ออออออ..... | เปิดแผ่นป้าย Valorant | STAYgo เอาวะลองดู EP.2",
+          "publishedAt": "2025-11-09T00:00:00Z"
+        },
+        {
+          "id": "hLLp7SlhSmU",
+          "title": "คลิปแรกก็เอาซะยากเลย | ฉันคือใคร? ในโลกต่างๆ | STAYgo เอาวะลองดู EP.1",
+          "publishedAt": "2025-11-09T00:00:00Z"
+        }
+      ]
+    },
+    "gameonly": {
+      "id": "PLG20mBG6czan_lJEd2C4djODeMQl9jb76",
+      "total": 4,
+      "videos": [
+        {
+          "id": "tAxBuWYbMTU",
+          "title": "เกมนี้มีเควส | Quest Master New Era | STAYgo เกมมีเท่านี้",
+          "publishedAt": "2025-11-09T00:00:00Z"
+        },
+        {
+          "id": "Bb_PaPGpR3U",
+          "title": "เกมนี้มีฮีโร่#2 All Card List | The Massive-Verse | STAYgo เกมมีเท่านี้",
+          "publishedAt": "2025-11-09T00:00:00Z"
+        },
+        {
+          "id": "kdEedmBvAno",
+          "title": "เกมนี้มีฮีโร่#1 How to Play | The Massive-Verse | STAYgo เกมมีเท่านี้",
+          "publishedAt": "2025-11-09T00:00:00Z"
+        },
+        {
+          "id": "dZtE0_Ilr2M",
+          "title": "เกมนี้มีหมาป่า | Ultimate Werewolf Extreme | STAYgo เกมมีเท่านี้",
+          "publishedAt": "2025-11-09T00:00:00Z"
+        }
+      ]
+    },
+    "story": {
+      "id": "PLG20mBG6czakGL2XId3vjhhmrHOKd1bIq",
+      "total": 6,
+      "videos": [
+        {
+          "id": "CIzRgnFpNDM",
+          "title": "ไปงาน TBS ได้อะไรบ้าง| Thailand Boardgame Show 2025 | stayGO Story",
+          "publishedAt": "2025-12-14T00:00:00Z"
+        },
+        {
+          "id": "cbpIH2hLWWY",
+          "title": "กินไอติมรสแปลก? | Guss Damn Good  | STAYgo Story",
+          "publishedAt": "2025-11-09T00:00:00Z"
+        },
+        {
+          "id": "KKAPJBLonyE",
+          "title": "ทำ Challenge จาก @ministryofbeybladex | Beyblade X | STAYgo Story",
+          "publishedAt": "2025-11-09T00:00:00Z"
+        },
+        {
+          "id": "WeaTix1YENc",
+          "title": "พาเพื่อนไปลองแข่งเบย์เบลด | Beyblade X | stayGO Story",
+          "publishedAt": "2025-11-09T00:00:00Z"
+        },
+        {
+          "id": "Yo7G_I8GWk4",
+          "title": "ตามล่าของเล่น | Kyoto - Osaka 2025 | stayGO Story",
+          "publishedAt": "2025-11-09T00:00:00Z"
+        },
+        {
+          "id": "OIk13BYGbyE",
+          "title": "ตะลุยงานบอดเกมครั้งแรกยกแก๊ง | Thailand Boardgame Show 2024 | stayGO Story",
+          "publishedAt": "2025-11-09T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

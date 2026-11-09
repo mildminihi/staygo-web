@@ -8,7 +8,9 @@
     "export": "next build",
     "start": "next start",
     "lint": "eslint",
-    "deploy": "npm run build"
+    "deploy": "npm run build",
+    "prebuild": "node scripts/fetch-youtube.mjs",
+    "youtube": "node scripts/fetch-youtube.mjs"
   },
   "dependencies": {
     "next": "16.1.1",

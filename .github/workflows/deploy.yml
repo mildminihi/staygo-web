@@ -64,20 +64,33 @@ jobs:
         env:
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
 
-      # Uploads only files that changed since the last run (tracked in
-      # .ftp-deploy-sync-state.json on the server). Files on the server that this
-      # action never uploaded are left alone.
+      # lftp instead of a Node FTP action: the server runs ProFTPD, which requires the
+      # FTPS data connection to reuse the TLS session (Node FTP clients get ECONNRESET).
+      # Uploads new and changed files; never deletes anything on the server.
+      - name: Install lftp
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+        working-directory: .
+
       - name: Upload to Plesk
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ${{ vars.FTP_PROTOCOL || 'ftps' }}
-          port: ${{ vars.FTP_PORT || 21 }}
-          # "loose" skips the TLS certificate check (Plesk's FTP certificate often
-          # doesn't match the domain). Set the FTP_SECURITY variable only if needed.
-          security: ${{ vars.FTP_SECURITY || 'strict' }}
-          local-dir: ./staygo-nextjs/out/
-          server-dir: ${{ vars.FTP_SERVER_DIR || 'httpdocs/' }}
-          dry-run: ${{ inputs.dry_run || false }}
+        working-directory: .
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          LFTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_PROTOCOL: ${{ vars.FTP_PROTOCOL || 'ftps' }}
+          FTP_PORT: ${{ vars.FTP_PORT || 21 }}
+          FTP_SERVER_DIR: ${{ vars.FTP_SERVER_DIR || 'httpdocs/' }}
+          # "loose" skips the TLS certificate check; set the FTP_SECURITY variable only if needed.
+          FTP_SECURITY: ${{ vars.FTP_SECURITY || 'strict' }}
+          DRY_RUN: ${{ inputs.dry_run && '--dry-run' || '' }}
+        run: |
+          if [ "$FTP_PROTOCOL" = "ftp" ]; then TLS="set ftp:ssl-allow false"; else TLS="set ftp:ssl-force true; set ftp:ssl-protect-data true"; fi
+          if [ "$FTP_SECURITY" = "loose" ]; then VERIFY=false; else VERIFY=true; fi
+          lftp -c "
+            set net:max-retries 3; set net:timeout 30; set net:reconnect-interval-base 5
+            $TLS
+            set ssl:verify-certificate $VERIFY
+            open --env-password -u \"$FTP_USERNAME\" -p $FTP_PORT $FTP_SERVER
+            echo '--- server folder before upload:'; cls -1 \"$FTP_SERVER_DIR\"; echo '---'
+            mirror --reverse --only-newer --no-perms --parallel=4 --verbose=1 $DRY_RUN ./staygo-nextjs/out/ \"$FTP_SERVER_DIR\"
+          "

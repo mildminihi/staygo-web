@@ -1,0 +1,107 @@
+.fp-stepper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+}
+.fp-stepper .sg-btn {
+  width: 44px;
+  padding: 0;
+  font-size: 20px;
+  flex: 0 0 auto;
+}
+.fp-stepper b {
+  font-size: 24px;
+  min-width: 24px;
+  text-align: center;
+}
+.fp-stage {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: var(--sg-ink);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  overflow: hidden;
+}
+.fp-msg {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  text-align: center;
+  color: #fff;
+  font-size: clamp(22px, 6vw, 34px);
+  font-weight: 500;
+  margin: 0;
+  pointer-events: none;
+  padding: 0 24px;
+  opacity: 0.85;
+}
+.fp-close {
+  position: absolute;
+  top: max(12px, env(safe-area-inset-top));
+  right: 12px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  background: transparent;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+}
+.fp-dot {
+  position: absolute;
+  width: 110px;
+  height: 110px;
+  margin: -55px 0 0 -55px;
+  border-radius: 50%;
+  background: var(--c);
+  border: 5px solid #fff;
+  box-shadow: 0 0 0 6px color-mix(in srgb, var(--c) 40%, transparent);
+  pointer-events: none;
+  transition: transform 0.25s, opacity 0.35s;
+  animation: fp-in 0.25s ease-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-family: var(--sg-font-th);
+  font-weight: 600;
+  font-size: 22px;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.35);
+}
+@keyframes fp-in {
+  from { transform: scale(0.3); }
+}
+.fp-ring {
+  position: absolute;
+  inset: -16px;
+  border-radius: 50%;
+  border: 5px solid #fff;
+  clip-path: inset(0 0 0 0);
+  animation: fp-ring var(--ms, 2500ms) linear forwards;
+  opacity: 0.8;
+}
+@keyframes fp-ring {
+  from { transform: scale(1.5); opacity: 0; }
+  to { transform: scale(1); opacity: 0.9; }
+}
+.fp-dot.win {
+  transform: scale(1.6);
+  z-index: 2;
+  animation: fp-win 0.8s ease-in-out infinite alternate;
+}
+@keyframes fp-win {
+  to { box-shadow: 0 0 0 26px color-mix(in srgb, var(--c) 35%, transparent); }
+}
+.fp-dot.lose {
+  opacity: 0.18;
+  transform: scale(0.7);
+}
+@media (prefers-reduced-motion: reduce) {
+  .fp-dot, .fp-dot.win, .fp-ring { animation: none; }
+}

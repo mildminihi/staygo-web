@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>วางนิ้วสุ่ม - สุ่มคนเริ่มเกม แบ่งทีม | STAYGO</title>
+    <meta name="title" content="วางนิ้วสุ่ม - สุ่มคนเริ่มเกม แบ่งทีม | STAYGO" />
+    <meta name="description" content="ทุกคนวางนิ้วบนจอมือถือเครื่องเดียว แล้วสุ่มว่าใครเริ่มเกมก่อน สุ่มหลายคน หรือแบ่งทีม ไม่ต้องพิมพ์ชื่อ" />
+    <meta name="robots" content="index, follow" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://staygoch.com/tools/finger-picker/" />
+    <meta property="og:title" content="วางนิ้วสุ่ม - สุ่มคนเริ่มเกม แบ่งทีม" />
+    <meta property="og:description" content="ทุกคนวางนิ้วบนจอมือถือเครื่องเดียว แล้วสุ่มว่าใครเริ่มเกมก่อน สุ่มหลายคน หรือแบ่งทีม ไม่ต้องพิมพ์ชื่อ" />
+    <meta property="og:image" content="https://staygoch.com/games/reveal-board/staygo-logo.png" />
+    <link rel="canonical" href="https://staygoch.com/tools/finger-picker/" />
+    <link rel="icon" type="image/png" href="/games/reveal-board/staygo-logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Mitr:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Kanit:wght@700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/assets/css/site.css" />
+    <link rel="stylesheet" href="/assets/css/staygo-cards.css" />
+    <link rel="stylesheet" href="/assets/css/staygo-skin.css" />
+    <link rel="stylesheet" href="/assets/css/staygo-tools.css" />
+    <link rel="stylesheet" href="./styles.css" />
+    <script defer src="/assets/js/config.js"></script>
+    <script defer src="/assets/js/site.js"></script>
+    <script src="/assets/js/analytics.js" defer></script>
+  </head>
+  <body class="sg-page sg-skin">
+    <header class="header">
+      <div class="container">
+        <div class="header-content">
+          <a href="/" class="logo-link">
+            <img src="/games/reveal-board/staygo-logo.png" alt="Staygo" class="logo" />
+          </a>
+
+          <nav class="nav" aria-label="เมนูหลัก">
+            <a href="/#play" class="nav-link">Play</a>
+            <a href="/tools/" class="nav-link active">Tools</a>
+            <a href="/watch/" class="nav-link">Watch & Play</a>
+            <a href="/about/" class="nav-link">About</a>
+          </nav>
+
+          <div class="header-actions">
+            <a href="https://www.youtube.com/@STAYGO" target="_blank" rel="noopener noreferrer" class="icon-button" aria-label="YouTube">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
+                <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+              </svg>
+            </a>
+            <button id="menuToggle" class="icon-button" aria-label="เมนู">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu">
+      <div class="mobile-menu-header">
+        <span class="mobile-menu-title">เมนู</span>
+        <button id="menuClose" class="icon-button" aria-label="ปิดเมนู">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <nav class="mobile-nav">
+        <a href="/#play" class="mobile-nav-link">Play</a>
+        <a href="/tools/" class="mobile-nav-link">Tools</a>
+        <a href="/watch/" class="mobile-nav-link">Watch & Play</a>
+        <a href="/about/" class="mobile-nav-link">About</a>
+      </nav>
+    </div>
+
+    <main class="tl">
+      <div class="tl-hero">
+        <h1>☝️ วางนิ้วสุ่ม</h1>
+        <p>ทุกคนวางนิ้วบนจอเครื่องเดียวกัน รอ 3 วินาที แล้วเครื่องจะสุ่มให้ ใครเริ่มก่อน ใครโดน หรือแบ่งทีม</p>
+      </div>
+
+      <section class="tl-narrow tl-stack">
+        <div class="sg-panel tl-stack">
+          <div>
+            <span class="tl-label">สุ่มแบบไหน</span>
+            <div class="tl-choice" id="modes">
+              <button data-mode="one" class="active"><b>👆 สุ่ม 1 คน</b><small>ใครเริ่มก่อน / ใครโดน</small></button>
+              <button data-mode="many"><b>✌️ สุ่มหลายคน</b><small>เลือกคนออกมา N คน</small></button>
+              <button data-mode="teams"><b>🎨 แบ่งทีม</b><small>แบ่งนิ้วเป็นทีมเท่าๆ กัน</small></button>
+            </div>
+          </div>
+          <div id="countRow" class="tl-row" hidden>
+            <span id="countLabel" class="tl-label" style="margin:0">จำนวน</span>
+            <div class="fp-stepper">
+              <button class="sg-btn" id="minus" aria-label="ลด">−</button>
+              <b id="count" class="tl-num">2</b>
+              <button class="sg-btn" id="plus" aria-label="เพิ่ม">+</button>
+            </div>
+          </div>
+          <button id="go" class="sg-btn blue block">เริ่ม (เปิดเต็มจอ)</button>
+          <p class="tl-hint">ใช้บนมือถือหรือแท็บเล็ต วางนิ้วพร้อมกันได้สูงสุดตามที่เครื่องรองรับ (ส่วนใหญ่ 5–10 นิ้ว) · บนคอม คลิกเพื่อวาง "นิ้วจำลอง" ได้</p>
+        </div>
+      </section>
+
+      <div id="stage" class="fp-stage" hidden>
+        <div id="dots"></div>
+        <p id="msg" class="fp-msg">วางนิ้วบนจอ</p>
+        <button id="close" class="fp-close" aria-label="ปิด">✕</button>
+      </div>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+
+  </body>
+</html>

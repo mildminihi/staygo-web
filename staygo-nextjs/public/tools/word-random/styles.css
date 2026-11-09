@@ -1,0 +1,119 @@
+.wr-cats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+.wr-cats button,
+.wr-durs button {
+  font-family: var(--sg-font-th);
+  font-size: 15px;
+  padding: 6px 14px;
+  border: 2.5px solid var(--sg-ink);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--sg-ink);
+  cursor: pointer;
+  box-shadow: 0 2px 0 var(--sg-ink);
+}
+.wr-cats button.active,
+.wr-durs button.active {
+  background: var(--sg-yellow);
+}
+.wr-durs {
+  display: flex;
+  gap: 6px;
+  margin-left: auto;
+}
+.wr-durs button {
+  padding: 4px 10px;
+  font-size: 14px;
+}
+.wr-stage {
+  display: grid;
+  gap: 14px;
+}
+.wr-card {
+  min-height: 220px;
+  border: 4px solid var(--sg-ink);
+  border-radius: 22px;
+  background: #fff8e6;
+  box-shadow: 0 6px 0 var(--sg-ink);
+  font-family: var(--sg-font-th);
+  color: var(--sg-ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  cursor: pointer;
+  text-align: center;
+}
+.wr-card span {
+  font-size: clamp(34px, 10vw, 60px);
+  font-weight: 600;
+  line-height: 1.25;
+}
+.wr-card.pop {
+  animation: wr-pop 0.3s ease-out;
+}
+@keyframes wr-pop {
+  from { transform: scale(0.9) rotate(-2deg); opacity: 0.4; }
+}
+.wr-timer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.wr-track {
+  flex: 1;
+  height: 16px;
+  border: 2.5px solid var(--sg-ink);
+  border-radius: 999px;
+  background: var(--sk-soft);
+  overflow: hidden;
+}
+.wr-fill {
+  height: 100%;
+  background: var(--sk-green);
+  transition: width 0.2s linear;
+}
+.wr-fill.warn {
+  background: var(--sg-red);
+}
+.wr-timer span {
+  font-size: 32px;
+  min-width: 48px;
+  text-align: right;
+}
+.wr-score {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  font-size: 18px;
+}
+.wr-score b {
+  font-size: 26px;
+}
+body.tl-big .tl-narrow {
+  max-width: none;
+}
+body.tl-big .wr-card {
+  min-height: calc(100vh - 220px);
+}
+body.tl-big .wr-card span {
+  font-size: clamp(60px, 12vw, 160px);
+}
+.wr-exitbig {
+  position: fixed;
+  right: 12px;
+  bottom: 12px;
+  z-index: 50;
+  opacity: 0.5;
+}
+@media (prefers-reduced-motion: reduce) {
+  .wr-card.pop { animation: none; }
+}
+.wr-card span[data-len="mid"] { font-size: clamp(28px, 8vw, 46px); }
+.wr-card span[data-len="long"] { font-size: clamp(22px, 6vw, 34px); }
+body.tl-big .wr-card span[data-len="mid"] { font-size: clamp(48px, 8vw, 110px); }
+body.tl-big .wr-card span[data-len="long"] { font-size: clamp(36px, 6vw, 80px); }

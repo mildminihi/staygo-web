@@ -1,0 +1,44 @@
+.ts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.ts-summary b {
+  font-size: 18px;
+}
+.ts-round h2 {
+  margin: 0 0 12px;
+  font-size: 22px;
+}
+.ts-tables {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 12px;
+}
+.ts-table {
+  border: 2.5px solid var(--sg-ink);
+  border-radius: 14px;
+  padding: 10px 12px;
+  background: #fff8e6;
+}
+.ts-table b {
+  display: inline-block;
+  font-size: 14px;
+  background: var(--sg-yellow);
+  border: 2px solid var(--sg-ink);
+  border-radius: 999px;
+  padding: 1px 10px;
+  margin-bottom: 6px;
+}
+.ts-table ul {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 15px;
+  line-height: 1.6;
+}
+@media print {
+  .header, .mobile-menu, .tl-hero, .ts-form, .tl-nobig, #staygo-consent { display: none !important; }
+  body.sg-skin { background: #fff; }
+  .sg-panel { box-shadow: none; break-inside: avoid; }
+  .ts-table { background: #fff; }
+}

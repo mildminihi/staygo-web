@@ -24,8 +24,9 @@
     <link rel="icon" type="image/png" href="../../games/reveal-board/staygo-logo.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Kanit:wght@700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Mitr:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Kanit:wght@700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="../../assets/css/site.css" />
+    <link rel="stylesheet" href="/assets/css/staygo-cards.css" />
     <script defer src="../../assets/js/config.js"></script>
     <script defer src="../../assets/js/site.js"></script>
     
@@ -780,8 +781,10 @@
       }
     </style>
     <script src="/assets/js/analytics.js" defer></script>
+      <link rel="stylesheet" href="/assets/css/staygo-skin.css" />
+    <link rel="stylesheet" href="./skin.css" />
   </head>
-  <body>
+  <body class="sg-page sg-skin">
     <header class="header">
       <div class="container">
         <div class="header-content">
@@ -891,6 +894,25 @@
               <div class="round-display">รอบที่ <span id="roundDisplay">1</span></div>
             </div>
             
+            <div id="turnTimer" class="tt-panel">
+              <div class="tt-head">
+                <label class="tt-switch"><input type="checkbox" id="ttOn" /> <b>⏳ จับเวลาต่อเทิร์น</b></label>
+                <div class="tt-presets" id="ttPresets">
+                  <button data-sec="15">15วิ</button><button data-sec="30">30วิ</button><button data-sec="60">1นาที</button><button data-sec="90">1:30</button><button data-sec="120">2นาที</button><button data-sec="180">3นาที</button>
+                </div>
+              </div>
+              <div id="ttBody" class="tt-body" hidden>
+                <div id="ttClock" class="tt-clock">0:30</div>
+                <div class="tt-track"><div id="ttFill" class="tt-fill"></div></div>
+                <div class="tt-actions">
+                  <button id="ttPause" class="button-secondary">⏸ หยุด</button>
+                  <button id="ttRestart" class="button-secondary">↺ เริ่มใหม่</button>
+                </div>
+                <label class="tt-auto"><input type="checkbox" id="ttAuto" /> หมดเวลาแล้วไปคนถัดไปอัตโนมัติ</label>
+                <p class="tt-hint">กด Space = ผู้เล่นถัดไป · เวลาเริ่มใหม่ทุกครั้งที่เปลี่ยนเทิร์น</p>
+              </div>
+            </div>
+
             <div class="turn-controls">
               <button id="prevTurnBtn" class="button-secondary">← ก่อนหน้า</button>
               <button id="nextTurnBtn" class="button-primary button-large">ถัดไป →</button>
@@ -1056,7 +1078,7 @@
         const availableColor = PLAYER_COLORS[appState.players.length % PLAYER_COLORS.length];
         
         const newPlayer = {
-          id: 'p' + Date.now(),
+          id: 'p' + Date.now() + Math.random().toString(36).slice(2, 6),
           name: `Player ${playerNumber}`,
           color: availableColor,
           life: appState.tracker.startingValue
@@ -1249,6 +1271,7 @@
         
         saveState();
         renderTurn();
+        document.dispatchEvent(new Event('turnchange'));
       }
 
       function prevTurn() {
@@ -1265,6 +1288,7 @@
         
         saveState();
         renderTurn();
+        document.dispatchEvent(new Event('turnchange'));
       }
 
       function randomizeTurnOrder() {
@@ -1272,6 +1296,7 @@
         appState.turn.currentIndex = 0;
         saveState();
         renderTurn();
+        document.dispatchEvent(new Event('turnchange'));
       }
 
       function moveTurnOrder(index, direction) {
@@ -1594,6 +1619,100 @@
       window.removePlayer = removePlayer;
       window.updateLife = updateLife;
       window.moveTurnOrder = moveTurnOrder;
+    </script>
+    <style>
+      .tt-panel { margin: 0 0 1.25rem; padding: 14px 16px; border: 3px solid var(--sg-ink, #231f20); border-radius: 18px; background: #fff; box-shadow: 0 4px 0 var(--sg-ink, #231f20); }
+      .tt-head { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; }
+      .tt-switch { display: inline-flex; gap: 8px; align-items: center; cursor: pointer; font-size: 17px; }
+      .tt-switch input, .tt-auto input { width: 20px; height: 20px; }
+      .tt-presets { display: flex; flex-wrap: wrap; gap: 6px; }
+      .tt-presets button { font: inherit; font-size: 14px; padding: 4px 10px; border: 2px solid var(--sg-ink, #231f20); border-radius: 999px; background: #fff; cursor: pointer; }
+      .tt-presets button.active { background: var(--sg-yellow, #ffc21a); }
+      .tt-body { margin-top: 12px; text-align: center; }
+      .tt-clock { font-family: var(--sg-font-card, inherit); font-weight: 700; font-size: clamp(56px, 16vw, 96px); line-height: 1; font-variant-numeric: tabular-nums; }
+      .tt-clock.warn { color: #e8202a; animation: tt-pulse 1s ease-in-out infinite; }
+      .tt-clock.over { color: #e8202a; }
+      @keyframes tt-pulse { 50% { transform: scale(1.06); } }
+      .tt-track { height: 14px; border: 2.5px solid var(--sg-ink, #231f20); border-radius: 999px; overflow: hidden; margin: 12px 0; background: #f3eee4; }
+      .tt-fill { height: 100%; background: #22b573; width: 100%; transition: width 0.25s linear, background 0.3s; }
+      .tt-fill.warn { background: #e8202a; }
+      .tt-actions { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+      .tt-auto { display: inline-flex; gap: 8px; align-items: center; margin-top: 10px; font-size: 15px; cursor: pointer; }
+      .tt-hint { font-size: 13px; color: #6b6461; margin: 8px 0 0; }
+      @media (prefers-reduced-motion: reduce) { .tt-clock.warn { animation: none; } }
+    </style>
+    <script>
+      // Per-turn timer for the Turn tab. Restarts on every 'turnchange' (next/prev/shuffle).
+      (function () {
+        const KEY = 'staygo-host-turn-timer';
+        let cfg = { on: false, sec: 30, auto: false };
+        try { cfg = Object.assign(cfg, JSON.parse(localStorage.getItem(KEY) || '{}')); } catch (e) {}
+        const save = () => { try { localStorage.setItem(KEY, JSON.stringify(cfg)); } catch (e) {} };
+        const $ = (id) => document.getElementById(id);
+        let endAt = 0, left = cfg.sec * 1000, paused = false, tick = null, lastBeep = null, firedEnd = false;
+        let audio = null;
+        function beep(f, ms) {
+          try {
+            audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+            const o = audio.createOscillator(), g = audio.createGain();
+            o.frequency.value = f; o.connect(g); g.connect(audio.destination);
+            g.gain.setValueAtTime(0.2, audio.currentTime);
+            g.gain.exponentialRampToValueAtTime(0.001, audio.currentTime + ms / 1000);
+            o.start(); o.stop(audio.currentTime + ms / 1000);
+          } catch (e) {}
+        }
+        const fmt = (ms) => { const s = Math.max(0, Math.ceil(ms / 1000)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
+        function render() {
+          const ms = paused ? left : endAt - Date.now();
+          const warn = ms <= 5000;
+          $('ttClock').textContent = ms <= 0 ? 'หมดเวลา!' : fmt(ms);
+          $('ttClock').className = 'tt-clock' + (ms <= 0 ? ' over' : warn ? ' warn' : '');
+          $('ttFill').style.width = Math.max(0, Math.min(100, (ms / (cfg.sec * 1000)) * 100)) + '%';
+          $('ttFill').className = 'tt-fill' + (warn ? ' warn' : '');
+          $('ttPause').textContent = paused ? '▶ เล่นต่อ' : '⏸ หยุด';
+          if (!paused && ms > 0 && ms <= 5000) {
+            const s = Math.ceil(ms / 1000);
+            if (s !== lastBeep) { lastBeep = s; beep(660, 120); }
+          }
+          if (!paused && ms <= 0 && !firedEnd) {
+            firedEnd = true;
+            beep(440, 600);
+            navigator.vibrate && navigator.vibrate([200, 100, 200]);
+            if (cfg.auto) setTimeout(() => document.getElementById('nextTurnBtn').click(), 1200);
+          }
+        }
+        function restart() {
+          if (!cfg.on) return;
+          paused = false; firedEnd = false; lastBeep = null;
+          endAt = Date.now() + cfg.sec * 1000;
+          clearInterval(tick); tick = setInterval(render, 200); render();
+        }
+        function stop() { clearInterval(tick); tick = null; }
+        function sync() {
+          $('ttOn').checked = cfg.on; $('ttAuto').checked = cfg.auto; $('ttBody').hidden = !cfg.on;
+          for (const b of $('ttPresets').children) b.classList.toggle('active', +b.dataset.sec === cfg.sec);
+          if (cfg.on) restart(); else stop();
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+          $('ttOn').onchange = (e) => { cfg.on = e.target.checked; save(); sync(); };
+          $('ttAuto').onchange = (e) => { cfg.auto = e.target.checked; save(); };
+          $('ttPresets').onclick = (e) => { const b = e.target.closest('[data-sec]'); if (!b) return; cfg.sec = +b.dataset.sec; save(); sync(); };
+          $('ttPause').onclick = () => {
+            if (paused) { endAt = Date.now() + left; paused = false; }
+            else { left = endAt - Date.now(); paused = true; }
+            render();
+          };
+          $('ttRestart').onclick = restart;
+          document.addEventListener('turnchange', restart);
+          document.addEventListener('keydown', (e) => {
+            if (e.key !== ' ' || e.target.closest('input, textarea, select')) return;
+            if (!document.getElementById('turn-tab').classList.contains('active')) return;
+            e.preventDefault();
+            document.getElementById('nextTurnBtn').click();
+          });
+          sync();
+        });
+      })();
     </script>
   </body>
 </html>

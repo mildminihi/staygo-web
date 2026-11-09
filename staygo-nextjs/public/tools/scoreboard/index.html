@@ -24,13 +24,16 @@
     <link rel="icon" type="image/png" href="../../games/reveal-board/staygo-logo.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Kanit:wght@700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Mitr:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Kanit:wght@700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="../../assets/css/site.css" />
+    <link rel="stylesheet" href="/assets/css/staygo-cards.css" />
     <script defer src="../../assets/js/config.js"></script>
     <script defer src="../../assets/js/site.js"></script>
     <script src="/assets/js/analytics.js" defer></script>
+      <link rel="stylesheet" href="/assets/css/staygo-skin.css" />
+    <link rel="stylesheet" href="./skin.css" />
   </head>
-  <body>
+  <body class="sg-page sg-skin">
     <header class="header">
       <div class="container">
         <div class="header-content">
@@ -132,6 +135,7 @@
             <div class="scoreboard-actions">
               <button class="button button-secondary button-md" onclick="showSummary()">🏆 สรุปคะแนน</button>
               <button class="button button-outline button-md" onclick="resetScoreboard()">🔄 เริ่มใหม่</button>
+              <button class="button button-outline button-md" id="bigBtn" type="button">📺 จอใหญ่</button>
             </div>
 
             <div id="scoreboardList" class="scoreboard-list"></div>
@@ -289,6 +293,19 @@
           document.getElementById('scoreboardContainer').style.display = 'none';
         }
       }
+    </script>
+    <button id="exitBig" class="button button-outline button-sm sb-exitbig" type="button" hidden>ออกจากจอใหญ่</button>
+    <script>
+      // Big-screen mode for a TV / stream: hides the site header, enlarges the score cards.
+      (function () {
+        const set = (on) => {
+          document.body.classList.toggle('sb-big', on);
+          document.getElementById('exitBig').hidden = !on;
+        };
+        document.getElementById('bigBtn').addEventListener('click', () => set(true));
+        document.getElementById('exitBig').addEventListener('click', () => set(false));
+        document.addEventListener('keydown', (e) => e.key === 'Escape' && set(false));
+      })();
     </script>
   </body>
 </html>

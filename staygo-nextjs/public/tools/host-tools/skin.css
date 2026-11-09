@@ -1,0 +1,43 @@
+/* STAYGO skin tweaks for Host Tools (loaded after /assets/css/staygo-skin.css) */
+.host-tools-title { font-family: var(--sg-font-th); font-weight: 600; }
+.tabs-container { overflow: hidden; }
+.tabs-nav { background: var(--sk-soft); border-bottom: 3px solid var(--sg-ink); }
+.tab-button { font-family: var(--sg-font-th); font-weight: 500; color: var(--sk-muted); }
+.tab-button:hover { background: var(--sk-cream); color: var(--sg-ink); }
+.tab-button.active { background: #fff; color: var(--sg-ink); }
+.tab-button.active::after { background: var(--sg-yellow); height: 4px; }
+
+.player-card, .tracker-card, .turn-order-item, .dice-controls, .dice-result-display, .history-item {
+  border: 2.5px solid var(--sg-ink);
+  border-radius: 16px;
+  box-shadow: 0 3px 0 var(--sg-ink);
+  background: #fff;
+}
+.player-card:hover, .tracker-card:hover, .turn-order-item:hover, .dice-controls:hover, .dice-result-display:hover { transform: none; box-shadow: 0 3px 0 var(--sg-ink); }
+.tracker-card::before, .current-turn-card::before { display: none; }
+.turn-order-item.current { background: var(--sg-yellow); border-color: var(--sg-ink); }
+.current-turn-card {
+  border: 3px solid var(--sg-ink);
+  border-radius: 20px;
+  box-shadow: 0 5px 0 var(--sg-ink);
+}
+.current-turn-card:hover { transform: none; }
+.current-turn-name, .round-display { font-family: var(--sg-font-th); text-shadow: 0 2px 0 rgba(0, 0, 0, 0.25); }
+.dice-type-btn {
+  font-family: var(--sg-font-card);
+  border: 2.5px solid var(--sg-ink);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--sg-ink);
+  box-shadow: 0 2px 0 var(--sg-ink);
+}
+.dice-type-btn.active { background: var(--sg-yellow); border-color: var(--sg-ink); color: var(--sg-ink); }
+.tracker-btn { font-family: var(--sg-font-card); border: 2px solid var(--sg-ink); border-radius: 10px; box-shadow: 0 2px 0 var(--sg-ink); }
+.host-tools-container .button-primary, .host-tools-container .button-secondary {
+  font-family: var(--sg-font-th);
+  border: 3px solid var(--sg-ink);
+  border-radius: 14px;
+  box-shadow: 0 3px 0 var(--sg-ink);
+}
+.host-tools-container .button-primary { background: var(--sg-blue); color: #fff; }
+.host-tools-container .button-secondary { background: #fff; color: var(--sg-ink); }

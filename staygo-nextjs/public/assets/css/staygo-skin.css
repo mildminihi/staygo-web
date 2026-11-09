@@ -214,3 +214,149 @@ body.sg-skin main .button-ghost {
   border-width: 2px;
   box-shadow: 0 2px 0 var(--sg-ink);
 }
+body.sg-skin main .button-secondary,
+body.sg-skin main .button-secondary:hover:not(:disabled) {
+  background: var(--sg-yellow);
+  color: var(--sg-ink);
+}
+body.sg-skin main .button-outline,
+body.sg-skin main .button-outline:hover:not(:disabled) {
+  background: #fff;
+  color: var(--sg-ink);
+  border-color: var(--sg-ink);
+}
+body.sg-skin main .button-sm {
+  border-width: 2px;
+  box-shadow: 0 2px 0 var(--sg-ink);
+}
+body.sg-skin main .button.active {
+  background: var(--sg-yellow);
+  color: var(--sg-ink);
+}
+
+/* ---------- tool pages (/tools/*) built on site.css classes ---------- */
+body.sg-skin .tool-title,
+body.sg-skin .section-title {
+  font-family: var(--sg-font-th);
+  font-weight: 600;
+}
+body.sg-skin .tool-description {
+  color: var(--sk-muted);
+}
+
+/* panels */
+body.sg-skin .setup-card,
+body.sg-skin .timer-card,
+body.sg-skin .score-card,
+body.sg-skin .team-card,
+body.sg-skin .team-input-panel,
+body.sg-skin .team-results-empty,
+body.sg-skin .draw-area,
+body.sg-skin .history-section,
+body.sg-skin .bracket-setup,
+body.sg-skin .modal-content,
+body.sg-skin .bracket-modal-content,
+body.sg-skin .tabs-container,
+body.sg-skin .dice-display-section,
+body.sg-skin .dice-control-section,
+body.sg-skin .dice-history-section,
+body.sg-skin .timer-display-container {
+  background: #fff;
+  border: 3px solid var(--sg-ink);
+  border-radius: 18px;
+  box-shadow: var(--sk-panel-shadow);
+}
+body.sg-skin .setup-section-title {
+  font-family: var(--sg-font-th);
+  font-weight: 600;
+  color: var(--sg-ink);
+}
+body.sg-skin .empty-state,
+body.sg-skin .item-list-empty,
+body.sg-skin .history-empty {
+  color: var(--sk-muted);
+}
+
+/* inputs */
+body.sg-skin .input-field,
+body.sg-skin .team-textarea,
+body.sg-skin .bracket-textarea,
+body.sg-skin .team-number-input,
+body.sg-skin .timer-input-field,
+body.sg-skin .team-input {
+  font-family: var(--sg-font-th);
+  background: #fff;
+  border: 2.5px solid var(--sg-ink);
+  border-radius: 12px;
+  color: var(--sg-ink);
+}
+body.sg-skin .input-field:focus,
+body.sg-skin .team-textarea:focus,
+body.sg-skin .bracket-textarea:focus,
+body.sg-skin .team-number-input:focus,
+body.sg-skin .timer-input-field:focus {
+  border-color: var(--sg-ink);
+  outline: 3px solid var(--sg-blue);
+  outline-offset: 1px;
+  box-shadow: none;
+}
+
+/* choice buttons / tabs */
+body.sg-skin .dice-type-button,
+body.sg-skin .timer-preset-btn,
+body.sg-skin .timer-input-btn,
+body.sg-skin .preset-btn,
+body.sg-skin .team-mode-option,
+body.sg-skin .bracket-mode-option,
+body.sg-skin .timer-mode-tab,
+body.sg-skin .score-btn {
+  font-family: var(--sg-font-th);
+  background: #fff;
+  color: var(--sg-ink);
+  border: 2.5px solid var(--sg-ink);
+  border-radius: 12px;
+  box-shadow: 0 2px 0 var(--sg-ink);
+}
+body.sg-skin .dice-type-button:hover,
+body.sg-skin .timer-preset-btn:hover,
+body.sg-skin .timer-input-btn:hover,
+body.sg-skin .preset-btn:hover,
+body.sg-skin .team-mode-option:hover,
+body.sg-skin .bracket-mode-option:hover,
+body.sg-skin .timer-mode-tab:hover {
+  border-color: var(--sg-ink);
+  background: var(--sk-cream);
+}
+body.sg-skin .dice-type-button.active,
+body.sg-skin .preset-btn.active,
+body.sg-skin .timer-mode-tab.active,
+body.sg-skin .team-mode-option:has(input[type="radio"]:checked),
+body.sg-skin .bracket-mode-option:has(input[type="radio"]:checked) {
+  background: var(--sg-yellow);
+  border-color: var(--sg-ink);
+  color: var(--sg-ink);
+}
+body.sg-skin .dice-type-button.active .dice-type-label,
+body.sg-skin .dice-type-button.active .dice-type-desc,
+body.sg-skin .timer-mode-tab.active span {
+  color: var(--sg-ink);
+}
+
+/* big numbers */
+body.sg-skin .timer-display,
+body.sg-skin .stat-value,
+body.sg-skin .score-value {
+  font-family: var(--sg-font-card);
+}
+body.sg-skin .timer-display {
+  color: var(--sg-ink);
+}
+
+body.sg-skin .dice-item {
+  border: 3px solid var(--sg-ink);
+  border-radius: 14px;
+  box-shadow: 0 3px 0 var(--sg-ink);
+}
+body.sg-skin .dice-face {
+  font-family: var(--sg-font-card);
+}

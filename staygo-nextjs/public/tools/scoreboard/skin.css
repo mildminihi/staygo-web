@@ -1,0 +1,19 @@
+/* STAYGO skin tweaks for ตารางคะแนน + big-screen mode */
+.score-card-header { border-bottom: 2px dashed var(--sk-line); }
+.score-value { font-family: var(--sg-font-card); font-weight: 700; color: var(--sg-ink); }
+.score-btn.plus-btn { background: var(--sk-green); color: #fff; }
+.score-btn.minus-btn { background: #fff; }
+
+body.sb-big .header,
+body.sb-big .mobile-menu,
+body.sb-big .team-header,
+body.sb-big .scoreboard-actions,
+body.sb-big #staygo-consent { display: none !important; }
+body.sb-big .section { padding: 24px 0; }
+body.sb-big .container { max-width: none; padding: 0 32px; }
+body.sb-big .scoreboard-list { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; }
+body.sb-big .score-card-name { font-size: 34px; }
+body.sb-big .score-value { font-size: 110px; }
+body.sb-big .score-btn { width: 64px; height: 64px; font-size: 30px; }
+.sb-exitbig { position: fixed; right: 12px; bottom: 12px; z-index: 50; opacity: 0.5; }
+.sb-exitbig[hidden] { display: none !important; }

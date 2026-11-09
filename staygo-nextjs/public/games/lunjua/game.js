@@ -109,12 +109,58 @@ document.addEventListener("keydown", (e) => {
 });
 
 const EVENT_TEXT = {
-  go: "GO! ต้องเปิดเพิ่มอีก 2 ใบ",
-  stay: "STAY! หยุดทันที แล้วเปิดโบนัส 1 ใบ (ไม่ระเบิด)",
-  bonus: "ใบโบนัสเก็บได้!",
-  bonusDiscard: "ใบโบนัสใช้ไม่ได้ ทิ้งไป",
   reshuffle: "กองจั่วหมด สับกองทิ้งเป็นกองใหม่",
 };
+
+// Every card flipped this turn goes in the flip row, in order. Action cards and the STAY bonus
+// get a label so they don't read as letters you keep.
+const ROW_TAG = {
+  bust: { text: "ซ้ำ! 💥", cls: "bad" },
+  go: { text: "GO! +2 ใบ", cls: "go" },
+  stay: { text: "STAY → โบนัส", cls: "stay" },
+  bonus: { text: "โบนัส ✓ เก็บได้", cls: "good" },
+  bonusDiscard: { text: "โบนัส ✕ ซ้ำ ทิ้ง", cls: "muted" },
+};
+
+function flipRowHTML(s, newFlip) {
+  const items = s.events.filter((e) => e.card && e.kind !== "reshuffle");
+  const html = items.map((e, i) => {
+    const tag = ROW_TAG[e.kind];
+    const cardCls = [
+      i === items.length - 1 && newFlip ? "pop" : "",
+      e.kind === "bust" ? "shake bust" : "",
+      e.kind === "go" || e.kind === "stay" ? "used" : "",
+      e.kind === "bonusDiscard" ? "crossed" : "",
+      e.kind === "bonus" ? "bonus" : "",
+    ].join(" ");
+    return `<div class="lj-slot k-${e.kind}">${cardHTML(e.card, { sub: false, cls: cardCls })}${
+      tag ? `<span class="lj-tag ${tag.cls}">${tag.text}</span>` : `<span class="lj-tag"></span>`
+    }</div>`;
+  });
+  // After a STAY, show where the bonus card will land.
+  if (s.phase === "stay")
+    html.push(`<div class="lj-slot k-next"><div class="sg-card lj-ghost"><span class="sg-big">?</span></div><span class="lj-tag stay">ใบโบนัส</span></div>`);
+  return html.join("");
+}
+
+// Big banner for GO! / STAY moments, plus the STAY bonus result.
+function calloutHTML(s) {
+  const last = s.events[s.events.length - 1];
+  if (s.phase === "stay")
+    return `<div class="lj-callout stay pop-in"><b>STAY! หยุดเปิดแล้ว</b><span>กดเปิดใบโบนัส 1 ใบ — ใบนี้ไม่มีทางระเบิด</span></div>`;
+  if (s.phase === "flip" && s.mustFlip > 0) {
+    const pips = "●".repeat(s.mustFlip);
+    return `<div class="lj-callout go${last?.kind === "go" ? " pop-in" : ""}"><b>GO! ต้องเปิดเพิ่มอีก ${s.mustFlip} ใบ</b><span><i class="lj-pips">${pips}</i> หยุดไม่ได้จนกว่าจะเปิดครบ</span></div>`;
+  }
+  if (s.phase === "banked" && (last?.kind === "bonus" || last?.kind === "bonusDiscard")) {
+    const c = last.card;
+    const name = c.k === "W" ? "STAYGO" : c.l;
+    return last.kind === "bonus"
+      ? `<div class="lj-callout good"><b>ใบโบนัส: ${esc(name)} เก็บได้!</b></div>`
+      : `<div class="lj-callout muted"><b>ใบโบนัส: ${esc(name)} ซ้ำ ทิ้งไป</b><span>ไม่ระเบิด เพราะเป็นใบโบนัส</span></div>`;
+  }
+  return "";
+}
 
 function render() {
   if (!state) return;
@@ -135,27 +181,18 @@ function render() {
     )
     .join("");
 
-  // Flip area: show cards flipped this turn; newest one animates in.
-  const bustId = s.phase === "bust" ? s.flipped[s.flipped.length - 1]?.id : null;
+  // Flip area: every card flipped this turn (letters, GO!, STAY, bonus); newest one animates in.
   const newFlip = s.flipsThisTurn !== lastFlipCount;
   lastFlipCount = s.flipsThisTurn;
-  const shown = s.flipped.map((c, i) =>
-    cardHTML(c, {
-      sub: false,
-      cls: [i === s.flipped.length - 1 && newFlip ? "pop" : "", c.id === bustId ? "shake bust" : ""].join(" "),
-    }),
-  );
-  $("flipArea").innerHTML = shown.length
-    ? shown.join("")
-    : `<div class="lj-empty">${s.phase === "flip" ? "กด <b>เปิดการ์ด</b> เพื่อเริ่ม" : ""}</div>`;
+  const row = flipRowHTML(s, newFlip);
+  $("flipArea").innerHTML =
+    row || `<div class="lj-empty">${s.phase === "flip" ? "กด <b>เปิดการ์ด</b> เพื่อเริ่ม" : ""}</div>`;
+  $("callout").innerHTML = calloutHTML(s);
 
-  // Action cards and events this turn (GO!, STAY, bonus, reshuffle).
+  // Other events (deck reshuffle).
   const chips = s.events
     .filter((e) => EVENT_TEXT[e.kind])
-    .map((e) => {
-      const card = e.card ? cardHTML(e.card, { sub: false, width: 28 }) : "";
-      return `<span class="lj-chip">${card}${EVENT_TEXT[e.kind]}</span>`;
-    });
+    .map((e) => `<span class="lj-chip">${EVENT_TEXT[e.kind]}</span>`);
   $("events").innerHTML = chips.join("");
 
   // Status and buttons
@@ -165,12 +202,20 @@ function render() {
   const next = $("nextBtn");
   const meter = $("meter");
   status.className = "lj-status";
-  if (s.phase === "flip") {
+  flip.textContent = s.phase === "stay" ? "เปิดใบโบนัส ✨" : "เปิดการ์ด";
+  if (s.phase === "stay") {
+    flip.hidden = false;
+    flip.disabled = false;
+    bank.hidden = bank.disabled = true;
+    next.hidden = true;
+    meter.hidden = true;
+    status.textContent = "";
+  } else if (s.phase === "flip") {
     flip.hidden = bank.hidden = false;
     next.hidden = true;
     flip.disabled = false;
     bank.disabled = s.flipsThisTurn === 0 || s.mustFlip > 0;
-    if (s.mustFlip > 0) status.innerHTML = `ต้องเปิดอีก <b>${s.mustFlip}</b> ใบก่อนหยุด`;
+    if (s.mustFlip > 0) status.textContent = "";
     else if (s.flipsThisTurn === 0) status.textContent = "เปิดการ์ดทีละใบ ตัวอักษรซ้ำในเทิร์นเดียว = ระเบิด!";
     else status.textContent = "จะเสี่ยงเปิดต่อ หรือหยุดเก็บเข้าคลัง?";
     const p = bustChance(s);

@@ -664,7 +664,8 @@ export function privateView(s: SGState, p: number): SGPrivate {
 export const LJ_MIN_PLAYERS = 2;
 export const LJ_MAX_PLAYERS = 6;
 
-export type LJPhase = "flip" | "bust" | "banked" | "end";
+// "stay": a STAY was flipped; the player now flips one bonus card (cannot bust), then it banks.
+export type LJPhase = "flip" | "stay" | "bust" | "banked" | "end";
 
 export interface LJEvent {
   kind: "letter" | "wild" | "go" | "stay" | "bust" | "bonus" | "bonusDiscard" | "reshuffle";
@@ -771,6 +772,18 @@ export function applyLunjua(
   const s = clone(state);
   const name = s.names[s.cur];
 
+  if (action.type === "flip" && s.phase === "stay") {
+    // Bonus flip after STAY: kept if it is new (or a wild), otherwise discarded. Then bank.
+    const b = ljDraw(s, rng);
+    s.flipsThisTurn++;
+    const keep = b.k === "W" || (b.k === "L" && !flippedLetters(s).has(b.l));
+    if (keep) s.flipped.push(b);
+    else s.discard.push(b);
+    s.events.push({ kind: keep ? "bonus" : "bonusDiscard", card: b });
+    ljBank(s, now);
+    return { ok: true, state: s };
+  }
+
   if (action.type === "flip") {
     if (s.phase !== "flip") return fail("ตอนนี้เปิดการ์ดไม่ได้");
     if (s.flipsThisTurn === 0) s.events = [];
@@ -794,21 +807,17 @@ export function applyLunjua(
       s.mustFlip += 2;
       s.events.push({ kind: "go", card: c });
     } else {
-      // STAY: stop now, one bonus flip that cannot bust, then bank.
+      // STAY: stop flipping; the player flips one bonus card next (see the "stay" phase above).
       s.discard.push(c);
       s.events.push({ kind: "stay", card: c });
       s.mustFlip = 0;
-      const b = ljDraw(s, rng);
-      const keep = b.k === "W" || (b.k === "L" && !flippedLetters(s).has(b.l));
-      if (keep) s.flipped.push(b);
-      else s.discard.push(b);
-      s.events.push({ kind: keep ? "bonus" : "bonusDiscard", card: b });
-      ljBank(s, now);
+      s.phase = "stay";
     }
     return { ok: true, state: s };
   }
 
   if (action.type === "bank") {
+    if (s.phase === "stay") return fail("เปิดใบโบนัสก่อน");
     if (s.phase !== "flip") return fail("ตอนนี้หยุดไม่ได้");
     if (s.flipsThisTurn === 0) return fail("ต้องเปิดอย่างน้อย 1 ใบ");
     if (s.mustFlip > 0) return fail(`ต้องเปิดอีก ${s.mustFlip} ใบ`);

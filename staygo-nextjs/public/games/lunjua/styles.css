@@ -392,3 +392,124 @@ body.lj-big .lj-pname {
     min-height: 380px;
   }
 }
+
+/* ---------- flip row slots: card + label ---------- */
+.lj-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.lj-tag {
+  min-height: 22px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  padding: 5px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.lj-tag:empty {
+  padding: 0;
+}
+.lj-tag.go { background: var(--sg-yellow); color: var(--sg-ink); }
+.lj-tag.stay { background: var(--sg-red); color: #fff; }
+.lj-tag.good { background: #22b573; color: #fff; }
+.lj-tag.bad { background: var(--sg-red); color: #fff; }
+.lj-tag.muted { background: #e2dccf; color: #6b6461; }
+
+/* action cards are used up, not kept: smaller, tilted, faded */
+.lj-flip .sg-card.used {
+  --card-w: 58px;
+  transform: rotate(-6deg);
+  opacity: 0.8;
+  box-shadow: none;
+}
+.lj-flip .sg-card.used.pop {
+  animation: lj-used-in 0.5s ease-out;
+}
+@keyframes lj-used-in {
+  0% { transform: scale(1.4) rotate(0); opacity: 1; }
+  100% { transform: rotate(-6deg); opacity: 0.8; }
+}
+.lj-flip .sg-card.bonus {
+  box-shadow: 0 0 0 4px #22b573, 0 3px 0 var(--sg-ink);
+}
+.lj-flip .sg-card.crossed {
+  opacity: 0.5;
+  position: relative;
+}
+.lj-flip .sg-card.crossed::after {
+  content: "✕";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(var(--card-w) * 0.8);
+  color: var(--sg-red);
+  font-family: var(--sg-font-card);
+}
+.lj-ghost {
+  border-style: dashed;
+  box-shadow: none;
+  background: #fff8e6;
+  color: var(--sg-red);
+  animation: lj-ghost 1.2s ease-in-out infinite;
+}
+@keyframes lj-ghost {
+  50% { transform: translateY(-4px); }
+}
+
+/* ---------- GO!/STAY banner ---------- */
+.lj-callout-wrap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.lj-callout-wrap:empty {
+  display: none;
+}
+.lj-callout {
+  width: 100%;
+  max-width: 440px;
+  display: grid;
+  gap: 2px;
+  padding: 10px 16px;
+  border: 3px solid var(--sg-ink);
+  border-radius: 16px;
+  box-shadow: 0 4px 0 var(--sg-ink);
+}
+.lj-callout b {
+  font-size: 22px;
+  font-weight: 600;
+}
+.lj-callout span {
+  font-size: 15px;
+}
+.lj-callout.go { background: var(--sg-yellow); color: var(--sg-ink); }
+.lj-callout.stay { background: var(--sg-red); color: #fff; }
+.lj-callout.good { background: #22b573; color: #fff; }
+.lj-callout.muted { background: #f3eee4; color: var(--sg-ink); box-shadow: none; border-width: 2px; }
+.lj-callout.muted b { font-size: 18px; }
+.lj-pips {
+  font-style: normal;
+  letter-spacing: 4px;
+  font-size: 18px;
+}
+.pop-in {
+  animation: lj-pop-in 0.35s ease-out;
+}
+@keyframes lj-pop-in {
+  0% { transform: scale(0.85); opacity: 0; }
+  70% { transform: scale(1.04); }
+  100% { transform: none; opacity: 1; }
+}
+body.lj-big .lj-callout { max-width: 640px; }
+body.lj-big .lj-callout b { font-size: 32px; }
+body.lj-big .lj-callout span { font-size: 20px; }
+body.lj-big .lj-tag { font-size: 15px; }
+body.lj-big .lj-flip .sg-card.used { --card-w: clamp(70px, 7vw, 110px); }
+@media (prefers-reduced-motion: reduce) {
+  .lj-ghost, .pop-in, .lj-flip .sg-card.used.pop { animation: none; }
+}

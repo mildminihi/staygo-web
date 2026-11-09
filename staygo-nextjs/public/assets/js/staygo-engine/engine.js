@@ -673,6 +673,19 @@ export function applyLunjua(state, actor, action, rng, now) {
         return fail("ยังไม่ถึงตาคุณ");
     const s = clone(state);
     const name = s.names[s.cur];
+    if (action.type === "flip" && s.phase === "stay") {
+        // Bonus flip after STAY: kept if it is new (or a wild), otherwise discarded. Then bank.
+        const b = ljDraw(s, rng);
+        s.flipsThisTurn++;
+        const keep = b.k === "W" || (b.k === "L" && !flippedLetters(s).has(b.l));
+        if (keep)
+            s.flipped.push(b);
+        else
+            s.discard.push(b);
+        s.events.push({ kind: keep ? "bonus" : "bonusDiscard", card: b });
+        ljBank(s, now);
+        return { ok: true, state: s };
+    }
     if (action.type === "flip") {
         if (s.phase !== "flip")
             return fail("ตอนนี้เปิดการ์ดไม่ได้");
@@ -704,22 +717,17 @@ export function applyLunjua(state, actor, action, rng, now) {
             s.events.push({ kind: "go", card: c });
         }
         else {
-            // STAY: stop now, one bonus flip that cannot bust, then bank.
+            // STAY: stop flipping; the player flips one bonus card next (see the "stay" phase above).
             s.discard.push(c);
             s.events.push({ kind: "stay", card: c });
             s.mustFlip = 0;
-            const b = ljDraw(s, rng);
-            const keep = b.k === "W" || (b.k === "L" && !flippedLetters(s).has(b.l));
-            if (keep)
-                s.flipped.push(b);
-            else
-                s.discard.push(b);
-            s.events.push({ kind: keep ? "bonus" : "bonusDiscard", card: b });
-            ljBank(s, now);
+            s.phase = "stay";
         }
         return { ok: true, state: s };
     }
     if (action.type === "bank") {
+        if (s.phase === "stay")
+            return fail("เปิดใบโบนัสก่อน");
         if (s.phase !== "flip")
             return fail("ตอนนี้หยุดไม่ได้");
         if (s.flipsThisTurn === 0)

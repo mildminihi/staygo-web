@@ -190,7 +190,7 @@ function playRandomLunjua(seed: number, n: number): LJState {
     if (++steps > 20_000) throw new Error(`seed ${seed}: ลุ้นจั่ว did not end`);
     let act: { type: "flip" | "bank" | "nextTurn" };
     if (s.phase === "bust" || s.phase === "banked") act = { type: "nextTurn" };
-    else if (s.flipsThisTurn === 0 || s.mustFlip > 0) act = { type: "flip" };
+    else if (s.phase === "stay" || s.flipsThisTurn === 0 || s.mustFlip > 0) act = { type: "flip" };
     else act = rng() < bustChance(s) + 0.15 ? { type: "bank" } : { type: "flip" };
     const r = applyLunjua(s, s.cur, act, rng, steps);
     assert.ok(r.ok, `seed ${seed}: ${act.type} rejected: ${!r.ok && r.error}`);
@@ -241,9 +241,28 @@ test("ลุ้นจั่ว: STAY gives a bonus flip that cannot bust", () =>
   s.deck.unshift(s1, stay, s2);
   s = (applyLunjua(s, 0, { type: "flip" }, rng, 0) as { state: LJState }).state;
   s = (applyLunjua(s, 0, { type: "flip" }, rng, 0) as { state: LJState }).state;
+  // STAY waits for the player to flip the bonus card; stopping is not allowed yet.
+  assert.equal(s.phase, "stay");
+  assert.equal(applyLunjua(s, 0, { type: "bank" }, rng, 0).ok, false);
+  assert.equal(applyLunjua(s, 1, { type: "flip" }, rng, 0).ok, false);
+  assert.equal(countCardsLJ(s), DECK_SIZE);
+  s = (applyLunjua(s, 0, { type: "flip" }, rng, 0) as { state: LJState }).state;
+  // The bonus S is a duplicate: discarded, not a bust.
   assert.equal(s.phase, "banked");
   assert.deepEqual(s.banks[0], ["S"]);
+  assert.deepEqual(s.events.map((e) => e.kind), ["letter", "stay", "bonusDiscard"]);
   assert.equal(countCardsLJ(s), DECK_SIZE);
+});
+
+test("ลุ้นจั่ว: STAY bonus card that is new gets banked", () => {
+  const rng = seededRng(3);
+  let s = newLunjua(["A", "B"], rng, 0);
+  const pull = (pred: (c: LJState["deck"][number]) => boolean) => s.deck.splice(s.deck.findIndex(pred), 1)[0];
+  s.deck.unshift(pull((c) => c.k === "L" && c.l === "S"), pull((c) => c.k === "STAY"), pull((c) => c.k === "L" && c.l === "O"));
+  for (let i = 0; i < 3; i++) s = (applyLunjua(s, 0, { type: "flip" }, rng, 0) as { state: LJState }).state;
+  assert.equal(s.phase, "banked");
+  assert.deepEqual(s.banks[0], ["S", "O"]);
+  assert.deepEqual(s.events.map((e) => e.kind), ["letter", "stay", "bonus"]);
 });
 
 test("ลุ้นจั่ว: wilds fill missing letters", () => {

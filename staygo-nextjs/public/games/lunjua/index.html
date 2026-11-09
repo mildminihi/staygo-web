@@ -109,7 +109,7 @@
             <li><b>ตัวอักษร</b> — ถ้าตัวนั้นเปิดไปแล้วในเทิร์นนี้ = <b>ระเบิด</b> เสียการ์ดที่เปิดทั้งหมด จบเทิร์น</li>
             <li><b>STAYGO</b> — ไม่ระเบิด ตอนเก็บจะกลายเป็นตัวที่คลังยังขาด</li>
             <li><b>GO!</b> — ต้องเปิดเพิ่มอีก 2 ใบก่อนจะหยุดได้ (ซ้อนกันได้)</li>
-            <li><b>STAY</b> — หยุดทันที แล้วเปิดโบนัส 1 ใบที่ไม่ระเบิด จากนั้นเก็บเข้าคลัง</li>
+            <li><b>STAY</b> — หยุดเปิดทันที แล้วกดเปิดใบโบนัสอีก 1 ใบ (ไม่มีทางระเบิด) จากนั้นเก็บเข้าคลังอัตโนมัติ</li>
             <li><b>หยุด</b> — ตัวอักษรที่คลังยังไม่มีจะถูกเก็บ ใครเก็บครบ 6 ตัวก่อนชนะ (ไม่ต้องเรียงลำดับ)</li>
             <li>เคล็ดลับ: ดู "โอกาสระเบิดถ้าเปิดใบถัดไป" ก่อนตัดสินใจ</li>
           </ul>
@@ -133,6 +133,7 @@
           <div class="lj-stage sg-panel">
             <div class="lj-turn">ตาของ <b id="turnName"></b></div>
             <div id="flipArea" class="lj-flip" aria-live="polite"></div>
+            <div id="callout" class="lj-callout-wrap" aria-live="polite"></div>
             <div id="events" class="lj-events"></div>
             <div id="status" class="lj-status"></div>
             <div id="meter" class="lj-meter" hidden>

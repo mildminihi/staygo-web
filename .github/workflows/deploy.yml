@@ -1,35 +1,58 @@
-name: Deploy Next.js to GitHub Pages
+name: Build and deploy to Plesk
 
 on:
   push:
     branches:
       - main
   workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Only list what would be uploaded (no changes on the server)"
+        type: boolean
+        default: false
+  # Rebuild every day at 18:00 Thailand time so the latest YouTube clips show up
+  # without a code change (scripts/fetch-youtube.mjs runs before the build).
+  schedule:
+    - cron: '0 11 * * *'
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
-  group: "pages"
+  group: deploy
   cancel-in-progress: false
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./staygo-nextjs
-    
+
     steps:
+      - name: Check FTP settings
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        working-directory: .
+        run: |
+          missing=""
+          [ -z "$FTP_SERVER" ] && missing="$missing FTP_SERVER"
+          [ -z "$FTP_USERNAME" ] && missing="$missing FTP_USERNAME"
+          [ -z "$FTP_PASSWORD" ] && missing="$missing FTP_PASSWORD"
+          if [ -n "$missing" ]; then
+            echo "::error::Missing repository secrets:$missing (Settings → Secrets and variables → Actions)"
+            exit 1
+          fi
+
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'npm'
           cache-dependency-path: './staygo-nextjs/package-lock.json'
 
@@ -38,19 +61,23 @@ jobs:
 
       - name: Build with Next.js
         run: npm run build
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      # Uploads only files that changed since the last run (tracked in
+      # .ftp-deploy-sync-state.json on the server). Files on the server that this
+      # action never uploaded are left alone.
+      - name: Upload to Plesk
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          path: ./staygo-nextjs/out
-
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ${{ vars.FTP_PROTOCOL || 'ftps' }}
+          port: ${{ vars.FTP_PORT || 21 }}
+          # "loose" skips the TLS certificate check (Plesk's FTP certificate often
+          # doesn't match the domain). Set the FTP_SECURITY variable only if needed.
+          security: ${{ vars.FTP_SECURITY || 'strict' }}
+          local-dir: ./staygo-nextjs/out/
+          server-dir: ${{ vars.FTP_SERVER_DIR || 'httpdocs/' }}
+          dry-run: ${{ inputs.dry_run || false }}

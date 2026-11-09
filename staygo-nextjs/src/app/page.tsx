@@ -44,6 +44,7 @@ export default function Home() {
             {TOOLS.slice(0, HOME_TOOL_LIMIT).map((tool) => (
               <a key={tool.href} href={tool.href} className="tool-button">
                 <div className="tool-icon">{tool.icon}</div>
+                {tool.isNew && <span className="tool-new">ใหม่</span>}
                 <span className="tool-label">{tool.label}</span>
               </a>
             ))}

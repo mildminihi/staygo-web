@@ -39,6 +39,7 @@ export default function ToolsPage() {
             {TOOLS.map((tool) => (
               <a key={tool.href} href={tool.href} className="tool-button">
                 <div className="tool-icon">{tool.icon}</div>
+                {tool.isNew && <span className="tool-new">ใหม่</span>}
                 <span className="tool-label">{tool.label}</span>
                 <span className="tool-description">{tool.description}</span>
               </a>

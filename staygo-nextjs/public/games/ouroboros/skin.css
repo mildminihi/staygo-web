@@ -1,0 +1,87 @@
+/* STAYGO skin tweaks for Ouroboros (loaded after /assets/css/staygo-skin.css) */
+:root {
+  --void: #fffaf0;
+  --void-2: #ffffff;
+  --scale: #e8f4fd;
+  --scale-2: #cfe8fb;
+  --gold: #1a9bf0;
+  --gold-bright: #1286d4;
+  --ivory: #231f20;
+  --ivory-dim: #6b6461;
+  --danger: #e8202a;
+  --ob-shadow: 0 4px 0 #231f20;
+}
+.ob-main { background: transparent; font-family: var(--sg-font-th); }
+#app h1, #app h2, #app h3, #app .display,
+.eat-callout-line, .die-label, .room-code { font-family: var(--sg-font-th); font-weight: 600; letter-spacing: 0; }
+.room-code { font-family: var(--sg-font-card); letter-spacing: 0.08em; }
+.card { background: #fff; border: 3px solid var(--sg-ink); border-radius: 18px; }
+.eyebrow, .howto-title, .legend-title { letter-spacing: 0.08em; font-weight: 600; }
+
+.howto, .legend { background: #fff; border: 2.5px solid var(--sg-ink); border-radius: 14px; }
+.howto-step { color: var(--sg-ink); }
+.howto-step .num { background: var(--sg-yellow); border: 2px solid var(--sg-ink); color: var(--sg-ink); font-family: var(--sg-font-card); }
+
+#app button {
+  font-family: var(--sg-font-th);
+  font-weight: 500;
+  font-size: 15px;
+  background: #fff;
+  color: var(--sg-ink);
+  border: 3px solid var(--sg-ink);
+  border-radius: 14px;
+  box-shadow: 0 3px 0 var(--sg-ink);
+  transition: transform 0.08s, box-shadow 0.08s;
+}
+#app button:hover:not(:disabled) { border-color: var(--sg-ink); color: var(--sg-ink); transform: translateY(-1px); box-shadow: 0 4px 0 var(--sg-ink); }
+#app button:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 0 0 var(--sg-ink); }
+#app button.primary, #app button.primary:hover:not(:disabled) { background: var(--sg-blue); color: #fff; border: 3px solid var(--sg-ink); }
+#app button.danger { border-color: var(--sg-ink); color: var(--sg-red); }
+#app button.die-btn { background: #fff; }
+
+#app input, #app select {
+  font-family: var(--sg-font-th);
+  font-size: 16px;
+  background: #fff;
+  border: 2.5px solid var(--sg-ink);
+  border-radius: 12px;
+}
+#app label { font-weight: 500; font-size: 13px; }
+
+.grid-wrap { background: #fff; border: 3px solid var(--sg-ink); border-radius: 18px; box-shadow: 0 4px 0 var(--sg-ink); }
+#board { background: var(--sk-paper); border: 2px solid var(--sk-line); box-shadow: none; }
+#board::after { border-color: #c9c3b8; }
+.tile { border: 2px solid var(--sg-ink); box-shadow: 0 2px 0 var(--sg-ink); background: #fff; }
+.tile.special { border-color: var(--sg-ink); box-shadow: 0 2px 0 var(--sg-ink); background: color-mix(in srgb, var(--tile-accent) 18%, #fff); }
+.tile.kind-bonus { --tile-accent: #22b573; }
+.tile.kind-penalty { --tile-accent: #e8202a; }
+.tile.kind-chaos { --tile-accent: #ffc21a; }
+.tile.start { background: var(--sg-yellow); border-color: var(--sg-ink); color: var(--sg-ink); box-shadow: 0 2px 0 var(--sg-ink); }
+.legend-item { background: var(--sk-soft); }
+.legend-item.kind-bonus { --legend-accent: #22b573; }
+.legend-item.kind-penalty { --legend-accent: #e8202a; }
+.legend-item.kind-chaos { --legend-accent: #ffc21a; }
+.token { border: 2.5px solid var(--sg-ink); box-shadow: 0 2px 0 var(--sg-ink); background: var(--token-color, var(--gold)); font-family: var(--sg-font-card); }
+.token-tail { border: 1.5px solid var(--sg-ink); box-shadow: none; }
+
+.die-btn { background: #fff; }
+.die-icon { background: #fff; border: 2.5px solid var(--sg-ink); box-shadow: 0 2px 0 var(--sg-ink); font-family: var(--sg-font-card); }
+.die-d6 { --die-accent: #1a9bf0; }
+.die-d4 { --die-accent: #22b573; }
+.die-even { --die-accent: #d99a00; }
+.die-odd { --die-accent: #e8202a; }
+.die-faces { font-family: var(--sg-font-th); }
+.die-used { border: 2px solid var(--sg-ink); background: var(--sk-cream); color: var(--sg-ink); }
+
+.eat-callout-card { border: 3px solid var(--sg-ink); border-radius: 16px; box-shadow: 0 4px 0 var(--sg-ink); background: #fff; }
+.eat-callout-line { color: var(--sg-red); }
+.log { border-top-color: var(--sk-line); }
+.log .kill { color: var(--sg-red); }
+.pill { border: 2px solid var(--sg-ink); color: var(--sg-ink); background: var(--sk-cream); }
+.mode-card { border: 3px solid var(--sg-ink); background: #fff; border-radius: 16px; box-shadow: 0 3px 0 var(--sg-ink); }
+.mode-card:hover { border-color: var(--sg-ink); background: var(--sk-cream); }
+.qr-box { border: 3px solid var(--sg-ink); }
+.cooldown-badge { background: var(--sg-red); border: 2px solid var(--sg-ink); }
+.player-row { flex-wrap: nowrap; }
+.player-row input { flex: 1; width: auto; min-width: 0; }
+.player-row button { flex-shrink: 0; }

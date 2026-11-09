@@ -1,0 +1,41 @@
+/* STAYGO skin tweaks for ทายคำศัพท์ 5 ตัว (loaded after /assets/css/staygo-skin.css) */
+.wordle-main { background: transparent; }
+.wordle-container { background: transparent; box-shadow: none; border-radius: 0; overflow: visible; }
+
+.toast.show { background: var(--sg-ink); border-radius: 12px; font-weight: 500; }
+
+.tile {
+  border: 3px solid var(--line, #d8d1c3);
+  border-radius: 12px;
+  color: var(--sg-ink);
+}
+.tile.filled { border-color: var(--sg-ink); box-shadow: 0 2px 0 var(--sg-ink); }
+.tile.correct, .tile.present, .tile.absent, .secret-tile {
+  border-color: var(--sg-ink);
+  box-shadow: 0 2px 0 var(--sg-ink);
+}
+.tile.correct { background: var(--sk-green); }
+.tile.present { background: var(--sg-yellow); color: var(--sg-ink); }
+.tile.absent { background: #9b9488; }
+
+.keyboard-section-label { color: var(--sk-muted); font-weight: 500; }
+.key {
+  background: #fff;
+  color: var(--sg-ink);
+  border: 2px solid var(--sg-ink);
+  border-radius: 10px;
+  box-shadow: 0 2px 0 var(--sg-ink);
+  font-weight: 500;
+}
+.key:hover { background: var(--sk-cream); border-color: var(--sg-ink); }
+.key.correct { background: var(--sk-green); border-color: var(--sg-ink); box-shadow: 0 2px 0 var(--sg-ink); }
+.key.present { background: var(--sg-yellow); color: var(--sg-ink); border-color: var(--sg-ink); box-shadow: 0 2px 0 var(--sg-ink); }
+.key.absent { background: #9b9488; border-color: var(--sg-ink); box-shadow: 0 2px 0 var(--sg-ink); }
+.key.action { border-width: 3px; box-shadow: 0 3px 0 var(--sg-ink); font-weight: 500; }
+.key.action-back { background: #fff; color: var(--sg-ink); border-color: var(--sg-ink); }
+.key.action-back:hover { background: var(--sk-cream); border-color: var(--sg-ink); }
+.key.action-enter { background: var(--sg-blue); color: #fff; border-color: var(--sg-ink); box-shadow: 0 3px 0 var(--sg-ink); }
+.key.action-enter:hover { background: var(--sg-blue); }
+.secret-reveal { padding: 16px; }
+.secret-reveal h3 { color: var(--sg-ink); }
+.stat-card-label { color: var(--sk-muted); }

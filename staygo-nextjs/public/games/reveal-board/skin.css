@@ -1,0 +1,75 @@
+/* STAYGO skin tweaks for เปิดแผ่นป้าย (loaded after /assets/css/staygo-skin.css) */
+body.sg-skin {
+  --primary: var(--sg-blue);
+  --primary-hover: #1286d4;
+  --secondary: var(--sg-yellow);
+  --secondary-hover: #f0b000;
+  --border: var(--sk-line);
+}
+.game-container {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  padding: 24px 0;
+  width: 100%;
+}
+.controls-panel, .game-rules {
+  background: #fff;
+  border: 3px solid var(--sg-ink);
+  border-radius: 18px;
+  box-shadow: 0 4px 0 var(--sg-ink);
+}
+.controls-panel { padding: 24px; }
+.input-field input[type="number"],
+.input-field input[type="file"] {
+  border: 2.5px solid var(--sg-ink);
+  border-radius: 12px;
+  min-width: 0;
+  max-width: 100%;
+}
+.input-field label { font-weight: 500; }
+
+.button {
+  font-family: var(--sg-font-th);
+  font-weight: 500;
+  font-size: 16px;
+  height: 46px;
+  border: 3px solid var(--sg-ink);
+  border-radius: 14px;
+  box-shadow: 0 3px 0 var(--sg-ink);
+  transition: transform 0.08s, box-shadow 0.08s;
+}
+.button:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 0 0 var(--sg-ink); }
+.primary-button, .primary-button:hover:not(:disabled) { background: var(--sg-blue); color: #fff; box-shadow: 0 3px 0 var(--sg-ink); }
+.secondary-button, .secondary-button:hover:not(:disabled) { background: var(--sg-yellow); color: var(--sg-ink); border-color: var(--sg-ink); box-shadow: 0 3px 0 var(--sg-ink); }
+.back-button, .back-button:hover { background: #fff; color: var(--sg-ink); box-shadow: 0 3px 0 var(--sg-ink); }
+
+.lang-btn { border: 2px solid var(--sg-ink); border-radius: 999px; font-family: var(--sg-font-th); }
+.lang-btn.active { background: var(--sg-yellow); color: var(--sg-ink); border-color: var(--sg-ink); }
+
+.board-container { border: 3px solid var(--sg-ink); border-radius: 18px; box-shadow: 0 4px 0 var(--sg-ink); background: var(--sg-ink); }
+.board-container.fullscreen { border-radius: 0; }
+#imagePreview { background: var(--sg-ink); }
+.tile {
+  background: var(--sg-blue);
+  border: 2px solid var(--sg-ink);
+  border-radius: 6px;
+  font-family: var(--sg-font-card);
+  text-shadow: 0 2px 0 var(--sg-ink);
+  box-shadow: none;
+}
+.tile:nth-child(odd) { background: #2b8ce6; }
+.tile:hover { background: var(--sg-yellow); border-color: var(--sg-ink); color: var(--sg-ink); text-shadow: none; box-shadow: none; }
+
+.stat-item { border: 2.5px solid var(--sg-ink); border-radius: 14px; box-shadow: 0 2px 0 var(--sg-ink); }
+.stat-value { color: var(--sg-blue); }
+.placeholder { background: #fff; border: 3px dashed #c9c3b8; border-radius: 18px; }
+.game-rules li { color: var(--sg-ink); }
+.input-field { min-width: 0; }
+.input-field input[type="number"], .input-field input[type="file"] { width: 100%; }
+@media (max-width: 768px) {
+  .controls-panel { padding: 16px; }
+  .control-group { gap: 12px; }
+}
+.header .container { padding-top: 0; padding-bottom: 0; }
+@media (max-width: 600px) { .game-container { padding-top: 64px; } }

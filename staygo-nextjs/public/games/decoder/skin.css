@@ -1,0 +1,45 @@
+/* STAYGO skin tweaks for ถอดรหัสตัวเลข (loaded after /assets/css/staygo-skin.css) */
+.decoder-main { background: transparent; }
+.decoder-container { background: transparent; box-shadow: none; border-radius: 0; overflow: visible; }
+
+.digit-input {
+  font-family: var(--sg-font-card);
+  border: 3px solid var(--sg-ink);
+  border-radius: 14px;
+  box-shadow: 0 3px 0 var(--sg-ink);
+  color: var(--sg-ink);
+}
+.digit-input:hover { border-color: var(--sg-ink); }
+.digit-input:focus {
+  border-color: var(--sg-ink);
+  box-shadow: 0 0 0 3px var(--sg-yellow), 0 3px 0 var(--sg-ink);
+}
+.input-title, .history-title { color: var(--sg-ink); font-weight: 600; }
+.guess-history { background: var(--sk-soft); border-radius: 14px; }
+.empty-message { color: var(--sk-muted); }
+.guess-entry {
+  border: 2.5px solid var(--sg-ink);
+  border-radius: 14px;
+  box-shadow: 0 2px 0 var(--sg-ink);
+}
+.attempt-number {
+  font-family: var(--sg-font-card);
+  background: var(--sk-soft);
+  color: var(--sg-ink);
+  border: 2px solid var(--sg-ink);
+  border-radius: 10px;
+}
+.digit-box, .secret-digit {
+  font-family: var(--sg-font-card);
+  border: 2.5px solid var(--sg-ink);
+  border-radius: 10px;
+  box-shadow: 0 2px 0 var(--sg-ink);
+}
+.digit-box.green { background: var(--sk-green); }
+.digit-box.yellow { background: var(--sg-yellow); color: var(--sg-ink); }
+.digit-box.red { background: var(--sg-red); }
+.secret-digit { background: var(--sg-blue); }
+.secret-reveal { padding: 16px; }
+.secret-reveal h3 { color: var(--sg-ink); }
+.stat-card-label { color: var(--sk-muted); }
+.history-area { padding: 16px; }

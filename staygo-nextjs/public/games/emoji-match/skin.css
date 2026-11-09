@@ -1,0 +1,26 @@
+/* STAYGO skin tweaks for จับคู่อีโมจิ (loaded after /assets/css/staygo-skin.css) */
+.game-wrapper { padding: 32px 0 60px; }
+
+.setup-screen, .result-screen, .game-header, .game-board {
+  background: #fff;
+  border: 3px solid var(--sg-ink);
+  border-radius: 18px;
+  box-shadow: 0 4px 0 var(--sg-ink);
+}
+.setup-screen h1 { font-size: clamp(32px, 7vw, 44px); }
+.setup-screen p, .stat-label, .result-stat-label { color: var(--sk-muted); }
+.option-label { font-weight: 500; }
+
+.card {
+  background: var(--sg-blue);
+  border: 3px solid var(--sg-ink);
+  border-radius: 14px;
+  box-shadow: 0 3px 0 var(--sg-ink);
+}
+.card::before { font-family: var(--sg-font-card); font-weight: 700; color: #fff; text-shadow: 0 2px 0 var(--sg-ink); }
+.card.flipped { background: #fff; border-color: var(--sg-ink); }
+.card.matched { background: var(--sk-green); border-color: var(--sg-ink); }
+
+.result-screen h2 { color: var(--sk-green-dark); }
+.result-stat { background: var(--sk-soft); border: 2.5px solid var(--sg-ink); border-radius: 14px; }
+.result-stat-value { font-family: var(--sg-font-card); font-weight: 600; color: var(--sg-ink); }

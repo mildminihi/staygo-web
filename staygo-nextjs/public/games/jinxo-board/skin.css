@@ -1,0 +1,63 @@
+/* STAYGO skin tweaks for กระดาน JinxO (loaded after /assets/css/staygo-skin.css) */
+.jx-head h1 span { color: var(--sg-blue); }
+.jx-player input,
+.jx-round-tab,
+.jx-cell textarea,
+.jx-bonus span,
+.jx-summary b,
+.jx-score-label,
+.jx-score-input,
+.jx-score-total { font-family: var(--sg-font-th); }
+.jx-round-tab small, .jx-score-label small, .jx-score-label button, .jx-corner { font-family: var(--sg-font-th); }
+.jx-bonus span, .jx-summary b, .jx-score-input, .jx-score-total { font-family: var(--sg-font-card); font-weight: 600; }
+
+.jx-player input {
+  border: 2.5px solid var(--sg-ink);
+  border-radius: 12px;
+  font-weight: 500;
+}
+.jx-player input:focus { border-color: var(--sg-ink); outline: 3px solid var(--sg-blue); outline-offset: 1px; }
+
+.jx-rounds { background: var(--sk-soft); border-radius: 14px; }
+.jx-round-tab { font-weight: 500; }
+.jx-round-tab.active {
+  background: #fff;
+  border: 2.5px solid var(--sg-ink);
+  box-shadow: 0 2px 0 var(--sg-ink);
+}
+.jx-round-tab small { color: var(--sg-blue); }
+
+.jx-board {
+  background: var(--sg-yellow);
+  border: 3px solid var(--sg-ink);
+  border-radius: 18px;
+  box-shadow: 0 4px 0 var(--sg-ink);
+}
+.jx-cell { border: 2.5px solid var(--sg-ink); border-radius: 12px; }
+.jx-cell textarea { font-weight: 500; }
+.jx-cell:focus-within { border-color: var(--sg-blue); box-shadow: 0 0 0 2px var(--sg-blue); }
+.jx-mark.circle { border-color: var(--sg-blue); }
+.jx-mark.cross::before, .jx-mark.cross::after { background: var(--sg-red); }
+.jx-act[data-act="circle"] { color: var(--sg-blue); }
+.jx-act[data-act="cross"] { color: var(--sg-red); }
+.jx-cell.jinx .jx-star path { fill: var(--sg-yellow); }
+.jx-bonus span { border-color: var(--sg-ink); color: var(--sg-ink); background: rgba(255, 255, 255, 0.55); }
+.jx-bonus.got span { background: var(--sg-ink); border-color: var(--sg-ink); color: var(--sg-yellow); }
+.jx-corner { color: var(--sg-ink); }
+
+.jx-summary, .jx-scores, .jx-help {
+  background: #fff;
+  border: 3px solid var(--sg-ink);
+  border-radius: 18px;
+  box-shadow: 0 4px 0 var(--sg-ink);
+}
+.jx-summary .jx-sum-total b { color: var(--sg-blue); }
+.jx-score-row { border-bottom-color: var(--sk-line); }
+.jx-score-label button { color: var(--sg-blue); }
+.jx-score-input { border: 2.5px solid var(--sg-ink); border-radius: 12px; }
+.jx-score-input:focus { border-color: var(--sg-blue); }
+.jx-score-input.manual { background: var(--sk-cream); }
+.jx-score-total { background: var(--sg-ink); color: var(--sg-yellow); border-radius: 12px; }
+.jx-help { box-shadow: none; border-width: 2.5px; }
+.jx-notice { background: #e8f4fd; border: 2.5px solid var(--sg-ink); border-radius: 14px; }
+.jx-notice a { color: var(--sg-blue); }

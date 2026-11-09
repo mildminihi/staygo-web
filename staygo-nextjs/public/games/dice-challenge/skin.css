@@ -1,0 +1,75 @@
+/* STAYGO skin tweaks for เกมทอยเต๋า (loaded after /assets/css/staygo-skin.css) */
+.dice-challenge-main { background: transparent; }
+.dice-challenge-container { background: transparent; box-shadow: none; border-radius: 0; overflow: visible; }
+
+.section-title, .game-screen-title, .selected-card-display h3 { color: var(--sg-ink); font-weight: 600; }
+.dice-count-number { font-family: var(--sg-font-card); font-weight: 600; }
+
+.card {
+  background: #fff;
+  border: 3px solid var(--sg-ink);
+  border-radius: 16px;
+  box-shadow: 0 3px 0 var(--sg-ink);
+}
+.card:hover { border-color: var(--sg-ink); box-shadow: 0 5px 0 var(--sg-ink); }
+.card.selected { background: var(--sg-yellow); border-color: var(--sg-ink); color: var(--sg-ink); }
+.card.selected .card-description { color: var(--sg-ink); }
+.card-description, .selected-card-desc { color: var(--sk-muted); }
+.card-points, .selected-card-points, .card.selected .card-points {
+  font-family: var(--sg-font-card);
+  color: var(--sg-blue);
+}
+.card.selected .card-points { color: var(--sg-ink); }
+.used-badge { background: var(--sg-red); border: 2px solid var(--sg-ink); border-radius: 999px; }
+.selected-card-name { color: var(--sg-ink); }
+
+.dice-display {
+  background: #fff;
+  border: 3px solid var(--sg-ink);
+  border-radius: 18px;
+  box-shadow: 0 4px 0 var(--sg-ink);
+}
+.dice-display.match-success { background: #e3f7ec; border: 3px solid var(--sg-ink); }
+.dice-display.match-fail { background: #fde4e4; border: 3px solid var(--sg-ink); }
+.die {
+  font-family: var(--sg-font-card);
+  border: 3px solid var(--sg-ink);
+  border-radius: 14px;
+  box-shadow: 0 3px 0 var(--sg-ink);
+  color: var(--sg-ink);
+}
+.dice-sum { font-family: var(--sg-font-card); color: var(--sg-ink); }
+
+.current-team-display {
+  background: var(--sg-blue);
+  border: 3px solid var(--sg-ink);
+  border-radius: 18px;
+  box-shadow: 0 4px 0 var(--sg-ink);
+}
+.current-team-score { font-family: var(--sg-font-card); }
+.teams-scoreboard { padding: 16px; }
+.team-score-item { border: 2.5px solid var(--sk-line); border-radius: 12px; }
+.team-score-item.current-team { border-color: var(--sg-ink); background: var(--sk-cream); }
+.team-score-item.current-team .team-score-name { color: var(--sg-ink); }
+.team-score-name { color: var(--sg-ink); }
+.team-score-value, .player-count-display { font-family: var(--sg-font-card); color: var(--sg-blue); }
+
+.player-count-section {
+  background: #fff;
+  border: 3px solid var(--sg-ink);
+  border-radius: 18px;
+  box-shadow: 0 4px 0 var(--sg-ink);
+}
+.player-count-input, .team-count-input {
+  font-family: var(--sg-font-card);
+  border: 3px solid var(--sg-ink);
+  border-radius: 14px;
+}
+.player-count-input:focus, .team-count-input:focus { border-color: var(--sg-ink); outline: 3px solid var(--sg-yellow); }
+.player-count-info { color: var(--sg-ink); }
+
+@media (max-width: 768px) {
+  .dice-count-buttons { flex-direction: row; }
+  .dice-count-btn { flex: 1; padding: 1rem 0.5rem; }
+}
+.dice-controls { background: transparent; }

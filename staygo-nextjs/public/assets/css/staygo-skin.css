@@ -1,0 +1,216 @@
+/* STAYGO skin — gives every web game the look of ลุ้นจั่ว and STAYGO!:
+   cream paper, thick ink outlines, hard drop shadows, Mitr for Thai, Fredoka for numbers.
+   Load after site.css, staygo-cards.css and the game's own stylesheet, with <body class="sg-page sg-skin">.
+   Game-specific tweaks live in each game's skin.css, loaded after this file. */
+
+body.sg-skin {
+  --sk-paper: #fffaf0;
+  --sk-cream: #fff3d6;
+  --sk-soft: #f3eee4;
+  --sk-line: #e2dccf;
+  --sk-muted: #6b6461;
+  --sk-green: #22b573;
+  --sk-green-dark: #0f7a4f;
+  --sk-panel-shadow: 0 4px 0 var(--sg-ink);
+  --sk-btn-shadow: 0 3px 0 var(--sg-ink);
+
+  /* site.css tokens */
+  --bg: var(--sk-paper);
+  --surface: #fff;
+  --surface-2: var(--sk-soft);
+  --text: var(--sg-ink);
+  --text-muted: var(--sk-muted);
+  --primary: var(--sg-blue);
+
+  font-family: var(--sg-font-th);
+  background: var(--sk-paper);
+  color: var(--sg-ink);
+}
+body.sg-skin main h1,
+body.sg-skin main h2,
+body.sg-skin main h3,
+body.sg-skin main h4 {
+  font-family: var(--sg-font-th);
+  font-weight: 600;
+  letter-spacing: 0;
+}
+body.sg-skin main button,
+body.sg-skin main input,
+body.sg-skin main select,
+body.sg-skin main textarea {
+  font-family: var(--sg-font-th);
+}
+
+/* ---------- shared building blocks used by several games ---------- */
+
+/* the big white box that wraps each game → plain paper, content sits on panels */
+body.sg-skin .sk-frame {
+  background: transparent;
+  box-shadow: none;
+  border: 0;
+  border-radius: 0;
+}
+
+body.sg-skin .game-title {
+  font-family: var(--sg-font-th);
+  font-weight: 600;
+  color: var(--sg-ink);
+  font-size: clamp(32px, 7vw, 44px);
+  line-height: 1.15;
+}
+body.sg-skin .game-subtitle {
+  color: var(--sk-muted);
+  font-weight: 400;
+}
+
+/* white panels with an ink outline */
+body.sg-skin .instructions-panel,
+body.sg-skin .header-stats,
+body.sg-skin .input-area,
+body.sg-skin .history-area,
+body.sg-skin .secret-reveal,
+body.sg-skin .stat-card,
+body.sg-skin .selected-card-display,
+body.sg-skin .teams-scoreboard {
+  background: #fff;
+  border: 3px solid var(--sg-ink);
+  border-radius: 18px;
+  box-shadow: var(--sk-panel-shadow);
+}
+body.sg-skin .instructions-panel h3,
+body.sg-skin .instructions-panel p,
+body.sg-skin .guide-item span {
+  color: var(--sg-ink);
+}
+body.sg-skin .color-box {
+  border: 2.5px solid var(--sg-ink);
+  border-radius: 10px;
+}
+body.sg-skin .color-box.green { background: var(--sk-green); }
+body.sg-skin .color-box.yellow { background: var(--sg-yellow); }
+body.sg-skin .color-box.red { background: var(--sg-red); }
+body.sg-skin .color-box.gray { background: #b9b2a6; }
+
+/* choice tiles (difficulty, mode, dice count …) */
+body.sg-skin .difficulty-btn,
+body.sg-skin .mode-btn,
+body.sg-skin .dice-count-btn,
+body.sg-skin .option-btn {
+  background: #fff;
+  color: var(--sg-ink);
+  border: 3px solid var(--sg-ink);
+  border-radius: 14px;
+  box-shadow: var(--sk-btn-shadow);
+  transition: transform 0.08s, box-shadow 0.08s, background 0.15s;
+}
+body.sg-skin .difficulty-btn:hover,
+body.sg-skin .mode-btn:hover,
+body.sg-skin .dice-count-btn:hover,
+body.sg-skin .option-btn:hover {
+  border-color: var(--sg-ink);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 0 var(--sg-ink);
+}
+body.sg-skin .difficulty-btn.active,
+body.sg-skin .mode-btn.active,
+body.sg-skin .dice-count-btn.active,
+body.sg-skin .option-btn.active {
+  background: var(--sg-yellow);
+  border-color: var(--sg-ink);
+  color: var(--sg-ink);
+}
+body.sg-skin .difficulty-btn.active *,
+body.sg-skin .mode-btn.active *,
+body.sg-skin .dice-count-btn.active * {
+  color: var(--sg-ink);
+}
+
+/* buttons */
+body.sg-skin .game-btn,
+body.sg-skin .start-btn,
+body.sg-skin .result-btn,
+body.sg-skin .back-btn {
+  font-family: var(--sg-font-th);
+  font-weight: 500;
+  border: 3px solid var(--sg-ink);
+  border-radius: 14px;
+  box-shadow: var(--sk-btn-shadow);
+  background: #fff;
+  color: var(--sg-ink);
+  transition: transform 0.08s, box-shadow 0.08s;
+}
+body.sg-skin .game-btn:hover:not(:disabled),
+body.sg-skin .start-btn:hover,
+body.sg-skin .result-btn:hover,
+body.sg-skin .back-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 0 var(--sg-ink);
+}
+body.sg-skin .game-btn:active:not(:disabled),
+body.sg-skin .start-btn:active,
+body.sg-skin .result-btn:active,
+body.sg-skin .back-btn:active {
+  transform: translateY(3px);
+  box-shadow: 0 0 0 var(--sg-ink);
+}
+body.sg-skin .game-btn-primary,
+body.sg-skin .game-btn-primary:hover:not(:disabled),
+body.sg-skin .start-btn,
+body.sg-skin .start-btn:hover,
+body.sg-skin .result-btn.primary,
+body.sg-skin .result-btn.primary:hover {
+  background: var(--sg-blue);
+  color: #fff;
+}
+body.sg-skin .game-btn-secondary,
+body.sg-skin .game-btn-secondary:hover:not(:disabled),
+body.sg-skin .result-btn.secondary {
+  background: #fff;
+  color: var(--sg-ink);
+}
+
+/* stats + badges */
+body.sg-skin .stat-value,
+body.sg-skin .stat-card-value {
+  font-family: var(--sg-font-card);
+  font-weight: 600;
+  color: var(--sg-ink);
+}
+body.sg-skin .difficulty-badge {
+  background: var(--sg-yellow);
+  color: var(--sg-ink);
+  border: 2.5px solid var(--sg-ink);
+  border-radius: 999px;
+}
+
+body.sg-skin .end-title {
+  font-family: var(--sg-font-th);
+  font-weight: 600;
+}
+body.sg-skin .end-title.victory { color: var(--sk-green-dark); }
+body.sg-skin .end-title.gameover { color: var(--sg-red); }
+
+/* site.css .button family, used inside games */
+body.sg-skin main .button {
+  font-family: var(--sg-font-th);
+  font-weight: 500;
+  border: 3px solid var(--sg-ink);
+  border-radius: 14px;
+  box-shadow: var(--sk-btn-shadow);
+  background: #fff;
+  color: var(--sg-ink);
+  transition: transform 0.08s, box-shadow 0.08s;
+}
+body.sg-skin main .button:active:not(:disabled) {
+  transform: translateY(3px);
+  box-shadow: 0 0 0 var(--sg-ink);
+}
+body.sg-skin main .button-primary,
+body.sg-skin main .button-primary:hover:not(:disabled) {
+  background: var(--sg-blue);
+  color: #fff;
+}
+body.sg-skin main .button-ghost {
+  border-width: 2px;
+  box-shadow: 0 2px 0 var(--sg-ink);
+}

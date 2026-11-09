@@ -1,0 +1,61 @@
+/* STAYGO skin tweaks for Zoom Quiz (loaded after /assets/css/staygo-skin.css) */
+:root {
+  --zq-bg: #fffaf0;
+  --zq-panel: #ffffff;
+  --zq-panel-2: #f3eee4;
+  --zq-border: #e2dccf;
+  --zq-border-strong: #231f20;
+  --zq-text: #231f20;
+  --zq-text-dim: #6b6461;
+  --zq-accent: #1a9bf0;
+  --zq-accent-bright: #1286d4;
+  --zq-danger: #e8202a;
+  --zq-success: #22b573;
+  --zq-shadow: 0 4px 0 #231f20;
+}
+.zq-main { background: transparent; font-family: var(--sg-font-th); }
+#app h1, #app h2, #app h3, #app .display { font-family: var(--sg-font-th); font-weight: 600; letter-spacing: 0; }
+.card { background: #fff; border: 3px solid var(--sg-ink); border-radius: 18px; }
+.eyebrow { letter-spacing: 0.08em; font-weight: 600; }
+
+#app button {
+  font-family: var(--sg-font-th);
+  font-weight: 500;
+  font-size: 15px;
+  background: #fff;
+  border: 3px solid var(--sg-ink);
+  border-radius: 14px;
+  box-shadow: 0 3px 0 var(--sg-ink);
+  transition: transform 0.08s, box-shadow 0.08s;
+}
+#app button:hover:not(:disabled) { border-color: var(--sg-ink); color: var(--sg-ink); transform: translateY(-1px); box-shadow: 0 4px 0 var(--sg-ink); }
+#app button:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 0 0 var(--sg-ink); }
+#app button.primary, #app button.primary:hover:not(:disabled) { background: var(--sg-blue); color: #fff; border: 3px solid var(--sg-ink); }
+#app button.danger { border: 2px solid var(--sg-ink); color: var(--sg-red); box-shadow: 0 2px 0 var(--sg-ink); }
+#app button.ghost { background: var(--sk-soft); }
+#app button.confirm-danger, #app button.confirm-danger:hover:not(:disabled) { background: var(--sg-red); color: #fff; border: 3px solid var(--sg-ink); }
+.zq-chip button, .zq-chip button:hover:not(:disabled) { border: none !important; box-shadow: none !important; background: transparent !important; transform: none !important; }
+.zq-leave-row button { box-shadow: none; border-color: transparent; background: transparent; }
+
+#app input, #app select, #app textarea {
+  font-family: var(--sg-font-th);
+  font-size: 16px;
+  background: #fff;
+  border: 2.5px solid var(--sg-ink);
+  border-radius: 12px;
+}
+#app label { font-weight: 500; font-size: 13px; }
+
+.zq-qcard { background: #fff; border: 2.5px solid var(--sg-ink); border-radius: 14px; box-shadow: 0 2px 0 var(--sg-ink); }
+.zq-qcard-thumb { border: 2px solid var(--sg-ink); }
+.zq-qcard-num, .zq-timer { font-family: var(--sg-font-card); }
+.zq-empty { border: 3px dashed #c9c3b8; }
+.zq-chip { background: var(--sk-cream); border: 2px solid var(--sg-ink); }
+.zq-frame { border: 3px solid var(--sg-ink); border-radius: 18px; box-shadow: 0 4px 0 var(--sg-ink); background: var(--sg-ink); }
+.zq-choice-pill { background: #fff; border: 2.5px solid var(--sg-ink); border-radius: 12px; }
+.zq-choice-pill.zq-correct { background: #e3f7ec; border-color: var(--sg-ink); color: #0f7a4f; }
+.zq-answer-banner { background: #e3f7ec; border: 3px solid var(--sg-ink); border-radius: 14px; }
+.zq-answer-banner .zq-answer-label { color: #0f7a4f; }
+.zq-answer-banner .zq-answer-text { font-family: var(--sg-font-th); font-weight: 600; }
+.zq-countdown { background: #fff; border: 2.5px solid var(--sg-ink); font-family: var(--sg-font-card); }
+.zq-paused-badge { background: var(--sg-ink); color: var(--sg-yellow); }

@@ -1,0 +1,50 @@
+/* STAYGO skin tweaks for ลูปนรกหมกมุ่น (loaded after /assets/css/staygo-skin.css) */
+.stat-card, .question-area, .modal-content {
+  background: #fff;
+  border: 3px solid var(--sg-ink);
+  border-radius: 18px;
+  box-shadow: 0 4px 0 var(--sg-ink);
+}
+.stat-label { color: var(--sk-muted); letter-spacing: 0; text-transform: none; font-weight: 500; }
+.stat-value { font-family: var(--sg-font-card); font-weight: 600; color: var(--sg-blue); }
+
+.card-back, .card-front {
+  border: 3px solid var(--sg-ink);
+  border-radius: 16px;
+  box-shadow: 0 4px 0 var(--sg-ink);
+  font-family: var(--sg-font-card);
+}
+.card-back {
+  background: repeating-linear-gradient(45deg, var(--sg-ink) 0 8px, #3a3536 8px 16px);
+  color: var(--sg-yellow);
+  font-weight: 700;
+}
+.card-front { border-color: var(--sg-ink); }
+.card-front.red { color: var(--sg-red); }
+.card-front.black { color: var(--sg-ink); }
+.card-value { font-weight: 700; }
+
+.question-text, .modal-title { font-family: var(--sg-font-th); font-weight: 600; color: var(--sg-ink); }
+.answer-btn, .modal-btn {
+  font-family: var(--sg-font-th);
+  font-weight: 500;
+  border: 3px solid var(--sg-ink);
+  border-radius: 14px;
+  box-shadow: 0 3px 0 var(--sg-ink);
+  transition: transform 0.08s, box-shadow 0.08s;
+}
+.answer-btn:hover, .modal-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 0 var(--sg-ink); }
+.answer-btn:active, .modal-btn:active { transform: translateY(3px); box-shadow: 0 0 0 var(--sg-ink); }
+.red-btn, .red-btn:hover { background: var(--sg-red); }
+.black-btn, .black-btn:hover { background: var(--sg-ink); }
+.higher-btn, .higher-btn:hover { background: var(--sk-green); }
+.lower-btn, .lower-btn:hover { background: var(--sg-yellow); color: var(--sg-ink); }
+.inside-btn, .inside-btn:hover { background: var(--sg-blue); }
+.outside-btn, .outside-btn:hover { background: #7b4fd6; }
+.suit-btn, .suit-btn:hover { background: #fff; color: var(--sg-ink); border-color: var(--sg-ink); }
+.suit-btn.suit-red, .suit-btn.suit-red:hover { color: var(--sg-red); border-color: var(--sg-ink); background: #fff; }
+.modal-btn, .modal-btn:hover { background: var(--sg-blue); }
+.wrong-btn, .wrong-btn:hover { background: var(--sg-red); }
+.modal-rounds { color: var(--sg-blue); }
+.modal-rounds span { font-family: var(--sg-font-card); font-weight: 600; }
+.team-description { color: var(--sk-muted); }

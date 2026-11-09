@@ -1,0 +1,79 @@
+/* STAYGO skin tweaks for Dungeon Ledger (loaded after /assets/css/staygo-skin.css) */
+:root {
+  --dl-bg: #fffaf0;
+  --dl-panel: #ffffff;
+  --dl-panel-2: #f3eee4;
+  --dl-border: #e2dccf;
+  --dl-text: #231f20;
+  --dl-muted: #6b6461;
+  --dl-muted-2: #9b9488;
+  --dl-gold: #d99a00;
+  --dl-blue: #1a9bf0;
+  --dl-red: #e8202a;
+  --dl-green: #12a36b;
+}
+.dl-main { background: transparent; font-family: var(--sg-font-th); }
+.dl-app, .dl-app button { font-family: var(--sg-font-th); }
+.dl-app .mono,
+.dl-hero-rarity, .dl-hero-stat, .dl-hero-set, .dl-hero-level-btn, .dl-note,
+.dl-item-enchant, .dl-item-rarity, .dl-item-gear-stats, .dl-item-status,
+.dl-enchant-btn, .dl-sell-btn, .dl-enchant-feedback, .dl-log {
+  font-family: var(--sg-font-card);
+}
+.dl-app .mono { background: transparent; }
+.dl-header-title { font-family: var(--sg-font-card); font-weight: 700; font-size: 26px; letter-spacing: 0.02em; }
+
+.dl-topbar, .dl-panel, .dl-gacha-panel {
+  background: #fff;
+  border: 3px solid var(--sg-ink);
+  border-radius: 18px;
+  box-shadow: 0 4px 0 var(--sg-ink);
+}
+.dl-tab {
+  border: 2.5px solid var(--sg-ink);
+  border-radius: 12px;
+  box-shadow: 0 2px 0 var(--sg-ink);
+  color: var(--sg-ink);
+  font-weight: 500;
+}
+.dl-tab.active { background: var(--sg-yellow); border-color: var(--sg-ink); color: var(--sg-ink); }
+.dl-bar { background: var(--sk-soft); border: 2px solid var(--sg-ink); }
+.dl-log { background: var(--sk-cream); border: 2.5px solid var(--sg-ink); border-radius: 14px; }
+
+.dl-btn {
+  border: 3px solid var(--sg-ink);
+  border-radius: 14px;
+  box-shadow: 0 3px 0 var(--sg-ink);
+  background: #fff;
+  font-weight: 500;
+  font-size: 15px;
+  transition: transform 0.08s, box-shadow 0.08s;
+}
+.dl-btn:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 0 0 var(--sg-ink); }
+.dl-btn-primary { background: var(--sg-yellow); color: var(--sg-ink); }
+.dl-btn-blue { background: var(--sg-blue); color: #fff; }
+.dl-btn-ghost { background: #fff; border: 3px solid var(--sg-ink); color: var(--sg-ink); }
+.dl-btn-primary:disabled, .dl-btn-blue:disabled { background: var(--sk-soft); color: var(--sk-muted); }
+
+.dl-hero-card, .dl-item-card {
+  border: 2.5px solid var(--sg-ink);
+  border-radius: 14px;
+  box-shadow: 0 2px 0 var(--sg-ink);
+}
+.dl-hero-card.in-team { border-color: var(--sg-ink); background: var(--sk-cream); box-shadow: 0 0 0 2px var(--sg-yellow), 0 2px 0 var(--sg-ink); }
+.dl-slot { border: 2px dashed #c9c3b8; border-radius: 8px; }
+.dl-hero-assign-btn, .dl-hero-level-btn, .dl-enchant-btn, .dl-sell-btn, .dl-item-hero-btn {
+  border: 2px solid var(--sg-ink);
+  border-radius: 10px;
+  box-shadow: 0 2px 0 var(--sg-ink);
+  background: #fff;
+}
+.dl-hero-assign-btn.active, .dl-item-hero-btn.equipped { background: var(--sg-yellow); color: var(--sg-ink); }
+.dl-sell-btn.confirm { background: var(--dl-green); color: #fff; }
+.dl-gacha-sub, .dl-gacha-btn, .dl-rarity-legend, .dl-pull-card span:last-child { font-family: var(--sg-font-card); }
+.dl-gacha-btn { border: 3px solid var(--sg-ink); border-radius: 14px; box-shadow: 0 3px 0 var(--sg-ink); }
+.dl-pulls-panel { background: var(--sk-cream); border: 2.5px solid var(--sg-ink); border-radius: 14px; }
+.dl-pull-card { border: 2px solid var(--sg-ink); border-radius: 10px; }
+.dl-gameover-modal { border: 3px solid var(--sg-ink); border-radius: 18px; box-shadow: 0 4px 0 var(--sg-ink); }
+.dl-gameover-title { font-family: var(--sg-font-th); font-weight: 600; }
+.dl-team-icons .dl-empty-note { font-size: 13px; }

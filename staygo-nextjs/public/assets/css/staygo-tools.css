@@ -1,0 +1,163 @@
+/* Shared layout for STAYGO tool pages (buzzer, vote, finger picker, roles, words, seating).
+   Load after staygo-cards.css and staygo-skin.css. */
+.tl {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 20px 16px 56px;
+}
+.tl [hidden] {
+  display: none !important;
+}
+.tl-hero {
+  text-align: center;
+  margin: 8px 0 20px;
+}
+.tl-hero h1 {
+  font-size: clamp(32px, 7vw, 44px);
+  line-height: 1.15;
+  margin: 0 0 6px;
+}
+.tl-hero p {
+  margin: 0;
+  color: var(--sk-muted);
+  font-size: 16px;
+  line-height: 1.6;
+}
+.tl-narrow {
+  max-width: 520px;
+  margin: 0 auto;
+}
+.tl-stack {
+  display: grid;
+  gap: 16px;
+}
+.tl-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.tl-row > .sg-btn {
+  flex: 1 1 140px;
+}
+.tl-label {
+  display: block;
+  font-weight: 500;
+  margin: 0 0 6px;
+}
+.tl-hint {
+  color: var(--sk-muted);
+  font-size: 14px;
+  margin: 8px 0 0;
+}
+.tl-choice {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+.tl-choice button {
+  text-align: left;
+  font-family: var(--sg-font-th);
+  background: #fff;
+  border: 3px solid var(--sg-ink);
+  border-radius: 16px;
+  box-shadow: 0 3px 0 var(--sg-ink);
+  padding: 14px 16px;
+  cursor: pointer;
+  color: var(--sg-ink);
+  transition: transform 0.08s, box-shadow 0.08s, background 0.15s;
+}
+.tl-choice button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 0 var(--sg-ink);
+}
+.tl-choice button.active {
+  background: var(--sg-yellow);
+}
+.tl-choice b {
+  display: block;
+  font-size: 18px;
+  font-weight: 600;
+}
+.tl-choice small {
+  display: block;
+  font-size: 14px;
+  color: var(--sk-muted);
+  margin-top: 2px;
+}
+.tl-choice button.active small {
+  color: var(--sg-ink);
+}
+.tl-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  border: 2px solid var(--sg-ink);
+  background: #fff;
+  font-size: 14px;
+}
+.tl-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #c9c3b8;
+  flex: 0 0 auto;
+}
+.tl-dot.on {
+  background: var(--sk-green);
+}
+textarea.sg-input {
+  min-height: 140px;
+  resize: vertical;
+  line-height: 1.6;
+}
+select.sg-input {
+  appearance: auto;
+}
+.tl-num {
+  font-family: var(--sg-font-card);
+  font-weight: 600;
+}
+.tl-code {
+  font-family: var(--sg-font-card);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+.tl-qr svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  background: #fff;
+  border-radius: 12px;
+}
+
+/* big-screen mode: hide site chrome, enlarge content (TV / stream) */
+body.tl-big .header,
+body.tl-big .mobile-menu,
+body.tl-big .tl-hero,
+body.tl-big .tl-nobig {
+  display: none !important;
+}
+body.tl-big .tl {
+  max-width: none;
+  padding: 24px 32px;
+}
+
+.tl-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 20px;
+  transform: translateX(-50%);
+  background: var(--sg-ink);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-size: 15px;
+  z-index: 200;
+  max-width: calc(100vw - 32px);
+}
+.tl-row > .sg-btn.small {
+  flex: 0 0 auto;
+}

@@ -1,0 +1,226 @@
+/* Buzzer */
+.bz-host {
+  display: grid;
+  gap: 16px;
+}
+@media (min-width: 860px) {
+  .bz-host {
+    grid-template-columns: 280px minmax(0, 1fr);
+    align-items: start;
+  }
+}
+.bz-join {
+  text-align: center;
+  display: grid;
+  gap: 8px;
+}
+.bz-code {
+  font-size: 52px;
+  line-height: 1;
+  color: var(--sg-blue);
+}
+.bz-qr {
+  max-width: 220px;
+  margin: 0 auto;
+  width: 100%;
+}
+.bz-players {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+.bz-players li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+}
+.bz-pname {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.bz-pbtns {
+  display: flex;
+  gap: 4px;
+}
+.bz-pbtns button {
+  font: inherit;
+  font-size: 12px;
+  border: 2px solid var(--sg-ink);
+  background: #fff;
+  border-radius: 8px;
+  padding: 1px 6px;
+  cursor: pointer;
+}
+.bz-main {
+  display: grid;
+  gap: 14px;
+  min-height: 420px;
+  align-content: start;
+}
+.bz-round {
+  font-size: 20px;
+}
+.bz-round b {
+  font-size: 28px;
+}
+.bz-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+.bz-list li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border: 2.5px solid var(--sk-line);
+  border-radius: 14px;
+  font-size: 18px;
+  animation: bz-in 0.25s ease-out;
+}
+.bz-list li.first {
+  border: 3px solid var(--sg-ink);
+  background: var(--sg-yellow);
+  box-shadow: 0 4px 0 var(--sg-ink);
+  font-size: 26px;
+}
+@keyframes bz-in {
+  from { transform: translateY(8px); opacity: 0; }
+}
+.bz-rank {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2.5px solid var(--sg-ink);
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+.bz-bname {
+  flex: 1;
+  font-weight: 600;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.bz-delta {
+  color: var(--sk-muted);
+  font-size: 15px;
+}
+.bz-list li.first .bz-delta {
+  color: var(--sg-ink);
+}
+.bz-empty {
+  text-align: center;
+  color: var(--sk-muted);
+  font-size: 18px;
+  padding: 40px 0;
+  margin: 0;
+}
+.bz-controls small {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+/* player */
+.bz-me {
+  justify-content: space-between;
+  font-size: 15px;
+  margin-bottom: 18px;
+}
+.bz-buzz {
+  display: block;
+  width: min(78vw, 320px);
+  aspect-ratio: 1;
+  margin: 8px auto 18px;
+  border-radius: 50%;
+  border: 6px solid var(--sg-ink);
+  background: var(--sg-red);
+  color: #fff;
+  font-family: var(--sg-font-th);
+  font-size: clamp(44px, 14vw, 64px);
+  font-weight: 600;
+  box-shadow: 0 12px 0 #8f1218, 0 14px 0 var(--sg-ink);
+  cursor: pointer;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.06s, box-shadow 0.06s;
+}
+.bz-buzz:active:not(:disabled) {
+  transform: translateY(10px);
+  box-shadow: 0 2px 0 #8f1218, 0 4px 0 var(--sg-ink);
+}
+.bz-buzz:disabled {
+  cursor: default;
+}
+.bz-buzz.locked {
+  background: #c9c3b8;
+  box-shadow: 0 12px 0 #8b8481, 0 14px 0 var(--sg-ink);
+}
+.bz-buzz.won {
+  background: var(--sk-green);
+  box-shadow: 0 4px 0 #0f7a4f, 0 6px 0 var(--sg-ink);
+  transform: translateY(8px);
+}
+.bz-buzz.late {
+  background: var(--sg-yellow);
+  color: var(--sg-ink);
+  box-shadow: 0 4px 0 #b88a00, 0 6px 0 var(--sg-ink);
+  transform: translateY(8px);
+}
+.bz-status {
+  text-align: center;
+  font-size: 18px;
+  min-height: 54px;
+}
+
+/* big screen */
+body.tl-big .bz-host {
+  grid-template-columns: 340px minmax(0, 1fr);
+}
+body.tl-big .bz-code {
+  font-size: 72px;
+}
+body.tl-big .bz-qr {
+  max-width: 280px;
+}
+body.tl-big .bz-main {
+  min-height: calc(100vh - 60px);
+}
+body.tl-big .bz-round {
+  font-size: 30px;
+}
+body.tl-big .bz-list li {
+  font-size: 28px;
+}
+body.tl-big .bz-list li.first {
+  font-size: 48px;
+}
+body.tl-big .bz-players li {
+  font-size: 20px;
+}
+.bz-exitbig {
+  position: fixed;
+  right: 12px;
+  bottom: 12px;
+  z-index: 50;
+  opacity: 0.5;
+}
+.bz-exitbig:hover {
+  opacity: 1;
+}
+body.tl-big .bz-rank { width: 52px; height: 52px; }
+body.tl-big .bz-list li.first .bz-rank { width: 72px; height: 72px; }
+body.tl-big .bz-delta { font-size: 22px; }

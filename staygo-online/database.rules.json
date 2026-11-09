@@ -4,7 +4,9 @@
     ".write": false,
     "rooms": {
       "$roomId": {
-        "meta":   { ".read": "auth != null" },
+        "meta": {
+          ".read": "auth != null"
+        },
         "seats": {
           ".read": "auth != null",
           "$i": {
@@ -18,11 +20,67 @@
             }
           }
         },
-        "public": { ".read": "auth != null" },
-        "private": {
-          "$uid": { ".read": "auth != null && auth.uid === $uid" }
+        "public": {
+          ".read": "auth != null"
         },
-        "secret": { ".read": false }
+        "private": {
+          "$uid": {
+            ".read": "auth != null && auth.uid === $uid"
+          }
+        },
+        "secret": {
+          ".read": false
+        }
+      }
+    },
+    "live": {
+      "$code": {
+        ".read": "auth != null",
+        ".validate": "$code.matches(/^[A-Z2-9]{4}$/)",
+        "meta": {
+          ".write": "auth != null && ((!data.exists() && newData.child('hostUid').val() === auth.uid) || data.child('hostUid').val() === auth.uid)",
+          ".validate": "newData.hasChildren(['hostUid', 'kind', 'createdAt']) && newData.child('kind').val().matches(/^(buzzer|vote)$/)"
+        },
+        "players": {
+          "$uid": {
+            ".write": "auth != null && (auth.uid === $uid || root.child('live').child($code).child('meta').child('hostUid').val() === auth.uid)",
+            ".validate": "!newData.exists() || (newData.child('name').isString() && newData.child('name').val().length >= 1 && newData.child('name').val().length <= 24)"
+          }
+        },
+        "state": {
+          ".write": "auth != null && root.child('live').child($code).child('meta').child('hostUid').val() === auth.uid",
+          "round": {
+            ".validate": "newData.isNumber()"
+          },
+          "locked": {
+            ".validate": "newData.isBoolean()"
+          }
+        },
+        "buzz": {
+          ".write": "auth != null && root.child('live').child($code).child('meta').child('hostUid').val() === auth.uid",
+          "$round": {
+            "$uid": {
+              ".write": "auth != null && auth.uid === $uid && !data.exists() && (root.child('live').child($code).child('state').child('round').val() + '') === $round && root.child('live').child($code).child('state').child('locked').val() !== true",
+              ".validate": "newData.child('t').val() === now"
+            }
+          }
+        },
+        "poll": {
+          ".write": "auth != null && root.child('live').child($code).child('meta').child('hostUid').val() === auth.uid",
+          ".validate": "newData.hasChildren(['id', 'question', 'options', 'open'])"
+        },
+        "votes": {
+          ".write": "auth != null && root.child('live').child($code).child('meta').child('hostUid').val() === auth.uid",
+          "$pollId": {
+            "$uid": {
+              ".write": "auth != null && auth.uid === $uid && root.child('live').child($code).child('poll').child('id').val() === $pollId && root.child('live').child($code).child('poll').child('open').val() === true",
+              ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() < 12"
+            }
+          }
+        },
+        "$other": {
+          ".validate": false
+        }
       }
     }
   }

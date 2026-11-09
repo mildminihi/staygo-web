@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>ปุ่มกดแข่ง (Buzzer) ออนไลน์ | STAYGO</title>
+    <meta name="title" content="ปุ่มกดแข่ง (Buzzer) ออนไลน์ | STAYGO" />
+    <meta name="description" content="เปลี่ยนมือถือทุกคนเป็นปุ่มกดแข่ง โฮสต์เห็นทันทีว่าใครกดก่อน เหมาะกับเกมตอบคำถาม ทายเพลง ทายภาพ และกิจกรรมกลุ่ม" />
+    <meta name="robots" content="index, follow" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://staygoch.com/tools/buzzer/" />
+    <meta property="og:title" content="ปุ่มกดแข่ง (Buzzer) ออนไลน์" />
+    <meta property="og:description" content="เปลี่ยนมือถือทุกคนเป็นปุ่มกดแข่ง โฮสต์เห็นทันทีว่าใครกดก่อน เหมาะกับเกมตอบคำถาม ทายเพลง ทายภาพ และกิจกรรมกลุ่ม" />
+    <meta property="og:image" content="https://staygoch.com/games/reveal-board/staygo-logo.png" />
+    <link rel="canonical" href="https://staygoch.com/tools/buzzer/" />
+    <link rel="icon" type="image/png" href="/games/reveal-board/staygo-logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Mitr:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Kanit:wght@700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/assets/css/site.css" />
+    <link rel="stylesheet" href="/assets/css/staygo-cards.css" />
+    <link rel="stylesheet" href="/assets/css/staygo-skin.css" />
+    <link rel="stylesheet" href="/assets/css/staygo-tools.css" />
+    <link rel="stylesheet" href="./styles.css" />
+    <script defer src="/assets/js/config.js"></script>
+    <script defer src="/assets/js/site.js"></script>
+    <script src="/assets/js/analytics.js" defer></script>
+  </head>
+  <body class="sg-page sg-skin">
+    <header class="header">
+      <div class="container">
+        <div class="header-content">
+          <a href="/" class="logo-link">
+            <img src="/games/reveal-board/staygo-logo.png" alt="Staygo" class="logo" />
+          </a>
+
+          <nav class="nav" aria-label="เมนูหลัก">
+            <a href="/#play" class="nav-link">Play</a>
+            <a href="/tools/" class="nav-link active">Tools</a>
+            <a href="/watch/" class="nav-link">Watch & Play</a>
+            <a href="/about/" class="nav-link">About</a>
+          </nav>
+
+          <div class="header-actions">
+            <a href="https://www.youtube.com/@STAYGO" target="_blank" rel="noopener noreferrer" class="icon-button" aria-label="YouTube">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
+                <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+              </svg>
+            </a>
+            <button id="menuToggle" class="icon-button" aria-label="เมนู">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu">
+      <div class="mobile-menu-header">
+        <span class="mobile-menu-title">เมนู</span>
+        <button id="menuClose" class="icon-button" aria-label="ปิดเมนู">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <nav class="mobile-nav">
+        <a href="/#play" class="mobile-nav-link">Play</a>
+        <a href="/tools/" class="mobile-nav-link">Tools</a>
+        <a href="/watch/" class="mobile-nav-link">Watch & Play</a>
+        <a href="/about/" class="mobile-nav-link">About</a>
+      </nav>
+    </div>
+
+    <main class="tl">
+      <div class="tl-hero">
+        <h1>🔔 ปุ่มกดแข่ง</h1>
+        <p>เปิดห้องบนจอโฮสต์ ให้ทุกคนสแกน QR แล้วมือถือกลายเป็นปุ่มกด รู้ทันทีว่าใครกดก่อน</p>
+      </div>
+
+      <!-- start -->
+      <section id="start" class="tl-narrow tl-stack" hidden>
+        <div class="sg-panel tl-stack">
+          <div>
+            <span class="tl-label">ฉันคือ…</span>
+            <div class="tl-choice">
+              <button id="pickHost"><b>🖥️ โฮสต์</b><small>เปิดห้องบนจอใหญ่ / คอมของคนคุมเกม</small></button>
+              <button id="pickPlayer"><b>📱 ผู้เล่น</b><small>ใส่รหัสห้องแล้วใช้มือถือเป็นปุ่มกด</small></button>
+            </div>
+          </div>
+          <div id="joinForm" class="tl-stack" hidden>
+            <label><span class="tl-label">รหัสห้อง</span><input id="codeInput" class="sg-input tl-code" maxlength="4" placeholder="เช่น K7QX" autocomplete="off" /></label>
+            <label><span class="tl-label">ชื่อของคุณ</span><input id="nameInput" class="sg-input" maxlength="24" placeholder="เช่น มายด์" autocomplete="nickname" /></label>
+            <button id="joinBtn" class="sg-btn blue block">เข้าห้อง</button>
+          </div>
+          <button id="createBtn" class="sg-btn blue block" hidden>สร้างห้องใหม่</button>
+        </div>
+        <details class="sg-panel">
+          <summary><b>วิธีใช้</b></summary>
+          <ul class="tl-hint">
+            <li>โฮสต์กด "สร้างห้องใหม่" แล้วขึ้นจอให้ทุกคนเห็นรหัส/QR</li>
+            <li>ผู้เล่นสแกน QR หรือใส่รหัส 4 ตัว แล้วใส่ชื่อ</li>
+            <li>โฮสต์อ่านคำถาม ใครรู้คำตอบกดปุ่มใหญ่ จอโฮสต์จะเรียงลำดับคนกดตามเวลาที่ถึงเซิร์ฟเวอร์</li>
+            <li>กด "รอบใหม่" (หรือปุ่ม N) เพื่อเคลียร์ แล้วเริ่มคำถามต่อไป ให้คะแนนด้วยปุ่ม +1</li>
+          </ul>
+        </details>
+      </section>
+
+      <!-- host -->
+      <section id="host" hidden>
+        <div class="bz-host">
+          <div class="bz-side tl-stack">
+            <div class="sg-panel bz-join">
+              <p class="tl-hint" style="margin:0">สแกนเพื่อเข้าห้อง หรือใส่รหัส</p>
+              <div id="hostCode" class="bz-code tl-code"></div>
+              <div id="qr" class="tl-qr bz-qr"></div>
+              <button id="copyLink" class="sg-btn small block tl-nobig">คัดลอกลิงก์</button>
+            </div>
+            <div class="sg-panel">
+              <div class="tl-row" style="justify-content:space-between">
+                <b>ผู้เล่น <span id="playerCount" class="tl-num"></span></b>
+              </div>
+              <ul id="playerList" class="bz-players"></ul>
+            </div>
+          </div>
+
+          <div class="bz-main sg-panel">
+            <div class="tl-row" style="justify-content:space-between">
+              <span class="bz-round">รอบที่ <b id="roundNo" class="tl-num">1</b></span>
+              <span id="lockTag" class="tl-chip" hidden>🔒 ล็อกปุ่มอยู่</span>
+            </div>
+            <ol id="buzzList" class="bz-list"></ol>
+            <p id="buzzEmpty" class="bz-empty">รอคนกด…</p>
+            <div class="tl-row bz-controls tl-nobig">
+              <button id="nextRound" class="sg-btn blue">▶ รอบใหม่ <small>(N)</small></button>
+              <button id="lockBtn" class="sg-btn">🔒 ล็อกปุ่ม <small>(L)</small></button>
+              <button id="bigBtn" class="sg-btn">📺 จอใหญ่</button>
+            </div>
+            <div class="tl-row tl-nobig" style="justify-content:flex-end">
+              <button id="endRoom" class="sg-btn small">ปิดห้อง</button>
+            </div>
+          </div>
+        </div>
+        <button id="exitBig" class="sg-btn small bz-exitbig" hidden>ออกจากจอใหญ่</button>
+      </section>
+
+      <!-- player -->
+      <section id="player" class="tl-narrow" hidden>
+        <div class="tl-row bz-me">
+          <span>ห้อง <b id="meCode" class="tl-code"></b></span>
+          <span><b id="meName"></b> · <span id="meScore" class="tl-num">0</span> แต้ม</span>
+        </div>
+        <button id="buzz" class="bz-buzz" aria-label="กดปุ่ม">กด!</button>
+        <p id="buzzStatus" class="bz-status"></p>
+        <div class="tl-row" style="justify-content:center">
+          <button id="leaveBtn" class="sg-btn small">ออกจากห้อง</button>
+        </div>
+      </section>
+
+      <p id="loading" class="tl-hint" style="text-align:center">กำลังโหลด…</p>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+
+  </body>
+</html>

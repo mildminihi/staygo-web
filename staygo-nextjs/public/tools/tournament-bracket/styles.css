@@ -1,0 +1,230 @@
+/* จัดสายการแข่งขัน */
+.tb { max-width: 1200px; }
+.tb-setup { max-width: 640px; margin: 0 auto; }
+.tb-namebar { justify-content: space-between; margin-top: 6px; }
+.tb-opts { display: grid; gap: 8px; }
+.tb-opts:empty { display: none; }
+.tb-check { display: inline-flex; align-items: center; gap: 8px; font-size: 15px; cursor: pointer; }
+.tb-check input { width: 18px; height: 18px; }
+.tb-sel { font: inherit; border: 2px solid var(--sg-ink); border-radius: 8px; padding: 0 4px; background: #fff; }
+.tb-preview {
+  margin: 0;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: var(--sk-cream);
+  font-size: 15px;
+}
+.tb-preview:empty { display: none; }
+
+/* header */
+.tb-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.tb-title { margin: 0; font-size: 28px; }
+.tb-prog { min-width: 200px; flex: 0 1 280px; font-size: 15px; }
+.tb-track { height: 12px; border: 2.5px solid var(--sg-ink); border-radius: 999px; background: #fff; overflow: hidden; margin-top: 4px; }
+.tb-fill { height: 100%; background: var(--sk-green); transition: width 0.4s ease; }
+.tb-tools { margin-bottom: 14px; gap: 8px; }
+
+/* next match */
+.tb-next {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  border: 3px solid var(--sg-ink);
+  border-radius: 16px;
+  background: var(--sk-cream);
+  box-shadow: 0 4px 0 var(--sg-ink);
+}
+.tb-next > span { flex-basis: 100%; }
+.tb-next b { flex: 1; font-size: 20px; min-width: 0; }
+.tb-next i { font-style: normal; color: var(--sk-muted); font-weight: 400; margin: 0 6px; }
+.tb-next .sg-btn { flex: 0 0 auto; }
+
+/* champion */
+.tb-champ {
+  text-align: center;
+  padding: 18px 16px;
+  margin-bottom: 16px;
+  border: 3px solid var(--sg-ink);
+  border-radius: 20px;
+  background: var(--sg-yellow);
+  box-shadow: 0 5px 0 var(--sg-ink);
+  animation: tb-in 0.4s ease-out;
+}
+.tb-champ h2 { margin: 2px 0 8px; font-size: clamp(30px, 7vw, 44px); }
+.tb-trophy { font-size: 52px; line-height: 1; animation: tb-bounce 1.2s ease-in-out infinite alternate; }
+.tb-podium { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px 18px; font-size: 18px; font-weight: 500; }
+@keyframes tb-in { from { transform: scale(0.9); opacity: 0; } }
+@keyframes tb-bounce { to { transform: translateY(-6px) rotate(-6deg); } }
+
+/* bracket board */
+.tb-panel { padding: 14px; }
+.tb-sub { margin: 0 0 10px; font-size: 18px; }
+.tb-scroll { overflow-x: auto; padding-bottom: 8px; -webkit-overflow-scrolling: touch; }
+.tb-heads { position: relative; height: 26px; margin-bottom: 4px; }
+.tb-heads span {
+  position: absolute;
+  top: 0;
+  width: 200px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--sk-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tb-canvas { position: relative; }
+.tb-lines { position: absolute; inset: 0; pointer-events: none; overflow: visible; }
+.tb-lines path { fill: none; stroke: #c9c3b8; stroke-width: 2.5; }
+.tb-lines path.live { stroke: var(--sg-ink); }
+.tb-slot { position: absolute; width: 200px; }
+
+/* match card */
+.tb-m {
+  position: relative;
+  width: 200px;
+  min-height: 76px;
+  background: #fff;
+  border: 2.5px solid var(--sk-line);
+  border-radius: 14px;
+  padding: 6px 8px;
+  display: grid;
+  gap: 2px;
+  align-content: center;
+}
+.tb-m[role="button"] { cursor: pointer; }
+.tb-m.playable {
+  border: 3px solid var(--sg-ink);
+  box-shadow: 0 3px 0 var(--sg-ink), 0 0 0 4px var(--sg-yellow);
+}
+.tb-m.playable:hover { transform: translateY(-2px); }
+.tb-m.done { border-color: var(--sg-ink); }
+.tb-m.done:hover { background: var(--sk-cream); }
+.tb-m.auto { min-height: 0; border-style: dashed; opacity: 0.75; }
+.tb-num {
+  position: absolute;
+  top: -9px;
+  left: 8px;
+  font-family: var(--sg-font-card);
+  font-size: 11px;
+  font-weight: 600;
+  background: #fff;
+  border: 1.5px solid var(--sk-line);
+  border-radius: 999px;
+  padding: 0 6px;
+  color: var(--sk-muted);
+}
+.tb-p {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 6px;
+  border-radius: 8px;
+  font-size: 15px;
+  line-height: 1.3;
+}
+.tb-pn { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tb-p.win { background: #e3f7ec; font-weight: 600; }
+.tb-p.lose { color: #9b9488; text-decoration: line-through; text-decoration-color: rgba(0, 0, 0, 0.2); }
+.tb-p.ghost { color: #9b9488; font-style: italic; font-size: 14px; }
+.tb-sc { font-family: var(--sg-font-card); font-weight: 600; font-size: 14px; color: var(--sk-green-dark); }
+.tb-p.lose .tb-sc { color: #9b9488; }
+.tb-tap {
+  position: absolute;
+  right: 8px;
+  bottom: -11px;
+  font-size: 11px;
+  font-weight: 600;
+  background: var(--sg-yellow);
+  border: 2px solid var(--sg-ink);
+  border-radius: 999px;
+  padding: 0 8px;
+  white-space: nowrap;
+}
+.tb-tap.draw { background: #fff; }
+.tb-extra .tb-m { margin-top: 6px; }
+
+/* league */
+.tb-tablewrap { overflow-x: auto; }
+.tb-table { width: 100%; border-collapse: collapse; font-size: 15px; min-width: 420px; }
+.tb-table th, .tb-table td { padding: 8px 6px; text-align: center; border-bottom: 1.5px solid var(--sk-line); }
+.tb-table th { font-size: 13px; color: var(--sk-muted); font-weight: 600; }
+.tb-table .l { text-align: left; }
+.tb-table .pts { font-size: 18px; }
+.tb-table tr.top td { background: var(--sk-cream); font-weight: 600; }
+.tb-round { margin-bottom: 14px; }
+.tb-round h4 { margin: 0 0 10px; font-size: 15px; color: var(--sk-muted); }
+.tb-fx { display: flex; flex-wrap: wrap; gap: 18px 12px; }
+
+/* result sheet */
+.tb-sheet { position: fixed; inset: 0; z-index: 300; display: flex; align-items: flex-end; justify-content: center; }
+.tb-sheet[hidden] { display: none !important; }
+.tb-sheet-bg { position: absolute; inset: 0; background: rgba(35, 31, 32, 0.45); }
+.tb-sheet-card {
+  position: relative;
+  width: min(520px, 100%);
+  margin: 0 0 max(12px, env(safe-area-inset-bottom));
+  display: grid;
+  gap: 12px;
+  animation: tb-up 0.2s ease-out;
+}
+@media (min-width: 700px) { .tb-sheet { align-items: center; } }
+@keyframes tb-up { from { transform: translateY(30px); opacity: 0; } }
+.tb-sheet-title { margin: 0; font-size: 22px; }
+.tb-sheet-body { display: grid; gap: 8px; }
+.tb-pick { display: flex; gap: 8px; align-items: stretch; }
+.tb-who {
+  flex: 1;
+  min-height: 60px;
+  font-family: var(--sg-font-th);
+  font-size: 20px;
+  font-weight: 500;
+  background: #fff;
+  color: var(--sg-ink);
+  border: 3px solid var(--sg-ink);
+  border-radius: 16px;
+  box-shadow: 0 3px 0 var(--sg-ink);
+  cursor: pointer;
+  padding: 8px 12px;
+  overflow-wrap: anywhere;
+}
+.tb-who:hover { background: var(--sk-cream); }
+.tb-who:active { transform: translateY(3px); box-shadow: none; }
+.tb-who.on { background: #e3f7ec; }
+.tb-score { width: 84px; text-align: center; font-family: var(--sg-font-card); font-size: 24px; flex: 0 0 auto; }
+.tb-vs { text-align: center; font-size: 13px; color: var(--sk-muted); }
+.tb-sheet-msg { margin: 0; font-size: 14px; color: var(--sk-muted); min-height: 0; }
+.tb-sheet-msg:empty { display: none; }
+
+/* big screen */
+body.tl-big .tb-head { margin-bottom: 18px; }
+body.tl-big .tb-title { font-size: 40px; }
+body.tl-big .tb-content, body.tl-big #content { zoom: 1.2; }
+body.tl-big .tb-m[role="button"] { cursor: default; }
+.tb-exitbig { position: fixed; right: 12px; bottom: 12px; z-index: 50; opacity: 0.5; }
+.tb-exitbig[hidden] { display: none !important; }
+
+@media (max-width: 600px) {
+  .tb-title { font-size: 22px; }
+  .tb-next b { font-size: 17px; flex-basis: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tb-trophy, .tb-champ, .tb-sheet-card { animation: none; }
+}
+@media print {
+  .header, .mobile-menu, .tl-hero, .tb-tools, .tb-next, #staygo-consent { display: none !important; }
+  body.sg-skin { background: #fff; }
+}
+/* keep wide brackets scrolling inside their panel instead of widening the page */
+#content, #content > *, .tb-panel, .tb-scroll { min-width: 0; max-width: 100%; }
+.tb { overflow-x: clip; }

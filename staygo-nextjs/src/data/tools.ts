@@ -81,7 +81,7 @@ export const TOOLS: Tool[] = [
     href: '/tools/tournament-bracket/',
     icon: '🏆',
     label: 'จัดสายการแข่งขัน',
-    description: 'สร้างสายการแข่งขันแบบทัวร์นาเมนต์',
+    description: 'แพ้คัดออก แพ้ 2 ครั้งตกรอบ หรือพบกันหมด แตะใส่ผล เลื่อนผู้ชนะให้เอง',
   },
   {
     href: '/tools/competition-timer/',

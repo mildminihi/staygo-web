@@ -623,3 +623,95 @@ body.busy .sgo button {
 #againWait {
   flex-basis: 100%;
 }
+
+/* ---------- card info (tap a card in hand) ---------- */
+.card-info {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  background: #fff8e6;
+  border: 2.5px solid var(--sg-ink);
+  border-radius: 14px;
+  padding: 10px 12px;
+}
+.card-info .sg-card {
+  border-width: 2px;
+  box-shadow: none;
+}
+.card-info b {
+  font-size: 17px;
+}
+.card-info p {
+  margin: 2px 0 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.card-info .fit {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 13px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: #f3eee4;
+}
+.card-info .fit.need {
+  background: var(--sg-yellow);
+  font-weight: 600;
+}
+
+/* ---------- hand guide (while discarding / giving) ---------- */
+.hand-guide {
+  margin-top: 6px;
+  border: 2px dashed #c9c3b8;
+  border-radius: 14px;
+  padding: 8px 10px;
+}
+.hand-guide .guide-title {
+  margin: 0 0 6px;
+  font-size: 13px;
+  color: #6b6461;
+}
+.hand-guide ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+}
+.hand-guide li {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 4px 6px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1.4;
+}
+.hand-guide li:hover,
+.hand-guide li.on {
+  background: #fff3d6;
+}
+.hand-guide li .sg-card {
+  border-width: 2px;
+  box-shadow: none;
+}
+.hand-guide li span {
+  color: #4a4446;
+}
+.hand-guide li em {
+  font-style: normal;
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--sg-yellow);
+  border-radius: 999px;
+  padding: 1px 8px;
+  white-space: nowrap;
+}
+.hand-guide li i {
+  font-style: normal;
+  font-family: var(--sg-font-card);
+  font-weight: 600;
+  color: var(--sg-blue);
+}
+.hand-guide { margin-top: 10px; }

@@ -1,6 +1,6 @@
 // STAYGO! ออนไลน์ — client. Reads public + private state, sends intents to the server.
 // The client never decides game results: every action goes through gameAction.
-import { POWER_NAMES, nextNeeded, SG_MIN_PLAYERS, SG_MAX_PLAYERS, HAND_LIMIT } from "/assets/js/staygo-engine/engine.js";
+import { LETTERS, POWER_NAMES, nextNeeded, SG_MIN_PLAYERS, SG_MAX_PLAYERS, HAND_LIMIT } from "/assets/js/staygo-engine/engine.js";
 import { esc, cardHTML, rowHTML, toast, formatDuration } from "/assets/js/staygo-engine/ui.js";
 import { firebaseConfigured, createFirebaseTransport } from "./transport-firebase.js";
 
@@ -37,6 +37,7 @@ let selected = null; // selected card id in my hand
 let yoloPicks = [];
 let lastNoticeT = 0;
 let expiredFor = null; // shoutDeadline we already tried to expire
+let presenceSeat = -1; // seat index our presence hooks point at
 
 const params = new URLSearchParams(location.search);
 const isLocal = ["localhost", "127.0.0.1", "[::1]"].includes(location.hostname);
@@ -57,8 +58,10 @@ function normPub(p) {
   if (!p) return null;
   p.players = (p.players || []).map((x) => ({ handCount: x?.handCount || 0, row: x?.row || [], skip: !!x?.skip }));
   p.log = p.log || [];
-  p.winners = p.winners || null;
-  p.pending = p.pending || null;
+  // Firebase drops null fields, so restore them; otherwise `endAt !== null` is true from the start.
+  for (const k of ["winners", "pending", "endAt", "shoutDeadline", "endedAt", "discardTop", "endReason"]) p[k] = p[k] ?? null;
+  p.deckCount = p.deckCount ?? 0;
+  p.turnCount = p.turnCount ?? 0;
   return p;
 }
 function normPriv(p) {
@@ -68,6 +71,7 @@ function normPriv(p) {
 
 function show(screen) {
   for (const id of ["config", "home", "lobby", "game"]) $(`screen-${id}`).hidden = id !== screen;
+  if (screen !== "game") for (const id of ["targetSheet", "shoutOverlay", "endOverlay"]) $(id).hidden = true;
 }
 
 async function send(action) {
@@ -147,8 +151,8 @@ $("codeInput").addEventListener("input", (e) => (e.target.value = e.target.value
 function enterRoom(c, seat) {
   code = c;
   history.replaceState(null, "", `?room=${c}${useMock ? "&mock=1" : ""}`);
+  presenceSeat = -1; // set from the seats listener once our seat is known
   watch();
-  T.presence(code, seat);
 }
 
 function watch() {
@@ -165,6 +169,11 @@ function watch() {
     },
     seats: (v) => {
       seats = normSeats(v);
+      const s = mySeat();
+      if (s >= 0 && s !== presenceSeat) {
+        presenceSeat = s;
+        T.presence(code, s);
+      }
       render();
     },
     pub: (v) => {
@@ -189,6 +198,9 @@ function leaveLocal() {
   T.stopPresence();
   code = meta = pub = priv = null;
   seats = [];
+  presenceSeat = -1;
+  selected = null;
+  yoloPicks = [];
   history.replaceState(null, "", useMock ? "?mock=1" : location.pathname);
   show("home");
 }
@@ -368,6 +380,34 @@ function renderBanner() {
   $("endEarlyBtn")?.addEventListener("click", () => send({ type: "endTurnEarly" }));
 }
 
+/** What a card does, plus how it fits my row. Shown whenever a card in hand is tapped. */
+function cardInfo(c) {
+  const row = pub?.players?.[mySeat()]?.row || [];
+  if (c.k === "L") {
+    const idx = LETTERS.indexOf(c.l);
+    const fit =
+      idx < row.length ? { text: "แถวคุณมีตัวนี้แล้ว", cls: "" } :
+      idx === row.length ? { text: "แถวคุณต้องการตัวนี้ถัดไป!", cls: "need" } :
+      { text: `แถวคุณยังไม่ถึงตัว ${c.l}`, cls: "" };
+    return { title: `${c.l} · ${POWER_NAMES[c.l]}`, lines: [`พลัง: ${POWER_DESC[c.l]}`, `หรือวางเป็นตัว ${c.l} ในแถว`], fit };
+  }
+  if (c.k === "W") {
+    const need = nextNeeded(row);
+    return { title: "STAYGO (ไวลด์)", lines: ["วางเป็นตัวอักษรไหนก็ได้ในแถว", "ไม่มีพลังพิเศษ"], fit: need ? { text: `ใช้เป็นตัว ${need} ต่อแถวได้เลย`, cls: "need" } : null };
+  }
+  if (c.k === "STAY") return { title: "STAY", lines: ["เลือกผู้เล่น 1 คน ให้ข้ามเทิร์นถัดไป"], fit: null };
+  return { title: "GO!", lines: ["ทุกคนส่งการ์ดทั้งมือให้คนทางซ้าย"], fit: null };
+}
+
+function cardInfoHTML(c) {
+  const info = cardInfo(c);
+  return `<div class="card-info">
+    ${cardHTML(c, { width: 44 })}
+    <div><b>${esc(info.title)}</b>${info.lines.map((l) => `<p>${esc(l)}</p>`).join("")}${
+      info.fit ? `<span class="fit ${info.fit.cls}">${esc(info.fit.text)}</span>` : ""
+    }</div></div>`;
+}
+
 function cardPlays(c) {
   // What the current player could do with this card right now.
   const p = pub;
@@ -402,11 +442,47 @@ function renderHand() {
         .map((c) => {
           const playable = canAct && cardPlays(c).some((x) => !x.disabled);
           const cls = [c.id === selected ? "selected" : "", canAct && !playable ? "dim" : "", c.id === taken ? "new" : ""].join(" ");
-          return cardHTML(c, { tag: "button", cls, attrs: `data-id="${c.id}" ${canAct ? "" : "disabled"}` });
+          return cardHTML(c, { tag: "button", cls, attrs: `data-id="${c.id}"` });
         })
         .join("")
     : '<p class="empty">ไม่มีการ์ดในมือ</p>';
+  renderHandGuide(hand);
 }
+
+// While discarding or choosing a card to give away, list what every card in hand does
+// so players can compare without tapping each one.
+function renderHandGuide(hand) {
+  const box = $("handGuide");
+  const show = myTurn() && ["giveS", "excess"].includes(pub.phase) && hand.length > 0;
+  box.hidden = !show;
+  if (!show) return (box.innerHTML = "");
+  const title = pub.phase === "excess" ? "ก่อนทิ้ง ดูก่อนว่าแต่ละใบทำอะไรได้" : "ก่อนให้ ดูก่อนว่าแต่ละใบทำอะไรได้";
+  // one line per kind of card; duplicates show ×2
+  const groups = [];
+  for (const c of hand) {
+    const key = c.k + (c.l || "");
+    const g = groups.find((x) => x.key === key);
+    if (g) g.ids.push(c.id);
+    else groups.push({ key, card: c, ids: [c.id] });
+  }
+  box.innerHTML = `<p class="guide-title">${title} · แตะเพื่อเลือก</p><ul>${groups
+    .map(({ card, ids }) => {
+      const info = cardInfo(card);
+      const on = ids.includes(selected) ? "on" : "";
+      return `<li data-id="${ids[0]}" class="${on}">${cardHTML(card, { width: 30, sub: false })}<div><b>${esc(info.title)}</b>${
+        ids.length > 1 ? ` <i>×${ids.length}</i>` : ""
+      } <span>${esc(info.lines[0].replace(/^พลัง: /, ""))}</span>${info.fit?.cls === "need" ? ` <em>${esc(info.fit.text)}</em>` : ""}</div></li>`;
+    })
+    .join("")}</ul>`;
+}
+
+$("handGuide").addEventListener("click", (e) => {
+  const li = e.target.closest("li[data-id]");
+  if (!li) return;
+  selected = +li.dataset.id;
+  renderHand();
+  renderActions();
+});
 
 $("hand").addEventListener("click", (e) => {
   const btn = e.target.closest("button[data-id]");
@@ -420,21 +496,21 @@ $("hand").addEventListener("click", (e) => {
 function renderActions() {
   const box = $("actions");
   const c = (priv?.hand || []).find((x) => x.id === selected);
-  if (!c || !myTurn()) {
+  if (!c) {
     box.innerHTML = "";
     box.hidden = true;
     return;
   }
   const plays = cardPlays(c);
   box.hidden = false;
-  box.innerHTML = plays.length
+  box.innerHTML = cardInfoHTML(c) + (!myTurn() ? "" : plays.length
     ? plays
         .map(
           (x, i) => `<button class="sg-btn ${x.cls || ""}" data-i="${i}" ${x.disabled ? "disabled" : ""}>
             <span>${esc(x.label)}</span>${x.desc ? `<small>${esc(x.desc)}</small>` : ""}</button>`,
         )
         .join("")
-    : '<p class="empty">การ์ดใบนี้ยังเล่นไม่ได้ตอนนี้</p>';
+    : '<p class="empty">การ์ดใบนี้ยังเล่นไม่ได้ตอนนี้</p>');
   box.querySelectorAll("button[data-i]").forEach((b) => {
     b.onclick = () => {
       const a = plays[+b.dataset.i]?.action;
@@ -560,8 +636,20 @@ function renderEnd() {
   $("againBtn").hidden = !isHost();
   $("againWait").hidden = isHost();
 }
-$("againBtn").onclick = () => send({ type: "start" });
-$("homeBtn").onclick = () => leaveLocal();
+$("againBtn").onclick = async () => {
+  const btn = $("againBtn");
+  btn.disabled = true;
+  btn.textContent = "กำลังเริ่ม…";
+  await send({ type: "start" });
+  btn.disabled = false;
+  btn.textContent = "เล่นอีกรอบ";
+};
+$("homeBtn").onclick = async () => {
+  const c = code;
+  leaveLocal();
+  // The game is over, so free the seat; the host's next round then starts without us.
+  if (c) T.leaveRoom(c).catch(() => {});
+};
 $("gLeave").onclick = () => {
   if (meta?.status === "playing" && !confirm("ออกจากห้อง? คุณกลับเข้ามาได้ด้วยลิงก์เดิมบนเบราว์เซอร์นี้")) return;
   leaveLocal();
@@ -593,7 +681,7 @@ function renderDevBar() {
         .join("") +
       ` <button class="sg-btn small" data-add>+ ผู้เล่น</button>` +
       (ss.length ? ` <button class="sg-btn small" data-off>สลับออนไลน์ของคนที่ถึงตา</button>` : "") +
-      (pub && pub.phase === "play" ? ` <button class="sg-btn small" data-near>แถวเกือบครบ</button>` : "");
+      (pub && pub.phase === "play" ? ` <button class="sg-btn small" data-near>แถวเกือบครบ</button> <button class="sg-btn small" data-big>มือเกิน</button>` : "");
   };
   bar.onclick = (e) => {
     const v = e.target.closest("[data-view]");
@@ -601,6 +689,7 @@ function renderDevBar() {
     if (e.target.closest("[data-add]")) T.dev.addPlayer("TEST");
     if (e.target.closest("[data-off]") && pub) T.dev.toggleOnline("TEST", pub.cur);
     if (e.target.closest("[data-near]")) T.dev.nearWin("TEST");
+    if (e.target.closest("[data-big]")) T.dev.bigHand("TEST");
     setTimeout(draw, 100);
   };
   T.dev.onUidChange((u) => {

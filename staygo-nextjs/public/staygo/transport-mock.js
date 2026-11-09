@@ -14,7 +14,24 @@ import {
 const ABSENT_MS = 30_000;
 const rng = () => crypto.getRandomValues(new Uint32Array(1))[0] / 2 ** 32;
 const wait = () => new Promise((r) => setTimeout(r, 60));
-const copy = (x) => (x == null ? x : JSON.parse(JSON.stringify(x)));
+// Like Realtime Database: null fields, empty arrays and empty objects are not stored.
+function rtdb(x) {
+  if (x == null) return undefined;
+  if (Array.isArray(x)) {
+    const a = x.map(rtdb);
+    return a.some((v) => v !== undefined) ? a : undefined;
+  }
+  if (typeof x === "object") {
+    const o = {};
+    for (const [k, v] of Object.entries(x)) {
+      const r = rtdb(v);
+      if (r !== undefined) o[k] = r;
+    }
+    return Object.keys(o).length ? o : undefined;
+  }
+  return x;
+}
+const copy = (x) => rtdb(JSON.parse(JSON.stringify(x ?? null))) ?? null;
 
 export function createMockTransport() {
   const rooms = {};
@@ -150,6 +167,18 @@ export function createMockTransport() {
         st.deck.push(...p.row.splice(0));
         p.row = ["S", "T", "A", "Y", "G"].map(grab);
         p.hand.push(grab("O"));
+        project(room, st);
+        fire();
+      },
+      /** Puts 9 cards in the current player's hand and asks them to discard down to 6. */
+      bigHand(code) {
+        const room = rooms[code];
+        const st = room?.state;
+        if (!st || st.phase !== "play") return;
+        const p = st.players[st.cur];
+        while (p.hand.length < 9 && st.deck.length) p.hand.push(st.deck.pop());
+        st.pending = null;
+        st.phase = "excess";
         project(room, st);
         fire();
       },

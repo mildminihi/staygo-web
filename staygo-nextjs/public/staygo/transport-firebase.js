@@ -33,6 +33,7 @@ export async function createFirebaseTransport() {
   };
 
   let presenceOff = null;
+  let presenceRef = null;
 
   return {
     kind: "firebase",
@@ -58,8 +59,9 @@ export async function createFirebaseTransport() {
 
     /** Marks this seat online, and offline (with a server timestamp) when the tab disconnects. */
     presence(code, seat) {
-      if (presenceOff) presenceOff();
+      this.stopPresence();
       const seatRef = ref(db, `rooms/${code}/seats/${seat}`);
+      presenceRef = seatRef;
       presenceOff = onValue(ref(db, ".info/connected"), async (s) => {
         if (s.val() !== true) return;
         try {
@@ -73,6 +75,9 @@ export async function createFirebaseTransport() {
     stopPresence() {
       if (presenceOff) presenceOff();
       presenceOff = null;
+      // Drop the pending "offline" write, or it could later land on someone else's seat after seats shift.
+      if (presenceRef) onDisconnect(presenceRef).cancel().catch(() => {});
+      presenceRef = null;
     },
   };
 }

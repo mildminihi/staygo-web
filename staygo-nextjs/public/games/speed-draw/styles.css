@@ -1,0 +1,465 @@
+/* วาดไว 15 วิ */
+
+/* players: once in a room, the page is the game — drop the hero, and the site header while drawing */
+body.sd-joined .tl-hero,
+body.sd-ingame .header {
+  display: none;
+}
+body.sd-ingame .tl {
+  padding-top: 10px;
+}
+
+/* ---------------------------------------------------------------- host */
+.sd-host {
+  display: grid;
+  gap: 16px;
+}
+@media (min-width: 860px) {
+  .sd-host {
+    grid-template-columns: 260px minmax(0, 1fr);
+    align-items: start;
+  }
+}
+.sd-join {
+  text-align: center;
+  display: grid;
+  gap: 8px;
+}
+.sd-code {
+  font-size: 52px;
+  line-height: 1;
+  color: var(--sg-blue);
+}
+.sd-qr {
+  max-width: 200px;
+  margin: 0 auto;
+  width: 100%;
+}
+.sd-players {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+.sd-players li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+}
+.sd-pname {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sd-kick {
+  font: inherit;
+  font-size: 12px;
+  border: 2px solid var(--sg-ink);
+  background: #fff;
+  border-radius: 8px;
+  padding: 1px 6px;
+  cursor: pointer;
+}
+.sd-main {
+  display: grid;
+  gap: 16px;
+  min-height: 460px;
+  align-content: space-between;
+}
+.sd-stage {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 10px;
+  text-align: center;
+  min-height: 340px;
+}
+.sd-bigicon {
+  font-size: 64px;
+  line-height: 1;
+}
+.sd-h {
+  font-size: 26px;
+  font-weight: 600;
+  margin: 0;
+}
+.sd-startbtn {
+  font-size: 22px;
+  padding: 14px 40px;
+  margin-top: 8px;
+}
+.sd-count {
+  font-size: clamp(120px, 22vw, 220px);
+  line-height: 1;
+  color: var(--sg-blue);
+  animation: sd-pulse 1s ease-in-out infinite;
+}
+@keyframes sd-pulse {
+  0% { transform: scale(1.15); }
+  60% { transform: scale(1); }
+}
+.sd-roundtag {
+  display: inline-block;
+  font-size: 18px;
+  background: var(--sg-yellow);
+  border: 2px solid var(--sg-ink);
+  border-radius: 999px;
+  padding: 2px 14px;
+}
+.sd-roundtag b {
+  font-size: 22px;
+}
+.sd-prompt {
+  font-family: "Kanit", var(--sg-font-th);
+  font-weight: 800;
+  font-size: clamp(48px, 9vw, 104px);
+  line-height: 1.15;
+  word-break: break-word;
+}
+.pop {
+  animation: sd-pop 0.35s ease-out;
+}
+@keyframes sd-pop {
+  from { transform: scale(0.6); opacity: 0; }
+}
+.sd-bar {
+  width: 100%;
+  max-width: 560px;
+  height: 14px;
+  border: 2px solid var(--sg-ink);
+  border-radius: 999px;
+  background: #fff;
+  overflow: hidden;
+  margin: 0 auto;
+}
+.sd-bar i {
+  display: block;
+  height: 100%;
+  width: 100%;
+  background: var(--sk-green);
+  transition: width 0.1s linear;
+}
+.sd-bar i.hurry {
+  background: var(--sg-red);
+}
+.sd-secs {
+  font-size: 44px;
+  line-height: 1;
+}
+.sd-controls {
+  justify-content: flex-end;
+}
+.sd-controls > .sg-btn {
+  flex: 0 0 auto;
+}
+.sd-exitbig {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 50;
+}
+body.tl-big .sd-host {
+  grid-template-columns: 240px minmax(0, 1fr);
+}
+body.tl-big .sd-main {
+  min-height: calc(100vh - 48px);
+}
+
+/* leaderboard + gallery */
+.sd-board {
+  list-style: none;
+  margin: 12px auto 20px;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+  max-width: 560px;
+}
+.sd-board li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 2px solid var(--sg-ink);
+  border-radius: 14px;
+  background: #fff;
+  padding: 8px 14px;
+  font-size: 18px;
+}
+.sd-board li.top {
+  background: var(--sg-yellow);
+  font-size: 22px;
+}
+.sd-rank {
+  width: 36px;
+  text-align: center;
+  font-size: 1.2em;
+}
+.sd-bname {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sd-bscore {
+  font-size: 1.3em;
+}
+.sd-bscore small,
+.sd-scorenum small {
+  font-size: 0.55em;
+  color: var(--sk-muted);
+}
+.sd-galhead {
+  flex-wrap: nowrap;
+  justify-content: space-between;
+}
+.sd-galtitle {
+  text-align: center;
+  display: grid;
+}
+.sd-galtitle small {
+  color: var(--sk-muted);
+}
+.sd-galtitle b {
+  font-family: "Kanit", var(--sg-font-th);
+  font-weight: 800;
+  font-size: 32px;
+  line-height: 1.2;
+}
+.sd-galgrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+.sd-galitem {
+  margin: 0;
+  text-align: center;
+  font-size: 15px;
+}
+.sd-galimg,
+.sd-thumb {
+  position: relative;
+  aspect-ratio: 1;
+  border: 2px solid var(--sg-ink);
+  border-radius: 12px;
+  background: #fff;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+}
+.sd-galimg img,
+.sd-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.sd-galimg span,
+.sd-thumb span {
+  color: var(--sk-muted);
+  font-size: 13px;
+}
+.sd-galimg i,
+.sd-thumb i {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-style: normal;
+  font-weight: 700;
+  color: #fff;
+  border: 2px solid var(--sg-ink);
+}
+.sd-galimg i.ok,
+.result .ok i {
+  background: var(--sk-green);
+}
+.sd-galimg i.no,
+.result .no i {
+  background: var(--sg-red);
+}
+.sd-galitem figcaption {
+  margin-top: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------- player */
+.sd-player {
+  max-width: 560px;
+  margin: 0 auto;
+}
+.sd-me {
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 15px;
+}
+.sd-wait {
+  text-align: center;
+  display: grid;
+  gap: 6px;
+  justify-items: center;
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+.sd-wait p {
+  margin: 0;
+}
+.sd-drawhead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.sd-drawhead .sd-roundtag {
+  font-size: 14px;
+  padding: 1px 10px;
+}
+.sd-drawhead .sd-roundtag b {
+  font-size: 18px;
+}
+.sd-pprompt {
+  flex: 1;
+  min-width: 0;
+  font-family: "Kanit", var(--sg-font-th);
+  font-weight: 800;
+  font-size: 30px;
+  line-height: 1.15;
+  text-align: center;
+}
+.sd-psecs {
+  font-size: 28px;
+  min-width: 36px;
+  text-align: right;
+}
+.sd-canvaswrap {
+  width: min(100%, calc(100dvh - 190px));
+  min-width: 240px;
+  aspect-ratio: 1;
+  margin: 10px auto 0;
+}
+#pad {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border: 3px solid var(--sg-ink);
+  border-radius: 16px;
+  background: #fff;
+  touch-action: none;
+  cursor: crosshair;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.sd-tools {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.sd-colors {
+  display: flex;
+  gap: 6px;
+}
+.sd-swatch,
+.sd-tool {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 2px solid var(--sg-ink);
+  background: var(--c, #fff);
+  cursor: pointer;
+  padding: 0;
+  font-size: 18px;
+  display: grid;
+  place-items: center;
+  color: var(--sg-ink);
+}
+.sd-swatch.on {
+  box-shadow: 0 0 0 3px #fff, 0 0 0 5px var(--sg-ink);
+}
+.sd-tool {
+  border-radius: 10px;
+  background: #fff;
+}
+.sd-dotsize {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--sg-ink);
+}
+.sd-tool.thick .sd-dotsize {
+  width: 18px;
+  height: 18px;
+}
+
+/* ordering + result grid: each cell is a fixed prompt with a swappable drawing */
+.sd-slots {
+  list-style: none;
+  margin: 8px 0 14px;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px 8px;
+}
+@media (min-width: 480px) {
+  .sd-slots {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+.sd-slots li {
+  display: grid;
+  gap: 4px;
+  align-content: start;
+}
+.sd-word {
+  font-size: 14px;
+  line-height: 1.3;
+  min-height: 2.6em;
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+}
+.sd-word b {
+  color: var(--sk-muted);
+  font-size: 12px;
+}
+button.sd-thumb {
+  cursor: pointer;
+  padding: 0;
+  width: 100%;
+  font: inherit;
+  transition: transform 0.1s;
+}
+button.sd-thumb.sel {
+  outline: 4px solid var(--sg-blue);
+  outline-offset: 2px;
+  transform: scale(0.94);
+}
+.sd-slots.locked button.sd-thumb {
+  opacity: 0.75;
+  cursor: default;
+}
+.sd-slots small {
+  font-size: 12px;
+  color: var(--sg-red);
+  line-height: 1.3;
+}
+.sd-score {
+  text-align: center;
+  margin-bottom: 8px;
+}
+.sd-scorenum {
+  font-size: 56px;
+  line-height: 1.1;
+}

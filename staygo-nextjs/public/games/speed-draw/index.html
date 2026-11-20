@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>วาดไว 15 วิ — เกมวาดรูปแข่งความจำ | STAYGO</title>
+    <meta name="title" content="วาดไว 15 วิ — เกมวาดรูปแข่งความจำ | STAYGO" />
+    <meta name="description" content="เกมปาร์ตี้วาดรูปบนมือถือ วาดตามโจทย์ข้อละ 15 วินาทีติดกัน 10 รูป แล้วแข่งกันเรียงรูปตัวเองให้ตรงกับโจทย์ ใครจำลายเส้นตัวเองได้มากสุดชนะ" />
+    <meta name="robots" content="index, follow" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://staygoch.com/games/speed-draw/" />
+    <meta property="og:title" content="วาดไว 15 วิ — เกมวาดรูปแข่งความจำ" />
+    <meta property="og:description" content="วาดตามโจทย์ข้อละ 15 วินาที 10 รูปรวด แล้วเรียงรูปตัวเองให้ตรงโจทย์ ใครจำได้มากสุดชนะ" />
+    <meta property="og:image" content="https://staygoch.com/games/reveal-board/staygo-logo.png" />
+    <link rel="canonical" href="https://staygoch.com/games/speed-draw/" />
+    <link rel="icon" type="image/png" href="/games/reveal-board/staygo-logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Mitr:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Kanit:wght@700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/assets/css/site.css" />
+    <link rel="stylesheet" href="/assets/css/staygo-cards.css" />
+    <link rel="stylesheet" href="/assets/css/staygo-skin.css" />
+    <link rel="stylesheet" href="/assets/css/staygo-tools.css" />
+    <link rel="stylesheet" href="./styles.css" />
+    <script defer src="/assets/js/config.js"></script>
+    <script defer src="/assets/js/site.js"></script>
+    <script src="/assets/js/analytics.js" defer></script>
+  </head>
+  <body class="sg-page sg-skin">
+    <header class="header">
+      <div class="container">
+        <div class="header-content">
+          <a href="/" class="logo-link">
+            <img src="/games/reveal-board/staygo-logo.png" alt="Staygo" class="logo" />
+          </a>
+
+          <nav class="nav" aria-label="เมนูหลัก">
+            <a href="/#play" class="nav-link active">Play</a>
+            <a href="/tools/" class="nav-link">Tools</a>
+            <a href="/watch/" class="nav-link">Watch & Play</a>
+            <a href="/about/" class="nav-link">About</a>
+          </nav>
+
+          <div class="header-actions">
+            <a href="https://www.youtube.com/@STAYGO" target="_blank" rel="noopener noreferrer" class="icon-button" aria-label="YouTube">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
+                <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+              </svg>
+            </a>
+            <button id="menuToggle" class="icon-button" aria-label="เมนู">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu">
+      <div class="mobile-menu-header">
+        <span class="mobile-menu-title">เมนู</span>
+        <button id="menuClose" class="icon-button" aria-label="ปิดเมนู">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <nav class="mobile-nav">
+        <a href="/#play" class="mobile-nav-link">Play</a>
+        <a href="/tools/" class="mobile-nav-link">Tools</a>
+        <a href="/watch/" class="mobile-nav-link">Watch & Play</a>
+        <a href="/about/" class="mobile-nav-link">About</a>
+      </nav>
+    </div>
+
+    <main class="tl">
+      <div class="tl-hero">
+        <h1>✏️ วาดไว 15 วิ</h1>
+        <p>วาดตามโจทย์ข้อละ 15 วินาที 10 รูปรวด แล้วแข่งกันเรียงรูปตัวเองให้ตรงโจทย์</p>
+      </div>
+
+      <!-- start -->
+      <section id="start" class="tl-narrow tl-stack" hidden>
+        <div class="sg-panel tl-stack">
+          <div>
+            <span class="tl-label">ฉันคือ…</span>
+            <div class="tl-choice">
+              <button id="pickHost"><b>🖥️ โฮสต์</b><small>เปิดห้องบนจอใหญ่ / คอมของคนคุมเกม</small></button>
+              <button id="pickPlayer"><b>📱 ผู้เล่น</b><small>ใส่รหัสห้องแล้ววาดบนมือถือ</small></button>
+            </div>
+          </div>
+          <div id="joinForm" class="tl-stack" hidden>
+            <label><span class="tl-label">รหัสห้อง</span><input id="codeInput" class="sg-input tl-code" maxlength="4" placeholder="เช่น K7QX" autocomplete="off" /></label>
+            <label><span class="tl-label">ชื่อของคุณ</span><input id="nameInput" class="sg-input" maxlength="24" placeholder="เช่น มายด์" autocomplete="nickname" /></label>
+            <button id="joinBtn" class="sg-btn blue block">เข้าห้อง</button>
+          </div>
+          <button id="createBtn" class="sg-btn blue block" hidden>สร้างห้องใหม่</button>
+        </div>
+        <details class="sg-panel" open>
+          <summary><b>วิธีเล่น</b></summary>
+          <ul class="tl-hint">
+            <li>โฮสต์สร้างห้องแล้วขึ้นจอ ผู้เล่นสแกน QR หรือใส่รหัส 4 ตัว</li>
+            <li>โฮสต์กดเริ่ม นับ 3 2 1 แล้วทุกคนได้โจทย์เดียวกัน วาดให้ทันใน 15 วินาที</li>
+            <li>หมดเวลา รูปจะถูกเก็บไว้แล้วขึ้นโจทย์ใหม่ทันที วนไปจนครบ 10 รูป</li>
+            <li>จากนั้นมีเวลา 1 นาที เรียงรูปของตัวเองให้ตรงกับโจทย์ที่ถูกสลับลำดับ (แตะ 2 รูปเพื่อสลับกัน)</li>
+            <li>หมดเวลาเฉลยพร้อมกัน ใครเรียงถูกมากที่สุดชนะ</li>
+          </ul>
+        </details>
+      </section>
+
+      <!-- host -->
+      <section id="host" hidden>
+        <div class="sd-host">
+          <div class="sd-side tl-stack">
+            <div class="sg-panel sd-join">
+              <p class="tl-hint" style="margin:0">สแกนเพื่อเข้าห้อง หรือใส่รหัส</p>
+              <div id="hostCode" class="sd-code tl-code"></div>
+              <div id="qr" class="tl-qr sd-qr"></div>
+              <button id="copyLink" class="sg-btn small block tl-nobig">คัดลอกลิงก์</button>
+            </div>
+            <div class="sg-panel">
+              <b>ผู้เล่น <span id="playerCount" class="tl-num"></span></b>
+              <ul id="playerList" class="sd-players"></ul>
+            </div>
+          </div>
+
+          <div class="sd-main sg-panel">
+            <!-- lobby -->
+            <div id="hLobby" class="sd-stage">
+              <div class="sd-bigicon">✏️</div>
+              <h2 class="sd-h">รอทุกคนเข้าห้อง</h2>
+              <p class="tl-hint">10 โจทย์ · ข้อละ 15 วินาที · เรียงรูป 1 นาที</p>
+              <button id="startBtn" class="sg-btn blue sd-startbtn tl-nobig">▶ เริ่มเกม</button>
+            </div>
+            <!-- countdown -->
+            <div id="hCount" class="sd-stage" hidden>
+              <p class="sd-h">เตรียมดินสอ!</p>
+              <div id="hCountNum" class="sd-count tl-num">3</div>
+            </div>
+            <!-- drawing -->
+            <div id="hDraw" class="sd-stage" hidden>
+              <div class="sd-roundtag">ภาพที่ <b id="hRound" class="tl-num">1</b>/<span id="hTotal" class="tl-num">10</span></div>
+              <div id="hPrompt" class="sd-prompt"></div>
+              <div class="sd-bar"><i id="hBar"></i></div>
+              <div id="hSecs" class="sd-secs tl-num"></div>
+              <p id="hSent" class="tl-hint"></p>
+            </div>
+            <!-- ordering -->
+            <div id="hOrder" class="sd-stage" hidden>
+              <div class="sd-bigicon">🧩</div>
+              <h2 class="sd-h">เรียงรูปให้ตรงโจทย์!</h2>
+              <div class="sd-bar"><i id="hOrderBar"></i></div>
+              <div id="hOrderSecs" class="sd-secs tl-num"></div>
+              <p id="hDone" class="tl-hint"></p>
+              <button id="revealBtn" class="sg-btn yellow tl-nobig">เฉลยเลย</button>
+            </div>
+            <!-- reveal -->
+            <div id="hReveal" hidden>
+              <h2 class="sd-h" style="text-align:center">🏆 ผลคะแนน</h2>
+              <ol id="board" class="sd-board"></ol>
+              <div class="sd-gallery">
+                <div class="tl-row sd-galhead">
+                  <button id="galPrev" class="sg-btn small" aria-label="โจทย์ก่อนหน้า">◀</button>
+                  <div class="sd-galtitle"><small>ข้อ <span id="galNo" class="tl-num"></span> · รูปของทุกคน</small><b id="galWord"></b></div>
+                  <button id="galNext" class="sg-btn small" aria-label="โจทย์ถัดไป">▶</button>
+                </div>
+                <div id="galGrid" class="sd-galgrid"></div>
+              </div>
+            </div>
+
+            <div class="tl-row sd-controls tl-nobig">
+              <button id="againBtn" class="sg-btn blue" hidden>🔁 เล่นอีกเกม</button>
+              <button id="stopBtn" class="sg-btn" hidden>⏹ หยุดเกม</button>
+              <button id="bigBtn" class="sg-btn">📺 จอใหญ่</button>
+              <button id="endRoom" class="sg-btn small">ปิดห้อง</button>
+            </div>
+          </div>
+        </div>
+        <button id="exitBig" class="sg-btn small sd-exitbig" hidden>ออกจากจอใหญ่</button>
+      </section>
+
+      <!-- player -->
+      <section id="player" class="sd-player" hidden>
+        <div class="tl-row sd-me">
+          <span>ห้อง <b id="meCode" class="tl-code"></b></span>
+          <span><b id="meName"></b></span>
+        </div>
+
+        <div id="pLobby" class="sg-panel sd-wait">
+          <div class="sd-bigicon">✏️</div>
+          <p><b>เข้าห้องแล้ว!</b></p>
+          <p class="tl-hint">รอโฮสต์กดเริ่มเกม · เตรียมนิ้วให้พร้อม</p>
+          <button id="leaveBtn" class="sg-btn small">ออกจากห้อง</button>
+        </div>
+
+        <div id="pCount" class="sd-wait" hidden>
+          <p class="sd-h">เตรียมวาด!</p>
+          <div id="pCountNum" class="sd-count tl-num">3</div>
+        </div>
+
+        <div id="pDraw" hidden>
+          <div class="sd-drawhead">
+            <span class="sd-roundtag"><b id="pRound" class="tl-num">1</b>/<span id="pTotal" class="tl-num">10</span></span>
+            <span id="pPrompt" class="sd-pprompt"></span>
+            <span id="pSecs" class="sd-psecs tl-num"></span>
+          </div>
+          <div class="sd-bar"><i id="pBar"></i></div>
+          <div class="sd-canvaswrap"><canvas id="pad" width="600" height="600" aria-label="พื้นที่วาดรูป"></canvas></div>
+          <div class="sd-tools">
+            <div id="colors" class="sd-colors"></div>
+            <button id="sizeBtn" class="sd-tool" aria-label="ขนาดเส้น"><i class="sd-dotsize"></i></button>
+            <button id="undoBtn" class="sd-tool" aria-label="ย้อนกลับ">↶</button>
+            <button id="clearBtn" class="sd-tool" aria-label="ล้างทั้งหมด">🗑</button>
+          </div>
+        </div>
+
+        <div id="pOrder" hidden>
+          <div class="sd-drawhead">
+            <span class="sd-pprompt">เรียงรูปให้ตรงโจทย์</span>
+            <span id="pOrderSecs" class="sd-psecs tl-num"></span>
+          </div>
+          <div class="sd-bar"><i id="pOrderBar"></i></div>
+          <p class="tl-hint" style="text-align:center">แตะรูป 2 รูปเพื่อสลับกัน</p>
+          <ol id="slots" class="sd-slots"></ol>
+          <button id="doneBtn" class="sg-btn blue block">✅ เสร็จแล้ว</button>
+        </div>
+
+        <div id="pReveal" hidden>
+          <div class="sg-panel sd-score">
+            <div id="pScore" class="sd-scorenum tl-num"></div>
+            <div id="pRank" class="tl-hint"></div>
+          </div>
+          <ol id="pResult" class="sd-slots result"></ol>
+          <p class="tl-hint" style="text-align:center">รอโฮสต์เริ่มเกมใหม่…</p>
+        </div>
+      </section>
+
+      <p id="loading" class="tl-hint" style="text-align:center">กำลังโหลด…</p>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

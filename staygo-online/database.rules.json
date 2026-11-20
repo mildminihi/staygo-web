@@ -39,7 +39,7 @@
         ".validate": "$code.matches(/^[A-Z2-9]{4}$/)",
         "meta": {
           ".write": "auth != null && ((!data.exists() && newData.child('hostUid').val() === auth.uid) || data.child('hostUid').val() === auth.uid)",
-          ".validate": "newData.hasChildren(['hostUid', 'kind', 'createdAt']) && newData.child('kind').val().matches(/^(buzzer|vote)$/)"
+          ".validate": "newData.hasChildren(['hostUid', 'kind', 'createdAt']) && newData.child('kind').val().matches(/^(buzzer|vote|speed-draw)$/)"
         },
         "players": {
           "$uid": {
@@ -75,6 +75,35 @@
             "$uid": {
               ".write": "auth != null && auth.uid === $uid && root.child('live').child($code).child('poll').child('id').val() === $pollId && root.child('live').child($code).child('poll').child('open').val() === true",
               ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() < 12"
+            }
+          }
+        },
+        "draws": {
+          ".write": "auth != null && root.child('live').child($code).child('meta').child('hostUid').val() === auth.uid",
+          "$game": {
+            "$uid": {
+              "$i": {
+                ".write": "auth != null && auth.uid === $uid && (root.child('live').child($code).child('state').child('game').val() + '') === $game && now < root.child('live').child($code).child('state').child('drawEnd').val() + 10000",
+                ".validate": "$i.matches(/^[0-9]{1,2}$/) && newData.isString() && newData.val().beginsWith('data:image/') && newData.val().length < 120000"
+              }
+            }
+          }
+        },
+        "answers": {
+          ".write": "auth != null && root.child('live').child($code).child('meta').child('hostUid').val() === auth.uid",
+          "$game": {
+            "$uid": {
+              ".write": "auth != null && auth.uid === $uid && (root.child('live').child($code).child('state').child('game').val() + '') === $game && now < root.child('live').child($code).child('state').child('orderEnd').val() + 3000 && root.child('live').child($code).child('state').child('reveal').val() !== true",
+              ".validate": "newData.hasChildren(['order']) && newData.child('order').isString() && newData.child('order').val().length <= 64",
+              "done": {
+                ".validate": "newData.isBoolean()"
+              },
+              "order": {
+                ".validate": true
+              },
+              "$other": {
+                ".validate": false
+              }
             }
           }
         },

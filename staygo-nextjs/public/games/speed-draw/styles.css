@@ -463,3 +463,10 @@ button.sd-thumb.sel {
   font-size: 56px;
   line-height: 1.1;
 }
+
+/* host settings in the lobby */
+.sd-settings {
+  width: min(100%, 220px);
+  text-align: left;
+  margin-top: 6px;
+}

@@ -1,4 +1,4 @@
-// วาดไว 15 วิ: everyone draws the same 10 prompts, 15 s each, then gets 60 s to match their own
+// วาดไว 15 วิ: everyone draws the same 10 prompts (host picks 5–20 s each; prompts come from one similar-shape set), then gets 60 s to match their own
 // drawings to the prompts (shown in a shuffled order). Score = drawings placed on the right prompt.
 //
 // Timing is not driven by the host's tab: the host writes startAt/drawEnd/orderEnd once (server
@@ -9,12 +9,12 @@ import {
   write, patch, remove, uid, now, loadSession, clearSession, joinUrl, qrSvg,
   $, esc, toast, beep, copyText,
 } from "/assets/js/live-room.js";
-import { WORDS } from "./words.js";
+import { SHAPE_SETS } from "./words.js";
 
 const KIND = "speed-draw";
 const NAME_KEY = "staygo-live-name";
 const ROUNDS = 10;
-const DRAW_MS = 15000;
+const DRAW_MS = 10000; // default seconds per drawing; the host can pick 5–20
 const ORDER_MS = 60000;
 const LEAD_MS = 3600; // 3-2-1 before the first prompt
 const PAD = 600; // drawing pad size in canvas pixels
@@ -252,13 +252,37 @@ function hostTick() {
   }
 }
 
+// ---- host setting: seconds per drawing (remembered on this computer)
+const SETTINGS_KEY = "staygo-speed-draw-settings";
+let lastShapeSet = null;
+try {
+  const s = JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}");
+  if (s.secs) $("drawSecs").value = String(s.secs);
+} catch {}
+// an unknown saved value leaves the select empty: fall back to the default
+if (!$("drawSecs").value) $("drawSecs").value = String(DRAW_MS / 1000);
+function settingsChanged() {
+  $("lobbyInfo").textContent = `${ROUNDS} โจทย์ · ข้อละ ${$("drawSecs").value} วินาที · เรียงรูป ${ORDER_MS / 60000} นาที`;
+  try {
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify({ secs: +$("drawSecs").value }));
+  } catch {}
+}
+$("drawSecs").onchange = settingsChanged;
+settingsChanged();
+
+/** 10 prompts from one shape set, so the drawings look alike; a different set from last game. */
 function pickPrompts() {
-  let pool = WORDS.filter((w) => !usedWords.has(w));
+  const sets = SHAPE_SETS.filter((s) => s.key !== lastShapeSet);
+  const set = sets[Math.floor(Math.random() * sets.length)];
+  lastShapeSet = set.key;
+  const words = set.words;
+  // avoid repeating words from earlier games in this room until the set runs out
+  let pool = words.filter((w) => !usedWords.has(w));
   if (pool.length < ROUNDS) {
-    usedWords.clear();
-    pool = [...WORDS];
+    words.forEach((w) => usedWords.delete(w));
+    pool = [...words];
   }
-  const out = shuffle(pool).slice(0, ROUNDS);
+  const out = shuffle([...pool]).slice(0, ROUNDS);
   out.forEach((w) => usedWords.add(w));
   return out;
 }
@@ -267,11 +291,12 @@ async function startGame() {
   if (!sortedPlayers().length && !confirm("ยังไม่มีผู้เล่นในห้อง เริ่มเลยไหม?")) return;
   const prev = room?.state?.game || 0;
   const g = prev + 1;
+  const drawMs = Math.min(20, Math.max(3, +$("drawSecs").value || DRAW_MS / 1000)) * 1000;
   const t0 = now() + LEAD_MS;
-  const drawEnd = t0 + ROUNDS * DRAW_MS;
+  const drawEnd = t0 + ROUNDS * drawMs;
   try {
     await write(`live/${code}/state`, {
-      round: g, locked: false, game: g, n: ROUNDS, drawMs: DRAW_MS,
+      round: g, locked: false, game: g, n: ROUNDS, drawMs,
       startAt: t0, drawEnd, orderEnd: drawEnd + ORDER_MS,
       prompts: pickPrompts(), show: shuffle(range(ROUNDS)), reveal: false,
     });

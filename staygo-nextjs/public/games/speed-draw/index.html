@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>วาดไว 15 วิ — เกมวาดรูปแข่งความจำ | STAYGO</title>
     <meta name="title" content="วาดไว 15 วิ — เกมวาดรูปแข่งความจำ | STAYGO" />
-    <meta name="description" content="เกมปาร์ตี้วาดรูปบนมือถือ วาดตามโจทย์ข้อละ 15 วินาทีติดกัน 10 รูป แล้วแข่งกันเรียงรูปตัวเองให้ตรงกับโจทย์ ใครจำลายเส้นตัวเองได้มากสุดชนะ" />
+    <meta name="description" content="เกมปาร์ตี้วาดรูปบนมือถือ วาดตามโจทย์ข้อละไม่กี่วินาทีติดกัน 10 รูป แล้วแข่งกันเรียงรูปตัวเองให้ตรงกับโจทย์ ใครจำลายเส้นตัวเองได้มากสุดชนะ" />
     <meta name="robots" content="index, follow" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://staygoch.com/games/speed-draw/" />
     <meta property="og:title" content="วาดไว 15 วิ — เกมวาดรูปแข่งความจำ" />
-    <meta property="og:description" content="วาดตามโจทย์ข้อละ 15 วินาที 10 รูปรวด แล้วเรียงรูปตัวเองให้ตรงโจทย์ ใครจำได้มากสุดชนะ" />
+    <meta property="og:description" content="วาดตามโจทย์ข้อละไม่กี่วินาที 10 รูปรวด แล้วเรียงรูปตัวเองให้ตรงโจทย์ ใครจำได้มากสุดชนะ" />
     <meta property="og:image" content="https://staygoch.com/games/reveal-board/staygo-logo.png" />
     <link rel="canonical" href="https://staygoch.com/games/speed-draw/" />
     <link rel="icon" type="image/png" href="/games/reveal-board/staygo-logo.png" />
@@ -82,7 +82,7 @@
     <main class="tl">
       <div class="tl-hero">
         <h1>✏️ วาดไว 15 วิ</h1>
-        <p>วาดตามโจทย์ข้อละ 15 วินาที 10 รูปรวด แล้วแข่งกันเรียงรูปตัวเองให้ตรงโจทย์</p>
+        <p>วาดตามโจทย์ข้อละไม่กี่วินาที 10 รูปรวด แล้วแข่งกันเรียงรูปตัวเองให้ตรงโจทย์</p>
       </div>
 
       <!-- start -->
@@ -105,8 +105,8 @@
         <details class="sg-panel" open>
           <summary><b>วิธีเล่น</b></summary>
           <ul class="tl-hint">
-            <li>โฮสต์สร้างห้องแล้วขึ้นจอ ผู้เล่นสแกน QR หรือใส่รหัส 4 ตัว</li>
-            <li>โฮสต์กดเริ่ม นับ 3 2 1 แล้วทุกคนได้โจทย์เดียวกัน วาดให้ทันใน 15 วินาที</li>
+            <li>โฮสต์สร้างห้องแล้วขึ้นจอ ผู้เล่นสแกน QR หรือใส่รหัส 4 ตัว โฮสต์เลือกเวลาวาดได้</li>
+            <li>โฮสต์กดเริ่ม นับ 3 2 1 แล้วทุกคนได้โจทย์เดียวกัน วาดให้ทันเวลาที่โฮสต์ตั้งไว้ (5–20 วินาที) โจทย์ทั้ง 10 ข้อในเกมเดียวกันจะเป็นของที่รูปทรงคล้ายกัน</li>
             <li>หมดเวลา รูปจะถูกเก็บไว้แล้วขึ้นโจทย์ใหม่ทันที วนไปจนครบ 10 รูป</li>
             <li>จากนั้นมีเวลา 1 นาที เรียงรูปของตัวเองให้ตรงกับโจทย์ที่ถูกสลับลำดับ (แตะ 2 รูปเพื่อสลับกัน)</li>
             <li>หมดเวลาเฉลยพร้อมกัน ใครเรียงถูกมากที่สุดชนะ</li>
@@ -135,7 +135,18 @@
             <div id="hLobby" class="sd-stage">
               <div class="sd-bigicon">✏️</div>
               <h2 class="sd-h">รอทุกคนเข้าห้อง</h2>
-              <p class="tl-hint">10 โจทย์ · ข้อละ 15 วินาที · เรียงรูป 1 นาที</p>
+              <p id="lobbyInfo" class="tl-hint"></p>
+              <div class="sd-settings tl-nobig">
+                <label><span class="tl-label">เวลาวาดต่อรูป</span>
+                  <select id="drawSecs" class="sg-input">
+                    <option value="5">5 วินาที</option>
+                    <option value="7">7 วินาที</option>
+                    <option value="10" selected>10 วินาที</option>
+                    <option value="15">15 วินาที</option>
+                    <option value="20">20 วินาที</option>
+                  </select>
+                </label>
+              </div>
               <button id="startBtn" class="sg-btn blue sd-startbtn tl-nobig">▶ เริ่มเกม</button>
             </div>
             <!-- countdown -->

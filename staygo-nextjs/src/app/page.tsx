@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import WebGameCard from '@/components/WebGameCard';
 import { HOME_GAME_LIMIT, WEB_GAMES } from '@/data/webGames';
@@ -9,6 +10,10 @@ import { channelTabs } from '@/data/youtube';
 
 // คลิปล่าสุดและเพลย์ลิสต์ดึงจาก YouTube ตอน build (ดู src/data/playlists.ts)
 const TABS = channelTabs();
+
+export const metadata: Metadata = {
+  alternates: { canonical: '/' },
+};
 
 export default function Home() {
   return (

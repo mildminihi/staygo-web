@@ -3,6 +3,7 @@ import WebGameCard from '@/components/WebGameCard';
 import { WEB_GAMES } from '@/data/webGames';
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/games/' },
   title: 'เกมปาร์ตี้ทั้งหมด - STAYGO',
   description: 'รวมเกมปาร์ตี้สนุกๆ เล่นฟรีบนเว็บ Reveal Board, ลูปนรกหมกมุ่น, จับคู่อีโมจิ, Dice Roguelike และอื่นๆ อีกมากมาย',
   keywords: 'เกมปาร์ตี้, เกมออนไลน์ฟรี, Reveal Board, เกมเปิดไพ่, เกมจับคู่, Roguelike, เกมลูกเต๋า',
@@ -14,10 +15,10 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'เกมปาร์ตี้ทั้งหมด - STAYGO',
     description: 'รวมเกมปาร์ตี้สนุกๆ เล่นฟรีบนเว็บ',
-    url: 'https://staygoch.com/games/',
+    url: 'https://www.staygoch.com/games/',
     images: [
       {
-        url: 'https://staygoch.com/games/reveal-board/staygo-logo.png',
+        url: 'https://www.staygoch.com/games/reveal-board/staygo-logo.png',
         width: 512,
         height: 512,
         alt: 'STAYGO Logo',

@@ -21,6 +21,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   return {
     title,
     description: game.summary,
+    alternates: { canonical: `/how-to-play/${game.slug}/` },
     icons: {
       icon: '/games/reveal-board/staygo-logo.png',
       shortcut: '/games/reveal-board/staygo-logo.png',
@@ -29,7 +30,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
     openGraph: {
       title,
       description: game.summary,
-      url: `https://staygoch.com/how-to-play/${game.slug}/`,
+      url: `https://www.staygoch.com/how-to-play/${game.slug}/`,
       images: [{ url: `https://i.ytimg.com/vi/${game.videos[0].id}/hqdefault.jpg`, alt: game.name }],
     },
   };

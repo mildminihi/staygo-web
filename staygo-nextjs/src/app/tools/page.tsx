@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { TOOLS } from '@/data/tools';
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/tools/' },
   title: 'เครื่องมือช่วยเล่นเกมทั้งหมด - STAYGO',
   description: 'รวมเครื่องมือช่วยเล่นเกมฟรีบนเว็บ ทอยลูกเต๋า จับเวลา สุ่มทีม ตารางคะแนน จัดสายการแข่งขัน จับสลาก ไวท์บอร์ด และอื่นๆ',
   keywords: 'เครื่องมือเล่นเกม, ทอยลูกเต๋าออนไลน์, จับเวลา, สุ่มทีม, ตารางคะแนน, จับสลาก, Board Game Tools',
@@ -13,10 +14,10 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'เครื่องมือช่วยเล่นเกมทั้งหมด - STAYGO',
     description: 'รวมเครื่องมือช่วยเล่นเกมฟรีบนเว็บ',
-    url: 'https://staygoch.com/tools/',
+    url: 'https://www.staygoch.com/tools/',
     images: [
       {
-        url: 'https://staygoch.com/games/reveal-board/staygo-logo.png',
+        url: 'https://www.staygoch.com/games/reveal-board/staygo-logo.png',
         width: 512,
         height: 512,
         alt: 'STAYGO Logo',

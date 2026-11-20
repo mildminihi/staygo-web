@@ -16,6 +16,8 @@ const kanit = Kanit({
 });
 
 export const metadata: Metadata = {
+  // relative URLs in page metadata (canonical, og) resolve against this; each page sets its own canonical
+  metadataBase: new URL("https://www.staygoch.com"),
   title: "STAYGO - เว็บไซต์เกมและเครื่องมือสำหรับเล่นเกม",
   description: "เว็บไซต์สำหรับเล่นเกมออนไลน์และเครื่องมือช่วยเล่นเกมต่างๆ จากช่อง STAYGO",
   keywords: "STAYGO, เกมออนไลน์, เครื่องมือเล่นเกม, Board Game, ทอยลูกเต๋า, จับเวลา, สุ่มทีม",
@@ -29,13 +31,13 @@ export const metadata: Metadata = {
   openGraph: {
     title: "STAYGO - เว็บไซต์เกมและเครื่องมือสำหรับเล่นเกม",
     description: "เว็บไซต์สำหรับเล่นเกมออนไลน์และเครื่องมือช่วยเล่นเกมต่างๆ จากช่อง STAYGO",
-    url: "https://staygoch.com",
+    url: "https://www.staygoch.com",
     siteName: "STAYGO",
     locale: "th_TH",
     type: "website",
     images: [
       {
-        url: "https://staygoch.com/games/reveal-board/staygo-logo.png",
+        url: "https://www.staygoch.com/games/reveal-board/staygo-logo.png",
         width: 512,
         height: 512,
         alt: "STAYGO Logo",
@@ -46,7 +48,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "STAYGO - เว็บไซต์เกมและเครื่องมือสำหรับเล่นเกม",
     description: "เว็บไซต์สำหรับเล่นเกมออนไลน์และเครื่องมือช่วยเล่นเกมต่างๆ จากช่อง STAYGO",
-    images: ["https://staygoch.com/games/reveal-board/staygo-logo.png"],
+    images: ["https://www.staygoch.com/games/reveal-board/staygo-logo.png"],
   },
 };
 
@@ -60,8 +62,8 @@ export default function RootLayout({
     "@context": "https://schema.org",
     "@type": "Organization",
     "name": "STAYGO",
-    "url": "https://staygoch.com",
-    "logo": "https://staygoch.com/games/reveal-board/staygo-logo.png",
+    "url": "https://www.staygoch.com",
+    "logo": "https://www.staygoch.com/games/reveal-board/staygo-logo.png",
     "description": "เว็บไซต์สำหรับเล่นเกมออนไลน์และเครื่องมือช่วยเล่นเกมต่างๆ จากช่อง STAYGO",
     "sameAs": [
       "https://www.youtube.com/@STAYGO"
@@ -72,14 +74,14 @@ export default function RootLayout({
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": "STAYGO",
-    "url": "https://staygoch.com",
+    "url": "https://www.staygoch.com",
     "description": "เว็บไซต์เกมและเครื่องมือสำหรับเล่นเกม",
     "publisher": {
       "@type": "Organization",
       "name": "STAYGO",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://staygoch.com/games/reveal-board/staygo-logo.png"
+        "url": "https://www.staygoch.com/games/reveal-board/staygo-logo.png"
       }
     }
   };
@@ -89,7 +91,6 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="canonical" href="https://staygoch.com/" />
         <script src="/assets/js/analytics.js" defer></script>
         
         {/* Structured Data for Search Engines */}

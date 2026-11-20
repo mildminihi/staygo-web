@@ -528,7 +528,7 @@
         return s === 'correct' ? '🟩' : (s === 'present' ? '🟨' : '⬜');
       }).join('');
     }).join('\n');
-    return header + ' ' + result + '\n' + rows + '\nhttps://staygoch.com/games/thai-wordle/';
+    return header + ' ' + result + '\n' + rows + '\nhttps://www.staygoch.com/games/thai-wordle/';
   }
 
   // ---------- 15. INITIAL SETUP-SCREEN STATE ----------

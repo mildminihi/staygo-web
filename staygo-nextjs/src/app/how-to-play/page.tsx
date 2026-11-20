@@ -3,6 +3,7 @@ import BoardGameList from './BoardGameList';
 import { BOARD_GAMES } from '@/data/boardgames';
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/how-to-play/' },
   title: 'วิธีเล่นบอร์ดเกม - STAYGO',
   description: 'รวมวิธีเล่นบอร์ดเกมที่ STAYGO เคยเล่น บอกแนวเกม จำนวนผู้เล่น เวลาที่ใช้ พร้อมคลิปสอนเล่นจากช่อง STAYGO',
   keywords: 'วิธีเล่นบอร์ดเกม, กติกาบอร์ดเกม, บอร์ดเกม, Board Game, How to Play, STAYGO',
@@ -14,10 +15,10 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'วิธีเล่นบอร์ดเกม - STAYGO',
     description: 'รวมวิธีเล่นบอร์ดเกม พร้อมคลิปสอนเล่นจากช่อง STAYGO',
-    url: 'https://staygoch.com/how-to-play/',
+    url: 'https://www.staygoch.com/how-to-play/',
     images: [
       {
-        url: 'https://staygoch.com/games/reveal-board/staygo-logo.png',
+        url: 'https://www.staygoch.com/games/reveal-board/staygo-logo.png',
         width: 512,
         height: 512,
         alt: 'STAYGO Logo',

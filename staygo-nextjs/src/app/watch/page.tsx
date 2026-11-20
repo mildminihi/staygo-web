@@ -7,7 +7,7 @@ import { SERIES, YT, listUrl } from '@/data/youtube';
 export const metadata: Metadata = {
   title: 'ดูคลิป STAYGO ทุกรายการ | STAYGO',
   description: 'รวมคลิปจากช่อง STAYGO: บอร์ดเกม แก๊งซ่า Challenge สะแตกโก เอาวะลองดู และอีกมากมาย อัปเดตคลิปใหม่ทุกสัปดาห์',
-  alternates: { canonical: 'https://staygoch.com/watch/' },
+  alternates: { canonical: '/watch/' },
 };
 
 export default function WatchPage() {

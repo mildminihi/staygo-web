@@ -17,10 +17,10 @@ export const metadata: Metadata = {
     url: 'https://www.staygoch.com/tools/',
     images: [
       {
-        url: 'https://www.staygoch.com/games/reveal-board/staygo-logo.png',
-        width: 512,
-        height: 512,
-        alt: 'STAYGO Logo',
+        url: 'https://www.staygoch.com/assets/image/share/page-tools.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'เครื่องมือช่วยเล่นเกม',
       },
     ],
   },

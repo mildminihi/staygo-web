@@ -72,7 +72,8 @@ body.busy .sgo button {
 .sgo-hero {
   text-align: center;
 }
-.sgo-hero h1 {
+.sgo-hero h1,
+.sgo-hero div.sg-logo {
   font-family: var(--sg-font-card);
   font-size: 56px;
   line-height: 1.05;
@@ -580,7 +581,8 @@ body.busy .sgo button {
 }
 
 @media (max-width: 480px) {
-  .sgo-hero h1 {
+  .sgo-hero h1,
+.sgo-hero div.sg-logo {
     font-size: 46px;
   }
   .room-code {

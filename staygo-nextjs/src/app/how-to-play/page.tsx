@@ -18,10 +18,10 @@ export const metadata: Metadata = {
     url: 'https://www.staygoch.com/how-to-play/',
     images: [
       {
-        url: 'https://www.staygoch.com/games/reveal-board/staygo-logo.png',
-        width: 512,
-        height: 512,
-        alt: 'STAYGO Logo',
+        url: 'https://www.staygoch.com/assets/image/share/page-howto.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'วิธีเล่นบอร์ดเกม',
       },
     ],
   },

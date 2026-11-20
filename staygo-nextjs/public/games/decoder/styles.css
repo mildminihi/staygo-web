@@ -427,6 +427,7 @@
 }
 
 .end-title {
+    line-height: 1.2;
     font-size: 3.5rem;
     font-weight: 800;
     margin-bottom: 2rem;

@@ -55,7 +55,9 @@
     margin-bottom: 6px;
 }
 
-h1.display {
+h1.display,
+.display.big {
+    line-height: 1.2;
     font-size: 30px;
     margin: 0 0 4px;
     color: var(--zq-text);

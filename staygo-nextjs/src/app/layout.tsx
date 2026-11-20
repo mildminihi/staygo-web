@@ -37,18 +37,16 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "https://www.staygoch.com/games/reveal-board/staygo-logo.png",
-        width: 512,
-        height: 512,
-        alt: "STAYGO Logo",
+        url: "https://www.staygoch.com/assets/image/share/page-site.jpg",
+        width: 1200,
+        height: 630,
+        alt: "STAYGO — เกมปาร์ตี้และเครื่องมือช่วยเล่นเกม",
       },
     ],
   },
+  // X/Twitter reads og:title, og:description and og:image when these are absent, so pages only set openGraph
   twitter: {
     card: "summary_large_image",
-    title: "STAYGO - เว็บไซต์เกมและเครื่องมือสำหรับเล่นเกม",
-    description: "เว็บไซต์สำหรับเล่นเกมออนไลน์และเครื่องมือช่วยเล่นเกมต่างๆ จากช่อง STAYGO",
-    images: ["https://www.staygoch.com/games/reveal-board/staygo-logo.png"],
   },
 };
 

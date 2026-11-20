@@ -8,6 +8,22 @@ export const metadata: Metadata = {
   title: 'ดูคลิป STAYGO ทุกรายการ | STAYGO',
   description: 'รวมคลิปจากช่อง STAYGO: บอร์ดเกม แก๊งซ่า Challenge สะแตกโก เอาวะลองดู และอีกมากมาย อัปเดตคลิปใหม่ทุกสัปดาห์',
   alternates: { canonical: '/watch/' },
+  openGraph: {
+    title: 'ดูคลิป STAYGO ทุกรายการ | STAYGO',
+    description: 'รวมคลิปจากช่อง STAYGO: บอร์ดเกม แก๊งซ่า Challenge สะแตกโก เอาวะลองดู และอีกมากมาย อัปเดตคลิปใหม่ทุกสัปดาห์',
+    url: '/watch/',
+    siteName: 'STAYGO',
+    locale: 'th_TH',
+    type: 'website',
+    images: [
+      {
+        url: 'https://www.staygoch.com/assets/image/share/page-site.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'STAYGO — เกมปาร์ตี้และเครื่องมือช่วยเล่นเกม',
+      },
+    ],
+  },
 };
 
 export default function WatchPage() {

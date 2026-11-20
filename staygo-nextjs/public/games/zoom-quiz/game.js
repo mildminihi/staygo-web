@@ -68,7 +68,7 @@ Screens.setup = () => {
   const el = document.createElement('div'); el.className = 'card';
   el.innerHTML = `
     <div class="eyebrow">สร้างเกมทายภาพ</div>
-    <h1 class="display">Zoom Quiz</h1>
+    <h2 class="display big">Zoom Quiz</h2>
     <p class="sub">ใส่รูปภาพ ตั้งคำเฉลย แล้วเลือกได้ว่าจะใส่ตัวเลือกช่วยทายไหม พอเริ่มเล่น รูปจะซูมเข้าสุดแล้วค่อยๆ ซูมออก ให้ทุกคนช่วยกันทายว่าคือใคร สิ่งใด หรือที่ไหน</p>
   `;
 
@@ -427,7 +427,7 @@ Screens.summary = () => {
   el.innerHTML = `
     <div class="zq-summary-icon">🏁</div>
     <div class="eyebrow" style="text-align:center;">จบเกมแล้ว</div>
-    <h1 class="display" style="text-align:center;">เล่นครบ ${state.questions.length} ข้อ</h1>
+    <h2 class="display big" style="text-align:center;">เล่นครบ ${state.questions.length} ข้อ</h2>
     <p class="sub" style="text-align:center;">อย่าลืมนับคะแนนที่จดไว้ ใครตอบถูกเยอะสุดคือผู้ชนะ 🎉</p>
     <div data-staygo-cta="zoom-quiz"></div>
   `;

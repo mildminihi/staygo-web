@@ -15,10 +15,10 @@ export const metadata: Metadata = {
     url: 'https://www.staygoch.com/about/',
     images: [
       {
-        url: 'https://www.staygoch.com/games/reveal-board/staygo-logo.png',
-        width: 512,
-        height: 512,
-        alt: 'STAYGO Logo',
+        url: 'https://www.staygoch.com/assets/image/share/page-site.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'STAYGO — เกมปาร์ตี้และเครื่องมือช่วยเล่นเกม',
       },
     ],
   },

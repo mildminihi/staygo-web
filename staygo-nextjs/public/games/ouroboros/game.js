@@ -350,7 +350,7 @@ Screens.home = () => {
   el.className='card';
   el.innerHTML = `
     <div class="eyebrow">เกมกระดาน · 2–6 คน</div>
-    <h1 class="display">Ouroboros</h1>
+    <h2 class="display big">Ouroboros</h2>
     <p class="sub">งูกินหาง เป็นทั้งผู้ล่าและผู้ถูกล่า — รอดคนสุดท้ายคือผู้ชนะ</p>
   `;
   el.appendChild(renderHowTo());
@@ -509,7 +509,7 @@ function renderPassScreen(){
     overlay.className='overlay-shield';
     overlay.innerHTML = `
       <div class="eyebrow">ส่งต่ออุปกรณ์</div>
-      <h1 class="display" style="color:${p.color}">${p.name}</h1>
+      <h2 class="display big" style="color:${p.color}">${p.name}</h2>
       <p class="sub">คนอื่นห้ามมอง — พร้อมแล้วกดเพื่อดูลูกเต๋าของตัวเอง</p>
     `;
     const btn = document.createElement('button');
@@ -1064,7 +1064,7 @@ function renderPlayerLobby(data){
   const el = document.createElement('div'); el.className='card';
   const me = (data.players||{})[state.online.myId];
   el.innerHTML = `<div class="eyebrow">เข้าร่วมห้องแล้ว</div>
-    <h1 class="display" style="color:${me?me.color:'inherit'}">${me?me.name:'ผู้เล่น'}</h1>
+    <h2 class="display big" style="color:${me?me.color:'inherit'}">${me?me.name:'ผู้เล่น'}</h2>
     <p class="sub">รอโฮสต์กดเริ่มเกมที่จอกลาง — เปิดหน้านี้ค้างไว้</p>`;
   el.appendChild(renderLeaveRoomButton());
   return el;

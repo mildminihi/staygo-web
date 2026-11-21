@@ -20,6 +20,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     page('/games/', 0.9, 'weekly'),
     page('/tools/', 0.9, 'weekly'),
     page('/how-to-play/', 0.9, 'weekly'),
+    page('/how-to-play/random/', 0.8, 'weekly'),
     page('/watch/', 0.8, 'weekly'),
     page('/about/', 0.5),
     ...WEB_GAMES.map((g) => page(g.href, 0.8)),

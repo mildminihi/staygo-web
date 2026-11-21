@@ -10,6 +10,8 @@ import { channelTabs } from '@/data/youtube';
 
 // คลิปล่าสุดและเพลย์ลิสต์ดึงจาก YouTube ตอน build (ดู src/data/playlists.ts)
 const TABS = channelTabs();
+// three episode covers fanned out on the "สุ่มบอร์ดเกม" button
+const PICK_THUMBS = [0, 1, 2].map((i) => BOARD_GAMES[Math.floor((i * BOARD_GAMES.length) / 3)]);
 
 export const metadata: Metadata = {
   alternates: { canonical: '/' },
@@ -27,8 +29,22 @@ export default function Home() {
               
               <div className="hero-actions">
                 <Link href="/games" className="button button-primary button-lg">▶ เล่นเกม</Link>
-                <a href="/tools/host-tools/" className="button button-secondary button-lg">🔧​ เครื่องมือสำหรับโฮสต์เกม</a>
               </div>
+
+              <Link href="/how-to-play/random/" className="hero-pick">
+                <span className="hero-pick-dice" aria-hidden="true">🎲</span>
+                <span className="hero-pick-text">
+                  <span className="hero-pick-kicker">ไม่รู้จะเล่นอะไร?</span>
+                  <strong className="hero-pick-title">สุ่มบอร์ดเกมคืนนี้เลย!</strong>
+                  <span className="hero-pick-sub">เลือกจาก {BOARD_GAMES.length} เกมที่เคยลงคลิปในช่อง</span>
+                </span>
+                <span className="hero-pick-thumbs" aria-hidden="true">
+                  {PICK_THUMBS.map((g) => (
+                    <img key={g.slug} src={`https://i.ytimg.com/vi/${g.videos[0].id}/mqdefault.jpg`} alt="" />
+                  ))}
+                </span>
+                <span className="hero-pick-go" aria-hidden="true">→</span>
+              </Link>
             </div>
             
             <div className="hero-illustration">

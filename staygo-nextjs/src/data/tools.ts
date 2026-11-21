@@ -42,12 +42,6 @@ export const TOOLS: Tool[] = [
     description: 'ใบตัวละครบนมือถือ หลอดพลัง ลูกเต๋า ลำดับเทิร์น มอนสเตอร์ และจอของผู้คุมเกม',
   },
   {
-    href: '/how-to-play/random/',
-    icon: '🎯',
-    label: 'สุ่มบอร์ดเกม',
-    description: 'บอกจำนวนคนกับแนวเกม แล้วสุ่มบอร์ดเกมที่ STAYGO เคยเล่น พร้อมคลิปและวิธีเล่น',
-  },
-  {
     href: '/tools/word-random/',
     icon: '🃏',
     label: 'สุ่มคำ / หัวข้อ',

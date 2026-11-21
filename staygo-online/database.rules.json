@@ -39,7 +39,7 @@
         ".validate": "$code.matches(/^[A-Z2-9]{4}$/)",
         "meta": {
           ".write": "auth != null && ((!data.exists() && newData.child('hostUid').val() === auth.uid) || data.child('hostUid').val() === auth.uid)",
-          ".validate": "newData.hasChildren(['hostUid', 'kind', 'createdAt']) && newData.child('kind').val().matches(/^(buzzer|vote|speed-draw)$/)"
+          ".validate": "newData.hasChildren(['hostUid', 'kind', 'createdAt']) && newData.child('kind').val().matches(/^(buzzer|vote|speed-draw|secret-roles)$/)"
         },
         "players": {
           "$uid": {
@@ -109,6 +109,16 @@
         },
         "$other": {
           ".validate": false
+        }
+      }
+    },
+    "liveRoles": {
+      "$code": {
+        ".validate": "$code.matches(/^[A-Z2-9]{4}$/)",
+        ".write": "auth != null && root.child('live').child($code).child('meta').child('hostUid').val() === auth.uid",
+        ".read": "auth != null && root.child('live').child($code).child('meta').child('hostUid').val() === auth.uid",
+        "$uid": {
+          ".read": "auth != null && auth.uid === $uid"
         }
       }
     }

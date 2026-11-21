@@ -138,3 +138,160 @@
 @media (prefers-reduced-motion: reduce) {
   .rl-card.open { animation: none; }
 }
+
+/* ---- start / host room */
+.rl-local {
+  align-self: center;
+}
+.rl-room {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 14px;
+  align-items: center;
+}
+.rl-qr {
+  width: 140px;
+}
+.rl-code {
+  font-size: 44px;
+  line-height: 1.1;
+}
+.rl-copy {
+  justify-self: start;
+}
+.rl-roomfoot {
+  grid-column: 1 / -1;
+}
+.rl-room.compact {
+  grid-template-columns: 1fr;
+}
+.rl-room.compact .rl-qr,
+.rl-room.compact .rl-copy {
+  display: none;
+}
+.rl-room.compact .rl-roomside > div {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+.rl-room.compact .rl-code {
+  font-size: 26px;
+}
+.rl-players {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.rl-players li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 2px solid var(--sg-ink);
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-size: 14px;
+  background: #fff;
+}
+.rl-players li small {
+  color: var(--sk-muted);
+}
+.rl-players li.ok {
+  background: #e3f6e6;
+}
+.rl-players li.rl-empty {
+  border: 0;
+  background: none;
+  padding: 0;
+  color: var(--sk-muted);
+}
+
+/* ---- custom roles / own words */
+.rl-crole {
+  display: grid;
+  gap: 8px;
+  padding: 10px;
+  border: 2px dashed var(--sk-line);
+  border-radius: 14px;
+}
+.rl-crow {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.rl-crow > .sg-input {
+  flex: 1;
+  min-width: 0;
+}
+.rl-crow > .sg-input.rl-cemoji {
+  flex: 0 0 52px;
+  text-align: center;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+.rl-crow > .sg-btn {
+  width: 36px;
+  padding: 0;
+  flex: 0 0 auto;
+}
+.rl-check {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 14px;
+}
+.rl-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.rl-sum.bad {
+  color: var(--sg-red);
+}
+[data-cadd] {
+  justify-self: start;
+}
+
+/* ---- player phone */
+.rl-me {
+  justify-content: space-between;
+}
+.rl-wait {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  text-align: center;
+  padding: 36px 18px;
+}
+.rl-wait b {
+  font-size: 22px;
+}
+.rl-wait small {
+  color: var(--sk-muted);
+}
+#pClock {
+  justify-content: center;
+}
+@media (max-width: 480px) {
+  .rl-room {
+    grid-template-columns: 110px 1fr;
+  }
+  .rl-qr {
+    width: 110px;
+  }
+  .rl-code {
+    font-size: 34px;
+  }
+}
+.rl-cstep {
+  border-bottom: 0;
+  padding: 0;
+}
+#pCard {
+  width: 100%;
+}
+#room {
+  margin-bottom: 16px;
+}

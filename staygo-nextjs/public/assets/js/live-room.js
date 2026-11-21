@@ -85,6 +85,11 @@ export function watchRoom(code, cb) {
   return fb.m.onValue(r(`live/${code}`), (s) => cb(s.val()));
 }
 
+/** Calls cb(value) for one path (null if it is gone or unreadable); returns an unsubscribe function. */
+export function watch(path, cb) {
+  return fb.m.onValue(r(path), (s) => cb(s.val()), () => cb(null));
+}
+export const read = async (path) => (await fb.m.get(r(path))).val();
 export const write = (path, value) => fb.m.set(r(path), value);
 export const patch = (path, value) => fb.m.update(r(path), value);
 export const remove = (path) => fb.m.remove(r(path));

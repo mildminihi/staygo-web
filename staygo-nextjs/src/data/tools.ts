@@ -33,7 +33,7 @@ export const TOOLS: Tool[] = [
     href: '/tools/secret-roles/',
     icon: '🎭',
     label: 'แจกบทลับ',
-    description: 'หมาป่า สายลับ ใครคือสปาย แจกบทด้วยมือถือเครื่องเดียว พร้อมสคริปต์คนเล่า',
+    description: 'หมาป่า สายลับ ใครคือสปาย หรือตั้งบทเอง แจกบทลงมือถือทุกคน พร้อมสคริปต์คนเล่า',
   },
   {
     href: '/tools/word-random/',

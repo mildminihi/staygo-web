@@ -5,18 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>แจกบทลับ - หมาป่า สายลับ ใครคือสปาย | STAYGO</title>
     <meta name="title" content="แจกบทลับ - หมาป่า สายลับ ใครคือสปาย | STAYGO" />
-    <meta name="description" content="แจกบทลับด้วยมือถือเครื่องเดียว สำหรับเกมหมาป่า (Werewolf) สายลับ (Spyfall) และใครคือสปาย (Undercover) พร้อมสคริปต์คนเล่าเรื่องและตัวจับเวลา" />
+    <meta name="description" content="แจกบทลับลงมือถือทุกคน สำหรับเกมหมาป่า (Werewolf) สายลับ (Spyfall) ใครคือสปาย (Undercover) หรือตั้งบทเอง พร้อมสคริปต์คนเล่าเรื่องและตัวจับเวลา" />
     <meta name="robots" content="index, follow" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://www.staygoch.com/tools/secret-roles/" />
     <meta property="og:title" content="แจกบทลับ - หมาป่า สายลับ ใครคือสปาย" />
-    <meta property="og:description" content="แจกบทลับด้วยมือถือเครื่องเดียว สำหรับเกมหมาป่า (Werewolf) สายลับ (Spyfall) และใครคือสปาย (Undercover) พร้อมสคริปต์คนเล่าเรื่องและตัวจับเวลา" />
+    <meta property="og:description" content="แจกบทลับลงมือถือทุกคน สำหรับเกมหมาป่า (Werewolf) สายลับ (Spyfall) ใครคือสปาย (Undercover) หรือตั้งบทเอง พร้อมสคริปต์คนเล่าเรื่องและตัวจับเวลา" />
     <meta property="og:image" content="https://www.staygoch.com/assets/image/share/tool-secret-roles.jpg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="แจกบทลับ - หมาป่า สายลับ ใครคือสปาย" />
-    <meta name="twitter:description" content="แจกบทลับด้วยมือถือเครื่องเดียว สำหรับเกมหมาป่า (Werewolf) สายลับ (Spyfall) และใครคือสปาย (Undercover) พร้อมสคริปต์คนเล่าเรื่องและตัวจับเวลา" />
+    <meta name="twitter:description" content="แจกบทลับลงมือถือทุกคน สำหรับเกมหมาป่า (Werewolf) สายลับ (Spyfall) ใครคือสปาย (Undercover) หรือตั้งบทเอง พร้อมสคริปต์คนเล่าเรื่องและตัวจับเวลา" />
     <meta name="twitter:image" content="https://www.staygoch.com/assets/image/share/tool-secret-roles.jpg" />
     <link rel="canonical" href="https://www.staygoch.com/tools/secret-roles/" />
     <link rel="icon" type="image/png" href="/games/reveal-board/staygo-logo.png" />
@@ -88,8 +88,46 @@
     <main class="tl">
       <div class="tl-hero">
         <h1>🎭 แจกบทลับ</h1>
-        <p>ส่งมือถือเครื่องเดียววนกัน แต่ละคนแตะดูบทของตัวเอง ไม่ต้องใช้การ์ด ไม่ต้องมีคนคุมบทแยก</p>
+        <p>โฮสต์สร้างห้อง ทุกคนสแกนเข้าจากมือถือตัวเอง แล้วได้บทลับขึ้นจอใครจอมัน ไม่ต้องใช้การ์ด</p>
       </div>
+
+      <!-- start -->
+      <section id="start" class="tl-narrow tl-stack" hidden>
+        <div class="sg-panel tl-stack">
+          <div>
+            <span class="tl-label">ฉันคือ…</span>
+            <div class="tl-choice">
+              <button id="pickHost"><b>🖥️ โฮสต์ / คนเล่าเรื่อง</b><small>สร้างห้อง เลือกเกมและบท แล้วแจกให้ทุกคน</small></button>
+              <button id="pickPlayer"><b>📱 ผู้เล่น</b><small>ใส่รหัสห้อง แล้วรอรับบทบนมือถือ</small></button>
+            </div>
+          </div>
+          <div id="joinForm" class="tl-stack" hidden>
+            <label><span class="tl-label">รหัสห้อง</span><input id="codeInput" class="sg-input tl-code" maxlength="4" placeholder="เช่น K7QX" autocomplete="off" /></label>
+            <label><span class="tl-label">ชื่อของคุณ</span><input id="nameInput" class="sg-input" maxlength="24" placeholder="เช่น มายด์" autocomplete="nickname" /></label>
+            <button id="joinBtn" class="sg-btn blue block">เข้าห้อง</button>
+          </div>
+          <button id="createBtn" class="sg-btn blue block" hidden>สร้างห้องใหม่</button>
+        </div>
+        <button id="pickLocal" class="sg-btn small rl-local">📲 ไม่มีเน็ต? ใช้มือถือเครื่องเดียวส่งวนกัน</button>
+      </section>
+
+      <!-- host: room panel -->
+      <section id="room" class="tl-narrow" hidden>
+        <div id="roomPanel" class="sg-panel rl-room">
+          <div id="qr" class="tl-qr rl-qr"></div>
+          <div class="tl-stack rl-roomside">
+            <div>
+              <p class="tl-hint" style="margin:0">รหัสห้อง</p>
+              <div id="hostCode" class="tl-code rl-code"></div>
+            </div>
+            <button id="copyLink" class="sg-btn small rl-copy">คัดลอกลิงก์</button>
+          </div>
+          <div class="rl-roomfoot">
+            <b>ผู้เล่น <span id="playerCount" class="tl-num"></span></b>
+            <ul id="playerList" class="rl-players"></ul>
+          </div>
+        </div>
+      </section>
 
       <!-- setup -->
       <section id="setup" class="tl-narrow tl-stack" hidden>
@@ -100,16 +138,23 @@
               <button data-game="werewolf" class="active"><b>🐺 หมาป่า (Werewolf)</b><small>ชาวบ้านต้องหาหมาป่าให้เจอก่อนโดนกินหมด · 5–20 คน</small></button>
               <button data-game="spyfall"><b>🕵️ สายลับ (Spyfall)</b><small>ทุกคนรู้สถานที่ ยกเว้นสายลับ · 4–12 คน</small></button>
               <button data-game="undercover"><b>🤫 ใครคือสปาย (Undercover)</b><small>ได้คำคล้ายกันแต่ไม่เหมือน · 4–15 คน</small></button>
+              <button data-game="custom"><b>✏️ ตั้งบทเอง</b><small>พิมพ์ชื่อบทและจำนวนเอง ใช้กับเกมไหนก็ได้ · 2–20 คน</small></button>
             </div>
           </div>
-          <label><span class="tl-label">ชื่อผู้เล่น (บรรทัดละคน)</span><textarea id="names" class="sg-input" placeholder="มายด์&#10;จูน&#10;นน&#10;หยก&#10;ต้น"></textarea></label>
+          <label id="namesBox"><span class="tl-label">ชื่อผู้เล่น (บรรทัดละคน)</span><textarea id="names" class="sg-input" placeholder="มายด์&#10;จูน&#10;นน&#10;หยก&#10;ต้น"></textarea></label>
           <p id="nameCount" class="tl-hint" style="margin-top:-8px"></p>
           <div id="opts" class="tl-stack"></div>
+          <div id="extra" class="tl-stack"></div>
+          <p id="hostNote" class="tl-hint" style="margin:0" hidden></p>
           <button id="deal" class="sg-btn blue block">แจกบท</button>
+        </div>
+        <div class="tl-row" style="justify-content:flex-end">
+          <button id="modeBack" class="sg-btn small" hidden>← เปลี่ยนโหมด</button>
+          <button id="endRoom" class="sg-btn small" hidden>ปิดห้อง</button>
         </div>
       </section>
 
-      <!-- deal: pass the phone -->
+      <!-- deal: pass the phone (one-phone mode) -->
       <section id="dealing" class="tl-narrow" hidden>
         <div class="sg-panel rl-deal">
           <p class="tl-hint" style="margin:0">คนที่ <b id="dealNo" class="tl-num"></b> / <b id="dealTotal" class="tl-num"></b></p>
@@ -120,16 +165,37 @@
         </div>
       </section>
 
-      <!-- play -->
+      <!-- play (host / one phone) -->
       <section id="play" class="tl-narrow tl-stack" hidden>
         <div id="playBody" class="tl-stack"></div>
         <div class="tl-row">
           <button id="reveal" class="sg-btn yellow">👀 เฉลยทั้งหมด</button>
-          <button id="again" class="sg-btn blue">🔄 แจกใหม่ (คนเดิม)</button>
+          <button id="again" class="sg-btn blue">🔄 แจกใหม่</button>
           <button id="back" class="sg-btn">⚙️ ตั้งค่า</button>
         </div>
         <div id="revealBox" class="sg-panel" hidden></div>
       </section>
+
+      <!-- player -->
+      <section id="player" class="tl-narrow tl-stack" hidden>
+        <div class="tl-row rl-me">
+          <span>ห้อง <b id="meCode" class="tl-code"></b></span>
+          <b id="meName"></b>
+        </div>
+        <div id="pWait" class="sg-panel rl-wait"></div>
+        <div id="pGame" class="tl-stack" hidden>
+          <button id="pCard" class="rl-card" aria-live="polite"></button>
+          <p class="tl-hint" style="text-align:center;margin:0">แตะการ์ดเพื่อเปิด/ปิด อย่าให้คนข้างๆ เห็น</p>
+          <div id="pClock" class="sg-panel rl-timer" hidden></div>
+          <div id="pInfo" class="tl-stack"></div>
+          <div id="pReveal" class="sg-panel" hidden></div>
+        </div>
+        <div class="tl-row" style="justify-content:center">
+          <button id="leaveBtn" class="sg-btn small">ออกจากห้อง</button>
+        </div>
+      </section>
+
+      <p id="loading" class="tl-hint" style="text-align:center">กำลังโหลด…</p>
     </main>
 
     <script type="module" src="./app.js"></script>

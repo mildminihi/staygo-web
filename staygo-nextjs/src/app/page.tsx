@@ -108,6 +108,7 @@ export default function Home() {
 
           <p className="yt-more-links">
             <Link href="/how-to-play/" className="link-more">ดูวิธีเล่นบอร์ดเกมทั้งหมด ({BOARD_GAMES.length}) →</Link>
+            <Link href="/how-to-play/random/" className="link-more">🎲 สุ่มบอร์ดเกมที่จะเล่นคืนนี้ →</Link>
           </p>
         </div>
       </section>

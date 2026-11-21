@@ -5335,6 +5335,9 @@ h3 {
 }
 .yt-more-links {
   margin: 24px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
 }
 
 /* /watch: one horizontal row per playlist */
@@ -5360,6 +5363,7 @@ h3 {
 .yt-row-extra {
   display: inline-block;
   margin-top: 8px;
+  margin-right: 24px;
 }
 @media (max-width: 768px) {
   .yt-grid {
@@ -5389,4 +5393,177 @@ h3 {
   font-weight: 700;
   padding: 1px 8px;
   line-height: 1.5;
+}
+
+/* ===== สุ่มบอร์ดเกม (/how-to-play/random/) ===== */
+.gp {
+  max-width: 960px;
+}
+.gp-head {
+  text-align: center;
+  margin: 16px 0 28px;
+}
+.gp-head .section-title {
+  font-size: 40px;
+  margin-bottom: 8px;
+}
+.gp-head p {
+  color: var(--text-muted);
+  font-size: 18px;
+  margin: 0;
+}
+.gp-wrap {
+  display: grid;
+  gap: 28px;
+}
+.gp-form {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  display: grid;
+  gap: 20px;
+}
+.gp-field {
+  display: grid;
+  gap: 10px;
+}
+.gp-label {
+  font-family: 'Kanit', sans-serif;
+  font-weight: 600;
+  font-size: 17px;
+}
+.gp-label small {
+  font-weight: 400;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+.gp-chips {
+  justify-content: flex-start;
+}
+.gp-roll {
+  justify-self: center;
+  min-width: 240px;
+  font-size: 20px;
+}
+.gp-count {
+  margin: -8px 0 0;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+.gp-result-area {
+  scroll-margin-top: 90px;
+}
+.gp-placeholder {
+  border: 2px dashed var(--border-strong);
+  border-radius: var(--radius-md);
+  padding: 40px 20px;
+  text-align: center;
+  color: var(--text-muted);
+}
+.gp-placeholder span {
+  font-size: 48px;
+  display: block;
+}
+.gp-placeholder p {
+  margin: 8px 0 0;
+}
+.gp-result {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  background: var(--surface);
+  border: 2px solid var(--primary);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+.gp-result.landed {
+  animation: gp-land 0.35s ease-out;
+}
+.gp-result.rolling .gp-thumb img {
+  filter: saturate(0.6) blur(1px);
+}
+@keyframes gp-land {
+  0% { transform: scale(0.96); }
+  60% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+.gp-thumb {
+  position: relative;
+  min-height: 240px;
+  background: var(--surface-2);
+}
+.gp-thumb img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.gp-body {
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.gp-kicker {
+  margin: 0;
+  color: var(--accent);
+  font-family: 'Kanit', sans-serif;
+  font-weight: 600;
+}
+.gp-name {
+  font-size: 28px;
+  line-height: 1.25;
+  margin: 0;
+}
+.gp-body .htp-meta {
+  margin: 0;
+  padding: 0;
+}
+.gp-summary {
+  margin: 4px 0 0;
+  line-height: 1.6;
+}
+.gp-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+}
+.gp-others-title {
+  font-size: 22px;
+  margin: 0 0 16px;
+}
+.gp-more {
+  display: block;
+  margin: 20px auto 0;
+}
+@media (max-width: 720px) {
+  .gp-head .section-title {
+    font-size: 30px;
+  }
+  .gp-head p {
+    font-size: 16px;
+  }
+  .gp-form {
+    padding: 18px 16px;
+  }
+  .gp-result {
+    grid-template-columns: 1fr;
+  }
+  .gp-thumb {
+    min-height: 0;
+    aspect-ratio: 16 / 9;
+  }
+  .gp-actions .button {
+    flex: 1 1 100%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gp-result.landed {
+    animation: none;
+  }
 }

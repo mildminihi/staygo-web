@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import BoardGameList from './BoardGameList';
 import { BOARD_GAMES } from '@/data/boardgames';
 
@@ -37,6 +38,9 @@ export default function HowToPlayPage() {
             <p style={{ color: 'var(--text-muted)', fontSize: '18px', margin: 0 }}>
               รวม {BOARD_GAMES.length} บอร์ดเกมที่ STAYGO เคยเล่น พร้อมกติกาย่อและคลิปสอนเล่นจากช่อง
             </p>
+            <Link href="/how-to-play/random/" className="button button-primary button-md" style={{ marginTop: '16px' }}>
+              🎲 ไม่รู้จะเล่นอะไร? สุ่มให้เลย
+            </Link>
           </div>
 
           <BoardGameList games={BOARD_GAMES} />

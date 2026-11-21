@@ -57,7 +57,10 @@ export default function WatchPage() {
                 ))}
               </div>
               {s.key === 'boardgame' && (
-                <Link href="/how-to-play/" className="link-more yt-row-extra">อ่านวิธีเล่นบอร์ดเกมแบบสรุป →</Link>
+                <>
+                  <Link href="/how-to-play/" className="link-more yt-row-extra">อ่านวิธีเล่นบอร์ดเกมแบบสรุป →</Link>
+                  <Link href="/how-to-play/random/" className="link-more yt-row-extra">🎲 สุ่มบอร์ดเกมจากคลิปในช่อง →</Link>
+                </>
               )}
             </section>
           ))}

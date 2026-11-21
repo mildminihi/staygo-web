@@ -1255,3 +1255,19 @@ export function getRelatedGames(game: BoardGame, limit = 4) {
     .slice(0, limit)
     .map(({ g }) => g);
 }
+
+/** Player count range from text like "2–6 คน", "2 คนขึ้นไป" or "4–8+ คน". Open-ended max = 99. */
+export function playerRange(g: BoardGame): [number, number] {
+  const s = g.players;
+  const r = s.match(/(\d+)\s*[–-]\s*(\d+)(\+)?/);
+  if (r) return [+r[1], r[3] ? 99 : +r[2]];
+  const n = s.match(/(\d+)/);
+  if (!n) return [1, 99];
+  return [+n[1], /ขึ้นไป|\+/.test(s) ? 99 : +n[1]];
+}
+
+/** Shortest play time in minutes from text like "20–30 นาที". */
+export function minMinutes(g: BoardGame): number {
+  const n = g.duration.match(/(\d+)/);
+  return n ? +n[1] : 30;
+}

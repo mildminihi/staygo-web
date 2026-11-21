@@ -39,7 +39,7 @@
         ".validate": "$code.matches(/^[A-Z2-9]{4}$/)",
         "meta": {
           ".write": "auth != null && ((!data.exists() && newData.child('hostUid').val() === auth.uid) || data.child('hostUid').val() === auth.uid)",
-          ".validate": "newData.hasChildren(['hostUid', 'kind', 'createdAt']) && newData.child('kind').val().matches(/^(buzzer|vote|speed-draw|secret-roles)$/)"
+          ".validate": "newData.hasChildren(['hostUid', 'kind', 'createdAt']) && newData.child('kind').val().matches(/^(buzzer|vote|speed-draw|secret-roles|adventure)$/)"
         },
         "players": {
           "$uid": {
@@ -107,6 +107,13 @@
             }
           }
         },
+        "rolls": {
+          ".write": "auth != null && root.child('live').child($code).child('meta').child('hostUid').val() === auth.uid",
+          "$id": {
+            ".write": "auth != null && !data.exists() && (root.child('live').child($code).child('meta').child('hostUid').val() === auth.uid || root.child('live').child($code).child('players').child(auth.uid).exists())",
+            ".validate": "newData.hasChildren(['uid', 'total', 't']) && newData.child('uid').val() === auth.uid && newData.child('total').isNumber() && newData.child('t').val() === now && (!newData.child('label').exists() || (newData.child('label').isString() && newData.child('label').val().length <= 80))"
+          }
+        },
         "$other": {
           ".validate": false
         }
@@ -119,6 +126,17 @@
         ".read": "auth != null && root.child('live').child($code).child('meta').child('hostUid').val() === auth.uid",
         "$uid": {
           ".read": "auth != null && auth.uid === $uid"
+        }
+      }
+    },
+    "liveInbox": {
+      "$code": {
+        ".validate": "$code.matches(/^[A-Z2-9]{4}$/)",
+        ".read": "auth != null && root.child('live').child($code).child('meta').child('hostUid').val() === auth.uid",
+        ".write": "auth != null && root.child('live').child($code).child('meta').child('hostUid').val() === auth.uid",
+        "$id": {
+          ".write": "auth != null && !data.exists() && root.child('live').child($code).child('players').child(auth.uid).exists()",
+          ".validate": "newData.hasChildren(['uid', 'total', 't']) && newData.child('uid').val() === auth.uid && newData.child('t').val() === now"
         }
       }
     }

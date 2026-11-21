@@ -36,6 +36,12 @@ export const TOOLS: Tool[] = [
     description: 'หมาป่า สายลับ ใครคือสปาย หรือตั้งบทเอง แจกบทลงมือถือทุกคน พร้อมสคริปต์คนเล่า',
   },
   {
+    href: '/tools/adventure-table/',
+    icon: '🗺️',
+    label: 'โต๊ะผจญภัย (TRPG)',
+    description: 'ใบตัวละครบนมือถือ หลอดพลัง ลูกเต๋า ลำดับเทิร์น มอนสเตอร์ และจอของผู้คุมเกม',
+  },
+  {
     href: '/tools/word-random/',
     icon: '🃏',
     label: 'สุ่มคำ / หัวข้อ',

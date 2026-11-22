@@ -63,6 +63,15 @@ export const WEB_GAMES: WebGame[] = [
     beta: true,
   },
   {
+    href: '/games/flipped/',
+    title: 'FLIPPED: พินบอลกลับด้าน',
+    meta: '1 Player • เกมฟิสิกส์ Roguelike',
+    short: 'คุณคือลูกเหล็ก ไม้ตีคือบอส ลงหลุมให้ได้!',
+    description: 'พินบอลกลับด้านแนว roguelike คุณเป็นลูกเหล็กที่ดีดตัวเองชนบัมเปอร์ ทำลายเกราะแล้วพุ่งชนไม้ตีให้พังจนลงหลุมได้ เก็บบัฟทุกตู้ ตายแล้วเอาเศษเหล็กไปอัปเกรดถาวร เล่นได้ทั้งมือถือและคอม',
+    cover: { images: ['/assets/image/flipped-cover-1.png', '/assets/image/flipped-cover-2.png'] },
+    beta: true,
+  },
+  {
     href: '/games/decoder/',
     title: 'ถอดรหัสตัวเลข',
     meta: '1 Player • เกมปริศนา',

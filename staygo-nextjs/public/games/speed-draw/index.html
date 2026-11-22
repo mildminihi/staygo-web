@@ -111,7 +111,7 @@
         <details class="sg-panel" open>
           <summary><b>วิธีเล่น</b></summary>
           <ul class="tl-hint">
-            <li>โฮสต์สร้างห้องแล้วขึ้นจอ ผู้เล่นสแกน QR หรือใส่รหัส 4 ตัว โฮสต์เลือกเวลาวาดได้</li>
+            <li>โฮสต์สร้างห้องแล้วขึ้นจอ ผู้เล่นสแกน QR หรือใส่รหัส 4 ตัว โฮสต์ตั้งเวลาวาด เลือกหมวดโจทย์ (หรือให้สุ่ม) และเลือกได้ว่าจะให้วาดสีดำสีเดียวหรือหลายสี</li>
             <li>โฮสต์กดเริ่ม นับ 3 2 1 แล้วทุกคนได้โจทย์เดียวกัน วาดให้ทันเวลาที่โฮสต์ตั้งไว้ (5–20 วินาที) โจทย์ทั้ง 10 ข้อในเกมเดียวกันจะเป็นของที่รูปทรงคล้ายกัน</li>
             <li>หมดเวลา รูปจะถูกเก็บไว้แล้วขึ้นโจทย์ใหม่ทันที วนไปจนครบ 10 รูป</li>
             <li>จากนั้นมีเวลา 1 นาที เรียงรูปของตัวเองให้ตรงกับโจทย์ที่ถูกสลับลำดับ (แตะ 2 รูปเพื่อสลับกัน)</li>
@@ -151,6 +151,15 @@
                     <option value="15">15 วินาที</option>
                     <option value="20">20 วินาที</option>
                   </select>
+                </label>
+                <label><span class="tl-label">สีปากกา</span>
+                  <select id="penMode" class="sg-input">
+                    <option value="mono" selected>⚫ สีดำสีเดียว (ยากกว่า)</option>
+                    <option value="multi">🎨 หลายสี</option>
+                  </select>
+                </label>
+                <label><span class="tl-label">หมวดโจทย์ <small>(ไม่เลือกก็ได้)</small></span>
+                  <select id="wordSet" class="sg-input"></select>
                 </label>
               </div>
               <button id="startBtn" class="sg-btn blue sd-startbtn tl-nobig">▶ เริ่มเกม</button>

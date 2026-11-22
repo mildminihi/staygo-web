@@ -1,4 +1,4 @@
-// วาดไว 15 วิ: everyone draws the same 10 prompts (host picks 5–20 s each; prompts come from one similar-shape set), then gets 60 s to match their own
+// วาดไว 15 วิ: everyone draws the same 10 prompts (host picks 5–20 s each; prompts come from one similar-shape set, random or host-picked; host can lock pens to black), then gets 60 s to match their own
 // drawings to the prompts (shown in a shuffled order). Score = drawings placed on the right prompt.
 //
 // Timing is not driven by the host's tab: the host writes startAt/drawEnd/orderEnd once (server
@@ -148,7 +148,6 @@ $("joinBtn").onclick = async () => {
 };
 
 // ================================================================ HOST
-const usedWords = new Set();
 let galIdx = 0;
 let revealSig = "";
 let lastBeep = "";
@@ -252,38 +251,77 @@ function hostTick() {
   }
 }
 
-// ---- host setting: seconds per drawing (remembered on this computer)
+// ---- host settings: seconds per drawing + prompt set (remembered on this computer)
 const SETTINGS_KEY = "staygo-speed-draw-settings";
-let lastShapeSet = null;
+const HISTORY_KEY = "staygo-speed-draw-history"; // recent sets + used words, so new rooms/refreshes don't repeat
+const MIX = "mix";
+$("wordSet").innerHTML =
+  `<option value="">🎲 สุ่มหมวด (ไม่ซ้ำล่าสุด)</option>` +
+  SHAPE_SETS.map((s) => `<option value="${s.key}">${s.name} (${s.words.length} คำ)</option>`).join("") +
+  `<option value="${MIX}">🌈 คละทุกหมวด (ง่ายขึ้น)</option>`;
 try {
   const s = JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}");
   if (s.secs) $("drawSecs").value = String(s.secs);
+  if (s.set) $("wordSet").value = s.set;
+  if (s.pen) $("penMode").value = s.pen;
 } catch {}
 // an unknown saved value leaves the select empty: fall back to the default
 if (!$("drawSecs").value) $("drawSecs").value = String(DRAW_MS / 1000);
+if ($("wordSet").selectedIndex < 0) $("wordSet").value = "";
+if (!$("penMode").value) $("penMode").value = "mono";
 function settingsChanged() {
-  $("lobbyInfo").textContent = `${ROUNDS} โจทย์ · ข้อละ ${$("drawSecs").value} วินาที · เรียงรูป ${ORDER_MS / 60000} นาที`;
+  const set = $("wordSet").value;
+  const setName = set === MIX ? "คละทุกหมวด" : SHAPE_SETS.find((s) => s.key === set)?.name.replace(/^\S+\s/, "") || "สุ่มหมวด";
+  const pen = $("penMode").value === "multi" ? "หลายสี" : "สีดำสีเดียว";
+  $("lobbyInfo").textContent = `${ROUNDS} โจทย์ · ${setName} · ${pen} · ข้อละ ${$("drawSecs").value} วินาที · เรียงรูป ${ORDER_MS / 60000} นาที`;
   try {
-    localStorage.setItem(SETTINGS_KEY, JSON.stringify({ secs: +$("drawSecs").value }));
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify({ secs: +$("drawSecs").value, set, pen: $("penMode").value }));
   } catch {}
 }
 $("drawSecs").onchange = settingsChanged;
+$("wordSet").onchange = settingsChanged;
+$("penMode").onchange = settingsChanged;
 settingsChanged();
 
-/** 10 prompts from one shape set, so the drawings look alike; a different set from last game. */
-function pickPrompts() {
-  const sets = SHAPE_SETS.filter((s) => s.key !== lastShapeSet);
-  const set = sets[Math.floor(Math.random() * sets.length)];
-  lastShapeSet = set.key;
-  const words = set.words;
-  // avoid repeating words from earlier games in this room until the set runs out
-  let pool = words.filter((w) => !usedWords.has(w));
-  if (pool.length < ROUNDS) {
-    words.forEach((w) => usedWords.delete(w));
-    pool = [...words];
+function loadHistory() {
+  try {
+    const h = JSON.parse(localStorage.getItem(HISTORY_KEY) || "{}");
+    return { sets: Array.isArray(h.sets) ? h.sets : [], words: Array.isArray(h.words) ? h.words : [] };
+  } catch {
+    return { sets: [], words: [] };
   }
-  const out = shuffle([...pool]).slice(0, ROUNDS);
-  out.forEach((w) => usedWords.add(w));
+}
+function saveHistory(h) {
+  try {
+    localStorage.setItem(HISTORY_KEY, JSON.stringify({ sets: h.sets.slice(0, SHAPE_SETS.length), words: h.words.slice(0, 400) }));
+  } catch {}
+}
+
+/** Random set: skip the most recently played half of the sets, so every set gets a turn before one comes back. */
+function randomSet(recent) {
+  const skip = new Set(recent.slice(0, Math.floor(SHAPE_SETS.length / 2)));
+  const sets = SHAPE_SETS.filter((s) => !skip.has(s.key));
+  return sets[Math.floor(Math.random() * sets.length)];
+}
+
+/** 10 prompts: words not used lately come first; when a set runs low, top up with its oldest-used words. */
+function pickPrompts() {
+  const h = loadHistory();
+  const choice = $("wordSet").value;
+  let words;
+  if (choice === MIX) {
+    words = SHAPE_SETS.flatMap((s) => s.words);
+  } else {
+    const set = SHAPE_SETS.find((s) => s.key === choice) || randomSet(h.sets);
+    words = set.words;
+    h.sets = [set.key, ...h.sets.filter((k) => k !== set.key)];
+  }
+  const used = new Map(h.words.map((w, i) => [w, i])); // index 0 = most recent
+  const fresh = shuffle(words.filter((w) => !used.has(w)));
+  const old = words.filter((w) => used.has(w)).sort((a, b) => used.get(b) - used.get(a));
+  const out = shuffle([...fresh, ...old].slice(0, ROUNDS));
+  h.words = [...out, ...h.words.filter((w) => !out.includes(w))];
+  saveHistory(h);
   return out;
 }
 
@@ -296,7 +334,7 @@ async function startGame() {
   const drawEnd = t0 + ROUNDS * drawMs;
   try {
     await write(`live/${code}/state`, {
-      round: g, locked: false, game: g, n: ROUNDS, drawMs,
+      round: g, locked: false, game: g, n: ROUNDS, drawMs, mono: $("penMode").value !== "multi",
       startAt: t0, drawEnd, orderEnd: drawEnd + ORDER_MS,
       prompts: pickPrompts(), show: shuffle(range(ROUNDS)), reveal: false,
     });
@@ -443,6 +481,7 @@ function watchPlayer(c, cb) {
 function ensureGame(st) {
   if (G && G.game === st.game) return;
   G = { game: st.game, n: st.n, drawings: Array(st.n).fill(null), saved: new Set(), cur: -1, slots: null, done: false, sel: null, fetched: false };
+  setPalette(!!st.mono);
   clearPad();
 }
 
@@ -669,6 +708,14 @@ for (const t of ["pointerup", "pointercancel", "lostpointercapture"]) pad.addEve
 $("colors").innerHTML =
   COLORS.map((c, i) => `<button class="sd-swatch${i ? "" : " on"}" data-c="${c}" style="--c:${c}" aria-label="สี ${i + 1}"></button>`).join("") +
   `<button class="sd-swatch eraser" data-c="${ERASER}" aria-label="ยางลบ">🧽</button>`;
+/** One-colour games (host setting) keep only black + the eraser. */
+function setPalette(mono) {
+  color = COLORS[0];
+  $("colors").querySelectorAll(".sd-swatch").forEach((x, i) => {
+    x.hidden = mono && i > 0 && x.dataset.c !== ERASER;
+    x.classList.toggle("on", i === 0);
+  });
+}
 $("colors").addEventListener("click", (e) => {
   const b = e.target.closest("[data-c]");
   if (!b) return;

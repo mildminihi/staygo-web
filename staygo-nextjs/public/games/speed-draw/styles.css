@@ -466,7 +466,10 @@ button.sd-thumb.sel {
 
 /* host settings in the lobby */
 .sd-settings {
-  width: min(100%, 220px);
+  width: min(100%, 260px);
   text-align: left;
   margin-top: 6px;
+}
+.sd-swatch[hidden] {
+  display: none;
 }

@@ -34,13 +34,20 @@ body.sg-page{min-height:0;background:var(--sg-paper)}
 canvas{display:block;touch-action:none}
 .ov{position:absolute;inset:0;display:none;align-items:center;justify-content:center;background:rgba(255,250,240,.9);z-index:5}
 .ov.show{display:flex}
-.panel{width:min(92vw,390px);max-height:94vh;overflow:auto;text-align:center;padding:16px 12px;box-sizing:border-box}
+.panel{width:min(92vw,390px);max-height:94vh;max-height:94dvh;overflow:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y;text-align:center;padding:16px 12px;box-sizing:border-box}
 .logo{font-family:var(--sg-font-card);font-weight:700;font-size:46px;line-height:1;margin:0;letter-spacing:.02em;color:var(--sg-ink)}
 .logo span{display:inline-block;color:var(--c);-webkit-text-stroke:2px var(--sg-ink);paint-order:stroke fill;text-shadow:0 3px 0 var(--sg-ink)}
 .tag{display:inline-block;margin:10px 0 6px;font-family:var(--sg-font-card);font-weight:600;font-size:13px;letter-spacing:.14em;background:var(--sg-yellow);border:2.5px solid var(--sg-ink);border-radius:999px;padding:2px 12px;box-shadow:0 2px 0 var(--sg-ink)}
 h2{font-size:24px;margin:0 0 4px;font-weight:600}
 .sub{color:#6b6461;margin:0 0 12px;font-size:15px}
-.how{text-align:left;font-size:14px;line-height:1.65;margin-bottom:14px;padding:12px 14px}
+.how{text-align:left;font-size:14px;line-height:1.65;margin:14px 0 0;padding:10px 14px}
+.how summary{cursor:pointer;font-weight:600;font-size:15px;list-style:none}
+.how summary::-webkit-details-marker{display:none}
+.how summary::after{content:' ▾';color:var(--sg-blue)}
+.how[open] summary::after{content:' ▴'}
+.how[open] summary{margin-bottom:6px}
+#btnStart{margin-bottom:0}
+.titlebtns{margin:6px 0 14px}
 .how b{color:var(--sg-blue);font-weight:600}
 .shop{text-align:left;margin-bottom:16px;padding:10px 14px}
 .shop .hd{display:flex;justify-content:space-between;align-items:center;font-weight:600;font-size:15px;margin-bottom:4px}
@@ -91,7 +98,17 @@ h2{font-size:24px;margin:0 0 4px;font-weight:600}
   <h1 class="logo"><span style="--c:#1a9bf0">F</span><span style="--c:#2b8ce6">L</span><span style="--c:#3d7fdb">I</span><span style="--c:#ffd21f">P</span><span style="--c:#ffb000">P</span><span style="--c:#e8202a">E</span><span style="--c:#1a9bf0">D</span></h1>
   <div class="tag">PINBALL REBELLION</div>
   <p class="sub">คุณคือลูกเหล็ก ลงหลุมให้ได้!</p>
-  <div class="how sg-panel">
+  <div class="titlebtns">
+    <button class="sg-btn blue block" id="btnStart">เริ่มรัน</button>
+    <div class="btnrow"><button class="sg-btn yellow small" id="btnStats">📊 สถิติ</button></div>
+  </div>
+  <div class="ballbar sg-panel"><div class="dots" id="ballDots"></div><span>เหลือ <b id="ballLeft">10</b> ลูก</span></div>
+  <div class="shop sg-panel">
+    <div class="hd"><span>อัปเกรดรอบนี้</span><span>เศษเหล็ก <b id="scrap">0</b> 🔩</span></div>
+    <div id="shopRows"></div>
+  </div>
+  <details class="how sg-panel">
+    <summary>วิธีเล่น</summary>
     <span id="howControl"><b>ลากถอยหลังแล้วปล่อย</b> = ดีดตัว</span> (ใช้พลัง ⚡) ระหว่างเล็งเวลาจะช้าลง<br>
     <b>ชนบัมเปอร์</b> = สู้ ทำลายได้จะได้ XP และพลังคืน<br>
     <b>ไม้ตีมีเกราะ 🛡️</b> ต้องทำลายบัมเปอร์ 60% ก่อนเกราะถึงจะแตก<br>
@@ -101,14 +118,7 @@ h2{font-size:24px;margin:0 0 4px;font-weight:600}
     ลงหลุมได้ = ไปตู้ถัดไป · HP หมด = จบรัน<br>
     <b>1 รอบมีลูกเหล็ก 10 ลูก</b> อัปเกรดด้วยเศษเหล็กใช้ได้ทั้งรอบ ลูกหมด = เริ่มรอบใหม่ อัปเกรดรีเซ็ตหมด<br>
     <b>เหรียญ 🪙</b> เก็บระหว่างรัน ใช้ซื้อของในร้านระหว่างตู้ จบรันแล้วหายหมด
-  </div>
-  <div class="ballbar sg-panel"><div class="dots" id="ballDots"></div><span>เหลือ <b id="ballLeft">10</b> ลูก</span></div>
-  <div class="shop sg-panel">
-    <div class="hd"><span>อัปเกรดรอบนี้</span><span>เศษเหล็ก <b id="scrap">0</b> 🔩</span></div>
-    <div id="shopRows"></div>
-  </div>
-  <button class="sg-btn blue block" id="btnStart">เริ่มรัน</button>
-  <div class="btnrow"><button class="sg-btn yellow small" id="btnStats">📊 สถิติ</button></div>
+  </details>
   <a class="back" href="/games/">← เกมทั้งหมด</a>
 </div></div>
 
@@ -196,6 +206,8 @@ const STAT0={runs:0,bestMachine:0,bestCleared:0,bossKills:0,bestLevel:0,maxHit:0
   totalDealt:0,totalKills:0,flipBroken:0,maxCoinsRun:0,totalScrap:0,revives:0,playTime:0,rounds:0,bestRound:0};
 let stats={...STAT0};
 try{const s=localStorage.getItem('rpb_stats'); if(s) stats=Object.assign(stats,JSON.parse(s));}catch(e){}
+// first-time players see the how-to open; the start button sits above it either way
+if(!stats.runs) document.querySelector('.how').open=true;
 function saveStats(){try{localStorage.setItem('rpb_stats',JSON.stringify(stats));}catch(e){}}
 const fmt=n=>Math.round(n).toLocaleString('en-US');
 function fmtTime(sec){const m=Math.floor(sec/60); return m>=60?Math.floor(m/60)+' ชม. '+(m%60)+' นาที':(m<1?'<1 นาที':m+' นาที');}
@@ -777,7 +789,7 @@ cv.addEventListener('pointermove',e=>{
 cv.addEventListener('pointerup',e=>{ if(aim.active && aim.mode!=='key' && e.pointerId===aim.id) launch(); });
 cv.addEventListener('pointercancel',e=>{ if(aim.mode!=='key') cancel(); });
 cv.addEventListener('contextmenu',e=>e.preventDefault());
-document.addEventListener('touchmove',e=>e.preventDefault(),{passive:false});
+document.addEventListener('touchmove',e=>{ if(e.target.closest&&e.target.closest('.panel')) return; e.preventDefault(); },{passive:false});
 
 addEventListener('keydown',e=>{
   if(state!=='play') return;

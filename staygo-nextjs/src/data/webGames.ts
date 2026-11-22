@@ -46,6 +46,15 @@ export const WEB_GAMES: WebGame[] = [
     cover: { images: ['/assets/image/lunjua-cover-1.png', '/assets/image/lunjua-cover-2.png'] },
   },
   {
+    href: '/games/flipped/',
+    title: 'FLIPPED: พินบอลกลับด้าน',
+    meta: '1 Player • เกมฟิสิกส์ Roguelike',
+    short: 'คุณคือลูกเหล็ก ไม้ตีคือบอส ลงหลุมให้ได้!',
+    description: 'พินบอลกลับด้านแนว roguelike คุณเป็นลูกเหล็กที่ดีดตัวเองชนบัมเปอร์ ทำลายเกราะแล้วพุ่งชนไม้ตีให้พังจนลงหลุมได้ เก็บบัฟทุกตู้ ตายแล้วเอาเศษเหล็กไปอัปเกรดถาวร เล่นได้ทั้งมือถือและคอม',
+    cover: { images: ['/assets/image/flipped-cover-1.png', '/assets/image/flipped-cover-2.png'] },
+    beta: true,
+  },
+  {
     href: '/games/emoji-match/',
     title: 'จับคู่อีโมจิ',
     meta: '1 Player • เกมจำ',
@@ -60,15 +69,6 @@ export const WEB_GAMES: WebGame[] = [
     short: 'ทอยเต๋าผจญภัยใน Dungeon',
     description: 'เกมผจญภัยด้วยลูกเต๋า วางแผนการต่อสู้แบบเทิร์นเบส รวบรวมไอเทมและเอาชนะบอส',
     cover: { images: ['/assets/image/dice-rouge-cover-1.png', '/assets/image/dice-rouge-cover-2.png'] },
-    beta: true,
-  },
-  {
-    href: '/games/flipped/',
-    title: 'FLIPPED: พินบอลกลับด้าน',
-    meta: '1 Player • เกมฟิสิกส์ Roguelike',
-    short: 'คุณคือลูกเหล็ก ไม้ตีคือบอส ลงหลุมให้ได้!',
-    description: 'พินบอลกลับด้านแนว roguelike คุณเป็นลูกเหล็กที่ดีดตัวเองชนบัมเปอร์ ทำลายเกราะแล้วพุ่งชนไม้ตีให้พังจนลงหลุมได้ เก็บบัฟทุกตู้ ตายแล้วเอาเศษเหล็กไปอัปเกรดถาวร เล่นได้ทั้งมือถือและคอม',
-    cover: { images: ['/assets/image/flipped-cover-1.png', '/assets/image/flipped-cover-2.png'] },
     beta: true,
   },
   {

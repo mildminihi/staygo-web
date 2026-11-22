@@ -60,6 +60,26 @@ h2{font-size:24px;margin:0 0 4px;font-weight:600}
 .stats{font-size:15px;line-height:1.9;margin:10px 0 16px;padding:12px}
 .stats b{font-family:var(--sg-font-card);font-weight:600;color:var(--sg-blue)}
 .owned{font-size:13px;color:#6b6461;margin-top:4px;min-height:16px}
+.btnrow{display:flex;gap:8px;margin-top:10px}
+.btnrow .sg-btn{flex:1}
+.coins{display:inline-block;font-family:var(--sg-font-card);font-weight:600;font-size:16px;background:var(--sg-yellow);border:2.5px solid var(--sg-ink);border-radius:999px;padding:1px 12px;box-shadow:0 2px 0 var(--sg-ink);margin:2px 0 6px}
+.item{display:flex;gap:10px;align-items:center;text-align:left;background:#fff;border:3px solid var(--sg-ink);border-radius:14px;box-shadow:0 3px 0 var(--sg-ink);padding:9px 10px}
+.item .ic{font-size:24px;width:40px;height:40px;flex:none;display:flex;align-items:center;justify-content:center;background:#fff3d6;border:2.5px solid var(--sg-ink);border-radius:10px}
+.item .tx{flex:1;min-width:0}
+.item .nm{font-weight:600;font-size:15px}
+.item .ds{font-size:12px;color:#6b6461;line-height:1.4}
+.item.sold{opacity:.45}
+.inv{font-size:13px;color:#6b6461;margin:8px 0 2px;min-height:18px}
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+.sbox{background:#fff;border:2.5px solid var(--sg-ink);border-radius:12px;box-shadow:0 2px 0 var(--sg-ink);padding:8px 6px}
+.sbox b{display:block;font-family:var(--sg-font-card);font-weight:600;font-size:22px;color:var(--sg-blue);line-height:1.2}
+.sbox span{font-size:12px;color:#6b6461}
+.ballbar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px;padding:10px 14px;font-size:14px}
+.ballbar .dots{display:flex;flex-wrap:wrap;gap:4px}
+.ballbar .dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--sg-ink);background:#fff;box-sizing:border-box}
+.ballbar .dot.on{background:#b9c3cc;box-shadow:inset -2px -2px 0 #8a96a1}
+.ballbar b{font-family:var(--sg-font-card);font-size:18px}
+.danger{font-size:12px;color:#6b6461;margin:6px 0 0}
 .back{display:inline-block;margin-top:14px;color:#6b6461;font-size:14px;text-decoration:none}
 .back:hover{color:var(--sg-ink);text-decoration:underline}
 </style>
@@ -78,25 +98,46 @@ h2{font-size:24px;margin:0 0 4px;font-weight:600}
     <b>ชนไม้ตีแรงๆ ตอนมันไม่ได้ตี</b> = เราตีบอส · <b>โดนมันตี</b> = เราเจ็บ<br>
     แต่ละตู้มีรูปทรงโต๊ะต่างกัน บางตู้มีกังหันหมุนหรือบัมเปอร์ที่เคลื่อนที่<br>
     ไม้ตียิ่งเจ็บยิ่งห้อยลงจนหลุมกว้างขึ้น ถ้าพังไปข้างหนึ่งหลุมจะเปิดโล่ง<br>
-    ลงหลุมได้ = ไปตู้ถัดไป · HP หมด = จบรัน
+    ลงหลุมได้ = ไปตู้ถัดไป · HP หมด = จบรัน<br>
+    <b>1 รอบมีลูกเหล็ก 10 ลูก</b> อัปเกรดด้วยเศษเหล็กใช้ได้ทั้งรอบ ลูกหมด = เริ่มรอบใหม่ อัปเกรดรีเซ็ตหมด<br>
+    <b>เหรียญ 🪙</b> เก็บระหว่างรัน ใช้ซื้อของในร้านระหว่างตู้ จบรันแล้วหายหมด
   </div>
+  <div class="ballbar sg-panel"><div class="dots" id="ballDots"></div><span>เหลือ <b id="ballLeft">10</b> ลูก</span></div>
   <div class="shop sg-panel">
-    <div class="hd"><span>อัปเกรดถาวร</span><span>เศษเหล็ก <b id="scrap">0</b> 🔩</span></div>
+    <div class="hd"><span>อัปเกรดรอบนี้</span><span>เศษเหล็ก <b id="scrap">0</b> 🔩</span></div>
     <div id="shopRows"></div>
   </div>
   <button class="sg-btn blue block" id="btnStart">เริ่มรัน</button>
+  <div class="btnrow"><button class="sg-btn yellow small" id="btnStats">📊 สถิติ</button></div>
   <a class="back" href="/games/">← เกมทั้งหมด</a>
+</div></div>
+
+<div class="ov" id="ovShop"><div class="panel">
+  <h2>ร้านค้ากลางทาง 🛒</h2>
+  <p class="sub" style="margin-bottom:4px">ของในร้านใช้ได้แค่รันนี้</p>
+  <div class="coins">🪙 <span id="shopCoins">0</span></div>
+  <div class="cards" id="shopItems"></div>
+  <div class="inv" id="shopInv"></div>
+  <div class="btnrow"><button class="sg-btn yellow small" id="btnReroll">🎲 สุ่มใหม่</button><button class="sg-btn blue small" id="btnNext">ไปตู้ถัดไป ▶</button></div>
+</div></div>
+
+<div class="ov" id="ovStats"><div class="panel">
+  <h2>สถิติ 📊</h2>
+  <div class="sgrid" id="statGrid"></div>
+  <button class="sg-btn blue block" id="btnStatsBack">กลับ</button>
+  <div class="btnrow"><button class="sg-btn red small" id="btnReset">🗑️ เริ่มใหม่ทั้งหมด</button></div>
+  <p class="danger" id="resetNote">ลบรอบปัจจุบัน (ลูกเหล็ก เศษเหล็ก อัปเกรด) และสถิติทั้งหมด</p>
 </div></div>
 
 <div class="ov" id="ovBuff"><div class="panel">
   <h2 id="buffTitle">ผ่านตู้!</h2>
-  <p class="sub" style="margin-bottom:4px">เลือกบัฟ 1 อย่าง</p>
+  <p class="sub" style="margin-bottom:4px" id="buffSub">เลือกบัฟ 1 อย่าง</p>
   <div class="cards" id="cards"></div>
   <div class="owned" id="owned"></div>
 </div></div>
 
 <div class="ov" id="ovOver"><div class="panel">
-  <h2>ลูกเหล็กพังแล้ว 💥</h2>
+  <h2 id="overTitle">ลูกเหล็กพังแล้ว 💥</h2>
   <div class="stats sg-panel" id="overStats"></div>
   <button class="sg-btn blue block" id="btnMenu">กลับเมนู</button>
   <a class="back" href="/games/">← เกมทั้งหมด</a>
@@ -122,13 +163,21 @@ try{ desktop=matchMedia('(hover: hover) and (pointer: fine)').matches; }catch(e)
 if(desktop) document.getElementById('howControl').innerHTML='<b>ชี้เมาส์แล้วค้างคลิก</b> (หรือ <b>A/D + ค้าง Space</b>) ปล่อย = ดีดตัว';
 
 // ---------- meta progression ----------
-let meta={scrap:0,hp:0,atk:0,en:0};
-try{const s=localStorage.getItem('rpb_meta'); if(s) meta=Object.assign(meta,JSON.parse(s));}catch(e){}
+// One round = BALLS_PER_ROUND balls. Scrap upgrades last for the round; when the last ball breaks everything resets.
+const BALLS_PER_ROUND=10;
+const freshMeta=()=>({scrap:0,hp:0,atk:0,en:0,balls:BALLS_PER_ROUND,used:0,bought:0,cleared:0,bestRun:0});
+let meta=freshMeta();
+try{const s=localStorage.getItem('rpb_meta'); if(s){ const o=JSON.parse(s); if(o.balls!==undefined) meta=Object.assign(meta,o); }}catch(e){}
+// saves from before the round system had unlimited upgrades: they start a fresh round
 function saveMeta(){try{localStorage.setItem('rpb_meta',JSON.stringify(meta));}catch(e){}}
 const UPG=[{k:'hp',name:'HP เริ่มต้น +15'},{k:'atk',name:'ATK เริ่มต้น +2'},{k:'en',name:'พลังเริ่มต้น +15'}];
 const upCost=lv=>15+lv*15;
 function renderShop(){
   document.getElementById('scrap').textContent=meta.scrap;
+  const total=Math.max(BALLS_PER_ROUND,meta.used+meta.balls);
+  document.getElementById('ballDots').innerHTML=Array.from({length:total},(_,i)=>`<span class="dot${i>=meta.used?' on':''}"></span>`).join('');
+  document.getElementById('ballLeft').textContent=meta.balls;
+  document.getElementById('btnStart').textContent=`เริ่มรัน · ลูกที่ ${meta.used+1}`;
   const box=document.getElementById('shopRows'); box.innerHTML='';
   UPG.forEach(u=>{
     const lv=meta[u.k], c=upCost(lv);
@@ -141,6 +190,54 @@ function renderShop(){
   });
 }
 renderShop();
+
+// ---------- lifetime stats ----------
+const STAT0={runs:0,bestMachine:0,bestCleared:0,bossKills:0,bestLevel:0,maxHit:0,maxTakenHit:0,maxDealtRun:0,maxTakenRun:0,
+  totalDealt:0,totalKills:0,flipBroken:0,maxCoinsRun:0,totalScrap:0,revives:0,playTime:0,rounds:0,bestRound:0};
+let stats={...STAT0};
+try{const s=localStorage.getItem('rpb_stats'); if(s) stats=Object.assign(stats,JSON.parse(s));}catch(e){}
+function saveStats(){try{localStorage.setItem('rpb_stats',JSON.stringify(stats));}catch(e){}}
+const fmt=n=>Math.round(n).toLocaleString('en-US');
+function fmtTime(sec){const m=Math.floor(sec/60); return m>=60?Math.floor(m/60)+' ชม. '+(m%60)+' นาที':(m<1?'<1 นาที':m+' นาที');}
+function renderStats(){
+  const rows=[
+    [stats.bestMachine?'ตู้ที่ '+stats.bestMachine:'-','ไปไกลสุด'],
+    [fmt(stats.bestCleared),'ผ่านตู้มากสุดใน 1 รัน'],
+    [fmt(stats.maxHit),'ดาเมจแรงสุดต่อครั้ง'],
+    [fmt(stats.maxTakenHit),'โดนแรงสุดต่อครั้ง'],
+    [fmt(stats.maxDealtRun),'ทำดาเมจรวมสูงสุด/รัน'],
+    [fmt(stats.maxTakenRun),'รับดาเมจรวมสูงสุด/รัน'],
+    [fmt(stats.bestLevel),'เลเวลสูงสุด'],
+    [fmt(stats.maxCoinsRun),'เหรียญมากสุด/รัน 🪙'],
+    [fmt(stats.bestRound),'ผ่านตู้รวมสูงสุด/รอบ'],
+    [fmt(stats.rounds),'จบรอบ (10 ลูก) ไปแล้ว'],
+    [fmt(stats.runs),'เล่นไปแล้ว (รัน)'],
+    [fmt(stats.bossKills),'ล้มตู้บอส 👑'],
+    [fmt(stats.totalKills),'ทำลายบัมเปอร์รวม'],
+    [fmt(stats.flipBroken),'ทำไม้ตีพังรวม'],
+    [fmt(stats.totalDealt),'ดาเมจรวมทั้งหมด'],
+    [fmt(stats.revives),'ใช้ชีวิตสำรอง 💖'],
+    [fmt(stats.totalScrap),'เศษเหล็กที่หาได้ 🔩'],
+    [fmtTime(stats.playTime),'เวลาเล่นรวม'],
+  ];
+  document.getElementById('statGrid').innerHTML=rows.map(([v,k])=>`<div class="sbox"><b>${v}</b><span>${k}</span></div>`).join('');
+}
+let resetArm=0;
+function disarmReset(){ resetArm=0; document.getElementById('btnReset').textContent='🗑️ เริ่มใหม่ทั้งหมด'; document.getElementById('resetNote').textContent='ลบรอบปัจจุบัน (ลูกเหล็ก เศษเหล็ก อัปเกรด) และสถิติทั้งหมด'; }
+document.getElementById('btnStats').onclick=()=>{ renderStats(); disarmReset(); hideAll(); document.getElementById('ovStats').classList.add('show'); };
+document.getElementById('btnStatsBack').onclick=()=>{ hideAll(); renderShop(); document.getElementById('ovTitle').classList.add('show'); };
+document.getElementById('btnReset').onclick=()=>{
+  if(Date.now()-resetArm>4000){
+    resetArm=Date.now();
+    document.getElementById('btnReset').textContent='แน่ใจนะ? กดอีกครั้งเพื่อลบ';
+    document.getElementById('resetNote').textContent='ลบแล้วกู้คืนไม่ได้';
+    setTimeout(()=>{ if(resetArm && Date.now()-resetArm>=4000) disarmReset(); },4100);
+    return;
+  }
+  meta=freshMeta(); stats={...STAT0};
+  saveMeta(); saveStats(); renderStats(); renderShop(); disarmReset();
+  document.getElementById('resetNote').textContent='ล้างข้อมูลแล้ว เริ่มใหม่ได้เลย ✨';
+};
 
 // ---------- table geometry ----------
 const R=10, G=640;
@@ -211,6 +308,18 @@ const BUFFS=[
  {id:'pierce',name:'พุ่งทะลวง',icon:'☄️',desc:'ชนด้วยความเร็วสูง ดาเมจ x1.6',apply:s=>{s.pierce+=.6;}},
  {id:'vital',name:'หัวใจเหล็ก',icon:'❤️',desc:'HP สูงสุด +30 และฟื้น HP เต็ม',apply:s=>{s.maxHp+=30;ball.hp=s.maxHp;}},
 ];
+// In-run shop: bought with run coins, gone when the run ends.
+const ITEMS=[
+ {id:'ball',name:'ลูกเหล็กเพิ่ม',icon:'⚪',price:()=>30+15*meta.bought,desc:'เพิ่มลูกเหล็กในรอบนี้ +1 ลูก ราคาขึ้นทุกครั้งที่ซื้อ',can:()=>true,buy:()=>{meta.balls++; meta.bought++; saveMeta();}},
+ {id:'life',name:'ชีวิตสำรอง',icon:'💖',price:40,desc:'HP หมดแล้วฟื้นกลับมา 50% (ถือได้สูงสุด 2)',can:()=>run.lives<2,buy:()=>{run.lives++;}},
+ {id:'guard',name:'โล่กันตี x3',icon:'🛡️',price:18,desc:'กันดาเมจได้ 3 ครั้ง ไม่ว่าโดนไม้ตีหรือหนาม',can:()=>true,buy:()=>{run.guard+=3;}},
+ {id:'potion',name:'ยาซ่อมลูกเหล็ก',icon:'🧪',price:12,desc:'ฟื้น HP 40% ทันที',can:()=>ball.hp<S.maxHp,buy:()=>{ball.hp=Math.min(S.maxHp,ball.hp+S.maxHp*.4);}},
+ {id:'bomb',name:'ระเบิดเกราะ',icon:'💣',price:24,desc:'ตู้ถัดไป ไม้ตีเริ่มแบบเกราะแตก ชนได้เต็มแรงทันที',can:()=>!run.next.bomb,buy:()=>{run.next.bomb=true;}},
+ {id:'hammer',name:'ค้อนปอนด์',icon:'🔨',price:22,desc:'ตู้ถัดไป ไม้ตีทั้งสองข้างเริ่มด้วย HP แค่ 70%',can:()=>!run.next.hammer,buy:()=>{run.next.hammer=true;}},
+ {id:'glue',name:'กาวเหนียว',icon:'🐌',price:18,desc:'ตู้ถัดไป ไม้ตีตอบสนองช้าลงเกือบเท่าตัว',can:()=>!run.next.glue,buy:()=>{run.next.glue=true;}},
+ {id:'battery',name:'แบตสำรอง',icon:'🔋',price:14,desc:'ดีดตัวฟรีไม่ใช้พลัง 4 ครั้ง',can:()=>true,buy:()=>{run.freeDash+=4;}},
+ {id:'card',name:'การ์ดบัฟ',icon:'🃏',price:35,desc:'เลือกบัฟเพิ่มอีก 1 อย่างทันที',can:()=>true,buy:()=>{ showBuffs('การ์ดบัฟ 🃏','เลือกบัฟเพิ่ม 1 อย่าง',openShop); return true; }},
+];
 const NAMES=['ตู้มือใหม่','ตู้หน้าปากซอย','ตู้บอส: ไม้ตีคู่หูเหล็ก','ตู้ไฟนีออน','ตู้สนิมเขรอะ','ตู้บอส: ไม้ตียักษ์','ตู้ใต้ดิน','ตู้ห้างร้าง','ตู้บอส: ไม้ตีปีศาจ'];
 
 // ---------- state ----------
@@ -237,9 +346,12 @@ function cfg(n){
 }
 
 function startRun(){
+  if(meta.balls<=0) meta=freshMeta();
+  meta.balls--; meta.used++; saveMeta();
   S={maxHp:100+meta.hp*15, atk:10+meta.atk*2, def:0, enMax:100+meta.en*15, regen:9, cost:30, power:950,
      bounce:.55, kick:220, slow:.18, aimDrain:14, burn:0, thorns:0, leech:0, chain:0, pierce:0};
-  run={machine:1,kills:0,lvl:1,xp:0,buffs:{}};
+  run={machine:1,kills:0,lvl:1,xp:0,buffs:{},coins:0,coinsEarned:0,lives:0,guard:0,freeDash:0,next:{},
+       dealt:0,taken:0,maxHit:0,maxTakenHit:0,flipBroken:0,bossKills:0,time:0,revives:0};
   ball={x:200,y:50,vx:0,vy:0,hp:S.maxHp,en:S.enMax,flash:0};
   launched=false;
   setupMachine();
@@ -273,8 +385,14 @@ function setupMachine(){
     bumpers.push({x,y,ox:x,amp,ph:Math.random()*6.28,msp:1.1+Math.random()*.9,r,type,hp,maxHp:hp,alive:true,hitCd:0,flash:0,burn:0,burnDps:0,pulse:0});
   }
   M.shieldReq=Math.ceil(bumpers.length*.6);
+  const nx=run.next||{};
+  if(nx.bomb) M.shieldReq=0;
+  if(nx.glue) M.react*=1.9;
+  if(nx.hammer) for(const f of flippers) f.hp=Math.round(f.maxHp*.7);
+  const used=[nx.bomb&&'💣',nx.hammer&&'🔨',nx.glue&&'🐌'].filter(Boolean).join(' ');
+  run.next={};
   const nm=NAMES[run.machine-1]||(M.boss?`ตู้บอส ${run.machine}`:`ตู้ที่ ${run.machine}`);
-  banner={t:`ตู้ที่ ${run.machine}`, s:`${nm} · โต๊ะ${L.name}`, life:1.9, boss:M.boss};
+  banner={t:`ตู้ที่ ${run.machine}`, s:`${nm} · โต๊ะ${L.name}`+(used?' · '+used:''), life:1.9, boss:M.boss};
 }
 function shielded(){return run.mkills<M.shieldReq;}
 function mkFlip(side){
@@ -313,16 +431,29 @@ function hitPower(impact){
 }
 
 // ---------- combat ----------
+function addCoins(n,x,y){ n=Math.round(n); if(n<=0) return; run.coins+=n; run.coinsEarned+=n; float(x,y,'+'+n+' 🪙','#e09a00',13); }
 function hurtBall(d,x,y,fromFlipper){
   if(fromFlipper){ if(ball.iframe>0) return; ball.iframe=.6; }
+  if(run.guard>0){ run.guard--; float(x,y,'กันได้ 🛡️','#1a9bf0',15); burst(ball.x,ball.y,'#1a9bf0',12,200); return; }
   d=Math.max(1,Math.round(d-S.def));
   ball.hp-=d; ball.flash=.25; shake=Math.max(shake,7);
+  run.taken+=d; if(d>run.maxTakenHit) run.maxTakenHit=d;
   float(x,y,'-'+d,'#e8202a',17);
-  if(ball.hp<=0){ball.hp=0; gameOver();}
+  if(ball.hp<=0){
+    if(run.lives>0){
+      run.lives--; run.revives++; ball.hp=Math.round(S.maxHp*.5); ball.iframe=1.5;
+      ball.en=S.enMax; burst(ball.x,ball.y,'#e8202a',30,320);
+      banner={t:'ชีวิตสำรอง! 💖',s:'ฟื้นกลับมา 50% ลุยต่อ',life:1.4,boss:false};
+      return;
+    }
+    ball.hp=0; gameOver();
+  }
 }
+function trackHit(d){ if(d>run.maxHit) run.maxHit=d; }
 function healBall(v,x,y){ const before=ball.hp; ball.hp=Math.min(S.maxHp,ball.hp+v); const g=Math.round(ball.hp-before); if(g>0) float(x,y,'+'+g,'#22b573',14); }
 function damageBumper(b,d,col){
   if(!b.alive) return;
+  run.dealt+=Math.min(d,b.hp); if(col) trackHit(d);
   b.hp-=d; b.flash=.12;
   if(col) float(b.x+(Math.random()-.5)*10,b.y-b.r,Math.round(d)+'',col,14);
   if(b.hp<=0) killBumper(b);
@@ -336,6 +467,7 @@ function killBumper(b){
   ball.en=Math.min(S.enMax,ball.en+12);
   float(b.x,b.y,'+'+xp+' XP','#1a9bf0',13);
   if(S.leech) healBall(S.leech,ball.x,ball.y-14);
+  addCoins(1+Math.floor(run.machine/2)+(b.type==='a'?2:0),b.x,b.y+16);
   if(b.type==='h') healBall(18,b.x,b.y+14);
 }
 function gainXp(x){
@@ -362,10 +494,12 @@ function hitBumper(b,impact){
 function damageFlipper(f,d,silent){
   if(!f.alive) return;
   const sh=shielded(); if(sh) d*=.25;
+  run.dealt+=Math.min(d,f.hp); if(!silent) trackHit(d);
   f.hp-=d;
   if(!silent){ f.flash=.15; const t=tipOf(f); float((f.p.x+t.x)/2,(f.p.y+t.y)/2-14,Math.max(1,Math.round(d))+(sh?' 🛡️':''),sh?'#1a9bf0':'#e09a00',16); }
   if(f.hp<=0){
-    f.hp=0; f.alive=false; shake=12;
+    f.hp=0; f.alive=false; shake=12; run.flipBroken++;
+    addCoins(5,(f.p.x+tipOf(f).x)/2,(f.p.y+tipOf(f).y)/2+18);
     const t=tipOf(f); burst((f.p.x+t.x)/2,(f.p.y+t.y)/2,'#e8202a',40,340);
     banner={t:f.side<0?'ไม้ตีซ้ายพัง!':'ไม้ตีขวาพัง!',s:'หลุมเปิดแล้ว ลงไปเลย!',life:1.4,boss:false};
   }
@@ -456,6 +590,7 @@ function update(rdt){
   if(aim.active && S.aimDrain>0) ball.en=Math.max(0,ball.en-S.aimDrain*rdt);
   else if(!aim.active) ball.en=Math.min(S.enMax,ball.en+S.regen*rdt);
   const dt=rdt*timeScale;
+  run.time+=rdt;
 
   aiFlippers(dt);
   const N=8; for(let i=0;i<N;i++){ step(dt/N); if(state!=='play') return; }
@@ -492,28 +627,99 @@ function hideAll(){document.querySelectorAll('.ov').forEach(o=>o.classList.remov
 function clearMachine(){
   state='buff'; aim.active=false; timeScale=1;
   healBall(Math.round(S.maxHp*.15),200,600);
-  document.getElementById('buffTitle').textContent=`ผ่าน${M.boss?'ตู้บอส':'ตู้ที่ '+run.machine}! 🎉`;
+  if(M.boss) run.bossKills++;
+  const reward=Math.round((8+2*run.machine)*(M.boss?1.5:1));
+  run.coins+=reward; run.coinsEarned+=reward;
+  run.shop=null; run.reroll=0;
+  showBuffs(`ผ่าน${M.boss?'ตู้บอส':'ตู้ที่ '+run.machine}! 🎉`,`ได้ +${reward} 🪙 · เลือกบัฟ 1 อย่าง`,openShop);
+}
+function ownedText(){
+  return Object.entries(run.buffs).map(([id,n])=>{const b=BUFFS.find(x=>x.id===id);return b.icon+(n>1?'x'+n:'');}).join(' ');
+}
+function showBuffs(title,sub,then){
+  hideAll();
+  document.getElementById('buffTitle').textContent=title;
+  document.getElementById('buffSub').textContent=sub;
   const pool=[...BUFFS].sort(()=>Math.random()-.5).slice(0,3);
   const box=document.getElementById('cards'); box.innerHTML='';
   pool.forEach(b=>{
     const el=document.createElement('button'); el.className='card';
     const n=run.buffs[b.id]||0;
     el.innerHTML=`<div class="ic">${b.icon}</div><div><div class="nm">${b.name}</div><div class="ds">${b.desc}</div>${n?`<div class="st">มีแล้ว x${n} · ซ้อนได้</div>`:''}</div>`;
-    el.onclick=()=>{ b.apply(S); run.buffs[b.id]=n+1; run.machine++; setupMachine(); hideAll(); state='play'; };
+    el.onclick=()=>{ b.apply(S); run.buffs[b.id]=n+1; then(); };
     box.appendChild(el);
   });
-  const owned=Object.entries(run.buffs).map(([id,n])=>{const b=BUFFS.find(x=>x.id===id);return b.icon+(n>1?'x'+n:'');}).join(' ');
+  const owned=ownedText();
   document.getElementById('owned').textContent=owned?'บัฟที่มี: '+owned:'';
   document.getElementById('ovBuff').classList.add('show');
 }
+const rerollCost=()=>5+run.reroll*4;
+const priceOf=it=>typeof it.price==='function'?it.price():it.price;
+// the extra ball is always on sale; the other four slots are random
+function rollShop(){ run.shop=[{id:'ball',sold:false},...ITEMS.filter(it=>it.id!=='ball').sort(()=>Math.random()-.5).slice(0,4).map(it=>({id:it.id,sold:false}))]; }
+function openShop(){
+  hideAll(); state='shop';
+  if(!run.shop) rollShop();
+  renderRunShop();
+  document.getElementById('ovShop').classList.add('show');
+}
+function renderRunShop(){
+  document.getElementById('shopCoins').textContent=run.coins;
+  const box=document.getElementById('shopItems'); box.innerHTML='';
+  run.shop.forEach(slot=>{
+    const it=ITEMS.find(x=>x.id===slot.id);
+    const el=document.createElement('div'); el.className='item'+(slot.sold?' sold':'');
+    el.innerHTML=`<div class="ic">${it.icon}</div><div class="tx"><div class="nm">${it.name}</div><div class="ds">${it.desc}</div></div>`;
+    const b=document.createElement('button'); b.className='buy sg-btn small yellow';
+    const ok=it.can();
+    const pr=priceOf(it);
+    b.textContent=slot.sold?'ซื้อแล้ว':(!ok?'เต็มแล้ว':`${pr} 🪙`);
+    b.disabled=slot.sold||!ok||run.coins<pr;
+    b.onclick=()=>{
+      if(slot.sold||!it.can()||run.coins<pr) return;
+      run.coins-=pr; slot.sold=true;
+      if(!it.buy()) renderRunShop(); // card item opens the buff picker, which returns here
+    };
+    el.appendChild(b); box.appendChild(el);
+  });
+  const rc=rerollCost(), rb=document.getElementById('btnReroll');
+  rb.textContent=`🎲 สุ่มใหม่ ${rc} 🪙`; rb.disabled=run.coins<rc;
+  const inv=[
+    `HP ${Math.ceil(ball.hp)}/${Math.round(S.maxHp)}`, `⚪ สำรอง ${meta.balls} ลูก`,
+    run.lives&&'💖x'+run.lives, run.guard&&'🛡️x'+run.guard, run.freeDash&&'🔋x'+run.freeDash,
+    run.next.bomb&&'💣', run.next.hammer&&'🔨', run.next.glue&&'🐌',
+  ].filter(Boolean).join(' · ');
+  const owned=ownedText();
+  document.getElementById('shopInv').innerHTML=inv+(owned?'<br>บัฟ: '+owned:'');
+}
+document.getElementById('btnReroll').onclick=()=>{ const c=rerollCost(); if(run.coins<c) return; run.coins-=c; run.reroll++; rollShop(); renderRunShop(); };
+document.getElementById('btnNext').onclick=()=>{ run.machine++; setupMachine(); hideAll(); state='play'; };
 function gameOver(){
   if(state!=='play') return;
   state='over'; aim.active=false; timeScale=1;
   const cleared=run.machine-1;
   const gain=cleared*12+run.kills+run.lvl*2;
-  meta.scrap+=gain; saveMeta();
+  meta.scrap+=gain; meta.cleared+=cleared; meta.bestRun=Math.max(meta.bestRun,run.machine);
+  const roundOver=meta.balls<=0;
+  const roundSum={cleared:meta.cleared,used:meta.used,best:meta.bestRun};
+  const rec=[];
+  const best=(k,v,label)=>{ if(v>stats[k]){ if(stats.runs>0&&v>0&&label) rec.push(label); stats[k]=v; } };
+  best('bestMachine',run.machine,'ไปไกลสุด'); best('bestCleared',cleared); best('bestLevel',run.lvl);
+  best('maxHit',Math.round(run.maxHit),'ดาเมจแรงสุด'); best('maxTakenHit',run.maxTakenHit);
+  best('maxDealtRun',Math.round(run.dealt),'ดาเมจรวม'); best('maxTakenRun',run.taken); best('maxCoinsRun',run.coinsEarned,'เหรียญ');
+  stats.runs++; stats.bossKills+=run.bossKills; stats.totalKills+=run.kills; stats.flipBroken+=run.flipBroken;
+  stats.totalDealt+=Math.round(run.dealt); stats.totalScrap+=gain; stats.revives+=run.revives; stats.playTime+=run.time;
+  if(roundOver){ stats.rounds++; best('bestRound',roundSum.cleared,'ผ่านตู้รวมทั้งรอบ'); meta=freshMeta(); }
+  saveMeta(); saveStats();
+  document.getElementById('overTitle').textContent=roundOver?'ลูกเหล็กหมดแล้ว! จบรอบ 🏁':'ลูกเหล็กพังแล้ว 💥';
+  document.getElementById('btnMenu').textContent=roundOver?'เริ่มรอบใหม่':'กลับเมนู';
   document.getElementById('overStats').innerHTML=
-    `ไปถึง: <b>ตู้ที่ ${run.machine}</b><br>ผ่านไป: <b>${cleared}</b> ตู้ · เลเวล <b>${run.lvl}</b><br>ทำลายบัมเปอร์: <b>${run.kills}</b><br>ได้เศษเหล็ก: <b>+${gain} 🔩</b>`;
+    `ไปถึง: <b>ตู้ที่ ${run.machine}</b><br>ผ่านไป: <b>${cleared}</b> ตู้ · เลเวล <b>${run.lvl}</b><br>ทำลายบัมเปอร์: <b>${run.kills}</b> · ไม้ตีพัง: <b>${run.flipBroken}</b><br>`+
+    `ดาเมจรวม: <b>${fmt(run.dealt)}</b> · แรงสุด: <b>${fmt(run.maxHit)}</b><br>รับดาเมจรวม: <b>${fmt(run.taken)}</b><br>`+
+    `เหรียญที่เก็บได้: <b>${run.coinsEarned} 🪙</b><br>`+
+    (roundOver?`<hr style="border:0;border-top:2px dashed #e2dccf;margin:8px 0">สรุปรอบ: ใช้ไป <b>${roundSum.used}</b> ลูก<br>ผ่านตู้รวม <b>${roundSum.cleared}</b> · ไกลสุด <b>ตู้ที่ ${roundSum.best}</b><br>อัปเกรดและเศษเหล็กรีเซ็ตแล้ว`
+              :`ได้เศษเหล็ก: <b>+${gain} 🔩</b> · เหลือ <b>${meta.balls}</b> ลูก`)+
+    (rec.length?`<br><span class="st" style="display:inline-block;margin-top:6px;font-size:13px;background:var(--sg-yellow);border:2px solid var(--sg-ink);border-radius:999px;padding:0 10px">🏆 สถิติใหม่: ${rec.join(', ')}</span>`:'');
   setTimeout(()=>document.getElementById('ovOver').classList.add('show'),500);
 }
 document.getElementById('btnStart').onclick=startRun;
@@ -543,8 +749,11 @@ function launch(){
   if(!aim.active) return;
   const v=aimVec(); aim.active=false;
   if(!v||!v.ok) return; // too short = cancel, no energy spent
-  if(ball.en<S.cost){ exhaustedT=1; float(ball.x,ball.y-20,'หมดแรง!','#ff8a00',15); return; }
-  ball.en-=S.cost;
+  if(run.freeDash>0) run.freeDash--;
+  else {
+    if(ball.en<S.cost){ exhaustedT=1; float(ball.x,ball.y-20,'หมดแรง!','#ff8a00',15); return; }
+    ball.en-=S.cost;
+  }
   const pw=S.power*(.25+.75*v.p);
   ball.vx=v.x*pw; ball.vy=v.y*pw; launched=true;
   burst(ball.x,ball.y,'#1a9bf0',12,220);
@@ -765,7 +974,7 @@ function drawAim(){
     ctx.strokeStyle=YELLOW; ctx.lineWidth=3.5;
     ctx.beginPath(); ctx.arc(ball.x,ball.y,R+13,-Math.PI/2,-Math.PI/2+6.283*v.p); ctx.stroke();
   }
-  if(ball.en<S.cost){ ctx.textAlign='center'; label('หมดแรง!',ball.x,ball.y-24,`600 13px ${FTH}`,ORANGE,'#fff',4); }
+  if(ball.en<S.cost && !run.freeDash){ ctx.textAlign='center'; label('หมดแรง!',ball.x,ball.y-24,`600 13px ${FTH}`,ORANGE,'#fff',4); }
 }
 function drawKeyArrow(){
   const dx=Math.cos(keyAng), dy=Math.sin(keyAng);
@@ -801,6 +1010,9 @@ function drawHUD(){
   const tired=ball.en<S.cost;
   meter(32,26,140,12,ball.en/S.enMax,tired?(exhaustedT>0&&Math.floor(exhaustedT*10)%2?'#fff':ORANGE):BLUE);
   ctx.fillStyle=INK; ctx.fillRect(32+140*S.cost/S.enMax,24,2,16);
+  label('🪙 '+run.coins,182,19,`600 13px ${FNUM}`,INK);
+  const inv=['⚪'+meta.balls, run.lives&&'💖'+run.lives, run.guard&&'🛡️'+run.guard, run.freeDash&&'🔋'+run.freeDash].filter(Boolean).join(' ');
+  if(inv) label(inv,182,37,`500 11px ${FNUM}`,INK);
   ctx.textAlign='right';
   label((M.boss?'👑 ':'')+'ตู้ที่ '+run.machine,390,20,`600 15px ${FTH}`,M.boss?RED:INK);
   const need=25+15*run.lvl;

@@ -116,7 +116,7 @@ h2{font-size:24px;margin:0 0 4px;font-weight:600}
     แต่ละตู้มีรูปทรงโต๊ะต่างกัน บางตู้มีกังหันหมุนหรือบัมเปอร์ที่เคลื่อนที่<br>
     ไม้ตียิ่งเจ็บยิ่งห้อยลงจนหลุมกว้างขึ้น ถ้าพังไปข้างหนึ่งหลุมจะเปิดโล่ง<br>
     ลงหลุมได้ = ไปตู้ถัดไป · HP หมด = จบรัน<br>
-    <b>1 รอบมีลูกเหล็ก 10 ลูก</b> อัปเกรดด้วยเศษเหล็กใช้ได้ทั้งรอบ ลูกหมด = เริ่มรอบใหม่ อัปเกรดรีเซ็ตหมด<br>
+    <b>1 รอบมีลูกเหล็ก 3 ลูก</b> อัปเกรดด้วยเศษเหล็กใช้ได้ทั้งรอบ ลูกหมด = เริ่มรอบใหม่ อัปเกรดรีเซ็ตหมด<br>
     <b>เหรียญ 🪙</b> เก็บระหว่างรัน ใช้ซื้อของในร้านระหว่างตู้ จบรันแล้วหายหมด
   </details>
   <a class="back" href="/games/">← เกมทั้งหมด</a>
@@ -174,11 +174,13 @@ if(desktop) document.getElementById('howControl').innerHTML='<b>ชี้เม�
 
 // ---------- meta progression ----------
 // One round = BALLS_PER_ROUND balls. Scrap upgrades last for the round; when the last ball breaks everything resets.
-const BALLS_PER_ROUND=10;
+const BALLS_PER_ROUND=3;
 const freshMeta=()=>({scrap:0,hp:0,atk:0,en:0,balls:BALLS_PER_ROUND,used:0,bought:0,cleared:0,bestRun:0});
 let meta=freshMeta();
 try{const s=localStorage.getItem('rpb_meta'); if(s){ const o=JSON.parse(s); if(o.balls!==undefined) meta=Object.assign(meta,o); }}catch(e){}
 // saves from before the round system had unlimited upgrades: they start a fresh round
+// saves from the 10-ball rounds: trim leftover balls to the 3-ball rule, but keep at least the current one
+meta.balls=Math.max(1,Math.min(meta.balls,BALLS_PER_ROUND-meta.used+meta.bought));
 function saveMeta(){try{localStorage.setItem('rpb_meta',JSON.stringify(meta));}catch(e){}}
 const UPG=[{k:'hp',name:'HP เริ่มต้น +15'},{k:'atk',name:'ATK เริ่มต้น +2'},{k:'en',name:'พลังเริ่มต้น +15'}];
 const upCost=lv=>15+lv*15;
@@ -222,7 +224,7 @@ function renderStats(){
     [fmt(stats.bestLevel),'เลเวลสูงสุด'],
     [fmt(stats.maxCoinsRun),'เหรียญมากสุด/รัน 🪙'],
     [fmt(stats.bestRound),'ผ่านตู้รวมสูงสุด/รอบ'],
-    [fmt(stats.rounds),'จบรอบ (10 ลูก) ไปแล้ว'],
+    [fmt(stats.rounds),'จบรอบไปแล้ว'],
     [fmt(stats.runs),'เล่นไปแล้ว (รัน)'],
     [fmt(stats.bossKills),'ล้มตู้บอส 👑'],
     [fmt(stats.totalKills),'ทำลายบัมเปอร์รวม'],
@@ -322,7 +324,7 @@ const BUFFS=[
 ];
 // In-run shop: bought with run coins, gone when the run ends.
 const ITEMS=[
- {id:'ball',name:'ลูกเหล็กเพิ่ม',icon:'⚪',price:()=>30+15*meta.bought,desc:'เพิ่มลูกเหล็กในรอบนี้ +1 ลูก ราคาขึ้นทุกครั้งที่ซื้อ',can:()=>true,buy:()=>{meta.balls++; meta.bought++; saveMeta();}},
+ {id:'ball',name:'ลูกเหล็กเพิ่ม',icon:'⚪',price:()=>60+40*meta.bought,desc:'เพิ่มลูกเหล็กในรอบนี้ +1 ลูก ราคาขึ้นทุกครั้งที่ซื้อ',can:()=>true,buy:()=>{meta.balls++; meta.bought++; saveMeta();}},
  {id:'life',name:'ชีวิตสำรอง',icon:'💖',price:40,desc:'HP หมดแล้วฟื้นกลับมา 50% (ถือได้สูงสุด 2)',can:()=>run.lives<2,buy:()=>{run.lives++;}},
  {id:'guard',name:'โล่กันตี x3',icon:'🛡️',price:18,desc:'กันดาเมจได้ 3 ครั้ง ไม่ว่าโดนไม้ตีหรือหนาม',can:()=>true,buy:()=>{run.guard+=3;}},
  {id:'potion',name:'ยาซ่อมลูกเหล็ก',icon:'🧪',price:12,desc:'ฟื้น HP 40% ทันที',can:()=>ball.hp<S.maxHp,buy:()=>{ball.hp=Math.min(S.maxHp,ball.hp+S.maxHp*.4);}},

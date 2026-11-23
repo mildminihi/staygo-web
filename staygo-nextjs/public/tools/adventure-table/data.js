@@ -140,3 +140,21 @@ export const MONSTERS = [
 ];
 
 export const DICE = [4, 6, 8, 10, 12, 20, 100];
+
+// English site: presets go into new characters, monsters and forms in English
+// (text saved in Thai earlier is still translated on screen by /assets/js/i18n/adventure-table.js).
+const T = (s) => window.STAYGO_I18N?.t(s) ?? s;
+if (window.STAYGO_I18N?.lang === "en") {
+  for (const sy of Object.values(SYSTEMS)) {
+    sy.label = T(sy.label);
+    for (const st of sy.stats) Object.assign(st, { label: T(st.label), short: T(st.short) });
+  }
+  RACES.forEach((r, i) => (RACES[i] = T(r)));
+  for (const c of CLASSES) {
+    c.name = T(c.name);
+    for (const a of c.abilities) Object.assign(a, { name: T(a.name), desc: T(a.desc) });
+    for (const it of c.items) it[0] = T(it[0]);
+  }
+  for (const c of CONDITIONS) c.label = T(c.label);
+  for (const m of MONSTERS) m.name = T(m.name);
+}

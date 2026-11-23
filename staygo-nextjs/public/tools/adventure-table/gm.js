@@ -401,6 +401,7 @@ function advance(dir) {
     if (o.kind === "p" || (S.priv?.mons?.[o.id]?.hp ?? 1) > 0) break;
   }
   writeInit({ ...init, turn, round });
+  window.SFX?.play(round !== init.round ? "go" : "move");
 }
 function newRound() {
   for (const p of heroes()) if (Object.values(p.c.conds || {}).some((c) => c.rounds)) patchHero(p.id, { conds: tickConds(p.c.conds) });
@@ -692,7 +693,7 @@ function renderCamps() {
   $("cpList").innerHTML = camps.length
     ? camps
         .map(
-          (c) => `<div class="at-saved"><div class="at-saved-info"><b>${esc(c.name)}</b><small>${new Date(c.savedAt).toLocaleString("th-TH", { dateStyle: "medium", timeStyle: "short" })} · ปาร์ตี้ ${
+          (c) => `<div class="at-saved"><div class="at-saved-info"><b>${esc(c.name)}</b><small>${new Date(c.savedAt).toLocaleString((document.documentElement.lang === "en" ? "en-GB" : "th-TH"), { dateStyle: "medium", timeStyle: "short" })} · ปาร์ตี้ ${
             (c.party || []).length
           } คน · มอนสเตอร์ ${Object.keys(c.mons || {}).length}</small></div>
           <button class="sg-btn small blue" data-cpload="${c.id}">โหลด</button><button class="sg-btn small" data-cpexp="${c.id}" aria-label="ส่งออก">⬇️</button><button class="sg-btn small" data-cpdel="${c.id}" aria-label="ลบ">🗑️</button></div>`,
@@ -701,7 +702,7 @@ function renderCamps() {
     : '<p class="tl-hint" style="margin:0">ยังไม่มีแคมเปญที่บันทึกไว้</p>';
 }
 $("cpSave").onclick = () => {
-  const name = $("cpName").value.trim() || `แคมเปญ ${new Date().toLocaleDateString("th-TH")}`;
+  const name = $("cpName").value.trim() || `แคมเปญ ${new Date().toLocaleDateString((document.documentElement.lang === "en" ? "en-GB" : "th-TH"))}`;
   const all = store.get(CAMP_KEY, {});
   const existing = Object.values(all).find((c) => c.name === name);
   const id = existing?.id || newId();

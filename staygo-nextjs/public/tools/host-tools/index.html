@@ -787,6 +787,9 @@
       }
     </style>
     <script src="/assets/js/analytics.js" defer></script>
+    <script src="/assets/js/sfx.js"></script>
+    <script src="/assets/js/i18n.js"></script>
+    <script src="/assets/js/i18n/tools.js"></script>
       <link rel="stylesheet" href="/assets/css/staygo-skin.css" />
     <link rel="stylesheet" href="./skin.css" />
   </head>
@@ -1221,6 +1224,7 @@
         const player = appState.players.find(p => p.id === playerId);
         if (player) {
           player.life += delta;
+          window.SFX?.play(delta > 0 ? 'point' : 'minus');
           saveState();
           renderTracker();
         }
@@ -1278,6 +1282,7 @@
         saveState();
         renderTurn();
         document.dispatchEvent(new Event('turnchange'));
+        window.SFX?.play(appState.turn.currentIndex === 0 ? 'go' : 'turn');
       }
 
       function prevTurn() {
@@ -1299,6 +1304,7 @@
 
       function randomizeTurnOrder() {
         appState.turn.order = appState.turn.order.sort(() => Math.random() - 0.5);
+        window.SFX?.play('shuffle');
         appState.turn.currentIndex = 0;
         saveState();
         renderTurn();
@@ -1422,6 +1428,7 @@
         const resultDetails = document.getElementById('diceResultDetails');
         
         // Disable button and add shake animation
+        window.SFX?.play('dice');
         rollBtn.disabled = true;
         rollBtn.style.opacity = '0.6';
         rollBtn.classList.add('button-rolling');
@@ -1445,6 +1452,7 @@
         
         // Show results after animation
         setTimeout(() => {
+          window.SFX?.play('land');
           resultSum.textContent = sum;
           resultSum.classList.remove('dice-rolling');
           resultSum.classList.add('dice-result-animate');
@@ -1500,7 +1508,9 @@
         const emoji = result.includes('หัว') ? '👑' : '⭕';
         
         // Show result after animation
+        window.SFX?.play('whoosh');
         setTimeout(() => {
+          window.SFX?.play('coin');
           coinResultEl.textContent = `${emoji} ${result}`;
           coinResultEl.className = 'result-appear';
           
@@ -1526,7 +1536,9 @@
         
         const randomPlayer = appState.players[Math.floor(Math.random() * appState.players.length)];
         
+        window.SFX?.play('drumroll', 0.5);
         setTimeout(() => {
+          window.SFX?.play('reveal');
           resultEl.textContent = `🎯 ${randomPlayer.name}`;
           resultEl.style.color = randomPlayer.color;
           resultEl.className = 'result-appear';
@@ -1561,7 +1573,9 @@
         resultEl.textContent = '🎲';
         resultEl.className = 'coin-flipping';
         
+        window.SFX?.play('drumroll', 0.5);
         setTimeout(() => {
+          window.SFX?.play('reveal');
           resultEl.textContent = `🎯 ${random}`;
           resultEl.style.color = '#3B82F6';
           resultEl.className = 'result-appear';
@@ -1658,6 +1672,7 @@
         let endAt = 0, left = cfg.sec * 1000, paused = false, tick = null, lastBeep = null, firedEnd = false;
         let audio = null;
         function beep(f, ms) {
+          if (window.SFX) return SFX.play(ms > 300 ? 'timeup' : 'tick');
           try {
             audio = audio || new (window.AudioContext || window.webkitAudioContext)();
             const o = audio.createOscillator(), g = audio.createGain();

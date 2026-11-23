@@ -114,7 +114,9 @@ function normalizeLang(value) {
     return value === "en" ? "en" : "th";
 }
 
+// The site-wide TH/EN switch (/assets/js/i18n.js) decides the language when it's on the page.
 function getCurrentLang() {
+    if (window.STAYGO_I18N) return normalizeLang(window.STAYGO_I18N.lang);
     const saved = (() => {
         try { return localStorage.getItem(LANG_STORAGE_KEY) || ""; } catch { return ""; }
     })();
@@ -127,6 +129,7 @@ function getCurrentLang() {
 
 function setCurrentLang(lang) {
     const normalized = normalizeLang(lang);
+    if (window.STAYGO_I18N && window.STAYGO_I18N.lang !== normalized) return window.STAYGO_I18N.set(normalized);
     try { localStorage.setItem(LANG_STORAGE_KEY, normalized); } catch { /* ignore */ }
     document.documentElement.setAttribute("lang", normalized);
     applyI18n(normalized);
@@ -171,6 +174,8 @@ function applyI18n(lang) {
         btn.classList.toggle("active", btnLang === normalized);
     });
 }
+
+window.addEventListener("staygo:lang", (e) => applyI18n(e.detail));
 
 class RevealBoardGame {
     constructor() {
@@ -344,6 +349,7 @@ class RevealBoardGame {
         tile.classList.add('revealed');
         this.revealedTiles++;
         this.updateStats();
+        window.SFX?.play(this.revealedTiles === this.totalTiles ? 'fanfare' : 'flip');
 
         // Check if all tiles are revealed
         if (this.revealedTiles === this.totalTiles) {
@@ -362,9 +368,12 @@ class RevealBoardGame {
 
         this.revealedTiles = 0;
         this.updateStats();
+        window.SFX?.play('shuffle');
     }
 
     revealAll() {
+        window.SFX?.play('drumroll', 0.8);
+        setTimeout(() => window.SFX?.play('fanfare'), 800);
         // Reveal all tiles at once
         const tiles = this.tilesOverlay.querySelectorAll('.tile');
         tiles.forEach(tile => {

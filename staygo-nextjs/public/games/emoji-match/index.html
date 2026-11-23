@@ -294,6 +294,9 @@
         }
     </style>
     <script src="/assets/js/analytics.js" defer></script>
+    <script src="/assets/js/sfx.js"></script>
+    <script src="/assets/js/i18n.js"></script>
+    <script src="/assets/js/i18n/games-small.js"></script>
     <script src="/assets/js/staygo-cta.js" defer></script>
     <link rel="stylesheet" href="/assets/css/staygo-skin.css" />
     <link rel="stylesheet" href="./skin.css" />
@@ -538,8 +541,10 @@
                 timerInterval = setInterval(() => {
                     seconds--;
                     updateTimer();
+                    if (seconds > 0 && seconds <= 5) window.SFX?.play('tick');
                     if (seconds <= 0) {
                         clearInterval(timerInterval);
+                        window.SFX?.play('timeup');
                         alert('หมดเวลา! ลองใหม่อีกครั้ง');
                         location.reload();
                     }
@@ -565,6 +570,7 @@
 
             this.classList.add('flipped');
             flippedCards.push(this);
+            window.SFX?.play('flip');
 
             if (flippedCards.length === 2) {
                 moves++;
@@ -584,11 +590,13 @@
                 matchedPairs++;
                 document.getElementById('matches').textContent = matchedPairs;
                 flippedCards = [];
+                setTimeout(() => window.SFX?.play(matchedPairs === totalPairs ? 'fanfare' : 'match'), 150);
 
                 if (matchedPairs === totalPairs) {
                     setTimeout(showResult, 500);
                 }
             } else {
+                setTimeout(() => window.SFX?.play('minus'), 250);
                 setTimeout(() => {
                     card1.classList.remove('flipped');
                     card2.classList.remove('flipped');

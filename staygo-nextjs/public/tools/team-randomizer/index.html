@@ -36,6 +36,9 @@
     <script defer src="../../assets/js/config.js"></script>
     <script defer src="../../assets/js/site.js"></script>
     <script src="/assets/js/analytics.js" defer></script>
+    <script src="/assets/js/sfx.js"></script>
+    <script src="/assets/js/i18n.js"></script>
+    <script src="/assets/js/i18n/tools.js"></script>
       <link rel="stylesheet" href="/assets/css/staygo-skin.css" />
     <link rel="stylesheet" href="./skin.css" />
   </head>
@@ -301,6 +304,8 @@
         }
 
         divideTeams() {
+          window.SFX?.play('shuffle');
+          setTimeout(() => window.SFX?.play('correct'), 420);
           // Shuffle members
           const shuffled = [...this.members].sort(() => Math.random() - 0.5);
           
@@ -408,7 +413,7 @@
 
         exportToScoreboard() {
           const teamData = this.teams.map((team, index) => ({
-            name: `ทีม ${index + 1}`,
+            name: window.STAYGO_I18N ? STAYGO_I18N.t(`ทีม ${index + 1}`) : `ทีม ${index + 1}`,
             members: team.members,
             color: team.color
           }));

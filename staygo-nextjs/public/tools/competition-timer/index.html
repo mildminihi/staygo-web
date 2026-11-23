@@ -36,6 +36,9 @@
     <script defer src="../../assets/js/config.js"></script>
     <script defer src="../../assets/js/site.js"></script>
     <script src="/assets/js/analytics.js" defer></script>
+    <script src="/assets/js/sfx.js"></script>
+    <script src="/assets/js/i18n.js"></script>
+    <script src="/assets/js/i18n/tools.js"></script>
       <link rel="stylesheet" href="/assets/css/staygo-skin.css" />
     <link rel="stylesheet" href="./skin.css" />
   </head>
@@ -223,7 +226,6 @@
       };
 
       // Audio Context for sound effects
-      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
       // DOM Elements
       const setupPhase = document.getElementById('setupPhase');
@@ -252,7 +254,7 @@
           div.className = 'player-name-input';
           div.innerHTML = `
             <label for="player${i}">ผู้เล่น ${i}:</label>
-            <input type="text" id="player${i}" value="ผู้เล่น ${i}" class="input-field" />
+            <input type="text" id="player${i}" value="${window.STAYGO_I18N ? STAYGO_I18N.t(`ผู้เล่น ${i}`) : `ผู้เล่น ${i}`}" class="input-field" />
           `;
           playerNamesContainer.appendChild(div);
         }
@@ -375,6 +377,8 @@
             
             if (!currentPlayer.isOut && currentPlayer.remainingSeconds > 0) {
               currentPlayer.remainingSeconds -= 0.1;
+              const secLeft = Math.ceil(currentPlayer.remainingSeconds);
+              if (secLeft <= 10 && secLeft > 0 && currentPlayer.lastTick !== secLeft) { currentPlayer.lastTick = secLeft; playTickSound(); }
               
               // Check for timeout
               if (currentPlayer.remainingSeconds <= 0) {
@@ -498,73 +502,12 @@
       }
 
       // Sound effects using Web Audio API
-      function playClickSound() {
-        const oscillator = audioContext.createOscillator();
-        const gainNode = audioContext.createGain();
-        
-        oscillator.connect(gainNode);
-        gainNode.connect(audioContext.destination);
-        
-        oscillator.frequency.value = 800;
-        oscillator.type = 'sine';
-        
-        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
-        
-        oscillator.start(audioContext.currentTime);
-        oscillator.stop(audioContext.currentTime + 0.1);
-      }
-
-      function playAlertSound() {
-        const oscillator = audioContext.createOscillator();
-        const gainNode = audioContext.createGain();
-        
-        oscillator.connect(gainNode);
-        gainNode.connect(audioContext.destination);
-        
-        oscillator.frequency.value = 440;
-        oscillator.type = 'square';
-        
-        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
-        
-        oscillator.start(audioContext.currentTime);
-        oscillator.stop(audioContext.currentTime + 0.5);
-      }
-
-      function playCountdownBeep() {
-        const oscillator = audioContext.createOscillator();
-        const gainNode = audioContext.createGain();
-        
-        oscillator.connect(gainNode);
-        gainNode.connect(audioContext.destination);
-        
-        oscillator.frequency.value = 600;
-        oscillator.type = 'sine';
-        
-        gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.15);
-        
-        oscillator.start(audioContext.currentTime);
-        oscillator.stop(audioContext.currentTime + 0.15);
-      }
-
-      function playStartBeep() {
-        const oscillator = audioContext.createOscillator();
-        const gainNode = audioContext.createGain();
-        
-        oscillator.connect(gainNode);
-        gainNode.connect(audioContext.destination);
-        
-        oscillator.frequency.value = 1000;
-        oscillator.type = 'sine';
-        
-        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
-        
-        oscillator.start(audioContext.currentTime);
-        oscillator.stop(audioContext.currentTime + 0.3);
-      }
+      // sounds come from /assets/js/sfx.js (respects the mute button)
+      function playClickSound() { window.SFX?.play('turn'); }
+      function playAlertSound() { window.SFX?.play('timeup'); }
+      function playCountdownBeep() { window.SFX?.play('count'); }
+      function playStartBeep() { window.SFX?.play('go'); }
+      function playTickSound() { window.SFX?.play('tick'); }
 
       // Initialize on load
       updatePlayerInputs();

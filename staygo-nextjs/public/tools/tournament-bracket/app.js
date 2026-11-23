@@ -6,7 +6,10 @@ const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "
 const rnd = (n) => crypto.getRandomValues(new Uint32Array(1))[0] % n;
 const SAVE_KEY = "staygo-bracket-v2";
 const FORM_KEY = "staygo-bracket-form";
-const SAMPLE = ["มายด์", "จูน", "นน", "หยก", "ต้น", "ฟ้า", "ภู", "มิว"];
+// sample names in the page's language
+// (translated as one phrase, so real players with these names are never renamed on screen)
+const SAMPLE_TH = "มายด์ จูน นน หยก ต้น ฟ้า ภู มิว";
+const SAMPLE = (window.STAYGO_I18N?.t(SAMPLE_TH) ?? SAMPLE_TH).split(" ");
 const MODE_NAME = { single: "แพ้คัดออก", double: "แพ้ 2 ครั้งตกรอบ", roundrobin: "พบกันหมด" };
 
 let state = null; // { t, title, score }
@@ -111,6 +114,7 @@ function saveForm() {
 }
 
 $("startBtn").onclick = () => {
+  window.SFX?.play("shuffle");
   let list = names();
   if (list.length < 2) return;
   if (form.shuffle && form.mode !== "roundrobin") {
@@ -270,8 +274,13 @@ function render() {
     $("champ").innerHTML = `<div class="tb-trophy">🏆</div><p class="tl-hint" style="margin:0">แชมป์${state.title ? ` ${esc(state.title)}` : ""}</p>
       <h2>${esc(nameOf(pd[0]))}</h2>
       <div class="tb-podium">${pd[1] != null ? `<span>🥈 ${esc(nameOf(pd[1]))}</span>` : ""}${third ? `<span>🥉 ${esc(third)}</span>` : ""}</div>`;
+    if (committing && $("champ").hidden) window.SFX?.play("fanfare");
+    else if (committing) window.SFX?.play("point");
     $("champ").hidden = false;
-  } else $("champ").hidden = true;
+  } else {
+    if (committing) window.SFX?.play("point");
+    $("champ").hidden = true;
+  }
 
   // next match
   const nm = nextMatch(t, res);
@@ -352,13 +361,16 @@ function closeSheet() {
   sheetId = null;
 }
 
+let committing = false;
 function commit(fn) {
+  committing = true;
   history.push(JSON.stringify(state.t.results));
   if (history.length > 50) history.shift();
   fn();
   save();
   closeSheet();
   render();
+  committing = false;
 }
 
 $("sheet").addEventListener("click", (e) => {
@@ -396,6 +408,7 @@ $("sheetBody").addEventListener("keydown", (e) => {
 $("undoBtn").onclick = () => {
   if (!history.length) return;
   state.t.results = JSON.parse(history.pop());
+  window.SFX?.play("back");
   save();
   render();
 };
@@ -442,7 +455,9 @@ $("copyBtn").onclick = async () => {
     const sc = r.result.scoreA != null ? ` ${r.result.scoreA}-${r.result.scoreB}` : "";
     lines.push(`#${num[m.id]} ${m.label}: ${nameOf(a)} vs ${nameOf(b)}${sc} → ${r.result.draw ? "เสมอ" : nameOf(r.winner) + " ชนะ"}`);
   }
-  const text = lines.join("\n");
+  let text = lines.join("\n");
+  // copied text follows the page language too
+  if (window.STAYGO_I18N) text = text.split("\n").map((l) => STAYGO_I18N.t(l)).join("\n");
   try {
     await navigator.clipboard.writeText(text);
     $("copyBtn").textContent = "✅ คัดลอกแล้ว";

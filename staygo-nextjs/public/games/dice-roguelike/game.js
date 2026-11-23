@@ -492,6 +492,7 @@ class GameController {
     // Execute combat turn
     executeCombatTurn() {
         const result = combatManager.executeTurn();
+        playTurnSounds(result);
 
         // Update UI
         getUI().renderCombat();
@@ -541,6 +542,8 @@ class GameController {
 
         // Spend energy
         gameState.player.energy = Math.max(0, gameState.player.energy - actualCost);
+        sfx('charge');
+        setTimeout(() => sfx('powerup'), 300);
 
         // Execute skill effect
         try {
@@ -637,6 +640,7 @@ class GameController {
 
     // Select reward
     selectReward(reward) {
+        sfx('levelup');
         // Add reward to player
         if (reward.type === 'diceMod') {
             gameState.addDiceMod(reward);
@@ -671,6 +675,7 @@ class GameController {
         const result = executeEventChoice(event, choiceIndex, gameState);
         
         if (result && result.success) {
+            sfx('reveal');
             // Update stats
             gameState.stats.eventsCompleted++;
             
@@ -692,6 +697,7 @@ class GameController {
         
         const inventory = generateShopInventory();
         getUI().showShopScreen(inventory);
+        sfx('coin');
     }
 
     // Start rest
@@ -701,6 +707,7 @@ class GameController {
 
     // Game over
     gameOver(victory) {
+        setTimeout(() => sfx(victory ? 'fanfare' : 'lose'), 500);
         gameState.isGameOver = true;
         gameState.isVictory = victory;
         
@@ -724,3 +731,28 @@ window.addEventListener('DOMContentLoaded', () => {
     window.game = game;
 });
 
+
+
+// ---------------------------------------------------------------- sounds
+function sfx(name, arg) { if (window.SFX) window.SFX.play(name, arg); }
+function playTurnSounds(result) {
+    if (!result) return;
+    const p = result.playerResults || {};
+    let t = 0;
+    if (p.block) { setTimeout(() => sfx('block'), t); t += 160; }
+    if (p.heal) { setTimeout(() => sfx('heal'), t); t += 200; }
+    if (p.attack) {
+        const a = p.attack;
+        setTimeout(() => sfx(a.dodged ? 'whoosh' : a.damage >= 30 ? 'crit' : 'hit'), t);
+        t += 280;
+    }
+    if (result.enemyDefeated) { setTimeout(() => sfx('explode'), t); setTimeout(() => sfx('win'), t + 450); return; }
+    const e = result.enemyResults;
+    if (e) {
+        t += 250;
+        if (e.action === 'attack') setTimeout(() => sfx(e.dodged ? 'whoosh' : 'hurt'), t);
+        else if (e.action === 'heal') setTimeout(() => sfx('heal'), t);
+        else if (e.action === 'block') setTimeout(() => sfx('block'), t);
+        else setTimeout(() => sfx('charge'), t);
+    }
+}

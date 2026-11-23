@@ -57,7 +57,9 @@ function draw() {
   void card.offsetWidth;
   card.classList.add("pop");
   updateLeft();
+  if (!round) sfx("deal");
 }
+const sfx = (n, a) => window.SFX?.play(n, a);
 
 // ---------------------------------------------------------------- timed round
 $("durations").onclick = (e) => {
@@ -77,6 +79,7 @@ function startRound() {
   $("ok").hidden = $("skip").hidden = false;
   $("okN").textContent = $("skipN").textContent = 0;
   draw();
+  sfx("go");
   round.timer = setInterval(tick, 200);
   tick();
 }
@@ -86,6 +89,10 @@ function tick() {
   $("clock").textContent = s;
   $("fill").style.width = (left / (duration * 1000)) * 100 + "%";
   $("fill").classList.toggle("warn", s <= 5);
+  if (s <= 5 && s > 0 && round.beeped !== s) {
+    round.beeped = s;
+    sfx("tick");
+  }
   if (left <= 0) stopRound(true);
 }
 function stopRound(showResult) {
@@ -98,6 +105,7 @@ function stopRound(showResult) {
   $("timerBox").hidden = true;
   if (showResult) {
     navigator.vibrate?.([200, 100, 200]);
+    sfx("timeup");
     $("word").textContent = `หมดเวลา! ถูก ${r.ok} · ข้าม ${r.skip}`;
     $("word").dataset.len = "mid";
   } else $("scoreRow").hidden = true;
@@ -106,6 +114,7 @@ function answer(correct) {
   if (!round) return;
   if (correct) round.ok++;
   else round.skip++;
+  sfx(correct ? "correct" : "whoosh");
   $("okN").textContent = round.ok;
   $("skipN").textContent = round.skip;
   draw();

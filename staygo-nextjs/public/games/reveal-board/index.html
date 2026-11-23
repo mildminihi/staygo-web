@@ -100,39 +100,6 @@
             position: relative;
         }
 
-        .lang-toggle {
-            position: absolute;
-            top: 16px;
-            right: 16px;
-            display: inline-flex;
-            gap: 8px;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .lang-btn {
-            padding: 8px 10px;
-            border-radius: var(--radius-md);
-            border: 1px solid var(--border);
-            background: var(--surface);
-            color: var(--text);
-            font-weight: 600;
-            font-size: 13px;
-            cursor: pointer;
-            line-height: 1;
-            transition: all 0.15s ease;
-        }
-
-        .lang-btn:hover {
-            background: var(--surface-2);
-        }
-
-        .lang-btn.active {
-            background: var(--primary);
-            color: var(--text-inverse);
-            border-color: var(--primary);
-        }
-
         h1 {
             font-family: 'Kanit', sans-serif;
             margin: 0 0 10px 0;
@@ -443,6 +410,9 @@
         }
     </style>
     <script src="/assets/js/analytics.js" defer></script>
+    <script src="/assets/js/sfx.js"></script>
+    <script src="/assets/js/i18n.js"></script>
+    <script src="/assets/js/i18n/games-mid.js"></script>
     <link rel="stylesheet" href="/assets/css/staygo-skin.css" />
     <link rel="stylesheet" href="./skin.css" />
   </head>
@@ -502,10 +472,6 @@
 
     <main>
     <div class="game-container">
-        <div class="lang-toggle" role="group" aria-label="Language">
-            <button type="button" class="lang-btn" data-lang="th" aria-label="ภาษาไทย">ไทย</button>
-            <button type="button" class="lang-btn" data-lang="en" aria-label="English">EN</button>
-        </div>
         <h1 data-i18n="title">เปิดแผ่นป้าย</h1>
         <p class="game-subtitle" data-i18n="subtitle">อัปโหลดรูป แล้วกด สร้างกระดาน เพื่อเริ่มเล่น</p>
 

@@ -149,10 +149,12 @@ export function rollFx(r, { mine = false, small = false } = {}) {
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   let n = 0;
   clearInterval(fxTimer);
+  window.SFX?.play("dice");
   const done = () => {
     numEl.textContent = r.total;
     el.classList.add("landed");
     if (mine) navigator.vibrate?.(r.crit ? [60, 40, 60] : 40);
+    window.SFX?.play(r.crit === 1 ? "fanfare" : r.crit === -1 ? "lose" : "land");
     setTimeout(() => el.classList.remove("on", "landed"), small ? 1800 : 2600);
   };
   if (reduce) return done();

@@ -13,6 +13,7 @@ function handleDigitInput(event, index) {
     }
     
     input.value = value;
+    if (value) window.SFX?.play('type');
 
     // Auto-advance to next input
     if (value && index < gameState.digitCount - 1) {

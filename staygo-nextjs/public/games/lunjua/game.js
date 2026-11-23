@@ -35,7 +35,9 @@ function loadNames() {
 }
 
 // ---------------------------------------------------------------- setup screen
-let names = loadNames() || ["ผู้เล่น 1", "ผู้เล่น 2", "ผู้เล่น 3"];
+// default names in the page's language ("Player 1" on the English site)
+const defName = (i) => window.STAYGO_I18N?.t(`ผู้เล่น ${i}`) ?? `ผู้เล่น ${i}`;
+let names = loadNames() || [defName(1), defName(2), defName(3)];
 
 function renderSetup() {
   $("countLabel").textContent = names.length;
@@ -59,17 +61,18 @@ $("minus").onclick = () => {
   renderSetup();
 };
 $("plus").onclick = () => {
-  if (names.length < LJ_MAX_PLAYERS) names.push(`ผู้เล่น ${names.length + 1}`);
+  if (names.length < LJ_MAX_PLAYERS) names.push(defName(names.length + 1));
   renderSetup();
 };
 $("startBtn").onclick = () => {
-  const clean = names.map((n, i) => n.trim().slice(0, 16) || `ผู้เล่น ${i + 1}`);
+  const clean = names.map((n, i) => n.trim().slice(0, 16) || defName(i + 1));
   names = clean;
   try {
     localStorage.setItem(NAMES_KEY, JSON.stringify(clean));
   } catch {}
   const first = $("randomFirst").checked ? Math.floor(rng() * clean.length) : 0;
   state = newLunjua(clean, rng, Date.now(), first);
+  window.SFX?.play("shuffle");
   lastFlipCount = 0;
   save();
   show("game");
@@ -87,9 +90,38 @@ function act(type) {
   if (!state) return;
   const r = applyLunjua(state, state.cur, { type }, rng, Date.now());
   if (!r.ok) return;
+  const prevEvents = state.events.length;
   state = r.state;
   save();
   render();
+  playActSound(type, state.events.slice(state.events.length < prevEvents ? 0 : prevEvents));
+}
+
+const sfx = (n, a) => window.SFX?.play(n, a);
+function playActSound(type, fresh) {
+  const s = state;
+  if (s.phase === "end") return sfx("fanfare");
+  if (type === "nextTurn") return sfx("turn");
+  if (type === "bank") return sfx(s.gained?.length ? "coin" : "place");
+  const kinds = fresh.map((e) => e.kind);
+  if (kinds.includes("reshuffle")) sfx("shuffle");
+  const k = kinds.filter((x) => x !== "reshuffle").pop();
+  if (k === "bust" || s.phase === "bust") {
+    sfx("flip");
+    setTimeout(() => sfx("explode"), 90);
+  } else if (k === "go") {
+    sfx("flip");
+    setTimeout(() => sfx("powerup"), 80);
+  } else if (k === "stay") {
+    sfx("flip");
+    setTimeout(() => sfx("reveal"), 80);
+  } else if (k === "bonus") sfx("match");
+  else if (k === "bonusDiscard") sfx("minus");
+  else if (k === "wild") {
+    sfx("flip");
+    setTimeout(() => sfx("sparkle"), 80);
+  }
+  else sfx("flip");
 }
 
 $("flipBtn").onclick = () => act("flip");

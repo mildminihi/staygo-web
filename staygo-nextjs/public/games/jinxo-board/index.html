@@ -432,6 +432,9 @@
       }
     </style>
     <script src="/assets/js/analytics.js" defer></script>
+    <script src="/assets/js/sfx.js"></script>
+    <script src="/assets/js/i18n.js"></script>
+    <script src="/assets/js/i18n/games-small.js"></script>
       <link rel="stylesheet" href="/assets/css/staygo-skin.css" />
     <link rel="stylesheet" href="./skin.css" />
   </head>
@@ -509,7 +512,7 @@
         <button class="jx-round-tab" data-round="2" role="tab">รอบ 3<small></small></button>
       </div>
 
-      <div class="jx-board" id="board" aria-label="กระดานคำตอบ 3x3"></div>
+      <div class="jx-board" id="board" data-sfx="off" aria-label="กระดานคำตอบ 3x3"></div>
 
       <div class="jx-summary" aria-live="polite">
         <div>วงกลม<b id="sumCircle">0</b></div>
@@ -671,6 +674,7 @@
             const i = Number(btn.closest('.jx-cell').dataset.index);
             const cell = state.rounds[state.current].cells[i];
             const act = btn.dataset.act;
+            const bonusBefore = calc(state.rounds[state.current]).bonus;
             if (act === 'circle') {
               // Tapping again on a plain circle clears the mark.
               if (cell.mark === 'circle' && !cell.jinx) cell.mark = '';
@@ -683,6 +687,14 @@
               cell.jinx = false;
             }
             if (navigator.vibrate) navigator.vibrate(10);
+            if (window.SFX) {
+              const bonusAfter = calc(state.rounds[state.current]).bonus;
+              if (bonusAfter > bonusBefore) SFX.play('levelup');
+              else if (!cell.mark) SFX.play('back');
+              else if (cell.mark === 'cross') SFX.play('minus');
+              else if (cell.jinx) SFX.play('sparkle');
+              else SFX.play('pop');
+            }
             save();
             render();
           });

@@ -169,6 +169,8 @@
     el.classList.add('active');
   }
 
+  function sfx(n) { if (window.SFX) SFX.play(n); }
+
   function showToast(msg) {
     toastEl.textContent = msg;
     toastEl.classList.add('show');
@@ -296,9 +298,14 @@
     var rows = wordGrid.querySelectorAll('.word-row');
     var row = rows[state.guesses.length - 1];
     var tiles = row.querySelectorAll('.tile');
+    var st = (state.guesses[state.guesses.length - 1] || {}).statuses || [];
     tiles.forEach(function (tile, i) {
       setTimeout(function () {
         tile.classList.add('flip');
+        if (window.SFX) {
+          var k = st[i];
+          SFX.tone(k === 'correct' ? 880 + i * 60 : k === 'present' ? 620 + i * 40 : 300, 90, 'triangle', k === 'absent' ? 0.12 : 0.2);
+        }
       }, i * 80);
     });
     setTimeout(function () {
@@ -393,6 +400,7 @@
     if (clusters.length > WORD_LEN) return;
     state.currentGuess = tentative;
     renderGrid();
+    sfx('type');
   }
 
   function handleBackspace() {
@@ -401,6 +409,7 @@
     chars.pop();
     state.currentGuess = chars.join('');
     renderGrid();
+    sfx('back');
   }
 
   function handleSubmit() {
@@ -409,6 +418,7 @@
     if (clusters.length !== WORD_LEN) {
       showToast('พิมพ์ให้ครบ 5 ตัวอักษร');
       shakeCurrentRow();
+      sfx('wrong');
       return;
     }
 
@@ -473,6 +483,7 @@
   function finishGame(won) {
     state.finished = true;
     state.won = won;
+    sfx(won ? 'fanfare' : 'lose');
     if (state.mode === 'daily') {
       saveDailyState();
       updateStatsAfterDailyGame(won);

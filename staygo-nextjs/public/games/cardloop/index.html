@@ -36,6 +36,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Mitr:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Kanit:wght@700;800&display=swap" rel="stylesheet" />
     <script src="/assets/js/analytics.js" defer></script>
+    <script src="/assets/js/sfx.js"></script>
+    <script src="/assets/js/i18n.js"></script>
+    <script src="/assets/js/i18n/games-small.js"></script>
     <script src="/assets/js/staygo-cta.js" defer></script>
     <link rel="stylesheet" href="/assets/css/staygo-skin.css" />
     <link rel="stylesheet" href="./skin.css" />
@@ -300,9 +303,11 @@
             handleAnswer(answer) {
                 this.currentCard = this.drawCard();
                 
+                window.SFX?.play('flip');
                 if (this.checkAnswer(answer, this.currentCard)) {
                     // Correct answer
                     this.revealCard(this.currentCard, this.question);
+                    setTimeout(() => window.SFX?.play(this.question === 4 ? 'fanfare' : 'correct'), this.question === 4 ? 500 : 200);
                     
                     if (this.question === 4) {
                         // Win!
@@ -321,6 +326,7 @@
                 } else {
                     // Wrong answer - restart
                     this.revealCard(this.currentCard, this.question);
+                    setTimeout(() => window.SFX?.play('wrong'), 200);
                     setTimeout(() => {
                         this.showWrongModal();
                     }, 800);
@@ -378,6 +384,7 @@
             }
 
             showWinModal() {
+                // (fanfare already played on the 4th reveal)
                 this.totalWins++;
                 document.getElementById('winRounds').textContent = this.round;
                 document.getElementById('winModal').classList.add('active');

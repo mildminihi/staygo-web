@@ -4,7 +4,9 @@ const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 const rnd = (n) => crypto.getRandomValues(new Uint32Array(1))[0] % n;
 const KEY = "staygo-seating-names";
-const SAMPLE = "มายด์ จูน นน หยก ต้น ฟ้า ภู มิว ปอนด์ แพรว บอส ใบเตย ก้อง น้ำ เจ เบล ปาล์ม ฝน ไอซ์ พลอย".split(" ");
+// sample names in the page's language (i18n-tools.js has the English list)
+const SAMPLE_TH = "มายด์ จูน นน หยก ต้น ฟ้า ภู มิว ปอนด์ แพรว บอส ใบเตย ก้อง น้ำ เจ เบล ปาล์ม ฝน ไอซ์ พลอย";
+const SAMPLE = (window.STAYGO_I18N?.t(SAMPLE_TH) ?? SAMPLE_TH).split(" ");
 
 let plan = null;
 
@@ -98,6 +100,8 @@ function make() {
   const sizes = tableSizes(list.length, +$("size").value);
   const rounds = +$("rounds").value;
   const { tables, met } = solve(list.length, sizes, rounds);
+  window.SFX?.play("shuffle");
+  setTimeout(() => window.SFX?.play("correct"), 400);
   plan = { list, tables };
   // stats
   let repeats = 0;
@@ -130,9 +134,11 @@ $("make").onclick = $("reroll").onclick = make;
 
 $("copy").onclick = async () => {
   if (!plan) return;
-  const text = plan.tables
+  let text = plan.tables
     .map((round, r) => `รอบที่ ${r + 1}\n` + round.map((t, i) => `  โต๊ะ ${i + 1}: ${t.map((p) => plan.list[p]).join(", ")}`).join("\n"))
     .join("\n\n");
+  // copied text follows the page language too
+  if (window.STAYGO_I18N) text = text.split("\n").map((l) => STAYGO_I18N.t(l)).join("\n");
   try {
     await navigator.clipboard.writeText(text);
     $("copy").textContent = "✅ คัดลอกแล้ว";

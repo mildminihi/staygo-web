@@ -129,6 +129,10 @@ const PLAYER_COLORS = ['#c8993f','#5a9b7c','#a4342a','#4d7ea8','#8b5fbf','#c46b3
    Backend-agnostic — local mode calls it on state.players directly,
    online mode calls it on a snapshot built from Firebase data and
    writes the result back to the room. */
+function sfx(n, a){ window.SFX?.play(n, a); }
+let sfxOnceKey = '';
+function sfxOnce(key, n){ if(sfxOnceKey === key) return; sfxOnceKey = key; sfx(n); }
+
 function resolveTurnPure(allPlayers, boardTiles, boardSize, direction, picks){
   const n = boardSize;
   const aliveBefore = allPlayers.filter(p=>p.alive);
@@ -484,6 +488,7 @@ function beginPickingPhase(){
     });
     state.boardSize = newSize;
     state.log.push(`🌀 วงแหวนหดตัวลง! เหลือ ${newSize} ช่อง`);
+    sfx('drain');
   }
 
   state.turnOrder = alivePlayers().filter(p=>!p.skipNext).map(p=>p.id);
@@ -528,6 +533,7 @@ function renderPassScreen(){
     const b = buildDieButton(d.key, d.cooldown, ()=>{
       const roll = def.faces[Math.floor(Math.random()*def.faces.length)];
       state.picks[pid] = { dieKey:d.key, roll };
+      sfx('dice');
       state.passScreenFor = null;
       state.pickIndex++;
       if(state.pickIndex >= state.turnOrder.length){ state.phase='reveal'; }
@@ -594,6 +600,7 @@ function renderBoardScreen(){
       h.style.color='var(--gold-bright)'; h.style.marginTop='16px';
       h.textContent = winner ? `${winner.name} คือผู้รอดชีวิตคนสุดท้าย 🐍` : 'ไม่มีผู้รอดชีวิต';
       el.appendChild(h);
+      sfxOnce('end-local-' + state.round, winner ? 'fanfare' : 'lose');
       const cta = document.createElement('div'); cta.setAttribute('data-staygo-cta', 'ouroboros');
       el.appendChild(cta);
       const again = document.createElement('button');
@@ -756,6 +763,7 @@ function animateTokenWalk({ boardTiles, boardSize, paths, players, headerHTML, k
   let step = 1;
   function tick(){
     positionTokens(step);
+    sfx('tap');
     step++;
     if(step < maxLen){
       setTimeout(tick, STEP_MS);
@@ -772,6 +780,8 @@ function animateTokenWalk({ boardTiles, boardSize, paths, players, headerHTML, k
 // was eaten this round.
 function playEatenReveal(board, killLog, eatenIds, tokenEls, bodyEls, onDone){
   if(!killLog.length && !eatenIds.length){ onDone(); return; }
+  if(eatenIds.length){ sfx('hit'); setTimeout(()=>sfx('explode'), 120); }
+  else if(killLog.some(l=>l.includes('โล่'))) sfx('block');
 
   eatenIds.forEach(id=>{
     const tok = tokenEls[id];
@@ -1187,6 +1197,7 @@ async function submitOnlinePick(dieKey){
   const db = state.online.fb, code = state.online.code, myId = state.online.myId;
   const def = DICE_TYPES[dieKey];
   const roll = def.faces[Math.floor(Math.random()*def.faces.length)];
+  sfx('dice');
   await db.ref('rooms/'+code+'/picks/'+myId).set({ dieKey, roll });
 
   // whoever completes the last pending pick advances the room to reveal
@@ -1280,6 +1291,7 @@ function renderOnlineResolved(data){
     const h = document.createElement('h3'); h.className='display'; h.style.color='var(--gold-bright)'; h.style.marginTop='16px';
     h.textContent = winner ? `${winner.name} คือผู้รอดชีวิตคนสุดท้าย 🐍` : 'ไม่มีผู้รอดชีวิต';
     el.appendChild(h);
+    sfxOnce('end-online-' + (data.round || 0), winner && winner.id === state.online?.myId ? 'fanfare' : winner ? 'win' : 'lose');
     const cta = document.createElement('div'); cta.setAttribute('data-staygo-cta', 'ouroboros');
     el.appendChild(cta);
     if(state.online.isHost){

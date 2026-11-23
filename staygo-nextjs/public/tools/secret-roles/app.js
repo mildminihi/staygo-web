@@ -59,12 +59,14 @@ let spies = 1;
 let under = { undercover: 1, white: 0 };
 let spyPlace = "";
 let underWords = ["", ""];
+// first-time example roles, in the language the page is shown in
+const tr = (s) => window.STAYGO_I18N?.t(s) ?? s;
 let custom = store.get(CUSTOM_KEY, null) || {
   roles: [
-    { name: "ฆาตกร", emoji: "🔪", count: 1, desc: "", team: false },
-    { name: "นักสืบ", emoji: "🔍", count: 1, desc: "", team: false },
+    { name: tr("ฆาตกร"), emoji: "🔪", count: 1, desc: "", team: false },
+    { name: tr("นักสืบ"), emoji: "🔍", count: 1, desc: "", team: false },
   ],
-  filler: { name: "ผู้บริสุทธิ์", emoji: "🙂", desc: "" },
+  filler: { name: tr("ผู้บริสุทธิ์"), emoji: "🙂", desc: "" },
 };
 
 // game
@@ -437,6 +439,7 @@ function infoHTML(kind, first) {
 
 // ---------------------------------------------------------------- one phone: pass it around
 function localDeal(list) {
+  sfx("shuffle");
   deck = buildDeck(list.map((name) => ({ name })));
   dealIdx = 0;
   show("dealing");
@@ -456,6 +459,7 @@ function renderDeal() {
 }
 $("card").onclick = () => {
   cardOpen = !cardOpen;
+  sfx("flip");
   if (cardOpen) {
     seen = true;
     $("card").className = "rl-card open";
@@ -467,6 +471,7 @@ $("card").onclick = () => {
   $("passOn").disabled = !seen || cardOpen;
 };
 $("passOn").onclick = () => {
+  sfx("deal");
   if (dealIdx < deck.players.length - 1) {
     dealIdx++;
     renderDeal();
@@ -524,14 +529,20 @@ function renderPlay() {
 }
 const placesHTML = (items) => `<div class="rl-places">${items.map((t) => `<span>${esc(t)}</span>`).join("")}</div>`;
 
+const sfx = (n, a) => window.SFX?.play(n, a);
 function runClock(el, end, onEnd) {
   const tick = () => {
     const left = Math.max(0, end - (mode === "local" ? Date.now() : now()));
     const s = Math.ceil(left / 1000);
     el.textContent = left > 0 ? `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}` : "หมดเวลา!";
     el.classList.toggle("warn", s <= 10);
+    if (left > 0 && s <= 5 && el.dataset.beep !== String(s)) {
+      el.dataset.beep = s;
+      sfx("tick");
+    }
     if (left <= 0) {
       clearInterval(id);
+      sfx("timeup");
       onEnd?.();
     }
   };
@@ -544,6 +555,7 @@ function startTimer(min) {
   $("tStart").textContent = "↺ เริ่มใหม่";
   const end = (mode === "local" ? Date.now() : now()) + min * 60000;
   timer = runClock($("tClock"), end, () => navigator.vibrate?.([200, 100, 200]));
+  sfx("go");
   if (mode === "host") write(`live/${code}/state/timerEnd`, end).catch(() => {});
 }
 
@@ -553,6 +565,8 @@ $("reveal").onclick = () => {
   const rv = revealData();
   $("revealBox").innerHTML = revealHTML(rv);
   $("revealBox").hidden = false;
+  sfx("drumroll", 0.8);
+  setTimeout(() => sfx("reveal"), 800);
   if (mode === "host") write(`live/${code}/state/reveal`, clean(rv)).catch(() => toast("ส่งเฉลยไม่สำเร็จ"));
 };
 $("again").onclick = () => (mode === "host" ? hostDeal() : localDeal(deck.players.map((p) => p.name)));
@@ -616,6 +630,7 @@ function renderRoom() {
 }
 
 async function hostDeal() {
+  sfx("shuffle");
   const people = dealable().map((p) => ({ id: p.id, name: p.name }));
   const [min, max] = LIMITS[game];
   if (people.length < min || people.length > max) return toast(`ต้องมีคนออนไลน์ ${min}–${max} คน`);
@@ -713,6 +728,8 @@ function renderPlayer() {
     pClockEnd = 0;
     clearInterval(pTimer);
     $("pClock").hidden = true;
+    sfx("deal");
+    window.SFX?.vibrate(80);
     $("pInfo").innerHTML =
       (st.summary ? `<div class="sg-panel"><span class="tl-label">บทในเกมนี้</span>${placesHTML(st.summary)}</div>` : "") + infoHTML(st.game, st.first);
     drawCard();
@@ -726,6 +743,7 @@ function renderPlayer() {
       pTimer = runClock($("pClockT"), pClockEnd);
     }
   }
+  if (st.reveal && $("pReveal").hidden) sfx("reveal");
   $("pReveal").hidden = !st.reveal;
   if (st.reveal) $("pReveal").innerHTML = revealHTML(st.reveal);
 }
@@ -736,6 +754,7 @@ function drawCard() {
 $("pCard").onclick = () => {
   if (!myCard) return;
   pOpen = !pOpen;
+  sfx("flip");
   drawCard();
   if (pOpen && room?.players?.[uid()]?.seen !== myCard.deal) write(`live/${code}/players/${uid()}/seen`, myCard.deal).catch(() => {});
 };

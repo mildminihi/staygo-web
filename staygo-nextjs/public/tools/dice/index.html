@@ -36,6 +36,9 @@
     <script defer src="../../assets/js/config.js"></script>
     <script defer src="../../assets/js/site.js"></script>
     <script src="/assets/js/analytics.js" defer></script>
+    <script src="/assets/js/sfx.js"></script>
+    <script src="/assets/js/i18n.js"></script>
+    <script src="/assets/js/i18n/tools.js"></script>
       <link rel="stylesheet" href="/assets/css/staygo-skin.css" />
     <link rel="stylesheet" href="./skin.css" />
   </head>
@@ -419,6 +422,7 @@
           });
 
           // Animate rolling
+          window.SFX?.play('dice');
           await new Promise(resolve => setTimeout(resolve, 100));
 
           // Roll each die
@@ -434,10 +438,12 @@
             diceElement.classList.remove('rolling');
             diceElement.classList.add('revealed');
             diceElement.querySelector('.dice-face').textContent = result;
+            window.SFX?.play(result === dice.faces && dice.faces > 2 ? 'coin' : 'land');
           }
 
           // Calculate and show total
           const total = results.reduce((sum, r) => sum + r.result, 0);
+          setTimeout(() => window.SFX?.play('point'), 120);
           document.getElementById('diceTotal').innerHTML = `
             <span class="dice-total-label">ผลรวม:</span>
             <span class="dice-total-value">${total}</span>

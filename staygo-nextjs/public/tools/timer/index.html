@@ -36,6 +36,9 @@
     <script defer src="../../assets/js/config.js"></script>
     <script defer src="../../assets/js/site.js"></script>
     <script src="/assets/js/analytics.js" defer></script>
+    <script src="/assets/js/sfx.js"></script>
+    <script src="/assets/js/i18n.js"></script>
+    <script src="/assets/js/i18n/tools.js"></script>
       <link rel="stylesheet" href="/assets/css/staygo-skin.css" />
     <link rel="stylesheet" href="./skin.css" />
   </head>
@@ -254,49 +257,9 @@
         }
 
         createSounds() {
-          // Create beep sound for lap (short beep)
-          const beepCtx = new (window.AudioContext || window.webkitAudioContext)();
-          this.beepSound = () => {
-            const oscillator = beepCtx.createOscillator();
-            const gainNode = beepCtx.createGain();
-            oscillator.connect(gainNode);
-            gainNode.connect(beepCtx.destination);
-            oscillator.frequency.value = 800;
-            oscillator.type = 'sine';
-            gainNode.gain.setValueAtTime(0.3, beepCtx.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, beepCtx.currentTime + 0.1);
-            oscillator.start(beepCtx.currentTime);
-            oscillator.stop(beepCtx.currentTime + 0.1);
-          };
-
-          // Create finish sound for countdown (longer, different tone)
-          const finishCtx = new (window.AudioContext || window.webkitAudioContext)();
-          this.finishSound = () => {
-            const oscillator = finishCtx.createOscillator();
-            const gainNode = finishCtx.createGain();
-            oscillator.connect(gainNode);
-            gainNode.connect(finishCtx.destination);
-            oscillator.frequency.value = 1000;
-            oscillator.type = 'sine';
-            gainNode.gain.setValueAtTime(0.3, finishCtx.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, finishCtx.currentTime + 0.5);
-            oscillator.start(finishCtx.currentTime);
-            oscillator.stop(finishCtx.currentTime + 0.5);
-            
-            // Second beep
-            setTimeout(() => {
-              const osc2 = finishCtx.createOscillator();
-              const gain2 = finishCtx.createGain();
-              osc2.connect(gain2);
-              gain2.connect(finishCtx.destination);
-              osc2.frequency.value = 1200;
-              osc2.type = 'sine';
-              gain2.gain.setValueAtTime(0.3, finishCtx.currentTime);
-              gain2.gain.exponentialRampToValueAtTime(0.01, finishCtx.currentTime + 0.5);
-              osc2.start(finishCtx.currentTime);
-              osc2.stop(finishCtx.currentTime + 0.5);
-            }, 200);
-          };
+          // sounds come from /assets/js/sfx.js (respects the mute button)
+          this.beepSound = () => window.SFX?.play('select');
+          this.finishSound = () => window.SFX?.play('alarm');
         }
 
         init() {
@@ -399,6 +362,7 @@
           if (this.countdownTime === 0) return;
           
           this.isRunning = true;
+          window.SFX?.play('go');
           const startBtn = document.getElementById('countdownStartBtn');
           startBtn.innerHTML = '<span class="timer-btn-icon">⏸</span><span>หยุด</span>';
           
@@ -414,6 +378,8 @@
             // Add warning effect when < 10 seconds
             if (this.countdownRemaining <= 10000 && this.countdownRemaining > 0) {
               document.getElementById('timerDisplay').classList.add('timer-warning');
+              const sec = Math.ceil(this.countdownRemaining / 1000);
+              if (sec <= 5 && this.lastTick !== sec) { this.lastTick = sec; window.SFX?.play('tick'); }
             } else {
               document.getElementById('timerDisplay').classList.remove('timer-warning');
             }

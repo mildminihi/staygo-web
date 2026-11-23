@@ -36,6 +36,9 @@
     <script defer src="../../assets/js/config.js"></script>
     <script defer src="../../assets/js/site.js"></script>
     <script src="/assets/js/analytics.js" defer></script>
+    <script src="/assets/js/sfx.js"></script>
+    <script src="/assets/js/i18n.js"></script>
+    <script src="/assets/js/i18n/tools.js"></script>
       <link rel="stylesheet" href="/assets/css/staygo-skin.css" />
     <link rel="stylesheet" href="./skin.css" />
   </head>
@@ -251,6 +254,7 @@
         const player = players.find(p => p.id === playerId);
         if (player) {
           player.score = Math.max(0, player.score + delta);
+          window.SFX?.play(delta > 0 ? (delta >= 5 ? 'coin' : 'point') : 'minus');
           renderScoreboard();
         }
       }
@@ -285,6 +289,7 @@
         }).join('');
 
         document.getElementById('summaryModal').classList.add('active');
+        window.SFX?.play('fanfare');
       }
 
       function closeSummary() {

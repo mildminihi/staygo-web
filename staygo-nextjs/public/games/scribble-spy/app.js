@@ -10,7 +10,7 @@
 import {
   connect, createRoom, joinRoom, leaveRoom, watchRoom, watch, roomMeta, normalizeCode,
   write, patch, remove, uid, now, serverTime, loadSession, clearSession, joinUrl, qrSvg,
-  $, esc, toast, beep, copyText,
+  $, esc, toast, beep, copyText, sfx,
 } from "/assets/js/live-room.js";
 import { CATEGORIES } from "./words.js";
 
@@ -53,6 +53,15 @@ const shuffle = (a) => {
 };
 const secs = (ms) => Math.max(0, Math.ceil(ms / 1000));
 const norm = (s) => String(s || "").toLowerCase().replace(/[\s.\-_'"!?]/g, "");
+// a guess counts in Thai or, for players using the English site, in English ("a"/"the" optional)
+const noArticle = (s) => norm(String(s || "").trim().replace(/^(a|an|the)\s+/i, ""));
+function guessMatches(guess, word) {
+  if (norm(guess) === norm(word)) return true;
+  const en = window.STAYGO_I18N?.en(word);
+  if (!en) return false;
+  const g = noArticle(guess);
+  return g === noArticle(en) || g === noArticle(en.replace(/\s*\(.*\)$/, "")); // "Krasue (floating head ghost)"
+}
 const colorOf = (st, id) => COLORS[(st.colors?.[id] ?? 0) % COLORS.length];
 const nameOf = (id) => room?.players?.[id]?.name || "ผู้เล่นที่ออกไปแล้ว";
 const dot = (st, id) => `<i class="ss-dot" style="--c:${colorOf(st, id)}"></i>`;
@@ -288,7 +297,7 @@ function hostTick() {
     const sec = secs(left);
     $("hBar").style.width = `${Math.max(0, Math.min(1, left / st.turnMs)) * 100}%`;
     $("hBar").classList.toggle("hurry", sec <= 5);
-    if (sec <= 3 && sec > 0 && lastBeep !== `${key}-${sec}`) beep(520, 60);
+    if (sec <= 3 && sec > 0 && lastBeep !== `${key}-${sec}`) sfx("tick");
     lastBeep = `${key}-${sec}`;
   } else if (phase === "vote") {
     const voters = artistsOf(st).filter((id) => room.players?.[id]?.online);
@@ -308,7 +317,7 @@ function hostTick() {
     $("hBar").style.width = `${Math.max(0, (st.guessEnd - t) / GUESS_MS) * 100}%`;
     $("hBar").classList.toggle("hurry", st.guessEnd - t < 10000);
     if (acted !== key) {
-      if (gs?.text && norm(gs.text) === norm(wordOf())) {
+      if (gs?.text && guessMatches(gs.text, wordOf())) {
         acted = key;
         finish(st, true, true, gs.text);
       } else if (!gs && t > st.guessEnd) {
@@ -324,9 +333,11 @@ function nextTurn(st, i, key) {
   const turns = turnsOf(st);
   if (i + 1 >= turns.length) {
     patch(`live/${code}/state`, { phase: "vote", voteEnd: now() + VOTE_MS }).catch(() => (acted = ""));
-    beep(660, 300);
+    sfx("whoosh");
+    setTimeout(() => sfx("notify"), 300);
   } else {
     patch(`live/${code}/state`, { turn: i + 1, turnAt: now() }).catch(() => (acted = ""));
+    sfx("pop");
   }
 }
 function skipTurn(st, i, key, s) {
@@ -352,7 +363,8 @@ function closeVote(st) {
   const spy = spyOf();
   if (max > 0 && top.length === 1 && top[0] === spy) {
     patch(`live/${code}/state`, { phase: "guess", guessEnd: now() + GUESS_MS, tally: count }).catch(() => (acted = ""));
-    beep(988, 300);
+    sfx("drumroll", 1.0);
+    setTimeout(() => sfx("reveal"), 1000);
   } else finish({ ...st, tally: count }, false, false, "");
 }
 /** caught: the vote found the spy; correct: the spy then guessed the word. */
@@ -367,7 +379,7 @@ function finish(st, caught, correct, guess) {
     scores,
     result: { spy, word: wordOf() || "", caught, correct, guess: guess || "", spyWins, tally: st.tally || tally(st) },
   }).catch(() => (acted = ""));
-  beep(spyWins ? 440 : 1319, 400);
+  sfx(spyWins ? "lose" : "fanfare");
 }
 $("closeVote").onclick = () => {
   const st = room?.state;
@@ -385,6 +397,7 @@ function judge(ok) {
 }
 
 // ---- host rendering
+let seenPlayers = -1;
 function renderHost() {
   const st = room.state || {};
   const phase = st.phase || "lobby";
@@ -392,6 +405,8 @@ function renderHost() {
   const scores = st.scores || {};
   const inGame = new Set(turnsOf(st));
   $("playerCount").textContent = `(${players.filter((p) => p.online).length}/${players.length})`;
+  if (players.length > seenPlayers && seenPlayers >= 0) sfx("join");
+  seenPlayers = players.length;
   $("playerList").innerHTML = players.length
     ? players
         .map((p) => {
@@ -597,7 +612,13 @@ function renderPlayer() {
     $("pResult").hidden = phase !== "result";
     document.body.classList.toggle("sd-ingame", phase !== "lobby");
     if (phase === "draw") roleHidden = false;
-    if (phase === "result") beep(st.result?.spyWins ? 440 : 1319, 300);
+    if (phase === "result") {
+      const r = st.result || {};
+      const iAmSpy = r.spy === uid();
+      sfx(iAmSpy === !!r.spyWins ? "win" : "lose");
+    }
+    if (phase === "vote" && mine) sfx("notify");
+    if (phase === "draw" && st.turn === 0) sfx("reveal");
     $("guessInput").value = "";
     $("guessBtn").disabled = false;
   }
@@ -616,7 +637,7 @@ function renderPlayer() {
     if (myTurn && myTurnKey !== `${st.game}-${i}`) {
       myTurnKey = `${st.game}-${i}`;
       navigator.vibrate?.([80, 60, 80]);
-      beep(880, 150);
+      sfx("turn");
     }
     pad.classList.toggle("mine", myTurn);
     const next = turns.indexOf(uid(), i + (who === uid() ? 1 : 0));
@@ -666,6 +687,7 @@ $("voteList").addEventListener("click", (e) => {
   if (!b || st?.phase !== "vote") return;
   write(`live/${code}/accuse/${st.game}/${uid()}`, b.dataset.vote).catch(() => toast("โหวตไม่สำเร็จ"));
   navigator.vibrate?.(20);
+  sfx("vote");
 });
 
 $("guessBtn").onclick = async () => {
@@ -754,6 +776,7 @@ function endStroke() {
   stroke = null;
   pad.classList.remove("mine");
   navigator.vibrate?.(30);
+  sfx("place");
   renderPlayer();
 }
 for (const t of ["pointerup", "pointercancel", "lostpointercapture"]) pad.addEventListener(t, endStroke);

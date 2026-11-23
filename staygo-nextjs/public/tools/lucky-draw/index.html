@@ -36,6 +36,9 @@
     <script defer src="../../assets/js/config.js"></script>
     <script defer src="../../assets/js/site.js"></script>
     <script src="/assets/js/analytics.js" defer></script>
+    <script src="/assets/js/sfx.js"></script>
+    <script src="/assets/js/i18n.js"></script>
+    <script src="/assets/js/i18n/tools.js"></script>
       <link rel="stylesheet" href="/assets/css/staygo-skin.css" />
     <link rel="stylesheet" href="./skin.css" />
   </head>
@@ -260,6 +263,7 @@
         }
 
         state.items.push(text);
+        window.SFX?.play('pop');
         itemInput.value = '';
         itemInput.focus();
         updateDisplay();
@@ -268,6 +272,7 @@
       // Remove item
       function removeItem(index) {
         state.items.splice(index, 1);
+        window.SFX?.play('back');
         updateDisplay();
       }
 
@@ -284,6 +289,8 @@
 
         // Show animation
         showDrawAnimation(drawnItem);
+        window.SFX?.play('reveal');
+        setTimeout(() => window.SFX?.play('fanfare'), 120);
 
         // Add to history
         state.drawnItems.push({

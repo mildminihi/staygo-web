@@ -3,6 +3,7 @@ import { Inter, Kanit } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import I18nBoot from "@/components/I18nBoot";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -85,11 +86,21 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="th">
+    // data-i18n-manual: I18nBoot starts the translator after hydration; lang/class change on the client
+    <html lang="th" data-i18n-manual="" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <script src="/assets/js/analytics.js" defer></script>
+        {/* English mode: hide the Thai text until i18n.js has swapped it (it removes the class, 1.5s at most) */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{if(localStorage.getItem('staygo-lang')==='en'){var d=document.documentElement;d.lang='en';d.classList.add('lang-en','i18n-wait');setTimeout(function(){d.classList.remove('i18n-wait')},1500)}}catch(e){}",
+          }}
+        />
+        <style>{`html.i18n-wait body{opacity:0}`}</style>
+        <script src="/assets/js/i18n.js" defer></script>
         
         {/* Structured Data for Search Engines */}
         <script
@@ -105,6 +116,7 @@ export default function RootLayout({
         <Header />
         {children}
         <Footer />
+        <I18nBoot />
       </body>
     </html>
   );

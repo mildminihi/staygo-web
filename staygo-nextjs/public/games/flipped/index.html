@@ -23,6 +23,9 @@
 <link rel="canonical" href="https://www.staygoch.com/games/flipped/">
 <link rel="icon" type="image/png" href="/games/reveal-board/staygo-logo.png">
 <script src="/assets/js/analytics.js" defer></script>
+    <script src="/assets/js/sfx.js"></script>
+    <script src="/assets/js/i18n.js"></script>
+    <script src="/assets/js/i18n/flipped.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Mitr:wght@400;500;600&display=swap" rel="stylesheet">
@@ -91,10 +94,12 @@ h2{font-size:24px;margin:0 0 4px;font-weight:600}
 .back:hover{color:var(--sg-ink);text-decoration:underline}
 </style>
 </head>
-<body class="sg-page">
+<body class="sg-page" data-lang-toggle-auto="off">
 <div id="wrap"><canvas id="c" aria-label="โต๊ะพินบอล"></canvas></div>
 
-<div class="ov show" id="ovTitle"><div class="panel">
+<div class="ov show" id="ovTitle"><div class="panel" style="position:relative">
+  <!-- TH/EN switch lives in the menu here, so it never covers the table during play (i18n.js fills it in) -->
+  <button type="button" class="lang-toggle" data-lang-toggle data-sfx="off" style="position:absolute;top:10px;right:10px"></button>
   <h1 class="logo"><span style="--c:#1a9bf0">F</span><span style="--c:#2b8ce6">L</span><span style="--c:#3d7fdb">I</span><span style="--c:#ffd21f">P</span><span style="--c:#ffb000">P</span><span style="--c:#e8202a">E</span><span style="--c:#1a9bf0">D</span></h1>
   <div class="tag">PINBALL REBELLION</div>
   <p class="sub">คุณคือลูกเหล็ก ลงหลุมให้ได้!</p>
@@ -161,6 +166,7 @@ h2{font-size:24px;margin:0 0 4px;font-weight:600}
 const W=400, TH=720, HUD=46, CH=TH+HUD;
 const cv=document.getElementById('c'), ctx=cv.getContext('2d');
 let scale=1, dpr=1;
+function sfx(n,a,gap){ window.SFX?.play(n,a,gap); }
 function resize(){
   scale=Math.min(innerWidth/W, innerHeight/CH);
   dpr=window.devicePixelRatio||1;
@@ -199,7 +205,7 @@ function renderShop(){
     r.innerHTML=`<span>${u.name} <small>Lv ${lv}</small></span>`;
     const b=document.createElement('button'); b.className='buy sg-btn small yellow'; b.textContent=`${c} 🔩`;
     b.disabled=meta.scrap<c;
-    b.onclick=()=>{ if(meta.scrap>=c){meta.scrap-=c; meta[u.k]++; saveMeta(); renderShop();} };
+    b.onclick=()=>{ if(meta.scrap>=c){meta.scrap-=c; meta[u.k]++; saveMeta(); renderShop(); sfx('levelup');} };
     r.appendChild(b); box.appendChild(r);
   });
 }
@@ -383,6 +389,7 @@ function cfg(n){
 }
 
 function startRun(){
+  sfx('go');
   if(meta.balls<=0) meta=freshMeta();
   meta.balls--; meta.used++; saveMeta();
   S={maxHp:100+meta.hp*15, atk:10+meta.atk*2, def:0, enMax:100+meta.en*15, regen:9, cost:30, power:950,
@@ -496,18 +503,18 @@ function hitPower(impact){
 }
 
 // ---------- combat ----------
-function addCoins(n,x,y){ n=Math.round(n*(M&&M.coinMul||1)); if(n<=0) return; run.coins+=n; run.coinsEarned+=n; float(x,y,'+'+n+' 🪙','#e09a00',13); }
+function addCoins(n,x,y){ n=Math.round(n*(M&&M.coinMul||1)); if(n<=0) return; sfx('coin',0,90); run.coins+=n; run.coinsEarned+=n; float(x,y,'+'+n+' 🪙','#e09a00',13); }
 function hurtBall(d,x,y,fromFlipper){
   if(fromFlipper){ if(ball.iframe>0) return; ball.iframe=.6; }
-  if(run.guard>0){ run.guard--; float(x,y,'กันได้ 🛡️','#1a9bf0',15); burst(ball.x,ball.y,'#1a9bf0',12,200); return; }
+  if(run.guard>0){ run.guard--; sfx('block'); float(x,y,'กันได้ 🛡️','#1a9bf0',15); burst(ball.x,ball.y,'#1a9bf0',12,200); return; }
   d=Math.max(1,Math.round(d-S.def));
-  ball.hp-=d; ball.flash=.25; shake=Math.max(shake,7);
+  ball.hp-=d; ball.flash=.25; shake=Math.max(shake,7); sfx('hurt',0,80);
   run.taken+=d; if(d>run.maxTakenHit) run.maxTakenHit=d;
   float(x,y,'-'+d,'#e8202a',17);
   if(ball.hp<=0){
     if(run.lives>0){
       run.lives--; run.revives++; ball.hp=Math.round(S.maxHp*.5); ball.iframe=1.5;
-      ball.en=S.enMax; burst(ball.x,ball.y,'#e8202a',30,320);
+      ball.en=S.enMax; burst(ball.x,ball.y,'#e8202a',30,320); sfx('heal');
       banner={t:'ชีวิตสำรอง! 💖',s:'ฟื้นกลับมา 50% ลุยต่อ',life:1.4,boss:false};
       return;
     }
@@ -524,8 +531,8 @@ function damageBumper(b,d,col){
   if(b.hp<=0) killBumper(b);
 }
 function killBumper(b){
-  b.alive=false; run.kills++; run.mkills++;
-  if(run.mkills===M.shieldReq){ banner={t:'เกราะบอสแตก! 🛡️💥',s:'ตอนนี้ชนไม้ตีได้เต็มแรงแล้ว',life:1.5,boss:false}; for(const f of flippers) if(f.alive){const t=tipOf(f); burst((f.p.x+t.x)/2,(f.p.y+t.y)/2,'#1a9bf0',24,260);} }
+  b.alive=false; run.kills++; run.mkills++; sfx('break',0,40);
+  if(run.mkills===M.shieldReq){ banner={t:'เกราะบอสแตก! 🛡️💥',s:'ตอนนี้ชนไม้ตีได้เต็มแรงแล้ว',life:1.5,boss:false}; sfx('levelup'); for(const f of flippers) if(f.alive){const t=tipOf(f); burst((f.p.x+t.x)/2,(f.p.y+t.y)/2,'#1a9bf0',24,260);} }
   burst(b.x,b.y,bCol(b),22,260);
   const xp=Math.round(b.maxHp*.6);
   gainXp(xp);
@@ -539,7 +546,7 @@ function killBumper(b){
 }
 // bomb bumper: blast nearby bumpers
 function explode(b){
-  burst(b.x,b.y,'#ff8a00',36,380); shake=Math.max(shake,10);
+  burst(b.x,b.y,'#ff8a00',36,380); shake=Math.max(shake,10); sfx('explode',0,60);
   bolts.push({ring:true,x1:b.x,y1:b.y,life:.3});
   for(const o of bumpers){ if(o===b||!o.alive) continue; if(Math.hypot(o.x-b.x,o.y-b.y)<100) damageBumper(o,S.atk*2,'#ff8a00'); }
 }
@@ -548,12 +555,13 @@ function gainXp(x){
   let need=25+15*run.lvl;
   while(run.xp>=need){
     run.xp-=need; run.lvl++; S.atk+=3; S.maxHp+=8; healBall(20,ball.x,ball.y-24);
-    float(ball.x,ball.y-30,'LEVEL UP!','#e09a00',20); burst(ball.x,ball.y,'#e09a00',26,300);
+    float(ball.x,ball.y-30,'LEVEL UP!','#e09a00',20); sfx('levelup'); burst(ball.x,ball.y,'#e09a00',26,300);
     need=25+15*run.lvl;
   }
 }
 function hitBumper(b,impact){
   const d=hitPower(impact);
+  sfx('bumper',0,40);
   damageBumper(b,d,impact>650&&S.pierce?'#ff8a00':'#231f20');
   burst(ball.x,ball.y,bCol(b),6,150);
   if(S.burn){b.burn=3; b.burnDps=S.atk*.35*S.burn;}
@@ -571,11 +579,11 @@ function damageFlipper(f,d,silent){
   f.hp-=d;
   if(M.boss && !f.rage && f.hp>0 && f.hp<f.maxHp*.5){
     f.rage=true;
-    if(!M.raged){ M.raged=true; banner={t:'บอสโกรธแล้ว! 😡',s:'ไม้ตีตีเร็วขึ้น ระวังด้วย',life:1.3,boss:true}; }
+    if(!M.raged){ M.raged=true; banner={t:'บอสโกรธแล้ว! 😡',s:'ไม้ตีตีเร็วขึ้น ระวังด้วย',life:1.3,boss:true}; sfx('alarm'); }
   }
   if(!silent){ f.flash=.15; const t=tipOf(f); float((f.p.x+t.x)/2,(f.p.y+t.y)/2-14,Math.max(1,Math.round(d))+(sh?' 🛡️':''),sh?'#1a9bf0':'#e09a00',16); }
   if(f.hp<=0){
-    f.hp=0; f.alive=false; shake=12; run.flipBroken++;
+    f.hp=0; f.alive=false; shake=12; run.flipBroken++; sfx('crit'); setTimeout(()=>sfx('explode'),80);
     addCoins(5,(f.p.x+tipOf(f).x)/2,(f.p.y+tipOf(f).y)/2+18);
     const t=tipOf(f); burst((f.p.x+t.x)/2,(f.p.y+t.y)/2,'#e8202a',40,340);
     banner={t:f.side<0?'ไม้ตีซ้ายพัง!':'ไม้ตีขวาพัง!',s:'หลุมเปิดแล้ว ลงไปเลย!',life:1.4,boss:false};
@@ -595,6 +603,7 @@ function ballHitsFlipper(f,impact){
     damageFlipper(f,d*.6);
     damageFlipper(o,d*.4,true); o.flash=.15; o.since=0;
   } else damageFlipper(f,d);
+  sfx('hit',0,60);
   burst(ball.x,ball.y,'#e09a00',10,200);
   shake=Math.max(shake,4);
   if(S.burn){f.burn=3; f.burnDps=S.atk*.25*S.burn;}
@@ -606,7 +615,7 @@ function aiFlippers(dt){
     if(!f.alive) continue;
     f.cd-=dt; f.hitCd-=dt; f.flash-=dt;
     if(f.burn>0){ f.burn-=dt; damageFlipper(f,f.burnDps*dt,true); if(!f.alive) continue; }
-    if(f.pending>0){ f.pending-=dt; if(f.pending<=0){ f.pending=0; f.state='up'; f.hold=M.hold; f.cd=M.cool; } continue; }
+    if(f.pending>0){ f.pending-=dt; if(f.pending<=0){ f.pending=0; f.state='up'; f.hold=M.hold; f.cd=M.cool; window.SFX?.tone(f.rage?260:200,70,'square',.07); } continue; }
     if(f.state==='rest' && f.cd<=0){
       const t=tipOf(f), d=distSeg(ball.x,ball.y,f.p.x,f.p.y,t.x,t.y);
       const reach=R+20+Math.max(0,ball.vy)*.06;
@@ -624,7 +633,7 @@ function aiFlippers(dt){
       if(dead.length){
         const b=dead[Math.floor(Math.random()*dead.length)];
         Object.assign(b,{alive:true,type:'s',hp:Math.round(b.maxHp*.6),flash:.3,burn:0});
-        burst(b.x,b.y,'#8a2be2',20,220); float(b.x,b.y-b.r-8,'คืนชีพ!','#8a2be2',13);
+        burst(b.x,b.y,'#8a2be2',20,220); float(b.x,b.y-b.r-8,'คืนชีพ!','#8a2be2',13); sfx('charge');
       }
     }
   }
@@ -634,7 +643,7 @@ function aiFlippers(dt){
       if(M.mark.life<=0){
         const m=M.mark; M.mark=null;
         bolts.push({x1:m.x+(Math.random()-.5)*60,y1:-HUD,x2:m.x,y2:m.y,life:.25,col:'#e8202a'});
-        burst(m.x,m.y,'#ffc21a',22,300); shake=Math.max(shake,8);
+        burst(m.x,m.y,'#ffc21a',22,300); shake=Math.max(shake,8); sfx('crit');
         if(Math.hypot(ball.x-m.x,ball.y-m.y)<40) hurtBall(M.fdmg*.6,ball.x,ball.y-16,false);
       }
     } else {
@@ -658,7 +667,7 @@ function step(h){
   ball.x+=ball.vx*h; ball.y+=ball.vy*h;
   for(const f of flippers) updFlipper(f,h);
   const wb=Math.min(.95,S.bounce+M.bAdd);
-  for(const w of walls) collide(w[0],w[1],w[2],w[3],2,wb);
+  for(const w of walls){ const r=collide(w[0],w[1],w[2],w[3],2,wb); if(r&&r.impact>180) sfx('bounce',r.impact/1300,70); }
   for(const p of posts) collide(p.x,p.y,p.x,p.y,6,.7);
   for(const s of spinners){
     s.ang+=s.w*h;
@@ -667,7 +676,7 @@ function step(h){
   }
   for(const s of slings){
     const r=collide(s[0],s[1],s[2],s[3],3,S.bounce);
-    if(r && s[4] && r.impact>60){ ball.vx+=r.nx*300; ball.vy+=r.ny*300; burst(r.cx,r.cy,'#e8202a',5,140); }
+    if(r && s[4] && r.impact>60){ ball.vx+=r.nx*300; ball.vy+=r.ny*300; burst(r.cx,r.cy,'#e8202a',5,140); sfx('bumper',0,60); }
   }
   for(const b of bumpers){
     if(!b.alive) continue;
@@ -741,6 +750,7 @@ function update(rdt){
 function hideAll(){document.querySelectorAll('.ov').forEach(o=>o.classList.remove('show'));}
 function clearMachine(){
   state='buff'; aim.active=false; timeScale=1;
+  sfx('drain'); setTimeout(()=>sfx('fanfare'),350);
   healBall(Math.round(S.maxHp*.15),200,600);
   if(M.boss) run.bossKills++;
   const reward=Math.round((8+2*run.machine)*(M.boss?1.5:1)*M.coinMul);
@@ -761,7 +771,7 @@ function showBuffs(title,sub,then){
     const el=document.createElement('button'); el.className='card';
     const n=run.buffs[b.id]||0;
     el.innerHTML=`<div class="ic">${b.icon}</div><div><div class="nm">${b.name}</div><div class="ds">${b.desc}</div>${n?`<div class="st">มีแล้ว x${n} · ซ้อนได้</div>`:''}</div>`;
-    el.onclick=()=>{ b.apply(S); run.buffs[b.id]=n+1; then(); };
+    el.onclick=()=>{ b.apply(S); run.buffs[b.id]=n+1; sfx('powerup'); then(); };
     box.appendChild(el);
   });
   const owned=ownedText();
@@ -792,7 +802,7 @@ function renderRunShop(){
     b.disabled=slot.sold||!ok||run.coins<pr;
     b.onclick=()=>{
       if(slot.sold||!it.can()||run.coins<pr) return;
-      run.coins-=pr; slot.sold=true;
+      run.coins-=pr; slot.sold=true; sfx('coin');
       if(!it.buy()) renderRunShop(); // card item opens the buff picker, which returns here
     };
     el.appendChild(b); box.appendChild(el);
@@ -807,11 +817,12 @@ function renderRunShop(){
   const owned=ownedText();
   document.getElementById('shopInv').innerHTML=inv+(owned?'<br>บัฟ: '+owned:'');
 }
-document.getElementById('btnReroll').onclick=()=>{ const c=rerollCost(); if(run.coins<c) return; run.coins-=c; run.reroll++; rollShop(); renderRunShop(); };
-document.getElementById('btnNext').onclick=()=>{ run.machine++; setupMachine(); hideAll(); state='play'; };
+document.getElementById('btnReroll').onclick=()=>{ const c=rerollCost(); if(run.coins<c) return; sfx('shuffle'); run.coins-=c; run.reroll++; rollShop(); renderRunShop(); };
+document.getElementById('btnNext').onclick=()=>{ sfx('go'); run.machine++; setupMachine(); hideAll(); state='play'; };
 function gameOver(){
   if(state!=='play') return;
   state='over'; aim.active=false; timeScale=1;
+  sfx('explode'); setTimeout(()=>sfx('lose'),450);
   const cleared=run.machine-1;
   const gain=cleared*12+run.kills+run.lvl*2;
   meta.scrap+=gain; meta.cleared+=cleared; meta.bestRun=Math.max(meta.bestRun,run.machine);
@@ -866,11 +877,12 @@ function launch(){
   if(!v||!v.ok) return; // too short = cancel, no energy spent
   if(run.freeDash>0) run.freeDash--;
   else {
-    if(ball.en<S.cost){ exhaustedT=1; float(ball.x,ball.y-20,'หมดแรง!','#ff8a00',15); return; }
+    if(ball.en<S.cost){ exhaustedT=1; float(ball.x,ball.y-20,'หมดแรง!','#ff8a00',15); sfx('wrong'); return; }
     ball.en-=S.cost;
   }
   const pw=S.power*(.25+.75*v.p);
   ball.vx=v.x*pw; ball.vy=v.y*pw; launched=true;
+  sfx('shoot');
   burst(ball.x,ball.y,'#1a9bf0',12,220);
 }
 function cancel(){ aim.active=false; }
@@ -923,7 +935,16 @@ function inkBar(x1,y1,x2,y2,c,w){
   line(x1,y1,x2,y2,c,w);
 }
 function disc(x,y,r,fill,stroke,sw){ctx.beginPath();ctx.arc(x,y,r,0,6.283);if(fill){ctx.fillStyle=fill;ctx.fill();}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=sw||3;ctx.stroke();}}
+// canvas text isn't part of the page, so translate it here for the English site (cached: it's drawn every frame)
+const trCache=new Map();
+function trc(t){
+  if(typeof t!=='string'||!window.STAYGO_I18N||STAYGO_I18N.lang!=='en'||!/[\u0E00-\u0E7F]/.test(t)) return t;
+  let v=trCache.get(t);
+  if(v===undefined){ v=STAYGO_I18N.t(t); if(trCache.size>400) trCache.clear(); trCache.set(t,v); }
+  return v;
+}
 function label(t,x,y,font,fill,stroke,sw){
+  t=trc(t);
   ctx.font=font; ctx.lineJoin='round';
   if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=sw||4;ctx.strokeText(t,x,y);}
   ctx.fillStyle=fill; ctx.fillText(t,x,y);

@@ -426,10 +426,13 @@
       }
     </style>
     <script src="/assets/js/analytics.js" defer></script>
+    <script src="/assets/js/sfx.js"></script>
+    <script src="/assets/js/i18n.js"></script>
+    <script src="/assets/js/i18n/tools.js"></script>
       <link rel="stylesheet" href="/assets/css/staygo-skin.css" />
     <link rel="stylesheet" href="./skin.css" />
   </head>
-  <body class="sg-page sg-skin">
+  <body class="sg-page sg-skin" data-sfx-toggle="off">
     <header class="wb-topbar">
       <a href="../../#tools" class="wb-icon-btn" aria-label="กลับหน้าหลัก" title="กลับ">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
@@ -543,6 +546,14 @@
         const cursorEl = document.getElementById('cursor');
         const undoBtn = document.getElementById('undoBtn');
         const redoBtn = document.getElementById('redoBtn');
+        window.SFX?.mountToggle(undoBtn.parentElement, undoBtn);
+        // TH/EN switch in the top bar (i18n.js fills in the label and handles the click)
+        const langBtn = document.createElement('button');
+        langBtn.type = 'button';
+        langBtn.className = 'lang-toggle';
+        langBtn.setAttribute('data-lang-toggle', '');
+        langBtn.setAttribute('data-sfx', 'off');
+        undoBtn.parentElement.insertBefore(langBtn, undoBtn);
         const popover = document.getElementById('popover');
         const moreBtn = document.getElementById('moreBtn');
         const moreSwatch = document.getElementById('moreSwatch');
@@ -776,6 +787,7 @@
         function undo() {
           if (!actions.length) return;
           redoStack.push(actions.pop());
+          window.SFX?.play('back');
           redraw();
           updateHistoryButtons();
           persist();
@@ -784,6 +796,7 @@
         function redo() {
           if (!redoStack.length) return;
           actions.push(redoStack.pop());
+          window.SFX?.play('tap');
           redraw();
           updateHistoryButtons();
           persist();
@@ -797,6 +810,7 @@
         function clearBoard() {
           if (!visibleActions().length) return;
           actions.push({ type: 'clear' });
+          window.SFX?.play('erase');
           redoStack = [];
           redraw();
           updateHistoryButtons();
@@ -806,6 +820,7 @@
 
         // ---------- Save as PNG ----------
         function saveImage() {
+          window.SFX?.play('correct');
           const out = document.createElement('canvas');
           out.width = canvas.width;
           out.height = canvas.height;

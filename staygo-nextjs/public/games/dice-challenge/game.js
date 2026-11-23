@@ -241,6 +241,7 @@ function setupEventListeners() {
 
 // Handle start game
 function handleStartGame() {
+    window.SFX?.play('go');
     const activeModeBtn = document.querySelector('.mode-btn.active');
     const activeDiceBtn = document.querySelector('.dice-count-btn.active');
     
@@ -279,9 +280,11 @@ function handleRollDice() {
     
     const result = gameState.rollDice();
     renderDiceResults(result);
+    window.SFX?.play('dice');
     
     // Check if card matches
     const matches = gameState.checkCardMatch();
+    setTimeout(() => window.SFX?.play(matches ? 'correct' : 'wrong'), 450);
     if (matches) {
         showCardMatch(true);
     } else {
@@ -310,6 +313,7 @@ function handleAddScore() {
     
     const success = gameState.addScore();
     if (success) {
+        window.SFX?.play('coin');
         // Update displays
         if (typeof updateCurrentTeamDisplay === 'function') {
             updateCurrentTeamDisplay();

@@ -7,7 +7,7 @@
 import {
   connect, createRoom, joinRoom, leaveRoom, watchRoom, roomMeta, normalizeCode,
   write, patch, remove, uid, now, loadSession, clearSession, joinUrl, qrSvg,
-  $, esc, toast, beep, copyText,
+  $, esc, toast, beep, copyText, sfx,
 } from "/assets/js/live-room.js";
 import { SHAPE_SETS } from "./words.js";
 
@@ -168,6 +168,7 @@ async function enterHost(c) {
   });
 }
 
+let seenPlayers = -1;
 function renderHostRoom() {
   const st = room.state || {};
   const ph = phaseOf(st);
@@ -176,6 +177,8 @@ function renderHostRoom() {
   const draws = room.draws?.[game] || {};
   const answers = room.answers?.[game] || {};
   $("playerCount").textContent = `(${players.filter((p) => p.online).length}/${players.length})`;
+  if (players.length > seenPlayers && seenPlayers >= 0) sfx("join");
+  seenPlayers = players.length;
   $("playerList").innerHTML = players.length
     ? players
         .map((p) => {
@@ -215,27 +218,27 @@ function hostTick() {
       $("hPrompt").classList.remove("pop");
       void $("hPrompt").offsetWidth;
       $("hPrompt").classList.add("pop");
-      beep(ph.i === 0 ? 1175 : 880, 200);
+      sfx(ph.i === 0 ? "go" : "notify");
     }
-    if (ph.name === "order") beep(660, 300);
+    if (ph.name === "order") sfx("whoosh");
     if (ph.name === "reveal") {
       revealSig = "";
       galIdx = 0;
-      beep(1319, 350);
+      sfx("fanfare");
     }
     renderHostRoom();
   }
   if (ph.name === "count") {
     const n = Math.min(3, secs(ph.left));
     $("hCountNum").textContent = n;
-    if (lastBeep !== "c" + n) beep(660, 120);
+    if (lastBeep !== "c" + n) sfx("count");
     lastBeep = "c" + n;
   } else if (ph.name === "draw") {
     const s = secs(ph.left);
     $("hSecs").textContent = s;
     $("hBar").style.width = `${ph.frac * 100}%`;
     $("hBar").classList.toggle("hurry", s <= 3);
-    if (s <= 3 && lastBeep !== `d${ph.i}-${s}`) beep(520, 70);
+    if (s <= 3 && lastBeep !== `d${ph.i}-${s}`) sfx("tick");
     lastBeep = `d${ph.i}-${s}`;
     const prev = ph.i - 1;
     if (prev >= 0) {
@@ -527,6 +530,7 @@ function startRound(st, i) {
   void el.offsetWidth;
   el.classList.add("pop");
   navigator.vibrate?.(i === 0 ? 120 : 60);
+  sfx(i === 0 ? "go" : "notify");
 }
 
 function saveRound(i) {
@@ -603,6 +607,7 @@ $("slots").addEventListener("click", (e) => {
     [G.slots[G.sel], G.slots[k]] = [G.slots[k], G.slots[G.sel]];
     G.sel = null;
     navigator.vibrate?.(20);
+    sfx("move");
     saveAnswer();
   }
   renderSlots();
@@ -634,7 +639,7 @@ async function enterReveal() {
     })
     .join("");
   $("pScore").innerHTML = `${score}<small>/${st.n}</small>`;
-  if (score === st.n) beep(1319, 400);
+  sfx(score === st.n ? "win" : score >= st.n / 2 ? "correct" : "minus");
   renderRank();
 }
 function renderRank() {

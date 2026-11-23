@@ -102,6 +102,7 @@ function addFinger(id, x, y) {
   $("dots").appendChild(el);
   fingers.set(id, { x, y, color, el });
   navigator.vibrate?.(15);
+  window.SFX?.play("pop");
   changed();
 }
 function removeFinger(id) {
@@ -109,11 +110,14 @@ function removeFinger(id) {
   if (!f) return;
   f.el.remove();
   fingers.delete(id);
+  if (!done) window.SFX?.play("leave");
   changed();
 }
 
+let rollTimer = 0;
 function changed() {
   clearTimeout(timer);
+  clearInterval(rollTimer);
   for (const f of fingers.values()) f.el.querySelector(".fp-ring")?.remove();
   const need = needed();
   if (fingers.size === 0) $("msg").textContent = "วางนิ้วบนจอ";
@@ -127,6 +131,11 @@ function changed() {
       f.el.appendChild(ring);
     }
     timer = setTimeout(pick, HOLD_MS);
+    const t0 = Date.now();
+    rollTimer = setInterval(() => {
+      const k = Math.min(1, (Date.now() - t0) / HOLD_MS);
+      window.SFX?.tone(500 + 700 * k, 40, "triangle", 0.08 + 0.1 * k);
+    }, 140);
   }
 }
 
@@ -139,7 +148,9 @@ function pick() {
   }
   for (const f of list) f.el.querySelector(".fp-ring")?.remove();
   done = true;
+  clearInterval(rollTimer);
   navigator.vibrate?.([40, 60, 120]);
+  window.SFX?.play(mode === "teams" ? "shuffle" : "fanfare");
   if (mode === "teams") {
     list.forEach((f, i) => {
       const t = i % count;
@@ -157,6 +168,7 @@ function pick() {
 
 function reset() {
   clearTimeout(timer);
+  clearInterval(rollTimer);
   done = false;
   nextColor = rnd(COLORS.length);
   fingers.clear();

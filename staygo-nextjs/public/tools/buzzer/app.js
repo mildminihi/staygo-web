@@ -2,7 +2,7 @@
 import {
   connect, createRoom, joinRoom, leaveRoom, watchRoom, roomMeta, normalizeCode,
   write, patch, remove, serverTime, uid, loadSession, clearSession, joinUrl, qrSvg,
-  $, esc, toast, beep, copyText,
+  $, esc, toast, beep, copyText, sfx,
 } from "/assets/js/live-room.js";
 
 const KIND = "buzzer";
@@ -11,6 +11,9 @@ let code = null;
 let role = null;
 let room = null;
 let unwatch = null;
+let lastCount = 0;
+let seenPlayers = -1;
+let playerSig = "";
 let lastFirst = null; // host: uid of the first presser this round, to beep once
 let joined = false;
 
@@ -119,8 +122,12 @@ function renderHost() {
 
   const order = pressOrder();
   const first = order[0];
-  if (first && first.id !== lastFirst) beep(988, 220);
+  if (first && first.id !== lastFirst) sfx("buzz");
+  else if (order.length > lastCount && lastCount > 0) sfx("tap");
   lastFirst = first?.id || null;
+  lastCount = order.length;
+  if (players.length > seenPlayers && seenPlayers >= 0) sfx("join");
+  seenPlayers = players.length;
   $("buzzEmpty").hidden = order.length > 0;
   $("buzzEmpty").textContent = state.locked ? "ล็อกปุ่มอยู่ กด ปลดล็อก เพื่อเริ่ม" : "รอคนกด…";
   $("buzzList").innerHTML = order
@@ -138,6 +145,7 @@ $("host").addEventListener("click", (e) => {
   if (s) {
     const p = room?.players?.[s.dataset.score];
     if (p) write(`live/${code}/players/${s.dataset.score}/score`, Math.max(0, (p.score || 0) + +s.dataset.d));
+    if (p) sfx(+s.dataset.d > 0 ? "point" : "minus");
   }
   const k = e.target.closest("[data-kick]");
   if (k && confirm(`เอา ${room?.players?.[k.dataset.kick]?.name || "ผู้เล่น"} ออกจากห้อง?`)) remove(`live/${code}/players/${k.dataset.kick}`);
@@ -145,10 +153,12 @@ $("host").addEventListener("click", (e) => {
 
 async function nextRound() {
   const round = room?.state?.round ?? 1;
+  sfx("whoosh");
   await patch(`live/${code}/state`, { round: round + 1, locked: false });
   remove(`live/${code}/buzz/${round}`).catch(() => {});
 }
 async function toggleLock() {
+  sfx(room?.state?.locked ? "go" : "block");
   await patch(`live/${code}/state`, { locked: !room?.state?.locked });
 }
 $("nextRound").onclick = nextRound;
@@ -207,6 +217,12 @@ function renderPlayer(me) {
   const state = room.state || { round: 1, locked: false };
   const order = pressOrder();
   const myRank = order.findIndex((b) => b.id === uid()) + 1;
+  const sig = `${state.round}-${myRank}-${state.locked}`;
+  if (sig !== playerSig) {
+    if (myRank === 1 && playerSig && !playerSig.endsWith("-1-false") ) sfx("win");
+    else if (!state.locked && !myRank && playerSig && (playerSig.endsWith("true") || !playerSig.startsWith(state.round + "-"))) sfx("notify");
+    playerSig = sig;
+  }
   $("meName").textContent = me.name;
   $("meScore").textContent = me.score || 0;
   const btn = $("buzz");
@@ -225,6 +241,7 @@ async function press() {
   const round = room?.state?.round ?? 1;
   $("buzz").disabled = true;
   navigator.vibrate?.(60);
+  sfx("buzz");
   try {
     await write(`live/${code}/buzz/${round}/${uid()}`, { t: serverTime() });
   } catch {

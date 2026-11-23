@@ -137,8 +137,10 @@ $("presets").onclick = (e) => {
   const b = e.target.closest("[data-preset]");
   if (!b) return;
   const p = PRESETS[+b.dataset.preset];
-  if (p.q) $("qInput").value = p.q;
-  opts = p.players ? playerNames() : p.opts.slice();
+  // presets fill the inputs in the host's language (players see the text exactly as the host sends it)
+  const t = (x) => window.STAYGO_I18N?.t(x) ?? x;
+  if (p.q) $("qInput").value = t(p.q);
+  opts = p.players ? playerNames() : p.opts.map(t);
   if (opts.length < 2) {
     if (p.players) toast("ยังมีผู้โหวตไม่ถึง 2 คน ใส่ตัวเลือกเองได้");
     while (opts.length < 2) opts.push("");
@@ -184,9 +186,13 @@ $("newPoll").onclick = async () => {
 };
 $("copyLink").onclick = () => copyText(joinUrl(code));
 
+const sfx = (n, a) => window.SFX?.play(n, a);
+let hostSig = "", lastTotal = 0, seenPlayers = -1, ballotSig = "";
 function renderHost() {
   const players = playerList();
   $("playerCount").textContent = `(${players.filter((p) => p.online).length}/${players.length})`;
+  if (players.length > seenPlayers && seenPlayers >= 0) sfx("join");
+  seenPlayers = players.length;
   const poll = room.poll;
   const voters = poll ? room.votes?.[poll.id] || {} : {};
   $("playerList").innerHTML = players.length
@@ -200,6 +206,13 @@ function renderHost() {
   if (!poll) return;
   const { counts, total } = tally();
   const reveal = !poll.open || !poll.hide;
+  const sig = `${poll.id}-${poll.open}`;
+  if (sig !== hostSig) {
+    if (hostSig) sfx(poll.open ? "go" : "fanfare");
+    hostSig = sig;
+    lastTotal = total;
+  } else if (total > lastTotal) sfx("vote");
+  lastTotal = total;
   $("pollQ").textContent = poll.question;
   $("pollState").textContent = poll.open ? "🟢 เปิดโหวตอยู่" : "🏁 ปิดโหวตแล้ว";
   $("voteCount").textContent = `${total}/${players.length}`;
@@ -257,6 +270,11 @@ function renderBallot() {
     return;
   }
   const { counts, total, mine } = tally();
+  const sig = `${poll.id}-${poll.open}`;
+  if (sig !== ballotSig) {
+    if (ballotSig || poll.open) sfx(poll.open ? "notify" : "reveal");
+    ballotSig = sig;
+  }
   if (poll.open) {
     box.innerHTML = `<h2 class="vt-q">${esc(poll.question)}</h2>
       <div class="vt-ballot">${poll.options
@@ -273,6 +291,7 @@ $("ballot").onclick = async (e) => {
   const b = e.target.closest("[data-vote]");
   if (!b || !room?.poll?.open) return;
   navigator.vibrate?.(30);
+  sfx("vote");
   try {
     await write(`live/${code}/votes/${room.poll.id}/${uid()}`, +b.dataset.vote);
   } catch {

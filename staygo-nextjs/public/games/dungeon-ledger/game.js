@@ -50,6 +50,8 @@
 
     var SELL_VALUE = { common: 8, rare: 20, epic: 45, legendary: 90 };
 
+    function sfx(n, a) { if (window.SFX) window.SFX.play(n, a); }
+
     function sellPrice(item) {
         var tmpl = itemTemplateById(item.templateId);
         var base = SELL_VALUE[tmpl.rarity] || 5;
@@ -283,6 +285,10 @@
         state.lastPulls = results;
         syncTeamHp();
         render();
+        var best = results.some(function (h) { return h.rarity === "legendary"; }) ? "fanfare"
+            : results.some(function (h) { return h.rarity === "epic"; }) ? "levelup" : "sparkle";
+        sfx("drumroll", 0.6);
+        setTimeout(function () { sfx("reveal"); sfx(best); }, 600);
     }
 
     function levelUp(id) {
@@ -292,6 +298,7 @@
         if (state.gold < cost) return;
         state.gold -= cost;
         o.level += 1;
+        sfx("levelup");
         render();
     }
 
@@ -416,6 +423,7 @@
         }
         if (idx !== -1) state.inventory.splice(idx, 1);
 
+        sfx("coin");
         addLog("💰 Sold " + tmpl.name + " +" + item.enchant + " for " + price + " gold.", "sys");
         render();
     }
@@ -441,6 +449,8 @@
                 : { ok: false, msg: "Failed — no change" });
 
         state.enchantFeedback[uid] = feedback;
+        sfx("charge");
+        setTimeout(function () { sfx(success ? "powerup" : willDowngrade ? "break" : "wrong"); }, 380);
         if (feedbackTimers[uid]) clearTimeout(feedbackTimers[uid]);
         feedbackTimers[uid] = setTimeout(function () {
             delete state.enchantFeedback[uid];
@@ -458,6 +468,8 @@
         var dmgToMonster = Math.max(1, Math.round(teamAtk * variance()));
         var dmgToTeam = Math.max(1, Math.round(state.monster.atk * variance()));
         var m = state.monster;
+        // idle combat runs every second, so keep these two very quiet
+        if (window.SFX) window.SFX.noise(70, { freq: 1800, to: 400, vol: 0.12 });
 
         addLog("Room " + state.room + " — party hits " + m.name + " for " + dmgToMonster, "atk");
         var nextMonsterHp = m.hp - dmgToMonster;
@@ -476,6 +488,7 @@
                 rewardText += " — found " + dropTmpl.name + "!";
             }
             addLog(rewardText, "win");
+            setTimeout(function () { sfx(m.isBoss ? "fanfare" : dropTmpl ? "sparkle" : "coin"); }, 150);
             state.teamHp = Math.min(maxTeamHp, state.teamHp + Math.round(maxTeamHp * 0.15));
             var nextRoom = state.room + 1;
             state.room = nextRoom;
@@ -489,6 +502,7 @@
         var nextTeamHp = state.teamHp - dmgToTeam;
         if (nextTeamHp <= 0) {
             addLog("The party is overwhelmed. Retreating to room 1.", "defeat");
+            setTimeout(function () { sfx("lose"); }, 200);
             var banished = banishRandomHero();
             if (banished) {
                 addLog("💀 " + banished.name + " was lost to the dungeon. The ledger closes their page.", "defeat");
@@ -500,6 +514,7 @@
             state.gameOver = banished ? { name: banished.name, icon: banished.icon } : { name: null, icon: "💀" };
         } else {
             state.teamHp = nextTeamHp;
+            setTimeout(function () { if (window.SFX) window.SFX.tone(160, 90, "sawtooth", 0.05); }, 250);
         }
 
         render();

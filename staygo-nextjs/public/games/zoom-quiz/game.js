@@ -210,6 +210,8 @@ function renderQuestionCard(q, i){
   return card;
 }
 
+function sfx(n){ window.SFX?.play(n); }
+
 function startQuiz(){
   state.screen = 'play';
   state.currentIndex = 0;
@@ -235,6 +237,7 @@ function beginQuestion(){
   state.lastFrameTime = null;
   render();
   scheduleZoomFrame();
+  sfx('go');
 }
 
 function currentScale(){
@@ -264,9 +267,12 @@ function zoomFrame(now){
   if (img) img.style.transform = `scale(${currentScale()})`;
   const timerEl = document.getElementById('zqTimer');
   if (timerEl) timerEl.textContent = formatTime(durationMs - state.elapsedMs);
+  const leftSec = Math.ceil((durationMs - state.elapsedMs) / 1000);
+  if (leftSec <= 5 && leftSec > 0 && state.lastTickSec !== leftSec) { state.lastTickSec = leftSec; sfx('tick'); }
 
   if (done) {
     state.rafId = null;
+    sfx('timeup');
     render(); // nothing left to pause once fully zoomed out — refresh controls
   } else {
     state.rafId = requestAnimationFrame(zoomFrame);
@@ -275,6 +281,7 @@ function zoomFrame(now){
 
 function togglePause(){
   state.paused = !state.paused;
+  sfx('toggle');
   if (!state.paused && state.phase === 'guessing') {
     scheduleZoomFrame();
   } else if (state.rafId) {
@@ -288,6 +295,8 @@ function revealAnswer(){
   if (state.rafId) { cancelAnimationFrame(state.rafId); state.rafId = null; }
   state.phase = 'revealed';
   render();
+  sfx('reveal');
+  setTimeout(() => sfx('ding'), 150);
   const img = document.getElementById('zqImage');
   if (img) {
     void img.offsetWidth; // force a reflow so the transition below animates from the current scale, not skips straight to it
@@ -301,9 +310,11 @@ function nextQuestion(){
     state.countdown = NEXT_COUNTDOWN_SECONDS;
     render();
     tickNextCountdown();
+    sfx('count');
   } else {
     state.screen = 'summary';
     render();
+    sfx('fanfare');
   }
 }
 
@@ -318,6 +329,7 @@ function tickNextCountdown(){
     } else {
       render();
       tickNextCountdown();
+      sfx('count');
     }
   }, 1000);
 }

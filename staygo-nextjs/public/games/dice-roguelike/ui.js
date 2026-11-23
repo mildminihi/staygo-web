@@ -280,6 +280,7 @@ class UIManager {
     }
 
     onNodeClick(node) {
+        sfx('move');
         if (window.game) {
             window.game.enterNode(node);
         }
@@ -458,6 +459,7 @@ class UIManager {
 
     onDieClick(index) {
         combatManager.diceManager.toggleSelectDie(index);
+        sfx('toggle');
         this.renderDice();
         this.updateCombatButtons();
         this.updateSlotTargets();
@@ -493,6 +495,7 @@ class UIManager {
                 dieDiv.addEventListener('click', (e) => {
                     e.stopPropagation();
                     combatManager.diceManager.removeFromSlot(slotName, die.index);
+                    sfx('back');
                     this.renderDice();
                     this.updateSlots();
                     this.updateCombatButtons();
@@ -536,6 +539,7 @@ class UIManager {
     onSlotClick(slotName) {
         if (combatManager.diceManager.selectedDice.length > 0) {
             combatManager.diceManager.allocateToSlot(slotName);
+            sfx('place');
             this.renderDice();
             this.updateSlots();
             this.updateCombatButtons();
@@ -568,6 +572,7 @@ class UIManager {
     onRollDice() {
         const diceCount = gameState ? gameState.player.diceCount : 5;
         combatManager.diceManager.rollDice(diceCount);
+        sfx('dice');
         this.rollingIndices = combatManager.diceManager.dice.map((_, i) => i);
         this.renderDice();
         this.updateCombatButtons();
@@ -577,6 +582,7 @@ class UIManager {
     onReroll() {
         const rerolledIndices = [...combatManager.diceManager.selectedDice];
         if (combatManager.diceManager.rerollSelected()) {
+            sfx('dice');
             this.rollingIndices = rerolledIndices;
             this.renderDice();
             this.updateCombatButtons();
@@ -908,6 +914,7 @@ class UIManager {
             itemDiv.addEventListener('click', () => {
                 const result = buyShopItem(item, gameState);
                 if (result.success) {
+                    sfx('coin');
                     // Refresh shop display
                     const newInventory = generateShopInventory();
                     this.showShopScreen(newInventory);
@@ -926,6 +933,7 @@ class UIManager {
         if (restBtn) {
             restBtn.onclick = () => {
                 gameState.heal(25);
+                sfx('heal');
                 this.showScreen('mapScreen');
                 this.renderMap();
             };

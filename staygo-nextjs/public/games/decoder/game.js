@@ -263,6 +263,7 @@ function handleStartGame() {
     const digitCount = parseInt(activeBtn.dataset.digits);
 
     gameState.startGame(difficulty, digitCount);
+    window.SFX?.play('go');
     showScreen('playing');
     renderPlayingScreen();
 }
@@ -276,12 +277,14 @@ function handleClear() {
 function handleSubmit() {
     const guess = getCurrentGuess();
     if (!guess || guess.length !== gameState.digitCount) {
+        window.SFX?.play('wrong');
         shakeInputs();
         return;
     }
 
     // Check if all digits are filled
     if (guess.some(d => d === null || d === undefined)) {
+        window.SFX?.play('wrong');
         shakeInputs();
         return;
     }
@@ -292,6 +295,12 @@ function handleSubmit() {
         renderGuessHistory();
         updateGameHeader();
         clearCurrentInput();
+        const fb = gameState.guesses[gameState.guesses.length - 1]?.feedback || [];
+        fb.forEach((f, i) => setTimeout(() => {
+            window.SFX?.tone(f === 'green' ? 900 + i * 70 : f === 'yellow' ? 620 + i * 40 : 300, 90, 'triangle', f === 'green' || f === 'yellow' ? 0.2 : 0.12);
+        }, i * 100));
+        if (gameState.gameStatus === 'victory') setTimeout(() => window.SFX?.play('fanfare'), fb.length * 100 + 150);
+        else if (gameState.gameStatus === 'gameover') setTimeout(() => window.SFX?.play('lose'), fb.length * 100 + 150);
         
         // Check if game ended
         if (gameState.gameStatus === 'victory' || gameState.gameStatus === 'gameover') {

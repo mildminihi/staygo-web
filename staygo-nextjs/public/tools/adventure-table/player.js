@@ -273,7 +273,10 @@ function renderBanners() {
     const mine = cur?.id === uid();
     html += `<div class="at-banner${mine ? " turn" : ""}">${mine ? "⚔️ ถึงตาคุณแล้ว!" : `ตาของ ${esc(cur?.e || "")} <b>${esc(cur?.name || "")}</b>`}<small>รอบที่ ${init.round}</small></div>`;
     const key = `${init.round}:${init.turn}`;
-    if (mine && key !== lastTurn) navigator.vibrate?.([120, 60, 120]);
+    if (mine && key !== lastTurn) {
+      navigator.vibrate?.([120, 60, 120]);
+      window.SFX?.play("turn");
+    }
     lastTurn = mine ? key : "";
   }
   const rq = st.req;
@@ -447,6 +450,7 @@ $("paneSheet").onclick = (e) => {
   if (use) {
     const a = c.abil[use];
     navigator.vibrate?.(30);
+    window.SFX?.play("powerup");
     return writeC({ [`abil/${use}/left`]: Math.max(0, num(a.left, a.max) - 1) });
   }
   const ar = t.closest("[data-aroll]")?.dataset.aroll;
@@ -592,6 +596,7 @@ function renderMsgs() {
     seenMsgs = ids;
     if (fresh.length) {
       navigator.vibrate?.([80, 40, 80]);
+      window.SFX?.play("notify");
       if (tab !== "msgs") $("msgBadge").hidden = false;
       openMsg(fresh[0]);
     }

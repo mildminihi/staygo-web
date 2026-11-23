@@ -155,6 +155,7 @@ export function toast(text, ms = 2400) {
   setTimeout(() => el.remove(), ms);
 }
 export function beep(freq = 880, ms = 160) {
+  if (window.SFX) return window.SFX.tone(freq, ms, "sine", 0.22);
   try {
     const ctx = (beep.ctx ||= new (window.AudioContext || window.webkitAudioContext)());
     const o = ctx.createOscillator();
@@ -167,6 +168,10 @@ export function beep(freq = 880, ms = 160) {
     o.start();
     o.stop(ctx.currentTime + ms / 1000);
   } catch {}
+}
+// named sound effect from /assets/js/sfx.js (no-op if it isn't loaded or is muted)
+export function sfx(name, arg, gap) {
+  window.SFX?.play(name, arg, gap);
 }
 export async function copyText(text) {
   try {

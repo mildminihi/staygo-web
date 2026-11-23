@@ -90,6 +90,7 @@ function createCardElement(card, isTeamMode) {
     // Add click handler (only if not used)
     if (!isUsed) {
         cardDiv.addEventListener('click', () => {
+            window.SFX?.play('select');
             if (isTeamMode) {
                 handleCardSelectTeam(card.id);
             } else {

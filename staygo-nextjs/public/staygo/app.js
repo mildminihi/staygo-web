@@ -168,7 +168,11 @@ function watch() {
       render();
     },
     seats: (v) => {
+      const before = seats.filter(Boolean).length;
       seats = normSeats(v);
+      const after = seats.filter(Boolean).length;
+      if (before && after > before) sfx("join");
+      else if (before && after < before) sfx("leave");
       const s = mySeat();
       if (s >= 0 && s !== presenceSeat) {
         presenceSeat = s;
@@ -177,8 +181,10 @@ function watch() {
       render();
     },
     pub: (v) => {
+      const prev = pub;
       pub = normPub(v);
       render();
+      pubSounds(prev, pub);
     },
     priv: (v) => {
       priv = normPriv(v);
@@ -190,6 +196,42 @@ function watch() {
       render();
     },
   });
+}
+
+// ---------------------------------------------------------------- sounds
+const sfx = (n, a) => window.SFX?.play(n, a);
+const LOG_SOUNDS = [
+  [/STAYGO!!!|ชนะ!/, null], // handled by the phase change
+  [/แถวครบ 6/, "alarm"],
+  [/ไม่ทันกด/, "lose"],
+  [/ต่อแถว/, "place"],
+  [/Take จั่ว/, "deal"],
+  [/Again/, "powerup"],
+  [/GO! ทุกคนส่ง/, "whoosh"],
+  [/Swap/, "shuffle"],
+  [/Got ขโมย/, "coin"],
+  [/Oops!/, "hurt"],
+  [/Yolo/, "whoosh"],
+  [/STAY ใส่|โดน STAY/, "block"],
+  [/ให้การ์ด 1 ใบคืน|ทิ้งการ์ด/, "flip"],
+  [/เริ่มเกม/, "shuffle"],
+];
+function pubSounds(prev, p) {
+  if (!prev || !p) return;
+  if (p.phase === "end" && prev.phase !== "end") {
+    sfx(p.winners?.includes(mySeat()) ? "fanfare" : "lose");
+    return;
+  }
+  const fresh = (p.log || []).slice(prev.log?.length || 0);
+  const last = fresh[fresh.length - 1];
+  if (last) {
+    const hit = LOG_SOUNDS.find(([re]) => re.test(last.text));
+    if (hit && hit[1]) sfx(hit[1]);
+  }
+  if (p.phase !== "end" && p.cur !== prev.cur && p.cur === mySeat()) {
+    setTimeout(() => sfx("turn"), 250);
+    window.SFX?.vibrate(60);
+  }
 }
 
 function leaveLocal() {

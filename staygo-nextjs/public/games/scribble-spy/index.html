@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>ใครวาดมั่ว — เกมวาดรูปจับผิดสายลับ | STAYGO</title>
+    <meta name="title" content="ใครวาดมั่ว — เกมวาดรูปจับผิดสายลับ | STAYGO" />
+    <meta name="description" content="เกมปาร์ตี้วาดรูปบนมือถือ เล่นได้ 3–20 คน ทุกคนรู้คำลับยกเว้นคนวาดมั่ว ผลัดกันวาดคนละเส้นบนกระดานเดียวกันที่จอกลาง แล้วโหวตจับตัวคนที่ไม่รู้คำ" />
+    <meta name="robots" content="index, follow" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.staygoch.com/games/scribble-spy/" />
+    <meta property="og:title" content="ใครวาดมั่ว — เกมวาดรูปจับผิดสายลับ" />
+    <meta property="og:description" content="ทุกคนรู้คำยกเว้น 1 คน ผลัดกันวาดคนละเส้น แล้วโหวตจับคนวาดมั่ว" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="ใครวาดมั่ว — เกมวาดรูปจับผิดสายลับ" />
+    <meta name="twitter:description" content="ทุกคนรู้คำยกเว้น 1 คน ผลัดกันวาดคนละเส้น แล้วโหวตจับคนวาดมั่ว" />
+    <link rel="canonical" href="https://www.staygoch.com/games/scribble-spy/" />
+    <link rel="icon" type="image/png" href="/games/reveal-board/staygo-logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Mitr:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Kanit:wght@700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/assets/css/site.css" />
+    <link rel="stylesheet" href="/assets/css/staygo-cards.css" />
+    <link rel="stylesheet" href="/assets/css/staygo-skin.css" />
+    <link rel="stylesheet" href="/assets/css/staygo-tools.css" />
+    <link rel="stylesheet" href="/games/speed-draw/styles.css" />
+    <link rel="stylesheet" href="./styles.css" />
+    <script defer src="/assets/js/config.js"></script>
+    <script defer src="/assets/js/site.js"></script>
+    <script src="/assets/js/analytics.js" defer></script>
+  </head>
+  <body class="sg-page sg-skin">
+    <header class="header">
+      <div class="container">
+        <div class="header-content">
+          <a href="/" class="logo-link">
+            <img src="/games/reveal-board/staygo-logo.png" alt="Staygo" class="logo" />
+          </a>
+
+          <nav class="nav" aria-label="เมนูหลัก">
+            <a href="/#play" class="nav-link active">Play</a>
+            <a href="/tools/" class="nav-link">Tools</a>
+            <a href="/watch/" class="nav-link">Watch & Play</a>
+            <a href="/about/" class="nav-link">About</a>
+          </nav>
+
+          <div class="header-actions">
+            <a href="https://www.youtube.com/@STAYGO" target="_blank" rel="noopener noreferrer" class="icon-button" aria-label="YouTube">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
+                <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+              </svg>
+            </a>
+            <button id="menuToggle" class="icon-button" aria-label="เมนู">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu">
+      <div class="mobile-menu-header">
+        <span class="mobile-menu-title">เมนู</span>
+        <button id="menuClose" class="icon-button" aria-label="ปิดเมนู">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <nav class="mobile-nav">
+        <a href="/#play" class="mobile-nav-link">Play</a>
+        <a href="/tools/" class="mobile-nav-link">Tools</a>
+        <a href="/watch/" class="mobile-nav-link">Watch & Play</a>
+        <a href="/about/" class="mobile-nav-link">About</a>
+      </nav>
+    </div>
+
+
+    <main class="tl">
+      <div class="tl-hero">
+        <h1>🕵️ ใครวาดมั่ว</h1>
+        <p>ทุกคนรู้คำลับ ยกเว้นคนวาดมั่ว 1 คน ผลัดกันวาดคนละเส้นบนกระดานเดียวกัน แล้วโหวตจับตัวให้ได้</p>
+      </div>
+
+      <!-- start -->
+      <section id="start" class="tl-narrow tl-stack" hidden>
+        <div class="sg-panel tl-stack">
+          <div>
+            <span class="tl-label">ฉันคือ…</span>
+            <div class="tl-choice">
+              <button id="pickHost"><b>🖥️ จอกลาง</b><small>เปิดห้องบนทีวี / คอม ให้ทุกคนดูภาพที่วาด</small></button>
+              <button id="pickPlayer"><b>📱 ผู้เล่น</b><small>ใส่รหัสห้องแล้ววาดบนมือถือ</small></button>
+            </div>
+          </div>
+          <div id="joinForm" class="tl-stack" hidden>
+            <label><span class="tl-label">รหัสห้อง</span><input id="codeInput" class="sg-input tl-code" maxlength="4" placeholder="เช่น K7QX" autocomplete="off" /></label>
+            <label><span class="tl-label">ชื่อของคุณ</span><input id="nameInput" class="sg-input" maxlength="24" placeholder="เช่น มายด์" autocomplete="nickname" /></label>
+            <button id="joinBtn" class="sg-btn blue block">เข้าห้อง</button>
+          </div>
+          <button id="createBtn" class="sg-btn blue block" hidden>สร้างห้องใหม่</button>
+        </div>
+        <details class="sg-panel" open>
+          <summary><b>วิธีเล่น</b></summary>
+          <ul class="tl-hint">
+            <li>เปิดห้องบนจอกลาง (ทีวี / คอม) ผู้เล่น 3–20 คนสแกน QR หรือใส่รหัส 4 ตัวจากมือถือ</li>
+            <li>เริ่มเกม ทุกคนเห็นหมวดเดียวกัน และเกือบทุกคนเห็น <b>คำลับ</b> บนมือถือตัวเอง ยกเว้น <b>คนวาดมั่ว</b> 1 คนที่ไม่รู้คำ</li>
+            <li>ผลัดกันวาดตามคิว ตาละ <b>1 เส้น</b> (ยกนิ้วเมื่อไหร่ก็ส่งเส้นทันที) ทุกเส้นขึ้นบนภาพเดียวกันที่จอกลาง วาดให้รู้ว่าเรารู้คำ แต่อย่าชัดจนคนวาดมั่วเดาออก</li>
+            <li>วาดครบแล้ว ทุกคนโหวตบนมือถือว่าใครคือคนวาดมั่ว ถ้าคะแนนเสมอ คนวาดมั่วรอดไป</li>
+            <li>ถ้าจับได้ คนวาดมั่วยังมีโอกาสพลิกเกมด้วยการเดาคำ</li>
+            <li>คะแนน: คนวาดมั่วรอดหรือเดาคำถูก ได้ +2 · จับได้และเดาผิด คนที่วาดทุกคนได้ +1</li>
+          </ul>
+        </details>
+      </section>
+
+      <!-- host / center screen -->
+      <section id="host" hidden>
+        <div class="sd-host">
+          <div class="sd-side tl-stack">
+            <div class="sg-panel sd-join">
+              <p class="tl-hint" style="margin:0">สแกนเพื่อเข้าห้อง หรือใส่รหัส</p>
+              <div id="hostCode" class="sd-code tl-code"></div>
+              <div id="qr" class="tl-qr sd-qr"></div>
+              <button id="copyLink" class="sg-btn small block tl-nobig">คัดลอกลิงก์</button>
+            </div>
+            <div class="sg-panel">
+              <b>ผู้เล่น <span id="playerCount" class="tl-num"></span></b>
+              <ul id="playerList" class="sd-players ss-players"></ul>
+            </div>
+          </div>
+
+          <div class="sd-main sg-panel">
+            <!-- lobby -->
+            <div id="hLobby" class="sd-stage">
+              <div class="sd-bigicon">🕵️</div>
+              <h2 class="sd-h">รอทุกคนเข้าห้อง</h2>
+              <p id="lobbyInfo" class="tl-hint"></p>
+              <div class="sd-settings tl-nobig">
+                <label><span class="tl-label">หมวดคำ</span>
+                  <select id="catSel" class="sg-input"></select>
+                </label>
+                <label><span class="tl-label">จำนวนรอบวาด</span>
+                  <select id="lapSel" class="sg-input">
+                    <option value="0" selected>อัตโนมัติ (≤10 คน 2 รอบ)</option>
+                    <option value="1">1 รอบ (คนละ 1 เส้น)</option>
+                    <option value="2">2 รอบ (คนละ 2 เส้น)</option>
+                    <option value="3">3 รอบ (คนละ 3 เส้น)</option>
+                  </select>
+                </label>
+                <label><span class="tl-label">เวลาต่อเส้น</span>
+                  <select id="turnSel" class="sg-input">
+                    <option value="10">10 วินาที</option>
+                    <option value="15">15 วินาที</option>
+                    <option value="20" selected>20 วินาที</option>
+                    <option value="30">30 วินาที</option>
+                  </select>
+                </label>
+              </div>
+              <button id="startBtn" class="sg-btn blue sd-startbtn tl-nobig">▶ เริ่มเกม</button>
+            </div>
+
+            <!-- drawing / voting / guessing / result share the board -->
+            <div id="hGame" class="ss-game" hidden>
+              <div class="ss-top">
+                <span class="sd-roundtag">หมวด <b id="hCat"></b></span>
+                <span id="hStatus" class="ss-status"></span>
+              </div>
+              <div class="ss-layout">
+                <div class="ss-boardwrap"><canvas id="board" width="600" height="600" aria-label="ภาพที่ทุกคนช่วยกันวาด"></canvas></div>
+                <div class="ss-panel">
+                  <div id="hTurn" class="ss-turn"></div>
+                  <div class="sd-bar"><i id="hBar"></i></div>
+                  <ol id="hQueue" class="ss-queue"></ol>
+                  <div id="hVote" class="ss-vote" hidden>
+                    <div class="sd-bigicon">🗳️</div>
+                    <h2 class="sd-h">โหวตหาคนวาดมั่ว!</h2>
+                    <p id="hVoted" class="tl-hint"></p>
+                    <button id="closeVote" class="sg-btn yellow tl-nobig">เปิดผลโหวตเลย</button>
+                  </div>
+                  <div id="hGuess" class="ss-vote" hidden>
+                    <div class="sd-bigicon">🎯</div>
+                    <h2 class="sd-h">จับได้แล้ว! <span id="hSpyName"></span></h2>
+                    <p class="tl-hint">แต่ยังพลิกได้ ถ้าเดาคำลับถูก…</p>
+                    <div id="hGuessText" class="ss-guess"></div>
+                    <div id="hJudge" class="tl-row tl-nobig" hidden>
+                      <button id="judgeYes" class="sg-btn blue">✅ เดาถูก</button>
+                      <button id="judgeNo" class="sg-btn red">❌ เดาผิด</button>
+                    </div>
+                  </div>
+                  <div id="hResult" class="ss-result" hidden></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="tl-row sd-controls tl-nobig">
+              <button id="againBtn" class="sg-btn blue" hidden>🔁 เล่นอีกเกม</button>
+              <button id="stopBtn" class="sg-btn" hidden>⏹ หยุดเกม</button>
+              <button id="bigBtn" class="sg-btn">📺 จอใหญ่</button>
+              <button id="endRoom" class="sg-btn small">ปิดห้อง</button>
+            </div>
+          </div>
+        </div>
+        <button id="exitBig" class="sg-btn small sd-exitbig" hidden>ออกจากจอใหญ่</button>
+      </section>
+
+      <!-- player -->
+      <section id="player" class="sd-player" hidden>
+        <div class="tl-row sd-me">
+          <span>ห้อง <b id="meCode" class="tl-code"></b></span>
+          <span><i id="meDot" class="ss-dot" hidden></i> <b id="meName"></b> <span id="meScore" class="tl-num ss-mescore"></span></span>
+        </div>
+
+        <div id="pLobby" class="sg-panel sd-wait">
+          <div class="sd-bigicon">🕵️</div>
+          <p><b>เข้าห้องแล้ว!</b></p>
+          <p id="pLobbyText" class="tl-hint">รอจอกลางกดเริ่มเกม</p>
+          <button id="leaveBtn" class="sg-btn small">ออกจากห้อง</button>
+        </div>
+
+        <div id="pGame" hidden>
+          <button id="roleCard" class="ss-role" aria-label="แตะเพื่อซ่อน / แสดงคำ"></button>
+          <div id="pStatus" class="ss-pstatus"></div>
+          <div class="sd-bar"><i id="pBar"></i></div>
+          <div class="sd-canvaswrap ss-padwrap"><canvas id="pad" width="600" height="600" aria-label="กระดานวาด"></canvas></div>
+
+          <div id="pVote" class="ss-pvote" hidden>
+            <p class="ss-ptitle">ใครคือคนวาดมั่ว? <small id="pVoteNote"></small></p>
+            <div id="voteList" class="ss-votelist"></div>
+          </div>
+
+          <div id="pGuess" class="sg-panel tl-stack ss-pguess" hidden>
+            <p class="ss-ptitle">โดนจับได้! เดาคำลับให้ถูกเพื่อพลิกชนะ</p>
+            <input id="guessInput" class="sg-input" maxlength="40" placeholder="คำที่ทุกคนวาด" autocomplete="off" />
+            <button id="guessBtn" class="sg-btn blue block">ส่งคำตอบ</button>
+          </div>
+
+          <div id="pResult" class="ss-presult" hidden></div>
+        </div>
+      </section>
+
+      <p id="loading" class="tl-hint" style="text-align:center">กำลังโหลด…</p>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

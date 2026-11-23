@@ -39,7 +39,7 @@
         ".validate": "$code.matches(/^[A-Z2-9]{4}$/)",
         "meta": {
           ".write": "auth != null && ((!data.exists() && newData.child('hostUid').val() === auth.uid) || data.child('hostUid').val() === auth.uid)",
-          ".validate": "newData.hasChildren(['hostUid', 'kind', 'createdAt']) && newData.child('kind').val().matches(/^(buzzer|vote|speed-draw|secret-roles|adventure)$/)"
+          ".validate": "newData.hasChildren(['hostUid', 'kind', 'createdAt']) && newData.child('kind').val().matches(/^(buzzer|vote|speed-draw|secret-roles|adventure|scribble-spy)$/)"
         },
         "players": {
           "$uid": {
@@ -112,6 +112,31 @@
           "$id": {
             ".write": "auth != null && !data.exists() && (root.child('live').child($code).child('meta').child('hostUid').val() === auth.uid || root.child('live').child($code).child('players').child(auth.uid).exists())",
             ".validate": "newData.hasChildren(['uid', 'total', 't']) && newData.child('uid').val() === auth.uid && newData.child('total').isNumber() && newData.child('t').val() === now && (!newData.child('label').exists() || (newData.child('label').isString() && newData.child('label').val().length <= 80))"
+          }
+        },
+        "strokes": {
+          ".write": "auth != null && root.child('live').child($code).child('meta').child('hostUid').val() === auth.uid",
+          "$game": {
+            "$i": {
+              ".write": "auth != null && (root.child('live').child($code).child('state').child('game').val() + '') === $game && root.child('live').child($code).child('state').child('phase').val() === 'draw' && (root.child('live').child($code).child('state').child('turn').val() + '') === $i && root.child('live').child($code).child('state').child('turns').child($i).val() === auth.uid && data.child('done').val() !== true",
+              ".validate": "newData.hasChildren(['p']) && newData.child('p').isString() && newData.child('p').val().length < 12000 && (!newData.child('done').exists() || newData.child('done').isBoolean())"
+            }
+          }
+        },
+        "accuse": {
+          ".write": "auth != null && root.child('live').child($code).child('meta').child('hostUid').val() === auth.uid",
+          "$game": {
+            "$uid": {
+              ".write": "auth != null && auth.uid === $uid && (root.child('live').child($code).child('state').child('game').val() + '') === $game && root.child('live').child($code).child('state').child('phase').val() === 'vote'",
+              ".validate": "newData.isString() && root.child('live').child($code).child('players').child(newData.val()).exists()"
+            }
+          }
+        },
+        "guess": {
+          ".write": "auth != null && root.child('live').child($code).child('meta').child('hostUid').val() === auth.uid",
+          "$game": {
+            ".write": "auth != null && !data.exists() && (root.child('live').child($code).child('state').child('game').val() + '') === $game && root.child('live').child($code).child('state').child('phase').val() === 'guess' && root.child('liveRoles').child($code).child(auth.uid).child('spy').val() === true",
+            ".validate": "newData.hasChildren(['text', 't']) && newData.child('text').isString() && newData.child('text').val().length <= 40 && newData.child('t').val() === now"
           }
         },
         "$other": {

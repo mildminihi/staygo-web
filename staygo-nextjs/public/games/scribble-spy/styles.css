@@ -1,0 +1,304 @@
+/* ใครวาดมั่ว — builds on /games/speed-draw/styles.css (sd-* classes) */
+
+.ss-dot {
+  display: inline-block;
+  flex: 0 0 auto;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--c, #ccc);
+  border: 2px solid var(--sg-ink);
+  vertical-align: -2px;
+  margin-right: 4px;
+}
+.ss-dot[hidden] {
+  display: none;
+}
+
+/* ---------------------------------------------------------------- center screen */
+.ss-game {
+  display: grid;
+  gap: 12px;
+}
+.ss-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.ss-status {
+  font-size: 18px;
+  font-weight: 600;
+}
+.ss-layout {
+  display: grid;
+  gap: 16px;
+}
+@media (min-width: 1000px) {
+  .ss-layout {
+    grid-template-columns: minmax(0, 1fr) 300px;
+    align-items: start;
+  }
+}
+.ss-boardwrap {
+  width: min(100%, calc(100vh - 230px));
+  min-width: 260px;
+  aspect-ratio: 1;
+  margin: 0 auto;
+}
+body.tl-big .ss-boardwrap {
+  width: min(100%, calc(100vh - 140px));
+}
+#board {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border: 3px solid var(--sg-ink);
+  border-radius: 18px;
+  background: #fff;
+}
+.ss-panel {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+}
+.ss-turn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 24px;
+  justify-content: center;
+}
+.ss-turn .ss-dot {
+  width: 22px;
+  height: 22px;
+}
+.ss-queue {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+.ss-queue li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 2px solid var(--sg-ink);
+  border-radius: 12px;
+  background: #fff;
+  padding: 4px 10px;
+  font-size: 16px;
+  opacity: 0.7;
+}
+.ss-queue li.now {
+  background: var(--sg-yellow);
+  opacity: 1;
+  font-weight: 600;
+}
+.ss-queue li span {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ss-vote {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  text-align: center;
+}
+.ss-guess {
+  font-size: 26px;
+}
+.ss-guess b {
+  font-family: "Kanit", var(--sg-font-th);
+  font-weight: 800;
+  font-size: 36px;
+}
+
+/* result (center + phone) */
+.ss-result,
+.ss-presult {
+  display: grid;
+  gap: 10px;
+}
+.ss-verdict {
+  font-size: 24px;
+  font-weight: 600;
+  text-align: center;
+  border: 3px solid var(--sg-ink);
+  border-radius: 16px;
+  padding: 10px 12px;
+  background: var(--sk-green);
+  color: #fff;
+}
+.ss-verdict.spy {
+  background: var(--sg-red);
+}
+.ss-reveal {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.ss-reveal > div {
+  border: 2px solid var(--sg-ink);
+  border-radius: 14px;
+  background: #fff;
+  padding: 8px;
+  text-align: center;
+  display: grid;
+}
+.ss-reveal small {
+  color: var(--sk-muted);
+}
+.ss-reveal b {
+  font-family: "Kanit", var(--sg-font-th);
+  font-weight: 800;
+  font-size: 26px;
+  line-height: 1.2;
+  word-break: break-word;
+}
+.ss-sub {
+  margin: 4px 0 0;
+  font-weight: 600;
+}
+.ss-tally {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+}
+.ss-tally li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 2px solid var(--sg-ink);
+  border-radius: 10px;
+  background: #fff;
+  padding: 3px 10px;
+}
+.ss-tally li.spy {
+  background: #ffe1e3;
+}
+.ss-tally li span {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------- phone */
+.ss-mescore {
+  color: var(--sk-muted);
+}
+.ss-role {
+  width: 100%;
+  font: inherit;
+  display: grid;
+  gap: 2px;
+  text-align: center;
+  border: 3px solid var(--sg-ink);
+  border-radius: 16px;
+  background: var(--sg-yellow);
+  padding: 8px 12px;
+  cursor: pointer;
+  color: var(--sg-ink);
+}
+.ss-role small {
+  font-size: 13px;
+}
+.ss-role b {
+  font-family: "Kanit", var(--sg-font-th);
+  font-weight: 800;
+  font-size: 32px;
+  line-height: 1.15;
+}
+.ss-role span {
+  font-size: 13px;
+}
+.ss-role.spy {
+  background: var(--sg-red);
+  color: #fff;
+}
+.ss-role.hid,
+.ss-role.watch {
+  background: #fff;
+  color: var(--sg-ink);
+}
+.ss-role.hid b,
+.ss-role.watch b {
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 20px;
+}
+.ss-pstatus {
+  text-align: center;
+  font-size: 17px;
+  margin: 8px 0 6px;
+  min-height: 1.5em;
+}
+.ss-go {
+  color: var(--sg-blue);
+  font-size: 20px;
+}
+.ss-padwrap {
+  width: min(100%, calc(100dvh - 250px));
+  margin-top: 8px;
+}
+#pad {
+  cursor: default;
+}
+#pad.mine {
+  cursor: crosshair;
+  box-shadow: 0 0 0 4px var(--sg-blue);
+}
+.ss-pvote,
+.ss-pguess {
+  margin-top: 12px;
+}
+.ss-ptitle {
+  font-weight: 600;
+  margin: 0 0 8px;
+  text-align: center;
+}
+.ss-ptitle small {
+  font-weight: 400;
+  color: var(--sk-muted);
+}
+.ss-votelist {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.ss-votebtn {
+  font: inherit;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border: 2px solid var(--sg-ink);
+  border-radius: 12px;
+  background: #fff;
+  padding: 10px;
+  cursor: pointer;
+  color: var(--sg-ink);
+  text-align: left;
+}
+.ss-votebtn span {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ss-votebtn.on {
+  background: var(--sg-blue);
+  color: #fff;
+}
+.ss-presult {
+  margin-top: 12px;
+}

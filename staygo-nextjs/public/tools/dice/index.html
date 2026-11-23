@@ -411,19 +411,28 @@
           // Hide clear button during roll
           clearButton.style.display = 'none';
           
-          // Change queued dice to rolling state
+          // Change queued (or previously revealed) dice to rolling state.
+          // Drop the old state and force a reflow so the animation restarts on every roll, not just the first.
           const diceElements = container.querySelectorAll('.dice-item');
+          document.getElementById('diceTotal').innerHTML = '';
           diceElements.forEach(el => {
-            el.classList.remove('queued');
+            el.classList.remove('queued', 'revealed', 'landed-max');
+            void el.offsetWidth;
             el.classList.add('rolling');
             // Remove the × button
             const removeBtn = el.querySelector('.dice-remove-btn');
             if (removeBtn) removeBtn.remove();
           });
 
-          // Animate rolling
+          // Tumble with flickering numbers before the first die lands
           window.SFX?.play('dice');
-          await new Promise(resolve => setTimeout(resolve, 100));
+          const faces = this.diceQueue.map(d => d.faces);
+          const flicker = setInterval(() => {
+            diceElements.forEach((el, i) => {
+              if (el.classList.contains('rolling')) el.querySelector('.dice-face').textContent = Math.floor(Math.random() * faces[i]) + 1;
+            });
+          }, 70);
+          await new Promise(resolve => setTimeout(resolve, 650));
 
           // Roll each die
           for (let i = 0; i < this.diceQueue.length; i++) {
@@ -436,10 +445,14 @@
             
             const diceElement = diceElements[i];
             diceElement.classList.remove('rolling');
+            void diceElement.offsetWidth;
             diceElement.classList.add('revealed');
+            if (result === dice.faces && dice.faces > 2) diceElement.classList.add('landed-max');
             diceElement.querySelector('.dice-face').textContent = result;
             window.SFX?.play(result === dice.faces && dice.faces > 2 ? 'coin' : 'land');
           }
+
+          clearInterval(flicker);
 
           // Calculate and show total
           const total = results.reduce((sum, r) => sum + r.result, 0);

@@ -156,6 +156,7 @@
     "รายการ": "entries",
     "ยังไม่มีการจับสลาก": "Nothing drawn yet",
     "ผลการจับสลาก": "Result",
+    "กำลังจับสลาก…": "Drawing…",
     "พิมพ์ชื่อรายการ (กด Enter เพื่อเพิ่ม)": "Type an entry (Enter to add)",
     "กรุณาใส่ชื่อรายการ": "Enter an entry name",
     "เพิ่มได้สูงสุด 100 รายการ": "You can add up to 100 entries",

@@ -276,37 +276,76 @@
         updateDisplay();
       }
 
-      // Draw item
+      // Draw item: names flicker past and slow down like a roulette, then the winner pops in
+      let drawing = false;
       function drawItem() {
+        if (drawing) return;
         if (state.items.length === 0) {
           alert('ไม่มีสลากในตัวเลือก');
           return;
         }
 
-        // Random selection
+        // Random selection (decided up front; the spin only shows it)
         const randomIndex = Math.floor(Math.random() * state.items.length);
         const drawnItem = state.items[randomIndex];
+        const pool = state.items.slice();
 
-        // Show animation
-        showDrawAnimation(drawnItem);
-        window.SFX?.play('reveal');
-        setTimeout(() => window.SFX?.play('fanfare'), 120);
+        drawing = true;
+        drawBtn.disabled = true;
+        resetBtn.disabled = true;
 
-        // Add to history
-        state.drawnItems.push({
-          item: drawnItem,
-          time: new Date()
-        });
+        const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const steps = reduce ? 0 : pool.length === 1 ? 6 : 22;
+        drawResult.innerHTML = `
+          <div class="draw-result-content ld-spinning">
+            <div class="draw-result-label">กำลังจับสลาก…</div>
+            <div class="draw-result-item"></div>
+          </div>
+        `;
+        const itemEl = drawResult.querySelector('.draw-result-item');
+        let last = -1;
+        let step = 0;
+        const tick = () => {
+          if (step >= steps) return finish();
+          // never show the same name twice in a row while spinning
+          let i = Math.floor(Math.random() * pool.length);
+          if (pool.length > 1 && i === last) i = (i + 1) % pool.length;
+          last = i;
+          itemEl.textContent = pool[i];
+          itemEl.classList.remove('ld-flick');
+          void itemEl.offsetWidth;
+          itemEl.classList.add('ld-flick');
+          window.SFX?.play('spin');
+          step++;
+          // ease out: fast at first, slower near the end
+          const t = step / steps;
+          setTimeout(tick, 45 + 260 * t * t);
+        };
+        const finish = () => {
+          showDrawAnimation(drawnItem);
+          confetti();
+          window.SFX?.play('reveal');
+          setTimeout(() => window.SFX?.play('fanfare'), 120);
 
-        // Remove from pool if checked
-        if (state.removeAfterDraw) {
-          state.items.splice(randomIndex, 1);
-        }
+          // Add to history
+          state.drawnItems.push({
+            item: drawnItem,
+            time: new Date()
+          });
 
-        // Update display after animation
-        setTimeout(() => {
-          updateDisplay();
-        }, 500);
+          // Remove from pool if checked
+          if (state.removeAfterDraw) {
+            state.items.splice(randomIndex, 1);
+          }
+
+          drawing = false;
+          resetBtn.disabled = false;
+          // Update display after the reveal animation
+          setTimeout(() => {
+            updateDisplay();
+          }, 500);
+        };
+        tick();
       }
 
       // Show draw animation
@@ -314,9 +353,31 @@
         drawResult.innerHTML = `
           <div class="draw-result-content draw-animation">
             <div class="draw-result-label">ผลการจับสลาก</div>
-            <div class="draw-result-item">${item}</div>
+            <div class="draw-result-item"></div>
           </div>
         `;
+        drawResult.querySelector('.draw-result-item').textContent = item;
+      }
+
+      // A burst of confetti over the result box
+      function confetti() {
+        if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        const colors = ['#ff5a5f', '#ffd23f', '#3ec1d3', '#7ed957', '#a46cff', '#ff8a3d'];
+        const layer = document.createElement('div');
+        layer.className = 'ld-confetti';
+        for (let i = 0; i < 42; i++) {
+          const p = document.createElement('i');
+          const angle = Math.random() * Math.PI * 2;
+          const dist = 90 + Math.random() * 170;
+          p.style.setProperty('--x', `${Math.cos(angle) * dist}px`);
+          p.style.setProperty('--y', `${Math.sin(angle) * dist * 0.7 - 40}px`);
+          p.style.setProperty('--r', `${Math.random() * 720 - 360}deg`);
+          p.style.background = colors[i % colors.length];
+          p.style.animationDelay = `${Math.random() * 0.08}s`;
+          layer.appendChild(p);
+        }
+        drawResult.appendChild(layer);
+        setTimeout(() => layer.remove(), 1500);
       }
 
       // Reset all

@@ -1,1 +1,45 @@
 /* STAYGO skin tweaks for this game (loaded after /assets/css/staygo-skin.css) */
+
+/* Roll animation: tumble the whole time the dice are rolling (restarted on every roll by the script),
+   then land with a bounce; a max roll gets a gold flash. */
+body.sg-skin .dice-item.rolling {
+  animation: sgDiceTumble 0.45s ease-in-out infinite;
+  background: var(--sg-blue, #2f80ed);
+}
+body.sg-skin .dice-item.rolling .dice-face {
+  color: #fff;
+}
+body.sg-skin .dice-item.revealed {
+  animation: sgDiceLand 0.42s cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+body.sg-skin .dice-item.landed-max {
+  background: var(--sg-yellow, #ffd23f);
+  animation: sgDiceLand 0.42s cubic-bezier(0.3, 1.6, 0.5, 1), sgDiceGlow 0.9s ease-out;
+}
+body.sg-skin .dice-total-value {
+  display: inline-block;
+  animation: sgDiceTotal 0.35s cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+@keyframes sgDiceTumble {
+  0% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-10px) rotate(90deg) scale(1.06); }
+  50% { transform: translateY(0) rotate(180deg); }
+  75% { transform: translateY(-6px) rotate(270deg) scale(1.04); }
+  100% { transform: translateY(0) rotate(360deg); }
+}
+@keyframes sgDiceLand {
+  0% { transform: translateY(-14px) scale(1.25) rotate(-8deg); }
+  60% { transform: translateY(2px) scale(0.94) rotate(2deg); }
+  100% { transform: translateY(0) scale(1) rotate(0deg); }
+}
+@keyframes sgDiceGlow {
+  0% { box-shadow: 0 0 0 0 rgba(255, 196, 0, 0.9), 0 3px 0 var(--sg-ink); }
+  100% { box-shadow: 0 0 0 16px rgba(255, 196, 0, 0), 0 3px 0 var(--sg-ink); }
+}
+@keyframes sgDiceTotal {
+  0% { transform: scale(0.4); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.sg-skin .dice-item.rolling, body.sg-skin .dice-item.revealed, body.sg-skin .dice-item.landed-max, body.sg-skin .dice-total-value { animation: none; }
+}

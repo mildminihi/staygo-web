@@ -115,7 +115,7 @@ h2{font-size:24px;margin:0 0 4px;font-weight:600}
   <details class="how sg-panel">
     <summary>วิธีเล่น</summary>
     <span id="howControl"><b>ลากถอยหลังแล้วปล่อย</b> = ดีดตัว</span> (ใช้พลัง ⚡) ระหว่างเล็งเวลาจะช้าลง<br>
-    <b>ชนบัมเปอร์</b> = สู้ ทำลายได้จะได้ XP และพลังคืน<br>
+    <b>ชนบัมเปอร์</b> = สู้ ทำลายได้จะได้ XP และพลังคืน ทุกครั้งที่ชนยังช็อต ⚡ ลดเลือดไม้ตีด้วย<br>
     <b>ไม้ตีมีเกราะ 🛡️</b> ต้องทำลายบัมเปอร์ 60% ก่อนเกราะถึงจะแตก<br>
     <b>ชนไม้ตีแรงๆ ตอนมันไม่ได้ตี</b> = เราตีบอส · <b>โดนมันตี</b> = เราเจ็บ<br>
     แต่ละตู้มีรูปทรงโต๊ะต่างกัน และอาจมี<b>กติกาพิเศษ</b> เช่น ไฟดับ ลมแรง ตื่นทอง<br>
@@ -563,6 +563,7 @@ function hitBumper(b,impact){
   const d=hitPower(impact);
   sfx('bumper',0,40);
   damageBumper(b,d,impact>650&&S.pierce?'#ff8a00':'#231f20');
+  bumperZapsFlippers(b,d);
   burst(ball.x,ball.y,bCol(b),6,150);
   if(S.burn){b.burn=3; b.burnDps=S.atk*.35*S.burn;}
   if(b.type==='s') hurtBall(M.spike,ball.x,ball.y-16);
@@ -572,9 +573,21 @@ function hitBumper(b,impact){
     if(best){ bolts.push({x1:b.x,y1:b.y,x2:best.x,y2:best.y,life:.18}); damageBumper(best,d*S.chain,'#3d7fdb'); }
   }
 }
-function damageFlipper(f,d,silent){
+// Every bumper hit also sends a spark down to the flippers, so the boss bar drops even without a direct hit.
+const BUMPER_TO_FLIPPER=.4; // ignores the flipper shield
+function bumperZapsFlippers(b,d){
+  const alive=flippers.filter(f=>f.alive); if(!alive.length) return;
+  const each=d*BUMPER_TO_FLIPPER/alive.length;
+  for(const f of alive){
+    const t=tipOf(f), mx=(f.p.x+t.x)/2, my=(f.p.y+t.y)/2;
+    bolts.push({x1:b.x,y1:b.y,x2:mx,y2:my,life:.14});
+    damageFlipper(f,each,true,true); f.flash=.1; f.since=0;
+    float(mx+(Math.random()-.5)*16,my-14,'⚡'+Math.max(1,Math.round(each)),'#3d7fdb',12);
+  }
+}
+function damageFlipper(f,d,silent,pierce){
   if(!f.alive) return;
-  const sh=shielded(); if(sh) d*=.25;
+  const sh=!pierce&&shielded(); if(sh) d*=.25;
   run.dealt+=Math.min(d,f.hp); if(!silent){ trackHit(d); f.since=0; }
   f.hp-=d;
   if(M.boss && !f.rage && f.hp>0 && f.hp<f.maxHp*.5){

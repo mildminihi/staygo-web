@@ -49,6 +49,7 @@
     "(ใช้พลัง ⚡) ระหว่างเล็งเวลาจะช้าลง": "(uses energy ⚡) Time slows while you aim",
     "ชนบัมเปอร์": "Hit bumpers",
     "= สู้ ทำลายได้จะได้ XP และพลังคืน": "= fight. Breaking them gives XP and energy",
+    "= สู้ ทำลายได้จะได้ XP และพลังคืน ทุกครั้งที่ชนยังช็อต ⚡ ลดเลือดไม้ตีด้วย": "= fight. Breaking them gives XP and energy, and every hit zaps ⚡ the flippers too",
     "ไม้ตีมีเกราะ 🛡️": "The flippers are shielded 🛡️",
     "ต้องทำลายบัมเปอร์ 60% ก่อนเกราะถึงจะแตก": "Break 60% of the bumpers to crack the shield",
     "ชนไม้ตีแรงๆ ตอนมันไม่ได้ตี": "Slam a flipper while it isn't swinging",

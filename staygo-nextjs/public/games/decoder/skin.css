@@ -43,3 +43,15 @@
 .secret-reveal h3 { color: var(--sg-ink); }
 .stat-card-label { color: var(--sk-muted); }
 .history-area { padding: 16px; }
+
+/* Mobile fit: history and secret digits shrink to fit 5 digits on narrow phones */
+.guess-digits { min-width: 0; }
+.digit-box { flex: 1 1 0; min-width: 0; max-width: 50px; width: auto; }
+.secret-display { max-width: 100%; }
+.secret-digit { flex: 0 1 48px; min-width: 0; }
+@media (max-width: 480px) {
+  .guess-entry { gap: 8px; padding: 8px; }
+  .guess-history { padding: 10px; }
+  .guess-digits { gap: 6px; }
+  .digit-box { height: 46px; }
+}

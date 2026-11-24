@@ -24,3 +24,31 @@
 .result-screen h2 { color: var(--sk-green-dark); }
 .result-stat { background: var(--sk-soft); border: 2.5px solid var(--sg-ink); border-radius: 14px; }
 .result-stat-value { font-family: var(--sg-font-card); font-weight: 600; color: var(--sg-ink); }
+
+/* Mobile fit: columns may shrink below the "?" glyph, and the glyph scales with the card */
+.game-board { container-type: inline-size; --n: 4; }
+.game-board.easy { --n: 4; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.game-board.medium { --n: 5; grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.game-board.hard { --n: 6; grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.card, .card::before { font-size: clamp(16px, calc(55cqw / var(--n)), 48px); }
+.card { min-width: 0; }
+
+@media (max-width: 768px) {
+  .option-buttons { flex-direction: row; flex-wrap: wrap; }
+}
+@media (max-width: 480px) {
+  .game-content { padding: 0 12px; }
+  .setup-screen, .result-screen { padding: 24px 14px; }
+  .setup-screen p { margin-bottom: 24px; }
+  .option-group { margin-bottom: 20px; }
+  .option-label { margin-bottom: 10px; }
+  .option-buttons { gap: 8px; }
+  .option-btn { flex: 1 1 0; max-width: none; min-width: 0; padding: 12px 6px; font-size: 14px; }
+  .start-btn { width: 100%; margin-top: 8px; }
+  .game-header { padding: 10px 6px; margin-bottom: 12px; }
+  .stat-label { font-size: 12px; }
+  .stat-value { font-size: 22px; }
+  .game-board { gap: 6px; padding: 10px; }
+  .card { border-radius: 10px; border-width: 2.5px; }
+  .result-buttons { flex-direction: column; }
+}

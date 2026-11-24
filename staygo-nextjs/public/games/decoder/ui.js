@@ -8,10 +8,20 @@ function handleDigitInput(event, index) {
     // Only allow digits 0-9
     value = value.replace(/[^0-9]/g, '');
     
-    if (value.length > 1) {
-        value = value.charAt(value.length - 1);
+    // Pasted or autofilled several digits: spread them across this box and the next ones
+    // (typing over a filled box gives 2 chars and keeps the newest, as before)
+    const pasted = /Paste|Replacement/.test(event.inputType || '') || value.length > 2;
+    if (value.length > 1 && pasted) {
+        const inputs = document.querySelectorAll('.digit-input');
+        const digits = value.slice(0, gameState.digitCount - index).split('');
+        digits.forEach((d, k) => { inputs[index + k].value = d; });
+        window.SFX?.play('type');
+        const last = inputs[Math.min(index + digits.length, gameState.digitCount - 1)];
+        if (last) { last.focus(); last.select(); }
+        return;
     }
-    
+    if (value.length > 1) value = value.charAt(value.length - 1);
+
     input.value = value;
     if (value) window.SFX?.play('type');
 

@@ -372,7 +372,7 @@ function renderDigitInputs() {
         input.type = 'text';
         input.inputMode = 'numeric';
         input.pattern = '[0-9]';
-        input.maxLength = 1;
+        // no maxLength: it would cut a pasted code down to 1 digit; handleDigitInput trims instead
         input.className = 'digit-input';
         input.dataset.index = i;
         

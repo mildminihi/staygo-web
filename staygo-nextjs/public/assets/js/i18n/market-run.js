@@ -1,0 +1,246 @@
+// English for Mom's Errand (/games/market-run/).
+(function () {
+  var I = window.STAYGO_I18N;
+  if (!I) return;
+  function re(src) { return new RegExp("^" + src + "$"); }
+
+  I.addPatterns([
+    [re("([−+]?)฿([\\d,]+)"), "$1฿$2"], // ฿ sits in the Thai block; prices need no translation
+    [re("📞 แม่: ซื้อ(.+?)เพิ่ม 1 (.+?) นะลูก แม่โอนให้อีก ฿(\\d+)"), function (_, it, u, m) { return "📞 Mom: Get 1 more " + I.t(u) + " of " + I.t(it).toLowerCase() + " too, sweetie. I've sent you ฿" + m; }],
+    [re("📞 แม่: ไม่ต้องซื้อ(.+)แล้วนะลูก"), function (_, it) { return "📞 Mom: Never mind the " + I.t(it).toLowerCase() + ", sweetie!"; }],
+    [re("👋 เจอเพื่อนชวนคุย เสียเวลา (\\d+) วิ"), "👋 A friend stops you for a chat — lost $1 sec"],
+    [re("👵 ป้าข้างบ้าน: ฝากซื้อ(.+?) 1 (.+?) ได้ไหม ป้าให้เงิน ฿(\\d+) ซื้อมาให้ได้ค่าขนม ฿(\\d+)"), function (_, it, u, a, r) {
+      return "👵 Neighbor: Could you pick up 1 " + I.t(u) + " of " + I.t(it).toLowerCase() + " for me? Here's ฿" + a + " — bring it and I'll give you ฿" + r + "!";
+    }],
+    [re("เหลือ (\\d+)"), "$1 left"],
+    [re("🏁 ไปตลาดมา (\\d+) วัน"), "🏁 $1 market days"],
+    [re("🎉 จบ (\\d+) วันแล้ว!"), "🎉 That's $1 days done!"],
+    [re("(.+) · (\\d\\d/\\d\\d)"), function (_, m, d) { return I.t(m) + " · " + d; }],
+    [re("ทั้งร้านลด (\\d+)%"), "Storewide $1% off"],
+    [re("ลด (\\d+)%"), "$1% off"],
+    [re("มี (\\d+)/(\\d+)"), "Got $1/$2"],
+    [re("ซื้อเกิน \\((\\d+) ชิ้น\\)"), "Bought too many ($1)"],
+    [re("โบนัสเวลา \\((\\d+) วิ\\)"), "Time bonus ($1 sec)"],
+  ]);
+
+  I.add({
+    "แม่ฝากซื้อ — เกมจ่ายตลาดแข่งเวลา | STAYGO": "Mom's Errand — Race-the-Clock Market Game | STAYGO",
+    "🛒 แม่ฝากซื้อ": "🛒 Mom's Errand",
+    "แม่ฝากซื้อ": "Mom's Errand",
+    "แม่ให้เงินไปจ่ายตลาด ซื้อให้ครบก่อนหมดเวลา ตามหาร้านที่ลดราคา เงินที่เหลือคือค่าขนมของเรา!":
+      "Mom hands you cash for the market. Get everything before time runs out and hunt down the deals — whatever's left is your pocket money!",
+    "เริ่มเกม ▶": "Start ▶",
+    "วิธีเล่น": "How to play",
+    "แฟลชเซล": "flash sale",
+    "ซื้อครบแล้วกด": "Once you've got everything, tap",
+    "กลับบ้าน": "Go home",
+    "ก่อนหมดเวลา เวลาที่เหลือทุก 2 วินาที แม่ให้โบนัส ฿1": "before time's up. Mom pays a ฿1 bonus for every 2 seconds left.",
+    "ขาดของชิ้นไหน แม่หักค่าขนม 1.5 เท่าของราคาปกติ กลับไม่ทันโดนหัก ฿20":
+      "For anything missing, Mom takes 1.5× its normal price out of your pocket money. Getting home late costs ฿20.",
+    "🏆 กระดานคะแนน": "🏆 Scoreboard",
+    "ยังไม่มีคะแนน มาเป็นคนแรกเลย!": "No scores yet — be the first!",
+
+    // brief
+    "ลูก ช่วยไปซื้อของให้แม่หน่อย": "Sweetie, could you do some shopping for me?",
+    "แม่ให้เงิน": "Here's",
+    "ต้องกลับมาภายใน": "— be back within",
+    "วินาทีนะ": "seconds!",
+    "📰 ใบปลิววันนี้": "📰 Today's flyer",
+    "วันนี้ไม่มีโปรในใบปลิว": "No deals in the flyer today",
+    "ออกไปตลาด! 🏃": "Off to the market! 🏃",
+
+    // HUD / map / shop
+    "วัน": "Day",
+    "เวลา": "Time",
+    "เงินในกระเป๋า": "Wallet",
+    "ของครบ": "Got",
+    "กดร้านเพื่อเดินไป": "Tap a shop to walk there",
+    "กำลังเดิน…": "Walking…",
+    "บ้าน": "Home",
+    "ออกจากร้าน": "Leave shop",
+    "📒 สมุดจดของ": "📒 Notebook",
+    "🏠 กลับบ้าน": "🏠 Go home",
+    "📣 แฟลชเซล!": "📣 Flash sale!",
+    "ซื้อ 2 แถม 1": "Buy 2 get 1 free",
+    "วันนี้ร้านนี้ไม่มีโปร": "No deals here today",
+    "ร้านนี้ไม่มีของในลิสต์วันนี้เลย": "Nothing from your list here today",
+    "ฟรี!": "FREE!",
+    "คืน": "Put back",
+    "ซื้อ": "Buy",
+    "ถูกสุดที่เห็น": "Cheapest seen",
+    "ยังไม่เห็นราคา": "No price seen yet",
+    "ยังซื้อไม่ครบ จะกลับบ้านเลยไหม?": "You haven't got everything yet. Go home anyway?",
+
+    // round end
+    "เงินที่แม่ให้": "Money from Mom",
+    "ใช้ไป": "Spent",
+    "เงินทอน": "Change",
+    "ลืมซื้อ": "Forgot",
+    "กลับไม่ทัน": "Late home",
+    "ค่าขนมวันนี้": "Today's pocket money",
+    "ไปร้านขนม 🍭": "To the candy shop 🍭",
+    "ทำไมกลับช้าจัง! แม่รอตั้งนาน": "What took you so long?! I've been waiting forever!",
+    "ลืมซื้ออะไรไปหรือเปล่าลูก แม่ต้องไปซื้อเองอีกรอบ": "Did you forget something? Now I have to go back out myself.",
+    "เก่งมากลูก! ครบทุกอย่างแถมประหยัดสุดๆ": "Well done! You got everything and saved a ton!",
+    "ครบทุกอย่างเลย ขอบใจนะลูก": "You got everything — thank you, sweetie!",
+
+    // treats
+    "ร้านขนมหน้าปากซอย": "Corner candy shop",
+    "กระเป๋าของเรา": "My bag",
+    "วันต่อไป ▶": "Next day ▶",
+    "ดูคะแนนรวม 🏆": "See final score 🏆",
+
+    // final
+    "ชื่อบนกระดานคะแนน": "Name for the scoreboard",
+    "เช่น มายด์": "e.g. Mild",
+    "บันทึกคะแนน": "Save score",
+    "เล่นอีกครั้ง ↻": "Play again ↻",
+
+    // modes & start
+    "เลือกโหมด": "Choose a mode",
+    "🛒 ปกติ": "🛒 Normal",
+    "3 วัน เรียนรู้ตลาด": "3 days to learn the market",
+    "🔥 ยาก": "🔥 Hard",
+    "เวลาน้อย งบตึง ของหมดไว": "Less time, tight budget, stock sells out fast",
+    "♾️ ไม่รู้จบ": "♾️ Endless",
+    "เล่นไปเรื่อยๆ จนแม่โกรธ 3 ครั้ง": "Keep going until Mom gets angry 3 times",
+    "📅 โจทย์ประจำวัน": "📅 Daily challenge",
+    "ตลาดเดียวกันทุกคนวันนี้ แข่งออนไลน์": "Same market for everyone today — compete online",
+    "ปกติ": "Normal",
+    "ยาก": "Hard",
+    "ไม่รู้จบ": "Endless",
+    "ประจำวัน": "Daily",
+    "แต่ละวันแม่ให้เงินและลิสต์ของ กดร้านบนแผนที่เพื่อเดินไป ร้านไกลยิ่งใช้เวลานาน": "Each day Mom gives you money and a list. Tap a shop on the map to walk there — farther shops take longer.",
+    "ราคา โปร และจำนวนของแต่ละร้านสุ่มใหม่ทุกวัน ต้องเข้าไปดูถึงจะรู้ ราคาที่เห็นแล้วจะจดลงสมุดให้": "Prices, deals and stock change every day and you only find out by going in. Prices you've seen go into your notebook.",
+    "ของหมดได้": "Things sell out",
+    "มีคนอื่นมาซื้อตัดหน้าตลอด ช่วงแฟลชเซลยิ่งหมดไว": "— other shoppers keep buying, and flash-sale items go even faster.",
+    "ต่อราคา": "Haggle",
+    "ได้ที่แผงในตลาด (ผัก หมู ของสด) กดหยุดให้ตรงโซนเขียว ถ้าพลาดป้าจะขึ้นราคา": "at the market stalls (veg, pork, fresh). Stop the needle in the green zone — miss and the price goes up.",
+    "ตะกร้าหนัก": "Heavy basket",
+    "ยิ่งแบกของเยอะยิ่งเดินช้า ของหนักอย่างข้าวสารควรซื้อทีหลัง": "— the more you carry, the slower you walk. Save heavy things like rice for last.",
+    "ระหว่างทางอาจเจอ": "On the way you might hit",
+    "ฝนตก": "rain",
+    "เพื่อนชวนคุย ป้าข้างบ้านฝากซื้อ หรือ": ", a chatty friend, a neighbor's favor, or",
+    "แม่โทรมาเปลี่ยนลิสต์": "Mom calling to change the list",
+    "ร้านขนม: ขนมกับของเล่นไม่หักคะแนน แต่": "Candy shop: snacks and toys don't cost points, but",
+    "ของช่วย": "helpers",
+    "(จักรยาน ถุงผ้า แอป) หักจากคะแนน ลงทุนให้คุ้ม!": "(bike, tote bag, app) come out of your score — make them pay off!",
+
+    // brief / play extras
+    "📱 แอปเช็กโปร: โปรทุกร้านวันนี้": "📱 Deals app: every shop's deals today",
+    "แม่โกรธ": "Mom's mood",
+    "(โกรธครบ 3 ครั้งจบเกม)": "(3 angry days ends the game)",
+    "ตะกร้า": "Basket",
+    "ของหนักเกิน เดินช้าลง 🐢": "Too heavy — walking slower 🐢",
+    "🌧️ ฝนตก! เดินช้าลงสักพัก": "🌧️ It's raining! Walking is slower for a bit",
+    "🎟️ เจอคูปองส่วนลด ฿10": "🎟️ Found a ฿10 coupon",
+    "รับฝาก": "Sure!",
+    "ไม่รับ": "No thanks",
+    "ป้าฝาก": "Favor",
+    "หมด": "Sold out",
+    "🤏 ต่อราคา": "🤏 Haggle",
+    "หยุด! 🤏": "Stop! 🤏",
+    "ลดหน่อยได้ไหม~ กดหยุดให้ตรงโซนเขียว!": "Any discount for me~? Stop in the green zone!",
+    "โอ๊ย ปากหวานจริง ลดให้ทั้งร้าน 25% เลย!": "Oh, you sweet talker! 25% off everything!",
+    "เอาไป ลดให้ทั้งร้าน 12%": "Fine — 12% off everything",
+    "ไม่ลด! ต่อมากขึ้นราคาอีก 10% เลย": "No way! For that, prices go up 10%!",
+    "🤝 ต่อราคาได้ ทั้งร้านลด 25%": "🤝 Haggled — 25% off the whole stall",
+    "🤝 ต่อราคาได้ ทั้งร้านลด 12%": "🤝 Haggled — 12% off the whole stall",
+    "😤 ต่อไม่สำเร็จ ทั้งร้านแพงขึ้น 10%": "😤 Haggling failed — everything's 10% dearer",
+
+    // round extras
+    "แม่โอนเพิ่ม": "Extra from Mom",
+    "คูปองที่เจอ": "Coupons found",
+    "เงินป้าข้างบ้าน": "Neighbor's money",
+    "คืนเงินป้า + ขอโทษ": "Refund the neighbor + sorry",
+    "ค่าขนมจากป้า": "Reward from the neighbor",
+
+    // treat shop extras
+    "เงินที่มี": "Cash",
+    "คะแนนตอนนี้": "Score so far",
+    "🍬 ขนมและของเล่น": "🍬 Snacks & toys",
+    "ซื้อให้ตัวเองได้เต็มที่ คะแนนไม่ลด": "Treat yourself — your score stays the same",
+    "🧰 ของช่วย": "🧰 Helpers",
+    "ใช้ได้ทุกวันที่เหลือ แต่ราคาหักจากคะแนน": "Work every remaining day, but the price comes off your score",
+    "จักรยาน": "Bicycle",
+    "เดินเร็วขึ้น 30%": "Travel 30% faster",
+    "ถุงผ้าใบใหญ่": "Big tote bag",
+    "แบกได้ 14 กก. (ปกติ 8)": "Carry 14 kg (normally 8)",
+    "แอปเช็กโปร": "Deals app",
+    "เห็นโปรทุกร้านก่อนออกจากบ้าน": "See every shop's deals before you leave",
+
+    // final extras
+    "คะแนน (ค่าขนมสุทธิ)": "Score (net pocket money)",
+    "🌐 กระดานออนไลน์วันนี้": "🌐 Today's online board",
+    "เปลี่ยนโหมด": "Change mode",
+    "กำลังโหลดกระดานออนไลน์…": "Loading the online board…",
+    "โหลดกระดานออนไลน์ไม่สำเร็จ แสดงคะแนนในเครื่องแทน": "Couldn't load the online board — showing scores on this device",
+    "กำลังส่งคะแนนขึ้นกระดานออนไลน์…": "Sending your score to the online board…",
+    "บันทึกแล้ว กระดานออนไลน์เก็บคะแนนที่ดีที่สุดของวันนี้ไว้": "Saved — the online board keeps your best score today",
+    "ส่งคะแนนขึ้นกระดานออนไลน์แล้ว": "Score sent to the online board",
+    "ส่งคะแนนออนไลน์ไม่สำเร็จ บันทึกไว้ในเครื่องแล้ว": "Couldn't send online — saved on this device",
+
+    // days
+    "วันอังคาร": "Tuesday",
+    "วันพฤหัสบดี": "Thursday",
+    "วันศุกร์": "Friday",
+    "วันอาทิตย์": "Sunday",
+
+    // days
+    "วันจันทร์": "Monday",
+    "วันพุธ": "Wednesday",
+    "วันเสาร์": "Saturday",
+
+    // shops
+    "แผงผักป้าแดง": "Auntie Daeng's Veg Stall",
+    "เขียงหมูลุงชัย": "Uncle Chai's Butcher",
+    "แผงสดน้าเล็ก": "Auntie Lek's Fresh Stall",
+    "ร้านโชห่วยเจ๊หมวย": "Jae Muay's Corner Store",
+    "มินิมาร์ท 24 ชม.": "24-hr Minimart",
+    "ซูเปอร์มาร์เก็ต": "Supermarket",
+
+    // items
+    "ไข่ไก่": "Eggs",
+    "ข้าวสาร": "Rice",
+    "นมสด": "Milk",
+    "น้ำปลา": "Fish sauce",
+    "น้ำมันพืช": "Cooking oil",
+    "บะหมี่กึ่งสำเร็จรูป": "Instant noodles",
+    "หมูสับ": "Minced pork",
+    "อกไก่": "Chicken breast",
+    "ปลาทู": "Mackerel",
+    "กุ้ง": "Shrimp",
+    "ผักบุ้ง": "Morning glory",
+    "กะหล่ำปลี": "Cabbage",
+    "มะเขือเทศ": "Tomatoes",
+    "กระเทียม": "Garlic",
+    "พริก": "Chilies",
+    "กล้วยหอม": "Bananas",
+    "เต้าหู้": "Tofu",
+    "สบู่": "Soap",
+    "ทิชชู่": "Tissues",
+
+    // units
+    "แผง": "tray",
+    "ถุง": "bag",
+    "กล่อง": "carton",
+    "ขวด": "bottle",
+    "แพ็ค": "pack",
+    "เข่ง": "basket",
+    "กำ": "bunch",
+    "หัว": "head",
+    "หวี": "hand",
+    "ก้อน": "bar",
+
+    // treats
+    "ลูกอม": "Candy",
+    "น้ำหวาน": "Juice box",
+    "ไอติม": "Ice cream",
+    "ช็อกโกแลต": "Chocolate",
+    "ขนมถุง": "Chips",
+    "การ์ดสะสม": "Trading cards",
+    "ลูกบอล": "Ball",
+    "รถของเล่น": "Toy car",
+    "ตุ๊กตา": "Teddy bear",
+  });
+})();

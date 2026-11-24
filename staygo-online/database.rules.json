@@ -164,6 +164,36 @@
           ".validate": "newData.hasChildren(['uid', 'total', 't']) && newData.child('uid').val() === auth.uid && newData.child('t').val() === now"
         }
       }
+    },
+    "leaderboards": {
+      "market-run": {
+        "$day": {
+          ".read": "auth != null",
+          ".validate": "$day.matches(/^20[0-9]{6}$/)",
+          ".indexOn": [
+            "score"
+          ],
+          "$uid": {
+            ".write": "auth != null && auth.uid === $uid && (!data.exists() || newData.child('score').val() > data.child('score').val())",
+            ".validate": "newData.hasChildren(['name','score','t']) && newData.child('t').val() === now",
+            "name": {
+              ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 20"
+            },
+            "score": {
+              ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 5000"
+            },
+            "perfect": {
+              ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 3"
+            },
+            "t": {
+              ".validate": "newData.isNumber()"
+            },
+            "$other": {
+              ".validate": false
+            }
+          }
+        }
+      }
     }
   }
 }

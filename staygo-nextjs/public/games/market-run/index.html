@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>แม่ฝากซื้อ — เกมจ่ายตลาดแข่งเวลา | STAYGO</title>
+    <meta name="title" content="แม่ฝากซื้อ — เกมจ่ายตลาดแข่งเวลา | STAYGO" />
+    <meta name="description" content="แม่ให้เงินไปจ่ายตลาด ซื้อของให้ครบตามลิสต์ก่อนหมดเวลา ตามหาร้านที่ลดราคา ยิ่งเหลือเงินมาก ยิ่งได้ค่าขนมมาก เล่นฟรีบนเว็บ" />
+    <meta name="robots" content="index, follow" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.staygoch.com/games/market-run/" />
+    <meta property="og:title" content="แม่ฝากซื้อ — เกมจ่ายตลาดแข่งเวลา" />
+    <meta property="og:description" content="ซื้อของให้แม่ให้ครบ หาร้านลดราคา เงินที่เหลือคือค่าขนมของเรา!" />
+    <meta property="og:image" content="https://www.staygoch.com/assets/image/market-run-cover-1.png" />
+    <meta property="og:image:width" content="1000" />
+    <meta property="og:image:height" content="800" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://www.staygoch.com/assets/image/market-run-cover-1.png" />
+    <meta name="twitter:title" content="แม่ฝากซื้อ — เกมจ่ายตลาดแข่งเวลา" />
+    <meta name="twitter:description" content="ซื้อของให้แม่ให้ครบ หาร้านลดราคา เงินที่เหลือคือค่าขนมของเรา!" />
+    <link rel="canonical" href="https://www.staygoch.com/games/market-run/" />
+    <link rel="icon" type="image/png" href="/games/reveal-board/staygo-logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Mitr:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Kanit:wght@700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/assets/css/site.css" />
+    <link rel="stylesheet" href="/assets/css/staygo-cards.css" />
+    <link rel="stylesheet" href="/assets/css/staygo-skin.css" />
+    <link rel="stylesheet" href="/assets/css/staygo-tools.css" />
+    <link rel="stylesheet" href="./styles.css" />
+    <script defer src="/assets/js/config.js"></script>
+    <script defer src="/assets/js/site.js"></script>
+    <script src="/assets/js/analytics.js" defer></script>
+    <script src="/assets/js/sfx.js"></script>
+    <script src="/assets/js/i18n.js"></script>
+    <script src="/assets/js/i18n/market-run.js"></script>
+  </head>
+  <body class="sg-page sg-skin">
+    <header class="header">
+      <div class="container">
+        <div class="header-content">
+          <a href="/" class="logo-link">
+            <img src="/games/reveal-board/staygo-logo.png" alt="Staygo" class="logo" />
+          </a>
+
+          <nav class="nav" aria-label="เมนูหลัก">
+            <a href="/#play" class="nav-link active">Play</a>
+            <a href="/tools/" class="nav-link">Tools</a>
+            <a href="/watch/" class="nav-link">Watch & Play</a>
+            <a href="/about/" class="nav-link">About</a>
+          </nav>
+
+          <div class="header-actions">
+            <a href="https://www.youtube.com/@STAYGO" target="_blank" rel="noopener noreferrer" class="icon-button" aria-label="YouTube">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
+                <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+              </svg>
+            </a>
+            <button id="menuToggle" class="icon-button" aria-label="เมนู">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu">
+      <div class="mobile-menu-header">
+        <span class="mobile-menu-title">เมนู</span>
+        <button id="menuClose" class="icon-button" aria-label="ปิดเมนู">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <nav class="mobile-nav">
+        <a href="/#play" class="mobile-nav-link">Play</a>
+        <a href="/tools/" class="mobile-nav-link">Tools</a>
+        <a href="/watch/" class="mobile-nav-link">Watch & Play</a>
+        <a href="/about/" class="mobile-nav-link">About</a>
+      </nav>
+    </div>
+
+
+
+    <main class="tl mr">
+      <div class="tl-hero">
+        <h1>🛒 แม่ฝากซื้อ</h1>
+        <p>แม่ให้เงินไปจ่ายตลาด ซื้อให้ครบก่อนหมดเวลา ตามหาร้านที่ลดราคา เงินที่เหลือคือค่าขนมของเรา!</p>
+      </div>
+
+      <!-- start -->
+      <section id="scrStart" class="tl-narrow tl-stack">
+        <div class="sg-panel tl-stack">
+          <span class="tl-label">เลือกโหมด</span>
+          <div class="mr-modes" id="modes">
+            <button data-mode="normal" class="on"><b>🛒 ปกติ</b><small>3 วัน เรียนรู้ตลาด</small></button>
+            <button data-mode="hard"><b>🔥 ยาก</b><small>เวลาน้อย งบตึง ของหมดไว</small></button>
+            <button data-mode="endless"><b>♾️ ไม่รู้จบ</b><small>เล่นไปเรื่อยๆ จนแม่โกรธ 3 ครั้ง</small></button>
+            <button data-mode="daily"><b>📅 โจทย์ประจำวัน</b><small>ตลาดเดียวกันทุกคนวันนี้ แข่งออนไลน์</small></button>
+          </div>
+          <button id="startBtn" class="sg-btn blue block mr-big">เริ่มเกม ▶</button>
+        </div>
+        <details class="sg-panel">
+          <summary><b>วิธีเล่น</b></summary>
+          <ul class="tl-hint">
+            <li>แต่ละวันแม่ให้เงินและลิสต์ของ กดร้านบนแผนที่เพื่อเดินไป ร้านไกลยิ่งใช้เวลานาน</li>
+            <li>ราคา โปร และจำนวนของแต่ละร้านสุ่มใหม่ทุกวัน ต้องเข้าไปดูถึงจะรู้ ราคาที่เห็นแล้วจะจดลงสมุดให้</li>
+            <li><b>ของหมดได้</b> มีคนอื่นมาซื้อตัดหน้าตลอด ช่วงแฟลชเซลยิ่งหมดไว</li>
+            <li><b>ต่อราคา</b> ได้ที่แผงในตลาด (ผัก หมู ของสด) กดหยุดให้ตรงโซนเขียว ถ้าพลาดป้าจะขึ้นราคา</li>
+            <li><b>ตะกร้าหนัก</b> ยิ่งแบกของเยอะยิ่งเดินช้า ของหนักอย่างข้าวสารควรซื้อทีหลัง</li>
+            <li>ระหว่างทางอาจเจอ <b>ฝนตก</b> เพื่อนชวนคุย ป้าข้างบ้านฝากซื้อ หรือ <b>แม่โทรมาเปลี่ยนลิสต์</b></li>
+            <li>ซื้อครบแล้วกด <b>กลับบ้าน</b> ก่อนหมดเวลา เวลาที่เหลือทุก 2 วินาที แม่ให้โบนัส ฿1</li>
+            <li>ขาดของชิ้นไหน แม่หักค่าขนม 1.5 เท่าของราคาปกติ กลับไม่ทันโดนหัก ฿20</li>
+            <li>ร้านขนม: ขนมกับของเล่นไม่หักคะแนน แต่ <b>ของช่วย</b> (จักรยาน ถุงผ้า แอป) หักจากคะแนน ลงทุนให้คุ้ม!</li>
+          </ul>
+        </details>
+        <div class="sg-panel">
+          <b>🏆 กระดานคะแนน</b>
+          <div class="mr-tabs" id="boardTabs">
+            <button data-board="normal" class="on">ปกติ</button>
+            <button data-board="hard">ยาก</button>
+            <button data-board="endless">ไม่รู้จบ</button>
+            <button data-board="daily">ประจำวัน</button>
+          </div>
+          <ol id="boardStart" class="mr-board"></ol>
+        </div>
+      </section>
+
+      <!-- brief -->
+      <section id="scrBrief" class="tl-narrow tl-stack" hidden>
+        <div class="sg-panel tl-stack mr-brief">
+          <div class="mr-day"><span id="briefDay"></span> <span class="mr-dayno" id="briefDayNo"></span></div>
+          <div id="briefStrikes" class="mr-strikes" hidden></div>
+          <div class="mr-mom">
+            <div class="mr-momface">👩</div>
+            <div class="mr-bubble">
+              <span>ลูก ช่วยไปซื้อของให้แม่หน่อย</span>
+              <span>แม่ให้เงิน</span> <b class="mr-money" id="briefBudget"></b>
+              <span>ต้องกลับมาภายใน</span> <b id="briefTime"></b> <span>วินาทีนะ</span>
+            </div>
+          </div>
+          <ul id="briefList" class="mr-list"></ul>
+          <div class="mr-flyer">
+            <b id="flyerTitle">📰 ใบปลิววันนี้</b>
+            <ul id="briefFlyer"></ul>
+          </div>
+          <div id="briefGear" class="mr-gear"></div>
+          <button id="goBtn" class="sg-btn blue block mr-big">ออกไปตลาด! 🏃</button>
+        </div>
+      </section>
+
+      <!-- play -->
+      <section id="scrPlay" hidden>
+        <div class="mr-hud sg-panel">
+          <div><small>วัน</small><b id="hudDay"></b></div>
+          <div class="mr-clock"><small>เวลา</small><b id="hudTime"></b></div>
+          <div><small>เงินในกระเป๋า</small><b id="hudWallet" class="mr-money"></b></div>
+          <div><small>ของครบ</small><b id="hudDone"></b></div>
+          <div id="hudLoadBox"><small>ตะกร้า</small><b id="hudLoad"></b></div>
+        </div>
+        <div id="toasts" class="mr-toasts" aria-live="polite"></div>
+        <div id="flash" class="mr-flash" hidden></div>
+        <div class="mr-play">
+          <div class="mr-main">
+            <div id="mapView" class="sg-panel mr-mapwrap">
+              <div id="map" class="mr-map">
+                <div class="mr-rain" aria-hidden="true"></div>
+                <div id="avatar" class="mr-avatar" aria-hidden="true">🧒</div>
+              </div>
+              <div class="mr-maphint tl-hint" id="mapHint">กดร้านเพื่อเดินไป</div>
+            </div>
+            <div id="shopView" class="sg-panel mr-shop" hidden>
+              <div class="mr-shophead">
+                <span class="mr-shopemo" id="shopEmo"></span>
+                <b id="shopName"></b>
+                <button id="leaveShop" class="sg-btn small">ออกจากร้าน</button>
+              </div>
+              <button id="bargBtn" class="sg-btn yellow small mr-bargbtn" hidden>🤏 ต่อราคา</button>
+              <div id="bargNote" class="mr-bargnote" hidden></div>
+              <div id="bargain" class="mr-barg" hidden>
+                <div class="mr-mom">
+                  <div class="mr-momface" id="bargFace"></div>
+                  <div class="mr-bubble" id="bargSay"></div>
+                </div>
+                <div class="mr-bargbar" id="bargBar"><i id="bargGood"></i><i id="bargGreat"></i><b id="bargNeedle"></b></div>
+                <button id="bargStop" class="sg-btn blue block mr-big">หยุด! 🤏</button>
+              </div>
+              <div id="shopDeals" class="mr-deals"></div>
+              <div id="shopItems" class="mr-items"></div>
+            </div>
+          </div>
+          <aside class="sg-panel mr-note">
+            <b>📒 สมุดจดของ</b>
+            <ul id="noteList" class="mr-notelist"></ul>
+            <button id="homeBtn" class="sg-btn yellow block">🏠 กลับบ้าน</button>
+          </aside>
+        </div>
+      </section>
+
+      <!-- round end -->
+      <section id="scrRound" class="tl-narrow tl-stack" hidden>
+        <div class="sg-panel tl-stack">
+          <div class="mr-mom">
+            <div class="mr-momface" id="roundFace">👩</div>
+            <div class="mr-bubble" id="roundSay"></div>
+          </div>
+          <div id="roundStrikes" class="mr-strikes" hidden></div>
+          <table class="mr-sum" id="roundTable"></table>
+          <div class="mr-pocket"><span>ค่าขนมวันนี้</span> <b id="roundPocket" class="mr-money"></b></div>
+          <button id="toTreats" class="sg-btn blue block mr-big">ไปร้านขนม 🍭</button>
+        </div>
+      </section>
+
+      <!-- treat shop -->
+      <section id="scrTreats" class="tl-narrow tl-stack" hidden>
+        <div class="sg-panel tl-stack">
+          <div class="mr-shophead"><span class="mr-shopemo">🍭</span><b>ร้านขนมหน้าปากซอย</b></div>
+          <div class="mr-pocket"><span>เงินที่มี</span> <b id="treatWallet" class="mr-money"></b></div>
+          <div class="mr-scoreline"><span>คะแนนตอนนี้</span> <b id="treatScore" class="mr-money"></b></div>
+          <b>🍬 ขนมและของเล่น</b>
+          <p class="tl-hint" style="margin:0">ซื้อให้ตัวเองได้เต็มที่ คะแนนไม่ลด</p>
+          <div id="treatList" class="mr-treats"></div>
+          <b>🧰 ของช่วย</b>
+          <p class="tl-hint" style="margin:0">ใช้ได้ทุกวันที่เหลือ แต่ราคาหักจากคะแนน</p>
+          <div id="helperList" class="mr-helpers"></div>
+          <div class="mr-bag"><span>กระเป๋าของเรา</span> <span id="bag" class="mr-bagitems"></span></div>
+          <button id="nextDay" class="sg-btn blue block mr-big">วันต่อไป ▶</button>
+        </div>
+      </section>
+
+      <!-- final -->
+      <section id="scrFinal" class="tl-narrow tl-stack" hidden>
+        <div class="sg-panel tl-stack mr-final">
+          <div class="mr-finaltitle" id="finalTitle"></div>
+          <div class="mr-modetag" id="finalMode"></div>
+          <div class="mr-score"><small>คะแนน (ค่าขนมสุทธิ)</small><b id="finalScore" class="mr-money"></b></div>
+          <div id="finalDays" class="mr-days"></div>
+          <div id="finalBag" class="mr-bagitems mr-finalbag"></div>
+          <div id="saveRow" class="tl-stack">
+            <label><span class="tl-label">ชื่อบนกระดานคะแนน</span><input id="nameInput" class="sg-input" maxlength="20" placeholder="เช่น มายด์" autocomplete="nickname" data-i18n-skip /></label>
+            <button id="saveBtn" class="sg-btn yellow block">บันทึกคะแนน</button>
+          </div>
+          <p id="saveNote" class="tl-hint" hidden></p>
+        </div>
+        <div class="sg-panel">
+          <b id="finalBoardTitle">🏆 กระดานคะแนน</b>
+          <ol id="boardFinal" class="mr-board"></ol>
+        </div>
+        <button id="againBtn" class="sg-btn blue block mr-big">เล่นอีกครั้ง ↻</button>
+        <button id="menuBtn" class="sg-btn block">เปลี่ยนโหมด</button>
+      </section>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

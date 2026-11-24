@@ -65,6 +65,15 @@ export const WEB_GAMES: WebGame[] = [
     cta: 'สร้าง / เข้าห้อง',
   },
   {
+    href: '/games/market-run/',
+    title: 'แม่ฝากซื้อ',
+    meta: '1 Player • เกมจ่ายตลาดแข่งเวลา',
+    short: 'ซื้อของให้แม่ให้ครบ หาร้านลดราคา เงินที่เหลือคือค่าขนม!',
+    description: 'แม่ให้เงินไปจ่ายตลาด ซื้อของตามลิสต์ให้ครบก่อนหมดเวลา แต่ละร้านราคาและโปรสุ่มใหม่ทุกวัน ต้องเดินไปเช็กเอง ระวังแฟลชเซลที่มาแป๊บเดียว ยิ่งเหลือเงินมาก ยิ่งได้ค่าขนมไปซื้อขนมและของเล่น เล่น 3 วันแล้วบันทึกคะแนนลงกระดาน',
+    cover: { images: ['/assets/image/market-run-cover-1.png', '/assets/image/market-run-cover-2.png'] },
+    beta: true,
+  },
+  {
     href: '/games/emoji-match/',
     title: 'จับคู่อีโมจิ',
     meta: '1 Player • เกมจำ',

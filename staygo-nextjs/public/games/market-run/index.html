@@ -119,7 +119,8 @@
             <li>ระหว่างทางอาจเจอ <b>ฝนตก</b> เพื่อนชวนคุย ป้าข้างบ้านฝากซื้อ หรือ <b>แม่โทรมาเปลี่ยนลิสต์</b></li>
             <li>ซื้อครบแล้วกด <b>กลับบ้าน</b> ก่อนหมดเวลา เวลาที่เหลือทุก 2 วินาที แม่ให้โบนัส ฿1</li>
             <li>ขาดของชิ้นไหน แม่หักค่าขนม 1.5 เท่าของราคาปกติ กลับไม่ทันโดนหัก ฿20</li>
-            <li>ร้านขนม: ขนมกับของเล่นไม่หักคะแนน แต่ <b>ของช่วย</b> (จักรยาน ถุงผ้า แอป) หักจากคะแนน ลงทุนให้คุ้ม!</li>
+            <li>คะแนน = <b>เงินเก็บ + แต้มความสุข 💖</b> ที่ร้านขนม ขนมและของเล่นให้แต้มความสุข ซื้อซ้ำได้ตัวคูณ เก็บครบชุดได้โบนัส</li>
+            <li><b>ของช่วย</b> (จักรยาน ถุงผ้า แอป) ไม่ให้แต้ม แต่ช่วยให้วันถัดไปเก็บเงินได้มากขึ้น ลงทุนให้คุ้ม!</li>
           </ul>
         </details>
         <div class="sg-panel">
@@ -224,12 +225,20 @@
         <div class="sg-panel tl-stack">
           <div class="mr-shophead"><span class="mr-shopemo">🍭</span><b>ร้านขนมหน้าปากซอย</b></div>
           <div class="mr-pocket"><span>เงินที่มี</span> <b id="treatWallet" class="mr-money"></b></div>
-          <div class="mr-scoreline"><span>คะแนนตอนนี้</span> <b id="treatScore" class="mr-money"></b></div>
+          <div class="mr-formula">
+            <span><small>เงินเก็บ</small><b id="treatSaved" class="mr-money"></b></span>
+            <i>+</i>
+            <span><small>ความสุข</small><b id="treatJoy" class="mr-joyval"></b></span>
+            <i>=</i>
+            <span><small>คะแนน</small><b id="treatScore"></b></span>
+          </div>
           <b>🍬 ขนมและของเล่น</b>
-          <p class="tl-hint" style="margin:0">ซื้อให้ตัวเองได้เต็มที่ คะแนนไม่ลด</p>
+          <p class="tl-hint" style="margin:0">ทุกชิ้นให้แต้มความสุข 💖 ซื้อชิ้นเดิมซ้ำในรอบเดียวกันได้ตัวคูณเพิ่มทีละ ×0.25 เก็บครบชุดได้โบนัส (ของแต่ละรอบมีจำกัด)</p>
           <div id="treatList" class="mr-treats"></div>
+          <b>🏅 เก็บครบชุด</b>
+          <div id="setList" class="mr-sets"></div>
           <b>🧰 ของช่วย</b>
-          <p class="tl-hint" style="margin:0">ใช้ได้ทุกวันที่เหลือ แต่ราคาหักจากคะแนน</p>
+          <p class="tl-hint" style="margin:0">ใช้ได้ทุกวันที่เหลือ แต่ไม่ได้แต้มความสุข เงินที่จ่ายไปคือคะแนนที่หายไป</p>
           <div id="helperList" class="mr-helpers"></div>
           <div class="mr-bag"><span>กระเป๋าของเรา</span> <span id="bag" class="mr-bagitems"></span></div>
           <button id="nextDay" class="sg-btn blue block mr-big">วันต่อไป ▶</button>
@@ -241,9 +250,10 @@
         <div class="sg-panel tl-stack mr-final">
           <div class="mr-finaltitle" id="finalTitle"></div>
           <div class="mr-modetag" id="finalMode"></div>
-          <div class="mr-score"><small>คะแนน (ค่าขนมสุทธิ)</small><b id="finalScore" class="mr-money"></b></div>
+          <div class="mr-score"><small>คะแนน (เงินเก็บ + ความสุข)</small><b id="finalScore" class="mr-money"></b></div>
           <div id="finalDays" class="mr-days"></div>
           <div id="finalBag" class="mr-bagitems mr-finalbag"></div>
+          <div id="finalSets" class="mr-finalsets" hidden></div>
           <div id="saveRow" class="tl-stack">
             <label><span class="tl-label">ชื่อบนกระดานคะแนน</span><input id="nameInput" class="sg-input" maxlength="20" placeholder="เช่น มายด์" autocomplete="nickname" data-i18n-skip /></label>
             <button id="saveBtn" class="sg-btn yellow block">บันทึกคะแนน</button>

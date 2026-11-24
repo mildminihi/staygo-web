@@ -55,17 +55,27 @@
     { wd: 5, items: 6, time: 85, flash: 2 },
   ];
 
+  // joy is the happiness score one treat gives; stock is how many the shop has per visit
   var TREATS = [
-    { th: "ลูกอม", emo: "🍬", price: 5 },
-    { th: "น้ำหวาน", emo: "🧃", price: 12 },
-    { th: "ไอติม", emo: "🍦", price: 15 },
-    { th: "ขนมถุง", emo: "🍿", price: 20 },
-    { th: "ช็อกโกแลต", emo: "🍫", price: 25 },
-    { th: "การ์ดสะสม", emo: "🃏", price: 35 },
-    { th: "ลูกบอล", emo: "⚽", price: 59 },
-    { th: "รถของเล่น", emo: "🚗", price: 99 },
-    { th: "ตุ๊กตา", emo: "🧸", price: 149 },
+    { id: "candy", th: "ลูกอม", emo: "🍬", price: 5, joy: 4, stock: 4 },
+    { id: "juice", th: "น้ำหวาน", emo: "🧃", price: 12, joy: 10, stock: 3 },
+    { id: "icecream", th: "ไอติม", emo: "🍦", price: 15, joy: 12, stock: 3 },
+    { id: "chips", th: "ขนมถุง", emo: "🍿", price: 20, joy: 16, stock: 3 },
+    { id: "choco", th: "ช็อกโกแลต", emo: "🍫", price: 25, joy: 20, stock: 2 },
+    { id: "card", th: "การ์ดสะสม", emo: "🃏", price: 35, joy: 28, stock: 3 },
+    { id: "ball", th: "ลูกบอล", emo: "⚽", price: 59, joy: 47, stock: 1 },
+    { id: "car", th: "รถของเล่น", emo: "🚗", price: 99, joy: 79, stock: 1 },
+    { id: "teddy", th: "ตุ๊กตา", emo: "🧸", price: 149, joy: 119, stock: 1 },
   ];
+  // collect every treat in a set (over the whole game) for a one-time bonus
+  var SETS = [
+    { id: "sweet", th: "ชุดของหวาน", emo: "🍬", items: ["candy", "icecream", "choco"], bonus: 25 },
+    { id: "cartoon", th: "ชุดดูการ์ตูน", emo: "📺", items: ["chips", "juice", "card"], bonus: 30 },
+    { id: "play", th: "ชุดวันหยุดสุดมันส์", emo: "⚽", items: ["ball", "car"], bonus: 60 },
+    { id: "gift", th: "ชุดของขวัญวันเกิด", emo: "🎁", items: ["teddy", "choco", "icecream"], bonus: 70 },
+    { id: "all", th: "สะสมครบทุกอย่าง", emo: "🌈", items: ["candy", "juice", "icecream", "chips", "choco", "card", "ball", "car", "teddy"], bonus: 150 },
+  ];
+  var COMBO_STEP = 0.25; // each repeat of the same treat in one visit: ×1, ×1.25, ×1.5, ×1.75
   var HELPERS = [
     { id: "bike", th: "จักรยาน", emo: "🚲", price: 120, desc: "เดินเร็วขึ้น 30%" },
     { id: "bag", th: "ถุงผ้าใบใหญ่", emo: "👜", price: 60, desc: "แบกได้ 14 กก. (ปกติ 8)" },
@@ -120,10 +130,12 @@
   function newGame() {
     var M = MODES[mode];
     var seed = mode === "daily" ? hashStr("market-run-" + todayKey()) : (Math.random() * 4294967296) >>> 0;
-    G = { mode: mode, M: M, seed: seed, date: mode === "daily" ? todayKey() : null, day: 0, earned: 0, gearSpent: 0, pocket: 0, days: [], bag: [], gear: {}, strikes: 0, saved: false };
+    G = { mode: mode, M: M, seed: seed, date: mode === "daily" ? todayKey() : null, day: 0, earned: 0, gearSpent: 0, treatSpent: 0, joy: 0, owned: {}, sets: {}, pocket: 0, days: [], bag: [], gear: {}, strikes: 0, saved: false };
     startBrief();
   }
-  function score() { return G.earned - G.gearSpent; }
+  // score = money kept + happiness from treats (helpers and treats both cost money)
+  function score() { return G.pocket + G.joy; }
+  function pts(n) { return Math.round(n).toLocaleString("en-US") + " แต้ม"; }
 
   function dayConfig(d) {
     var M = G.M, c;
@@ -929,31 +941,70 @@
   function gameOver() { return G.mode === "endless" ? G.strikes >= 3 : G.day + 1 >= G.M.days; }
 
   // ---------- treat shop ----------
+  var visit = {}; // per-visit treat stock and repeat counter
   function openTreats() {
+    visit = { left: {}, bought: {}, news: [] };
+    TREATS.forEach(function (t) { visit.left[t.id] = t.stock; visit.bought[t.id] = 0; });
     SFX.play("select");
     renderTreats();
     $("nextDay").textContent = gameOver() ? "ดูคะแนนรวม 🏆" : "วันต่อไป ▶";
     show("scrTreats");
   }
+  function comboMult(t) { return 1 + COMBO_STEP * visit.bought[t.id]; }
+  function nextJoy(t) { return Math.round(t.joy * comboMult(t)); }
+  function buyTreat(t) {
+    if (t.price > G.pocket || visit.left[t.id] <= 0) return;
+    var j = nextJoy(t);
+    G.pocket -= t.price;
+    G.treatSpent += t.price;
+    G.joy += j;
+    G.owned[t.id] = (G.owned[t.id] || 0) + 1;
+    visit.left[t.id]--;
+    visit.bought[t.id]++;
+    G.bag.push(t.emo);
+    var done = SETS.filter(function (st) { return !G.sets[st.id] && st.items.every(function (id) { return G.owned[id]; }); });
+    done.forEach(function (st) { G.sets[st.id] = true; G.joy += st.bonus; });
+    visit.news = done;
+    SFX.play(visit.bought[t.id] > 1 ? "combo" : "pop", visit.bought[t.id]);
+    if (done.length) setTimeout(function () { SFX.play("fanfare"); }, 150);
+    renderTreats();
+  }
   function renderTreats() {
     $("treatWallet").textContent = baht(G.pocket);
-    $("treatScore").textContent = baht(score());
+    $("treatSaved").textContent = baht(G.pocket);
+    $("treatJoy").textContent = "💖" + G.joy;
+    $("treatScore").textContent = pts(score());
     var box = $("treatList");
     box.innerHTML = "";
     TREATS.forEach(function (t) {
-      var b = el("button", "mr-treat");
-      b.disabled = t.price > G.pocket;
+      var left = visit.left[t.id], n = visit.bought[t.id];
+      var b = el("button", "mr-treat" + (n ? " combo" : ""));
+      b.disabled = t.price > G.pocket || left <= 0;
+      if (G.owned[t.id]) b.appendChild(span("×" + G.owned[t.id], "mr-owned"));
       b.appendChild(span(t.emo, "mr-treatemo"));
       b.appendChild(span(t.th, "mr-treatname"));
       b.appendChild(el("b", null, baht(t.price)));
-      b.addEventListener("click", function () {
-        if (t.price > G.pocket) return;
-        G.pocket -= t.price;
-        G.bag.push(t.emo);
-        SFX.play("pop");
-        renderTreats();
-      });
+      b.appendChild(span(left <= 0 ? "หมด" : "+" + nextJoy(t) + "💖" + (n ? " ×" + comboMult(t) : ""), "mr-joy"));
+      b.appendChild(span(left > 0 ? "เหลือ " + left : "", "mr-treatleft"));
+      b.addEventListener("click", function () { buyTreat(t); });
       box.appendChild(b);
+    });
+    var sb = $("setList");
+    sb.innerHTML = "";
+    SETS.forEach(function (st) {
+      var row = el("div", "mr-set" + (G.sets[st.id] ? " done" : "") + (visit.news.indexOf(st) >= 0 ? " new" : ""));
+      row.appendChild(span(st.emo, "mr-setemo"));
+      var mid = el("div", "mr-setmid");
+      mid.appendChild(el("b", null, st.th));
+      var icons = el("span", "mr-seticons");
+      st.items.forEach(function (id) {
+        var t = TREATS.filter(function (x) { return x.id === id; })[0];
+        icons.appendChild(span(t.emo, G.owned[id] ? "have" : "need"));
+      });
+      mid.appendChild(icons);
+      row.appendChild(mid);
+      row.appendChild(el("b", "mr-setbonus", G.sets[st.id] ? "✓ +" + st.bonus + "💖" : "+" + st.bonus + "💖"));
+      sb.appendChild(row);
     });
     var hb = $("helperList");
     hb.innerHTML = "";
@@ -972,6 +1023,7 @@
         if (owned || last || h.price > G.pocket) return;
         G.pocket -= h.price;
         G.gearSpent += h.price;
+        visit.news = [];
         G.gear[h.id] = true;
         SFX.play("levelup");
         renderTreats();
@@ -991,7 +1043,7 @@
   function finish() {
     $("finalTitle").textContent = G.mode === "endless" ? "🏁 ไปตลาดมา " + G.days.length + " วัน" : "🎉 จบ " + G.days.length + " วันแล้ว!";
     $("finalMode").textContent = G.M.th + (G.date ? " · " + G.date.slice(6, 8) + "/" + G.date.slice(4, 6) : "");
-    $("finalScore").textContent = baht(score());
+    $("finalScore").textContent = pts(score());
     var d = $("finalDays");
     d.innerHTML = "";
     G.days.forEach(function (x) {
@@ -1001,12 +1053,19 @@
       if (x.perfect) c.appendChild(span("⭐"));
       d.appendChild(c);
     });
-    if (G.gearSpent) {
-      var g = el("div", "mr-dayscore gear");
-      g.appendChild(span("ของช่วย"));
-      g.appendChild(el("b", null, "−" + baht(G.gearSpent)));
-      d.appendChild(g);
+    function chip(label, val, cls) {
+      var c = el("div", "mr-dayscore " + cls);
+      c.appendChild(span(label));
+      c.appendChild(el("b", null, val));
+      d.appendChild(c);
     }
+    if (G.gearSpent) chip("ของช่วย", "−" + baht(G.gearSpent), "gear");
+    if (G.treatSpent) chip("ซื้อขนม", "−" + baht(G.treatSpent), "gear");
+    chip("เงินเก็บ", baht(G.pocket), "sum");
+    if (G.joy) chip("ความสุข", "+💖" + G.joy, "joy");
+    var sets = SETS.filter(function (st) { return G.sets[st.id]; });
+    $("finalSets").textContent = sets.map(function (st) { return st.emo; }).join(" ");
+    $("finalSets").hidden = !sets.length;
     renderBag($("finalBag"));
     $("finalBag").hidden = !G.bag.length;
     $("nameInput").value = loadJSON(NAME_KEY, "") || "";
@@ -1073,7 +1132,7 @@
       li.appendChild(nm);
       li.appendChild(span(b.perfect ? "⭐".repeat(Math.min(b.perfect, 5)) : "", "mr-bstar"));
       li.appendChild(span(b.days > 3 ? "📆" + b.days : b.bag || "", "mr-bbag"));
-      li.appendChild(el("b", "mr-bscore", baht(b.score)));
+      li.appendChild(el("b", "mr-bscore", Math.round(b.score).toLocaleString("en-US")));
       ol.appendChild(li);
     });
   }

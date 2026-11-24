@@ -275,3 +275,30 @@
 @media (prefers-reduced-motion: reduce) {
   .mr-map.raining .mr-rain, .mr-notelist li.fresh, .mr-toast { animation: none; }
 }
+
+/* treat combos & sets */
+.mr-formula { display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; text-align: center; }
+.mr-formula span { display: flex; flex-direction: column; background: #fff; border: 2px solid var(--sg-ink); border-radius: 12px; padding: 4px 12px; min-width: 80px; }
+.mr-formula small { color: var(--sk-muted); font-size: 12px; }
+.mr-formula b { font-family: "Fredoka", "Mitr", sans-serif; font-size: 20px; }
+.mr-formula span:last-child { background: var(--sg-yellow); }
+.mr-formula i { font-style: normal; font-weight: 700; font-size: 20px; }
+.mr-joyval { color: #d6336c; }
+.mr-treat { position: relative; }
+.mr-treat.combo { background: #fff0f6; }
+.mr-joy { font-size: 12px; font-weight: 700; color: #d6336c; font-family: "Fredoka", "Mitr", sans-serif; }
+.mr-treatleft { font-size: 11px; color: var(--sk-muted); min-height: 14px; }
+.mr-owned { position: absolute; top: -9px; right: -7px; background: var(--sg-ink); color: #fff; border-radius: 999px; font-size: 11px; padding: 0 6px; font-family: "Fredoka", sans-serif; }
+.mr-sets { display: grid; gap: 6px; }
+.mr-set { display: flex; align-items: center; gap: 10px; background: #fff; border: 2px solid var(--sg-ink); border-radius: 12px; padding: 6px 10px; }
+.mr-set.done { background: #e6f7ee; }
+.mr-set.new { animation: mrPop .4s, mrFresh 1s 2; }
+.mr-setemo { font-size: 24px; }
+.mr-setmid { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+.mr-setmid b { font-size: 14px; }
+.mr-seticons { font-size: 18px; letter-spacing: 2px; }
+.mr-seticons .need { filter: grayscale(1); opacity: .35; }
+.mr-setbonus { font-family: "Fredoka", "Mitr", sans-serif; color: #d6336c; white-space: nowrap; }
+.mr-dayscore.sum { background: var(--sk-cream); }
+.mr-dayscore.joy { background: #fff0f6; }
+.mr-finalsets { font-size: 26px; letter-spacing: 4px; }

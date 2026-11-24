@@ -610,6 +610,7 @@ function renderPlayer() {
     $("pVote").hidden = phase !== "vote" || !mine;
     $("pGuess").hidden = true;
     $("pResult").hidden = phase !== "result";
+    $("pCta").hidden = phase !== "result";
     document.body.classList.toggle("sd-ingame", phase !== "lobby");
     if (phase === "draw") roleHidden = false;
     if (phase === "result") {

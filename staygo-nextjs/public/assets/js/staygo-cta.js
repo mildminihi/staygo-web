@@ -44,6 +44,12 @@
     'zoom-quiz': ['hues-and-cues', 'black-stories', 'jinxo'],
     lunjua: ['get-bit', 'perudo', 'hot-streak'],
     staygo: ['love-letter', 'uno-show-em-no-mercy', 'here-to-slay'],
+    flipped: ['marvel-united-spiderman', 'here-to-slay', 'quest-master-new-era'],
+    'market-run': ['hot-streak', 'name-it', 'get-bit'],
+    'dice-roguelike': ['perudo', 'here-to-slay', 'quest-master-new-era'],
+    'speed-draw': ['art-frenzy', 'hues-and-cues', 'name-it'],
+    'scribble-spy': ['art-frenzy', 'codenames', 'forbidden-word'],
+    'jinxo-board': ['jinxo'],
   };
 
   var CSS =

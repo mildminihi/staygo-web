@@ -12,6 +12,20 @@ export const HOME_TOOL_LIMIT = 4;
 
 export const TOOLS: Tool[] = [
   {
+    href: '/tools/clue-reveal/',
+    icon: '🕵️',
+    label: 'ทายจากคุณสมบัติ',
+    description: 'ใส่คำเฉลยกับคุณสมบัติกี่ข้อก็ได้ แล้วเปิดป้ายใบ้ทีละแผ่นให้ทุกคนทาย มีปุ่มเปิดทั้งหมดและเฉลย',
+    isNew: true,
+  },
+  {
+    href: '/tools/bingo/',
+    icon: '🎱',
+    label: 'บิงโก',
+    description: 'จอคนจับเลขพร้อมกงล้อลูกบอล และการ์ดบิงโก 5x5 บนมือถือ แตะวงเลข ครบแถวขีดเส้นให้',
+    isNew: true,
+  },
+  {
     href: '/tools/buzzer/',
     icon: '🔔',
     label: 'ปุ่มกดแข่ง (Buzzer)',

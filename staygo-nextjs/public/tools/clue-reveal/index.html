@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>ทายจากคุณสมบัติ - เกมเปิดป้ายใบ้ทีละข้อ | STAYGO</title>
+    <meta name="title" content="ทายจากคุณสมบัติ - เกมเปิดป้ายใบ้ทีละข้อ | STAYGO" />
+    <meta name="description" content="สร้างเกมทายคำจากคุณสมบัติ ใส่คำเฉลยกับคุณสมบัติกี่ข้อก็ได้ แล้วเปิดป้ายใบ้ทีละแผ่นบนจอใหญ่ เปิดทั้งหมด เฉลย แล้วไปข้อต่อไป" />
+    <meta name="robots" content="index, follow" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.staygoch.com/tools/clue-reveal/" />
+    <meta property="og:title" content="ทายจากคุณสมบัติ - เกมเปิดป้ายใบ้ทีละข้อ" />
+    <meta property="og:description" content="สร้างเกมทายคำจากคุณสมบัติ ใส่คำเฉลยกับคุณสมบัติกี่ข้อก็ได้ แล้วเปิดป้ายใบ้ทีละแผ่นบนจอใหญ่ เปิดทั้งหมด เฉลย แล้วไปข้อต่อไป" />
+    <meta property="og:image" content="https://www.staygoch.com/assets/image/share/tool-clue-reveal.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="ทายจากคุณสมบัติ - เกมเปิดป้ายใบ้ทีละข้อ" />
+    <meta name="twitter:description" content="สร้างเกมทายคำจากคุณสมบัติ ใส่คำเฉลยกับคุณสมบัติกี่ข้อก็ได้ แล้วเปิดป้ายใบ้ทีละแผ่นบนจอใหญ่ เปิดทั้งหมด เฉลย แล้วไปข้อต่อไป" />
+    <meta name="twitter:image" content="https://www.staygoch.com/assets/image/share/tool-clue-reveal.jpg" />
+    <link rel="canonical" href="https://www.staygoch.com/tools/clue-reveal/" />
+    <link rel="icon" type="image/png" href="/games/reveal-board/staygo-logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Mitr:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Kanit:wght@700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/assets/css/site.css" />
+    <link rel="stylesheet" href="/assets/css/staygo-cards.css" />
+    <link rel="stylesheet" href="/assets/css/staygo-skin.css" />
+    <link rel="stylesheet" href="/assets/css/staygo-tools.css" />
+    <link rel="stylesheet" href="./styles.css" />
+    <script defer src="/assets/js/config.js"></script>
+    <script defer src="/assets/js/site.js"></script>
+    <script src="/assets/js/analytics.js" defer></script>
+    <script src="/assets/js/sfx.js"></script>
+    <script src="/assets/js/i18n.js"></script>
+    <script src="/assets/js/i18n/tools.js"></script>
+  </head>
+  <body class="sg-page sg-skin">
+    <header class="header">
+      <div class="container">
+        <div class="header-content">
+          <a href="/" class="logo-link">
+            <img src="/games/reveal-board/staygo-logo.png" alt="Staygo" class="logo" />
+          </a>
+
+          <nav class="nav" aria-label="เมนูหลัก">
+            <a href="/#play" class="nav-link">Play</a>
+            <a href="/tools/" class="nav-link active">Tools</a>
+            <a href="/watch/" class="nav-link">Watch & Play</a>
+            <a href="/about/" class="nav-link">About</a>
+          </nav>
+
+          <div class="header-actions">
+            <a href="https://www.youtube.com/@STAYGO" target="_blank" rel="noopener noreferrer" class="icon-button" aria-label="YouTube">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
+                <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+              </svg>
+            </a>
+            <button id="menuToggle" class="icon-button" aria-label="เมนู">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu">
+      <div class="mobile-menu-header">
+        <span class="mobile-menu-title">เมนู</span>
+        <button id="menuClose" class="icon-button" aria-label="ปิดเมนู">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <nav class="mobile-nav">
+        <a href="/#play" class="mobile-nav-link">Play</a>
+        <a href="/tools/" class="mobile-nav-link">Tools</a>
+        <a href="/watch/" class="mobile-nav-link">Watch & Play</a>
+        <a href="/about/" class="mobile-nav-link">About</a>
+      </nav>
+    </div>
+
+    <main class="tl cr">
+      <div class="tl-hero" id="hero">
+        <h1>🕵️ ทายจากคุณสมบัติ</h1>
+        <p>ใส่คำเฉลยกับคุณสมบัติไว้ก่อน แล้วเปิดป้ายใบ้ทีละแผ่นให้ทุกคนทาย ใครตอบถูกได้แต้มไปจัดการกันเอง</p>
+      </div>
+
+      <!-- setup -->
+      <section id="scrSetup" class="tl-narrow tl-stack">
+        <div id="rounds" class="tl-stack"></div>
+        <div class="tl-row">
+          <button id="addRound" class="sg-btn">＋ เพิ่มข้อ</button>
+          <button id="sample" class="sg-btn">✨ ใส่ตัวอย่าง</button>
+        </div>
+        <label class="cr-check"><input type="checkbox" id="shuffleClues" /> สลับลำดับป้ายคุณสมบัติตอนเริ่มเกม</label>
+        <button id="startBtn" class="sg-btn blue block cr-big">เริ่มเกม ▶</button>
+        <p id="startNote" class="tl-hint" style="text-align:center;margin:0"></p>
+        <details class="sg-panel">
+          <summary><b>วิธีเล่น</b></summary>
+          <ul class="tl-hint cr-how">
+            <li>เจ้าของเกมใส่โจทย์ คำเฉลย และคุณสมบัติกี่ข้อก็ได้ ทำได้หลายข้อ</li>
+            <li>กดเริ่มเกม แล้วเปิดหน้านี้บนจอใหญ่ ป้ายคุณสมบัติจะถูกปิดไว้ เห็นแค่โจทย์</li>
+            <li>ให้ผู้เล่นผลัดกันเลือกเลขป้าย กดเปิดทีละแผ่น แล้วลองทายคำเฉลย</li>
+            <li>มีปุ่มเปิดทุกแผ่นป้าย ปุ่มเฉลย และไปข้อต่อไป ส่วนการนับคะแนนให้ตกลงกันเอง</li>
+            <li>โจทย์ที่ใส่ไว้จะถูกเก็บในเครื่องนี้ เปิดมาใหม่ก็ยังอยู่</li>
+          </ul>
+        </details>
+      </section>
+
+      <!-- play -->
+      <section id="scrPlay" class="tl-stack" hidden>
+        <div class="cr-bar">
+          <button id="editBtn" class="sg-btn small">← แก้ไขโจทย์</button>
+          <span id="roundNo" class="cr-roundno"></span>
+        </div>
+        <div class="sg-panel cr-question">
+          <div id="qText" class="cr-q"></div>
+          <div id="opened" class="cr-opened"></div>
+        </div>
+        <div id="cards" class="cr-cards"></div>
+        <div class="sg-panel cr-answer" id="answerBox">
+          <small>คำเฉลย</small>
+          <b id="answer" data-i18n-skip>❓❓❓</b>
+        </div>
+        <div class="cr-controls">
+          <button id="openAll" class="sg-btn">👀 เปิดทุกแผ่นป้าย</button>
+          <button id="revealBtn" class="sg-btn yellow">🎉 เฉลย</button>
+          <button id="nextBtn" class="sg-btn blue">ข้อต่อไป ▶</button>
+        </div>
+        <p class="tl-hint" style="text-align:center;margin:0">คีย์ลัด: กดเลข 1–9 เปิดป้าย · A เปิดทั้งหมด · Enter เฉลย · → ข้อต่อไป</p>
+      </section>
+
+      <!-- end -->
+      <section id="scrEnd" class="tl-narrow tl-stack" hidden>
+        <div class="sg-panel tl-stack cr-end">
+          <div class="cr-endtitle">🏁 ครบทุกข้อแล้ว!</div>
+          <p class="tl-hint" style="margin:0">นับคะแนนกันเลย ใครชนะ?</p>
+          <button id="againBtn" class="sg-btn blue block cr-big">เล่นอีกรอบ ↻</button>
+          <button id="backEdit" class="sg-btn block">แก้ไขโจทย์</button>
+        </div>
+      </section>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

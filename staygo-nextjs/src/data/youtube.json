@@ -63,6 +63,44 @@
       "publishedAt": "2026-06-12T00:00:00Z"
     }
   ],
+  "popular": [
+    {
+      "id": "2tUUn1ywX80",
+      "title": "ต้องมีนะ สีแดงอ่ะ | Uno Show'em No Mercy | STAYgo Boardgame",
+      "publishedAt": "",
+      "views": 40000
+    },
+    {
+      "id": "MSOypbyn_Ao",
+      "title": "การ์ดหมดมือ ทารกงอแง | MUFFIN TIME | STAYgo Boardgame",
+      "publishedAt": "",
+      "views": 17000
+    },
+    {
+      "id": "GsOp-583EzE",
+      "title": "หัว ตัว ขา ยิง!!! | PUBG: BATTLEGROUNDS The Board Game | STAYgo Boardgame",
+      "publishedAt": "",
+      "views": 12000
+    },
+    {
+      "id": "dZtE0_Ilr2M",
+      "title": "เกมนี้มีหมาป่า | Ultimate Werewolf Extreme | STAYgo เกมมีเท่านี้",
+      "publishedAt": "",
+      "views": 9900
+    },
+    {
+      "id": "rddw-jlcOoM",
+      "title": "ช่วยกันปั่นไฟ อย่าปั่นกันเอง | Dead By Daylight: เดอะบอร์ดเกม | STAYgo Boardgame",
+      "publishedAt": "",
+      "views": 8600
+    },
+    {
+      "id": "Wa5t5_qJYTI",
+      "title": "ถ้ารู้แล้ว ก็พูดมา | คำต้องห้าม @thepleelaofficial | STAYgo Boardgame",
+      "publishedAt": "",
+      "views": 6900
+    }
+  ],
   "playlists": {
     "boardgame": {
       "id": "PLG20mBG6czamQSIVdji-enijsr0oXadk-",

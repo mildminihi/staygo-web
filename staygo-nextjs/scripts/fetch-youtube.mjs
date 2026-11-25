@@ -69,6 +69,19 @@ function isoSeconds(iso) {
   return (+m[1] || 0) * 3600 + (+m[2] || 0) * 60 + (+m[3] || 0);
 }
 
+/** Most-viewed long videos on the channel, with view counts (for the homepage welcome popup). */
+async function popularVideos(channel) {
+  const r = await api("search", { part: "snippet", channelId: channel, order: "viewCount", type: "video", maxResults: "25" });
+  const ids = r.items.map((it) => it.id.videoId).filter(Boolean);
+  if (!ids.length) return [];
+  const d = await api("videos", { part: "snippet,contentDetails,statistics", id: ids.join(",") });
+  return d.items
+    .filter((x) => isoSeconds(x.contentDetails.duration) > 180)
+    .map((x) => ({ id: x.id, title: x.snippet.title, publishedAt: x.snippet.publishedAt, views: +x.statistics.viewCount || 0 }))
+    .sort((a, b) => b.views - a.views)
+    .slice(0, 6);
+}
+
 async function main() {
   if (!KEY) {
     console.log("[youtube] no YOUTUBE_API_KEY, keeping existing youtube.json");
@@ -76,6 +89,13 @@ async function main() {
   }
   const { channel, lists } = readConfig();
   const out = { updatedAt: new Date().toISOString(), source: "api", latest: await latestUploads(channel), playlists: {} };
+  try {
+    out.popular = await popularVideos(channel);
+  } catch (e) {
+    console.warn("[youtube] popular videos failed:", e.message);
+    const old = fs.existsSync(OUT) ? JSON.parse(fs.readFileSync(OUT, "utf8")) : {};
+    if (old.popular) out.popular = old.popular;
+  }
   for (const l of lists) {
     const { total, videos } = await playlistVideos(l.id);
     out.playlists[l.key] = { id: l.id, total, videos: videos.slice(0, PER_LIST) };

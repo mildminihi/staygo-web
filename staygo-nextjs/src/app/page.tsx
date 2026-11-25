@@ -6,10 +6,14 @@ import { HOME_TOOL_LIMIT, TOOLS } from '@/data/tools';
 import { BOARD_GAMES } from '@/data/boardgames';
 import LatestClip from '@/components/LatestClip';
 import PlaylistTabs from '@/components/PlaylistTabs';
-import { channelTabs } from '@/data/youtube';
+import { LATEST, YT, channelTabs, shortTitle } from '@/data/youtube';
+import WelcomePopup from '@/components/WelcomePopup';
 
 // คลิปล่าสุดและเพลย์ลิสต์ดึงจาก YouTube ตอน build (ดู src/data/playlists.ts)
 const TABS = channelTabs();
+// welcome popup: one of the channel's top clips by views, or the newest clip if we have no view counts
+const POPULAR = (YT.popular ?? []).slice(0, 5).map((v) => ({ id: v.id, title: shortTitle(v.title), views: v.views }));
+const WELCOME_CLIPS = POPULAR.length ? POPULAR : LATEST ? [{ id: LATEST.id, title: shortTitle(LATEST.title) }] : [];
 // three episode covers fanned out on the "สุ่มบอร์ดเกม" button
 const PICK_THUMBS = [0, 1, 2].map((i) => BOARD_GAMES[Math.floor((i * BOARD_GAMES.length) / 3)]);
 
@@ -20,6 +24,7 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <main>
+      <WelcomePopup clips={WELCOME_CLIPS} popular={POPULAR.length > 0} />
       <section className="hero" id="play">
         <div className="container">
           <div className="hero-content">

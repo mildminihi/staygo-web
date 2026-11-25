@@ -309,6 +309,7 @@
     [/^(\d+) นาที$/, "$1 min"],
     [/^(\d+)[–-](\d+) ชั่วโมง$/, "$1–$2 hr"],
     [/^วิธีเล่น (.+) - STAYGO$/, "How to play $1 - STAYGO"],
+    [/^([\d.]+[KMB]?) วิว$/, "$1 views"],
     [/^มี (\d+) เกมที่เข้าเงื่อนไข$/, "$1 games match"],
     [/^บอกจำนวนคนและแนวเกมที่อยากเล่น แล้วสุ่มบอร์ดเกมจาก (\d+) เกมที่ STAYGO เคยเล่น พร้อมคลิปและวิธีเล่นย่อ$/, "Tell us how many players and what kind of game you want, and we'll pick from $1 board games STAYGO has played, with clips and quick rules"],
   ]);
@@ -376,6 +377,14 @@
     "🔔 ติดตามช่อง": "🔔 Subscribe",
     "🔔 ติดตามช่อง →": "🔔 Subscribe →",
     "▶ ดูวิดีโอทั้งหมด": "▶ Watch all videos",
+    // homepage welcome popup
+    "ขอบคุณที่แวะมาเล่นนะ!": "Thanks for stopping by!",
+    "ถ้าชอบเว็บนี้ ฝากกดติดตามช่อง STAYGO ด้วยนะครับ 🙏": "If you enjoy the site, please subscribe to the STAYGO channel 🙏",
+    "🔥 คลิปยอดฮิตของช่อง": "🔥 Most-watched on the channel",
+    "🆕 คลิปล่าสุดของช่อง": "🆕 Latest on the channel",
+    "🔔 ติดตามช่อง STAYGO": "🔔 Subscribe to STAYGO",
+    "ไม่ต้องแสดงอีกวันนี้": "Don't show again today",
+    "ปิด": "Close",
     "คลิปใหม่ล่าสุด": "Newest video",
     "ลงเมื่อ": "Posted",
     "อ่านวิธีเล่น": "Read how to play",

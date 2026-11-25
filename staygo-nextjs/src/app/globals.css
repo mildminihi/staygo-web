@@ -5678,3 +5678,137 @@ h3 {
     animation: none;
   }
 }
+
+/* Homepage welcome popup (src/components/WelcomePopup.tsx) */
+.wp-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  padding: 16px;
+  background: rgba(17, 24, 39, 0.55);
+  backdrop-filter: blur(3px);
+  animation: wpFade 0.25s ease-out;
+  overflow-y: auto;
+}
+.wp-card {
+  position: relative;
+  width: min(100%, 420px);
+  margin: auto; /* centred, but scrolls from the top when taller than the screen */
+  background: var(--surface);
+  border: 3px solid #1D1B2E;
+  border-radius: 24px;
+  box-shadow: 0 6px 0 #1D1B2E, 0 24px 48px rgba(0, 0, 0, 0.25);
+  padding: 22px 20px 14px;
+  display: grid;
+  gap: 16px;
+  font-family: 'Kanit', sans-serif;
+  animation: wpPop 0.45s cubic-bezier(0.3, 1.5, 0.5, 1);
+}
+.wp-x {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--surface-2);
+  color: var(--text-muted);
+  font-size: 16px;
+  cursor: pointer;
+}
+.wp-x:hover { background: var(--border); color: var(--text); }
+.wp-head { text-align: center; display: grid; justify-items: center; gap: 4px; }
+.wp-logo { position: relative; width: 72px; height: 72px; margin-bottom: 4px; }
+.wp-logo img { width: 100%; height: 100%; object-fit: contain; border-radius: 50%; background: #fff; border: 3px solid #1D1B2E; }
+.wp-wave {
+  position: absolute;
+  right: -14px;
+  bottom: -4px;
+  font-size: 30px;
+  transform-origin: 70% 70%;
+  animation: wpWave 1.6s ease-in-out 0.4s 2;
+}
+.wp-title { margin: 0; font-size: 24px; font-weight: 600; line-height: 1.3; color: var(--text); }
+.wp-text { margin: 0; color: var(--text-muted); font-size: 16px; line-height: 1.5; text-wrap: balance; }
+.wp-clip {
+  display: grid;
+  gap: 8px;
+  padding: 8px;
+  border-radius: 18px;
+  background: var(--surface-2);
+  color: var(--text);
+  text-decoration: none;
+  transition: transform 0.15s, background 0.15s;
+}
+.wp-clip:hover { background: #EBEEF3; transform: translateY(-2px); }
+.wp-thumb { position: relative; display: block; aspect-ratio: 16 / 9; border-radius: 12px; overflow: hidden; background: #000; }
+.wp-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.wp-play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 56px;
+  height: 40px;
+  margin: -20px 0 0 -28px;
+  display: grid;
+  place-items: center;
+  padding-left: 3px;
+  border-radius: 12px;
+  background: #FF0000;
+  color: #fff;
+  font-size: 18px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  transition: transform 0.15s;
+}
+.wp-clip:hover .wp-play { transform: scale(1.1); }
+.wp-views {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  padding: 2px 8px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+}
+.wp-cliptext { display: grid; gap: 2px; padding: 0 4px 2px; }
+.wp-kicker { font-size: 13px; font-weight: 600; color: var(--accent); }
+.wp-cliptitle {
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.wp-sub { width: 100%; justify-content: center; font-family: 'Kanit', sans-serif; }
+.wp-foot { display: flex; justify-content: space-between; gap: 8px; margin-top: -4px; }
+.wp-foot button {
+  border: 0;
+  background: none;
+  padding: 8px 6px;
+  font: inherit;
+  font-size: 14px;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-radius: 8px;
+}
+.wp-foot button:hover { color: var(--text); background: var(--surface-2); }
+@media (max-width: 380px) {
+  .wp-card { padding: 18px 14px 10px; gap: 12px; }
+  .wp-title { font-size: 21px; }
+  .wp-logo { width: 60px; height: 60px; }
+}
+@media (max-height: 640px) {
+  .wp-logo { display: none; }
+}
+@keyframes wpFade { from { opacity: 0; } }
+@keyframes wpPop { from { opacity: 0; transform: translateY(24px) scale(0.92); } }
+@keyframes wpWave { 0%, 60%, 100% { transform: rotate(0); } 10%, 30% { transform: rotate(16deg); } 20%, 40% { transform: rotate(-10deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .wp-backdrop, .wp-card, .wp-wave { animation: none; }
+}

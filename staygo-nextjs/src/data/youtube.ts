@@ -4,12 +4,14 @@ import { BOARD_GAMES } from './boardgames';
 import { PLAYLISTS, type PlaylistInfo } from './playlists';
 
 export type Video = { id: string; title: string; publishedAt: string };
+export type PopularVideo = Video & { views: number };
 export type PlaylistData = { id: string; total: number; videos: Video[] };
 
 export const YT = data as {
   updatedAt: string;
   source: 'api' | 'snapshot';
   latest: Video[];
+  popular?: PopularVideo[];
   playlists: Record<string, PlaylistData>;
 };
 

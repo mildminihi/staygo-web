@@ -202,3 +202,11 @@
 .rr-sheet.loading img { visibility: hidden; }
 .rr-sheetcard a.sg-btn { text-decoration: none; }
 .rr-sheet.loading a.sg-btn { pointer-events: none; opacity: 0.5; }
+
+/* tiles the game just rewrote (new route piece, new obstacle) */
+.rr-cell.fresh::after {
+  content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background: rgba(255, 194, 26, 0.75); animation: rrFresh 0.9s ease-out forwards;
+}
+@keyframes rrFresh { from { opacity: 1; } to { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .rr-cell.fresh::after { animation-duration: 0.01s; } }

@@ -209,13 +209,18 @@
     }
     const path = [];
     for (let i = to; i !== -1; i = prev[i]) path.unshift(i);
-    // lay a road piece that can join each step, then scramble its rotation
+    // Make sure every step can join: keep the player's piece (and its rotation) when its shape fits,
+    // only swap in a new piece where it can't, e.g. a corner where the route runs straight or a 🚧.
     const dirTo = (a, b) => { const [ax, ay] = xy(a), [bx, by] = xy(b); return DIRS.find((d) => ax + d.dx === bx && ay + d.dy === by).b; };
     for (let k = 1; k < path.length - 1; k++) {
       const need = dirTo(path[k], path[k - 1]) | dirTo(path[k], path[k + 1]);
       const straight = need === (N | S) || need === (E | W);
+      const c = G.cells[path[k]];
+      const fits = c.t === 'road' && (c.base === SHAPE.T || c.base === SHAPE.X || c.base === (straight ? SHAPE.I : SHAPE.L));
+      if (fits) { if (c.lock) { c.lock = false; G.changed.add(path[k]); } continue; }
       const base = straight ? (Math.random() < 0.85 ? SHAPE.I : SHAPE.T) : (Math.random() < 0.8 ? SHAPE.L : SHAPE.T);
       G.cells[path[k]] = { t: 'road', base, r: rnd(4), lock: false, traffic: false };
+      G.changed.add(path[k]);
     }
     G.route = new Set(path);
     return path;
@@ -223,8 +228,9 @@
 
   function scrambleUntilBroken(path) {
     for (let tries = 0; tries < 40 && trace().found; tries++) {
-      const c = G.cells[path[1 + rnd(path.length - 2)]];
-      if (c.t === 'road' && !c.lock) c.r += 1 + rnd(3);
+      const i = path[1 + rnd(path.length - 2)];
+      const c = G.cells[i];
+      if (c.t === 'road' && !c.lock) { c.r += 1 + rnd(3); G.changed.add(i); }
     }
   }
 
@@ -248,12 +254,13 @@
     return pick(list);
   }
 
+  // Obstacles stay where they are; only top up to this level's counts (off the new route).
   function placeObstacles() {
     const L = G.count;
-    for (let i = 0; i < SIZE; i++) {
-      const c = G.cells[i];
-      if (c.t === 'block') G.cells[i] = randomRoad();
-      else if (c.t === 'road') { c.lock = false; c.traffic = false; }
+    const have = { block: 0, lock: 0, car: 0 };
+    for (const c of G.cells) {
+      if (c.t === 'block') have.block++;
+      else if (c.t === 'road') { if (c.lock) have.lock++; if (c.traffic) have.car++; }
     }
     const free = () => {
       const out = [];
@@ -266,15 +273,16 @@
     const blocks = L < 2 ? 0 : Math.min(9, 1 + Math.floor(L / 2));
     const locks = L < 3 ? 0 : Math.min(7, Math.floor((L - 1) / 2));
     const cars = L < 4 ? 0 : Math.min(5, 1 + Math.floor((L - 4) / 3));
-    take(free(), blocks, (i) => { G.cells[i] = { t: 'block' }; });
-    take(free(), locks, (i) => { G.cells[i].lock = true; });
+    take(free(), blocks - have.block, (i) => { G.cells[i] = { t: 'block' }; G.changed.add(i); });
+    take(free(), locks - have.lock, (i) => { G.cells[i].lock = true; G.changed.add(i); });
     const roads = [];
-    for (let i = 0; i < SIZE; i++) if (G.cells[i].t === 'road') roads.push(i);
-    take(roads, cars, (i) => { G.cells[i].traffic = true; });
+    for (let i = 0; i < SIZE; i++) if (G.cells[i].t === 'road' && !G.cells[i].traffic) roads.push(i);
+    take(roads, cars - have.car, (i) => { G.cells[i].traffic = true; G.changed.add(i); });
   }
 
   function newLeg() {
-    if (G.from != null && G.from !== G.rider && G.cells[G.from].t === 'spot') G.cells[G.from] = randomRoad();
+    G.changed = new Set();
+    if (G.from != null && G.from !== G.rider && G.cells[G.from].t === 'spot') { G.cells[G.from] = randomRoad(); G.changed.add(G.from); }
     G.from = G.rider;
     G.dog = null;
     const goal = chooseGoal();
@@ -288,6 +296,17 @@
     G.moveAt = G.leg === 'deliver' && G.count >= 10 && Math.random() < 0.3 ? G.clock + 4 + Math.random() * 5 : Infinity;
     renderOrder();
     renderAll();
+    flashChanged();
+  }
+
+  // briefly mark tiles the game rewrote, so a changed road never looks like it moved by itself
+  function flashChanged() {
+    for (const i of G.changed) {
+      const b = cellEls[i];
+      b.classList.remove('fresh'); void b.offsetWidth; b.classList.add('fresh');
+      setTimeout(() => b.classList.remove('fresh'), 900);
+    }
+    G.changed = new Set();
   }
 
   /* ---------- order card / HUD ---------- */
@@ -442,6 +461,7 @@
 
   function moveCustomer() {
     G.moveAt = Infinity;
+    G.changed = new Set([G.target]);
     G.cells[G.target] = randomRoad();
     G.dog = null;
     const goal = chooseGoal();
@@ -453,6 +473,7 @@
     sfx('notify');
     toast('📞 ลูกค้าขอเปลี่ยนที่ส่ง! +3 วิ', 'news');
     renderAll();
+    flashChanged();
     autoRide();
   }
 
@@ -503,7 +524,7 @@
     clearTimeout(G && G.rideTimer);
     G = {
       cells: Array.from({ length: SIZE }, randomRoad),
-      rider: 0, target: -1, from: null, route: new Set(),
+      rider: 0, target: -1, from: null, route: new Set(), changed: new Set(),
       leg: 'pickup', order: pick(SHOPS), warm: 100,
       time: START_TIME, clock: 0, score: 0, count: 0,
       dog: null, nextDog: 0, raining: false, rainUntil: 0, nextRain: 0, moveAt: Infinity,

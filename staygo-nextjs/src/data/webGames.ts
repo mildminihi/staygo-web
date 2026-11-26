@@ -74,6 +74,15 @@ export const WEB_GAMES: WebGame[] = [
     beta: true,
   },
   {
+    href: '/games/rider-rush/',
+    title: 'ด่วนจี๋ทะลุแยก',
+    meta: '1 Player • เกมต่อถนนแข่งเวลา',
+    short: 'หมุนถนนให้ต่อกัน รับข้าวไปส่งให้ทันก่อนข้าวเย็น ส่งได้ไม่รู้จบ!',
+    description: 'เกม puzzle แข่งกับเวลา แตะหมุนถนนให้ต่อจากไรเดอร์ไปถึงร้าน รับข้าวแล้วรีบต่อทางไปส่งบ้านลูกค้า ส่งต่อไปเรื่อยๆ ไม่รู้จบ ยิ่งข้าวร้อนยิ่งได้ทิปเยอะ ยิ่งส่งเยอะยิ่งยาก มีถนนปิดซ่อม รถติด หมาวิ่งขวางทาง และฝนตก เล่นได้ทั้งมือถือและคอม',
+    cover: { images: ['/assets/image/rider-rush-cover-1.webp', '/assets/image/rider-rush-cover-2.webp'] },
+    beta: true,
+  },
+  {
     href: '/games/emoji-match/',
     title: 'จับคู่อีโมจิ',
     meta: '1 Player • เกมจำ',

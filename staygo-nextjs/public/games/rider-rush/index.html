@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>ด่วนจี๋ทะลุแยก — เกมต่อถนนแข่งเวลา | STAYGO</title>
+    <meta name="title" content="ด่วนจี๋ทะลุแยก — เกมต่อถนนแข่งเวลา | STAYGO" />
+    <meta name="description" content="เกม puzzle แข่งเวลา หมุนถนนให้ต่อกัน รับข้าวจากร้านไปส่งลูกค้าก่อนข้าวเย็น ส่งต่อไปเรื่อยๆ ไม่รู้จบ ระวังถนนปิด รถติด หมาวิ่งตัดหน้า เล่นฟรีบนเว็บ" />
+    <meta name="robots" content="index, follow" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.staygoch.com/games/rider-rush/" />
+    <meta property="og:title" content="ด่วนจี๋ทะลุแยก — เกมต่อถนนแข่งเวลา" />
+    <meta property="og:description" content="หมุนถนนให้ต่อกัน รับข้าวไปส่งให้ทันก่อนข้าวเย็น ส่งได้ไม่รู้จบ!" />
+    <meta property="og:image" content="https://www.staygoch.com/assets/image/rider-rush-cover-1.png" />
+    <meta property="og:image:width" content="1000" />
+    <meta property="og:image:height" content="800" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://www.staygoch.com/assets/image/rider-rush-cover-1.png" />
+    <meta name="twitter:title" content="ด่วนจี๋ทะลุแยก — เกมต่อถนนแข่งเวลา" />
+    <meta name="twitter:description" content="หมุนถนนให้ต่อกัน รับข้าวไปส่งให้ทันก่อนข้าวเย็น ส่งได้ไม่รู้จบ!" />
+    <link rel="canonical" href="https://www.staygoch.com/games/rider-rush/" />
+    <link rel="icon" type="image/png" href="/games/reveal-board/staygo-logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Mitr:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Kanit:wght@700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/assets/css/site.css" />
+    <link rel="stylesheet" href="/assets/css/staygo-cards.css" />
+    <link rel="stylesheet" href="/assets/css/staygo-skin.css" />
+    <link rel="stylesheet" href="/assets/css/staygo-tools.css" />
+    <link rel="stylesheet" href="./styles.css" />
+    <script defer src="/assets/js/config.js"></script>
+    <script defer src="/assets/js/site.js"></script>
+    <script src="/assets/js/analytics.js" defer></script>
+    <script src="/assets/js/sfx.js"></script>
+    <script src="/assets/js/i18n.js"></script>
+    <script src="/assets/js/i18n/rider-rush.js"></script>
+      <script src="/assets/js/staygo-cta.js" defer></script>
+  </head>
+  <body class="sg-page sg-skin">
+    <header class="header">
+      <div class="container">
+        <div class="header-content">
+          <a href="/" class="logo-link">
+            <img src="/games/reveal-board/staygo-logo.png" alt="Staygo" class="logo" />
+          </a>
+
+          <nav class="nav" aria-label="เมนูหลัก">
+            <a href="/#play" class="nav-link active">Play</a>
+            <a href="/tools/" class="nav-link">Tools</a>
+            <a href="/watch/" class="nav-link">Watch & Play</a>
+            <a href="/about/" class="nav-link">About</a>
+          </nav>
+
+          <div class="header-actions">
+            <a href="https://www.youtube.com/@STAYGO" target="_blank" rel="noopener noreferrer" class="icon-button" aria-label="YouTube">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
+                <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+              </svg>
+            </a>
+            <button id="menuToggle" class="icon-button" aria-label="เมนู">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu">
+      <div class="mobile-menu-header">
+        <span class="mobile-menu-title">เมนู</span>
+        <button id="menuClose" class="icon-button" aria-label="ปิดเมนู">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <nav class="mobile-nav">
+        <a href="/#play" class="mobile-nav-link">Play</a>
+        <a href="/tools/" class="mobile-nav-link">Tools</a>
+        <a href="/watch/" class="mobile-nav-link">Watch & Play</a>
+        <a href="/about/" class="mobile-nav-link">About</a>
+      </nav>
+    </div>
+
+
+
+        <main class="tl rr">
+      <div class="tl-hero" id="hero">
+        <h1>🛵 ด่วนจี๋ทะลุแยก</h1>
+        <p>หมุนถนนให้ต่อกัน รับข้าวจากร้านไปส่งลูกค้าก่อนข้าวเย็น ส่งต่อไปเรื่อยๆ จนกว่าจะหมดกะ!</p>
+      </div>
+
+      <!-- start -->
+      <section id="scrStart" class="tl-narrow tl-stack">
+        <div class="sg-panel tl-stack">
+          <div class="rr-demo" aria-hidden="true">🛵 ➜ 🍜 ➜ 🏠 ➜ 🍗 ➜ 🏡 ➜ …</div>
+          <div class="rr-best" id="bestBox"></div>
+          <button id="startBtn" class="sg-btn blue block rr-big">เริ่มกะ ▶</button>
+        </div>
+        <details class="sg-panel" open>
+          <summary><b>วิธีเล่น</b></summary>
+          <ul class="tl-hint">
+            <li><b>แตะถนน</b> เพื่อหมุนทีละ 90° ต่อทางจาก 🛵 ไปยังจุดสีเหลือง</li>
+            <li>ถนนที่ต่อถึง 🛵 แล้วจะเป็น<b>สีฟ้า</b> พอต่อถึงปลายทาง ไรเดอร์จะขับไปเอง</li>
+            <li>ไปรับข้าวที่ร้าน แล้วไปส่งบ้านลูกค้า แล้วรับออเดอร์ถัดไป วนไปเรื่อยๆ ไม่รู้จบ</li>
+            <li>รับข้าวได้ +3 วิ ส่งสำเร็จได้เวลาเพิ่ม และได้<b>ทิป</b> ยิ่งข้าวร้อนยิ่งได้ทิปเยอะ</li>
+            <li>ยิ่งส่งเยอะยิ่งยาก: 🚧 ถนนปิดซ่อม 🔩 ถนนหมุนไม่ได้ 🚗 รถติด 🐕 หมาขวางทาง (แตะไล่ 3 ที) 🌧️ ฝนตกเวลาเดินไว</li>
+            <li>เวลาหมด = หมดกะ นับรายได้ทั้งหมด</li>
+          </ul>
+        </details>
+      </section>
+
+      <!-- play -->
+      <section id="scrPlay" hidden>
+        <div class="rr-hud sg-panel">
+          <div class="rr-clock" id="clockBox"><small>เวลา</small><b id="hudTime">40</b></div>
+          <div><small>รายได้</small><b id="hudScore" class="rr-money">฿0</b></div>
+          <div><small>ส่งแล้ว</small><b id="hudCount">0</b></div>
+          <button id="pauseBtn" class="rr-pause" aria-label="พัก" data-sfx="off">⏸</button>
+        </div>
+        <div class="rr-order sg-panel">
+          <span class="rr-ordemo" id="ordEmo"></span>
+          <div class="rr-ordtext"><b id="ordTitle"></b><small id="ordSub"></small></div>
+          <div class="rr-heat" id="heat" hidden><i id="heatBar"></i><span id="heatIcon">🔥</span></div>
+        </div>
+        <div class="rr-boardwrap" id="boardWrap">
+          <div id="board" class="rr-board" data-sfx="off"></div>
+          <div id="countLayer" class="rr-layer rr-count" hidden></div>
+          <div id="pauseLayer" class="rr-layer" hidden>
+            <b>พักก่อน ☕</b>
+            <button id="resumeBtn" class="sg-btn blue">เล่นต่อ ▶</button>
+            <button id="quitBtn" class="sg-btn small">เลิกกะ</button>
+          </div>
+        </div>
+        <div id="toasts" class="rr-toasts" aria-live="polite"></div>
+      </section>
+
+      <!-- game over -->
+      <section id="scrOver" class="tl-narrow tl-stack" hidden>
+        <div class="sg-panel tl-stack rr-over">
+          <div class="rr-overtitle">🏁 หมดกะแล้ว!</div>
+          <div id="overRank" class="rr-rank"></div>
+          <div id="overRecord" class="rr-record" hidden>🏆 สถิติใหม่!</div>
+          <div class="rr-stats">
+            <div><small>รายได้</small><b id="overScore" class="rr-money"></b></div>
+            <div><small>ส่งสำเร็จ</small><b id="overCount"></b></div>
+          </div>
+          <p id="overBest" class="tl-hint rr-center"></p>
+          <button id="shareBtn" class="sg-btn yellow block">แชร์ผล 📤</button>
+        </div>
+        <div data-staygo-cta="rider-rush"></div>
+        <button id="againBtn" class="sg-btn blue block rr-big">ออกกะใหม่ ↻</button>
+      </section>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

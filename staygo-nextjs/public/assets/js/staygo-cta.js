@@ -50,6 +50,7 @@
     'speed-draw': ['art-frenzy', 'hues-and-cues', 'name-it'],
     'scribble-spy': ['art-frenzy', 'codenames', 'forbidden-word'],
     'jinxo-board': ['jinxo'],
+    'rider-rush': ['hot-streak', 'get-bit', 'name-it'],
   };
 
   var CSS =

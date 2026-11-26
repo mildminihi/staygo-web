@@ -1,5 +1,7 @@
-// วาดไว 15 วิ: everyone draws the same 10 prompts (host picks 5–20 s each; prompts come from one similar-shape set, random or host-picked; host can lock pens to black), then gets 60 s to match their own
-// drawings to the prompts (shown in a shuffled order). Score = drawings placed on the right prompt.
+// วาดไว 15 วิ: everyone draws the same 10 prompts (host picks 5–20 s each; prompts come from one similar-shape set, random or host-picked; host can lock pens to black), then
+// matches SOMEONE ELSE's drawings to the prompts (shown in a shuffled order; host picks 60–180 s). Players sit in a ring (A sorts B,
+// B sorts C, C sorts A) and every correct placement scores for both the sorter and the artist, so a player's total is
+// (how well I sorted my neighbour) + (how well my other neighbour sorted me). Alone in the room you sort your own.
 //
 // Timing is not driven by the host's tab: the host writes startAt/drawEnd/orderEnd once (server
 // time) and every screen works out the phase from the clock. Drawings are uploaded as small JPEGs
@@ -15,7 +17,8 @@ const KIND = "speed-draw";
 const NAME_KEY = "staygo-live-name";
 const ROUNDS = 10;
 const DRAW_MS = 10000; // default seconds per drawing; the host can pick 5–20
-const ORDER_MS = 60000;
+const ORDER_MS = 90000; // default time to sort; the host can pick 60–180 s
+const REPAIR_MS = 5000; // the host may re-pair the ring this long after drawing ends (late uploads, players who left)
 const LEAD_MS = 3600; // 3-2-1 before the first prompt
 const PAD = 600; // drawing pad size in canvas pixels
 const THUMB = 240; // uploaded drawing size
@@ -74,6 +77,26 @@ function scoreOf(st, ans) {
   if (!o) return null;
   return st.show.reduce((s, p, k) => s + (o[k] === p ? 1 : 0), 0);
 }
+/** Ring of players: pairs[sorter] = whose drawings they sort. */
+function makePairs(ids) {
+  const p = {};
+  ids.forEach((id, k) => (p[id] = ids[(k + 1) % ids.length]));
+  return p;
+}
+const samePairs = (a = {}, b = {}) => Object.keys(a).length === Object.keys(b).length && Object.keys(a).every((k) => a[k] === b[k]);
+const sorterOf = (st, id) => Object.keys(st.pairs || {}).find((k) => st.pairs[k] === id);
+/** A player's points: what they got sorting their neighbour + what their other neighbour got sorting them. */
+function scoresOf(st, answers, id) {
+  const pairs = st.pairs || {};
+  if (!pairs[id]) return { sort: null, drawn: null, total: null };
+  const sort = scoreOf(st, answers[id]);
+  const by = sorterOf(st, id);
+  const drawn = by && by !== id ? scoreOf(st, answers[by]) : null;
+  const total = sort === null && drawn === null ? null : (sort || 0) + (drawn || 0);
+  return { sort, drawn, by, total };
+}
+const maxScore = (st) => (st.n || ROUNDS) * (Object.keys(st.pairs || {}).length > 1 ? 2 : 1);
+const nameOf = (id) => room?.players?.[id]?.name || "ผู้เล่นที่ออกไปแล้ว";
 function sortedPlayers() {
   return Object.entries(room?.players || {})
     .map(([id, p]) => ({ id, ...p }))
@@ -83,13 +106,7 @@ function sortedPlayers() {
 function leaderboard() {
   const st = room.state;
   const answers = room.answers?.[st.game] || {};
-  const draws = room.draws?.[st.game] || {};
-  const ids = new Set([...Object.keys(answers), ...Object.keys(draws)]);
-  const rows = [...ids].map((id) => ({
-    id,
-    name: room.players?.[id]?.name || "ผู้เล่นที่ออกไปแล้ว",
-    score: scoreOf(st, answers[id]),
-  }));
+  const rows = Object.keys(st.pairs || {}).map((id) => ({ id, name: nameOf(id), score: scoresOf(st, answers, id).total }));
   rows.sort((a, b) => (b.score ?? -1) - (a.score ?? -1) || a.name.localeCompare(b.name, "th"));
   for (const r of rows) r.rank = 1 + rows.filter((x) => (x.score ?? -1) > (r.score ?? -1)).length;
   return rows;
@@ -184,8 +201,8 @@ function renderHostRoom() {
         .map((p) => {
           let tag = "";
           if (ph.name === "draw" || ph.name === "count") tag = `${Object.keys(draws[p.id] || {}).length}/${st.n}`;
-          else if (ph.name === "order") tag = answers[p.id]?.done ? "✅" : "…";
-          else if (ph.name === "reveal") tag = scoreOf(st, answers[p.id]) ?? "–";
+          else if (ph.name === "order") tag = !st.pairs?.[p.id] ? "–" : answers[p.id]?.done ? "✅" : "…";
+          else if (ph.name === "reveal") tag = scoresOf(st, answers, p.id).total ?? "–";
           return `<li><span class="tl-dot${p.online ? " on" : ""}"></span><span class="sd-pname">${esc(p.name)}</span>
             <b class="tl-num">${tag}</b>
             <button class="sd-kick tl-nobig" data-kick="${p.id}" aria-label="เอาออก">✕</button></li>`;
@@ -195,7 +212,8 @@ function renderHostRoom() {
 
   // everyone online has pressed "done" → reveal without waiting for the clock
   if (ph.name === "order") {
-    const online = players.filter((p) => p.online);
+    if (now() < st.drawEnd + REPAIR_MS) repair();
+    const online = players.filter((p) => p.online && st.pairs?.[p.id]);
     if (online.length && online.every((p) => answers[p.id]?.done)) patch(`live/${code}/state`, { reveal: true }).catch(() => {});
   }
   if (ph.name === "reveal") renderReveal();
@@ -249,8 +267,9 @@ function hostTick() {
     $("hOrderSecs").textContent = secs(ph.left);
     $("hOrderBar").style.width = `${ph.frac * 100}%`;
     const answers = room.answers?.[st.game] || {};
-    const done = Object.values(answers).filter((a) => a?.done).length;
-    $("hDone").textContent = `เรียงเสร็จแล้ว ${done}/${sortedPlayers().filter((p) => p.online).length} คน`;
+    const inGame = sortedPlayers().filter((p) => p.online && st.pairs?.[p.id]);
+    const done = inGame.filter((p) => answers[p.id]?.done).length;
+    $("hDone").textContent = `เรียงเสร็จแล้ว ${done}/${inGame.length} คน`;
   }
 }
 
@@ -267,23 +286,26 @@ try {
   if (s.secs) $("drawSecs").value = String(s.secs);
   if (s.set) $("wordSet").value = s.set;
   if (s.pen) $("penMode").value = s.pen;
+  if (s.order) $("orderSecs").value = String(s.order);
 } catch {}
 // an unknown saved value leaves the select empty: fall back to the default
 if (!$("drawSecs").value) $("drawSecs").value = String(DRAW_MS / 1000);
 if ($("wordSet").selectedIndex < 0) $("wordSet").value = "";
 if (!$("penMode").value) $("penMode").value = "mono";
+if (!$("orderSecs").value) $("orderSecs").value = String(ORDER_MS / 1000);
 function settingsChanged() {
   const set = $("wordSet").value;
   const setName = set === MIX ? "คละทุกหมวด" : SHAPE_SETS.find((s) => s.key === set)?.name.replace(/^\S+\s/, "") || "สุ่มหมวด";
   const pen = $("penMode").value === "multi" ? "หลายสี" : "สีดำสีเดียว";
-  $("lobbyInfo").textContent = `${ROUNDS} โจทย์ · ${setName} · ${pen} · ข้อละ ${$("drawSecs").value} วินาที · เรียงรูป ${ORDER_MS / 60000} นาที`;
+  $("lobbyInfo").textContent = `${ROUNDS} โจทย์ · ${setName} · ${pen} · ข้อละ ${$("drawSecs").value} วินาที · เรียงรูป ${$("orderSecs").value} วินาที`;
   try {
-    localStorage.setItem(SETTINGS_KEY, JSON.stringify({ secs: +$("drawSecs").value, set, pen: $("penMode").value }));
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify({ secs: +$("drawSecs").value, set, pen: $("penMode").value, order: +$("orderSecs").value }));
   } catch {}
 }
 $("drawSecs").onchange = settingsChanged;
 $("wordSet").onchange = settingsChanged;
 $("penMode").onchange = settingsChanged;
+$("orderSecs").onchange = settingsChanged;
 settingsChanged();
 
 function loadHistory() {
@@ -335,16 +357,31 @@ async function startGame() {
   const drawMs = Math.min(20, Math.max(3, +$("drawSecs").value || DRAW_MS / 1000)) * 1000;
   const t0 = now() + LEAD_MS;
   const drawEnd = t0 + ROUNDS * drawMs;
+  const orderMs = Math.min(300, Math.max(30, +$("orderSecs").value || ORDER_MS / 1000)) * 1000;
+  const ring = shuffle(sortedPlayers().map((p) => p.id)); // who sorts whose drawings; re-checked when drawing ends
   try {
     await write(`live/${code}/state`, {
       round: g, locked: false, game: g, n: ROUNDS, drawMs, mono: $("penMode").value !== "multi",
-      startAt: t0, drawEnd, orderEnd: drawEnd + ORDER_MS,
+      startAt: t0, drawEnd, orderEnd: drawEnd + orderMs,
       prompts: pickPrompts(), show: shuffle(range(ROUNDS)), reveal: false,
+      ring, pairs: makePairs(ring),
     });
   } catch {
     return toast("เริ่มเกมไม่สำเร็จ ลองใหม่อีกครั้ง");
   }
   if (prev) clearGame(prev);
+}
+/** Once drawing ends, rebuild the ring from the players who actually drew something: drops anyone who left
+ *  before drawing and adds anyone who joined mid-game, keeping the starting order. */
+function repair() {
+  const st = room.state;
+  const draws = room.draws?.[st.game] || {};
+  const drew = (id) => Object.keys(draws[id] || {}).length > 0;
+  const ring = (st.ring || []).filter(drew);
+  for (const id of Object.keys(draws)) if (drew(id) && !ring.includes(id)) ring.push(id);
+  if (!ring.length) return;
+  const pairs = makePairs(ring);
+  if (!samePairs(pairs, st.pairs)) patch(`live/${code}/state`, { ring, pairs }).catch(() => {});
 }
 function clearGame(g) {
   remove(`live/${code}/draws/${g}`).catch(() => {});
@@ -374,12 +411,12 @@ function renderReveal() {
         .map(
           (r) => `<li class="${r.rank === 1 && r.score ? "top" : ""}"><span class="sd-rank">${(r.score && medal[r.rank - 1]) || r.rank}</span>
           <span class="sd-bname">${esc(r.name)}</span>
-          <span class="sd-bscore tl-num">${r.score ?? "–"}<small>/${st.n}</small></span></li>`,
+          <span class="sd-bscore tl-num">${r.score ?? "–"}<small>/${maxScore(st)}</small></span></li>`,
         )
         .join("")
     : '<li class="tl-hint">ไม่มีใครส่งคำตอบ</li>';
 
-  // gallery: everyone's drawing for one prompt, ✅ when they placed it on the right prompt
+  // gallery: everyone's drawing for one prompt, ✅ when whoever sorted it placed it on the right prompt
   const slotOf = st.show.indexOf(galIdx);
   $("galNo").textContent = `${galIdx + 1}/${st.n}`;
   $("galWord").textContent = st.prompts[galIdx];
@@ -387,11 +424,13 @@ function renderReveal() {
     ? rows
         .map((r) => {
           const img = draws[r.id]?.[galIdx];
-          const o = parseOrder(answers[r.id], st.n);
+          const by = sorterOf(st, r.id);
+          const o = parseOrder(answers[by], st.n);
           const ok = o && o[slotOf] === galIdx;
+          const sortedBy = by && by !== r.id ? `<small>${esc(nameOf(by))} เรียง</small>` : "";
           return `<figure class="sd-galitem">
             <div class="sd-galimg">${img ? `<img src="${img}" alt="รูปของ ${esc(r.name)}" />` : "<span>ไม่ได้วาด</span>"}<i class="${ok ? "ok" : "no"}">${ok ? "✓" : "✗"}</i></div>
-            <figcaption>${esc(r.name)}</figcaption></figure>`;
+            <figcaption>${esc(r.name)}${sortedBy}</figcaption></figure>`;
         })
         .join("")
     : "";
@@ -483,7 +522,11 @@ function watchPlayer(c, cb) {
 
 function ensureGame(st) {
   if (G && G.game === st.game) return;
-  G = { game: st.game, n: st.n, drawings: Array(st.n).fill(null), saved: new Set(), cur: -1, slots: null, done: false, sel: null, fetched: false };
+  stopTarget();
+  G = {
+    game: st.game, n: st.n, drawings: Array(st.n).fill(null), saved: new Set(), cur: -1, slots: null, done: false, sel: null, fetched: false,
+    target: undefined, tdraw: Array(st.n).fill(null), tOff: null, fresh: false,
+  };
   setPalette(!!st.mono);
   clearPad();
 }
@@ -496,6 +539,11 @@ function playerTick() {
 
   if (G && G.cur >= 0 && (ph.name !== "draw" || ph.i !== G.cur || st.game !== G.game)) saveRound(G.cur);
   if (ph.name === "draw" && G.cur !== ph.i) startRound(st, ph.i);
+  // the host re-paired the ring after drawing: start over on the new person's drawings
+  if (G && G.target !== undefined && (ph.name === "order" || ph.name === "reveal") && (st.pairs?.[uid()] || null) !== G.target) {
+    if (ph.name === "order") enterOrder();
+    else enterReveal();
+  }
 
   const key = ph.name + (st.game || 0);
   if (key !== shownPhase) {
@@ -516,7 +564,7 @@ function playerTick() {
     $("pOrderSecs").textContent = secs(ph.left);
     $("pOrderBar").style.width = `${ph.frac * 100}%`;
   }
-  if (ph.name === "reveal") renderRank();
+  if (ph.name === "reveal") renderPlayerReveal();
 }
 
 function startRound(st, i) {
@@ -550,6 +598,33 @@ function saveRound(i) {
   write(`live/${code}/draws/${G.game}/${uid()}/${i}`, url).catch(() => {});
 }
 
+function stopTarget() {
+  G?.tOff?.();
+  if (G) G.tOff = null;
+}
+/** Follow the drawings of the player this phone sorts (pairs[me]); re-render when they arrive. */
+function watchTarget(st) {
+  const t = st.pairs?.[uid()] || null;
+  if (G.target === t) return;
+  stopTarget();
+  G.fresh = G.target !== undefined; // re-paired mid-sort: shuffle anew instead of reusing the old answer
+  G.target = t;
+  G.tdraw = Array(G.n).fill(null);
+  G.slots = null;
+  G.done = false;
+  G.sel = null;
+  if (!t) return;
+  const g = G;
+  g.tOff = FB.m.onValue(FB.m.ref(FB.db, `live/${code}/draws/${g.game}/${t}`), (s) => {
+    if (G !== g) return;
+    const v = s.val() || {};
+    g.tdraw = range(g.n).map((i) => v[i] || null);
+    const ph = phaseOf(room?.state).name;
+    if (ph === "order" && g.slots) renderSlots();
+    if (ph === "reveal") renderPlayerReveal();
+  });
+}
+
 async function enterOrder() {
   const st = room.state;
   const g = G;
@@ -564,8 +639,9 @@ async function enterOrder() {
     } catch {}
   }
   if (G !== g) return;
-  if (!g.slots) {
-    const mine = room.answers?.[g.game]?.[uid()];
+  watchTarget(room.state);
+  if (g.target && !g.slots) {
+    const mine = g.fresh ? null : room.answers?.[g.game]?.[uid()];
     g.slots = parseOrder(mine, g.n);
     g.done = !!mine?.done;
     if (!g.slots) {
@@ -586,10 +662,20 @@ const tile = (img) => (img ? `<img src="${img}" alt="" draggable="false" />` : "
 
 function renderSlots() {
   const st = room.state;
+  const t = G.target;
+  $("pOrderTitle").textContent = !t ? "รอเกมหน้า" : t === uid() ? "เรียงรูปของตัวเอง" : `เรียงรูปของ ${nameOf(t)}`;
+  $("pOrderHint").textContent = !t
+    ? "รอบนี้คุณเข้ามาไม่ทันวาด รอเล่นเกมหน้านะ"
+    : t === uid() ? "แตะรูป 2 รูปเพื่อสลับกัน" : "แตะรูป 2 รูปเพื่อสลับกัน · ถูกกี่ข้อ ได้คะแนนทั้งคุณและเจ้าของรูป";
+  $("doneBtn").hidden = !t;
+  if (!t || !G.slots) {
+    $("slots").innerHTML = "";
+    return;
+  }
   $("slots").innerHTML = G.slots
     .map(
       (d, k) => `<li><span class="sd-word"><b class="tl-num">${k + 1}</b> ${esc(st.prompts[st.show[k]])}</span>
-      <button class="sd-thumb${G.sel === k ? " sel" : ""}" data-k="${k}">${tile(G.drawings[d])}</button></li>`,
+      <button class="sd-thumb${G.sel === k ? " sel" : ""}" data-k="${k}">${tile(G.tdraw[d])}</button></li>`,
     )
     .join("");
   $("doneBtn").textContent = G.done ? "✏️ แก้ต่อ" : "✅ เสร็จแล้ว";
@@ -599,7 +685,7 @@ function renderSlots() {
 
 $("slots").addEventListener("click", (e) => {
   const b = e.target.closest("[data-k]");
-  if (!b || !G?.slots || G.done || phaseOf(room?.state).name !== "order") return;
+  if (!b || !G?.slots || !G.target || G.done || phaseOf(room?.state).name !== "order") return;
   const k = +b.dataset.k;
   if (G.sel === null) G.sel = k;
   else if (G.sel === k) G.sel = null;
@@ -613,7 +699,7 @@ $("slots").addEventListener("click", (e) => {
   renderSlots();
 });
 $("doneBtn").onclick = () => {
-  if (!G?.slots) return;
+  if (!G?.slots || !G.target) return;
   G.done = !G.done;
   G.sel = null;
   saveAnswer();
@@ -623,32 +709,59 @@ $("doneBtn").onclick = () => {
 async function enterReveal() {
   const st = room.state;
   if (!G || G.game !== st.game) ensureGame(st);
-  if (!G.slots) {
-    // refreshed during the reveal, or never reached the ordering screen
-    await enterOrder().catch(() => {});
-  }
-  const o = G.slots || range(st.n);
-  let score = 0;
-  $("pResult").innerHTML = o
+  // refreshed during the reveal, or never reached the ordering screen
+  await enterOrder().catch(() => {});
+  const sc = scoresOf(st, room.answers?.[st.game] || {}, uid());
+  sfx(sc.total === null ? "notify" : sc.total >= maxScore(st) ? "win" : sc.total >= maxScore(st) / 2 ? "correct" : "minus");
+  renderPlayerReveal();
+}
+/** One sorted list: drawings (by drawing index) laid out as `order` placed them. */
+function resultList(st, order, drawings) {
+  return order
     .map((d, k) => {
       const ok = d === st.show[k];
-      if (ok) score++;
       return `<li class="${ok ? "ok" : "no"}"><span class="sd-word"><b class="tl-num">${k + 1}</b> ${esc(st.prompts[st.show[k]])}</span>
-        <div class="sd-thumb">${tile(G.drawings[d])}<i>${ok ? "✓" : "✗"}</i></div>
+        <div class="sd-thumb">${tile(drawings[d])}<i>${ok ? "✓" : "✗"}</i></div>
         ${ok ? "" : `<small>รูปนี้คือ “${esc(st.prompts[d])}”</small>`}</li>`;
     })
     .join("");
-  $("pScore").innerHTML = `${score}<small>/${st.n}</small>`;
-  sfx(score === st.n ? "win" : score >= st.n / 2 ? "correct" : "minus");
+}
+let playerRevealSig = "";
+function renderPlayerReveal() {
+  const st = room.state;
+  if (!G || G.game !== st.game || G.target === undefined) return;
+  const answers = room.answers?.[st.game] || {};
+  const sc = scoresOf(st, answers, uid());
+  const t = G.target;
   renderRank();
+  const sig = JSON.stringify([G.game, t, G.slots, G.tdraw.map(Boolean), G.drawings.map(Boolean), sc, sc.by && answers[sc.by]?.order, st.pairs]);
+  if (sig === playerRevealSig) return;
+  playerRevealSig = sig;
+  $("pScore").innerHTML = sc.total === null ? "–" : `${sc.total}<small>/${maxScore(st)}</small>`;
+  const solo = t === uid();
+  const parts = [];
+  if (t) parts.push(solo ? `เรียงรูปตัวเองถูก ${sc.sort ?? 0} ข้อ` : `คุณเรียงรูปของ ${nameOf(t)} ถูก ${sc.sort ?? 0} ข้อ`);
+  if (sc.by && !solo) parts.push(`${nameOf(sc.by)} เรียงรูปของคุณถูก ${sc.drawn ?? 0} ข้อ`);
+  $("pBreak").innerHTML = parts.map((x) => `<span>${esc(x)}</span>`).join("");
+
+  // 1) how I sorted my neighbour's drawings
+  $("pRes1Title").hidden = !t;
+  $("pRes1Title").textContent = solo ? "รูปของคุณ" : t ? `คุณเรียงรูปของ ${nameOf(t)}` : "";
+  $("pResult").innerHTML = t ? resultList(st, G.slots || range(st.n), G.tdraw) : "";
+  // 2) how my other neighbour sorted my drawings
+  const theirs = sc.by && !solo ? parseOrder(answers[sc.by], st.n) : null;
+  $("pRes2Title").hidden = !theirs;
+  $("pRes2Title").textContent = theirs ? `${nameOf(sc.by)} เรียงรูปของคุณ` : "";
+  $("pResult2").innerHTML = theirs ? resultList(st, theirs, G.drawings) : "";
 }
 function renderRank() {
   const rows = leaderboard();
   const me = rows.find((r) => r.id === uid());
-  $("pRank").textContent = me && rows.length > 1 ? `อันดับ ${me.rank} จาก ${rows.length} คน` : "ข้อที่เรียงถูก";
+  $("pRank").textContent = me && rows.length > 1 ? `อันดับ ${me.rank} จาก ${rows.length} คน` : "คะแนนของคุณ";
 }
 
 $("leaveBtn").onclick = () => {
+  stopTarget();
   unwatch?.();
   leaveRoom(KIND, code);
   code = role = room = null;
@@ -739,6 +852,7 @@ $("clearBtn").onclick = clearPad;
 
 // ---------------------------------------------------------------- leaving
 function kicked() {
+  stopTarget();
   unwatch?.();
   clearSession(KIND);
   code = role = room = null;
@@ -747,6 +861,7 @@ function kicked() {
   startScreen();
 }
 function closedRoom() {
+  stopTarget();
   unwatch?.();
   clearSession(KIND);
   const was = role;

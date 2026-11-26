@@ -379,7 +379,7 @@ Screens.setup = () => {
     row.innerHTML = `<span class="dot" style="background:${p.color}"></span>`;
     const input = document.createElement('input');
     input.value = p.name; input.placeholder = `ผู้เล่น ${i+1}`;
-    input.oninput = (e)=> p.name = e.target.value;
+    input.oninput = (e)=> p.name = cleanText(e.target.value).slice(0, 24);
     row.appendChild(input);
     if(state.players.length>2){
       const rm = document.createElement('button');
@@ -873,7 +873,7 @@ Screens['online-join'] = () => {
   const nameInput = document.createElement('input'); nameInput.placeholder='ชื่อของคุณ'; nameInput.style.marginTop='10px';
   el.appendChild(input); el.appendChild(nameInput);
   const btn = document.createElement('button'); btn.className='primary'; btn.style.marginTop='14px'; btn.textContent='เข้าห้อง';
-  btn.onclick = ()=> initFirebaseAndJoinRoom(input.value.trim(), nameInput.value.trim() || 'ผู้เล่น');
+  btn.onclick = ()=> initFirebaseAndJoinRoom(input.value.trim(), cleanText(nameInput.value.trim()).slice(0, 24) || 'ผู้เล่น');
   el.appendChild(btn);
   return el;
 };
@@ -928,9 +928,28 @@ async function initFirebaseAndJoinRoom(code, name){
   state.screen='online-lobby'; render();
 }
 
+/* Room data is written by other players' browsers, and much of the UI is built with
+   innerHTML, so every string from the room is cleaned before use: no < > " ' ` & in text
+   (a name can never become HTML), and colours must look like a real colour. */
+const SAFE_COLOR = /^(#[0-9a-f]{3,8}|hsla?\(\s*[\d.]+\s*,\s*[\d.]+%\s*,\s*[\d.]+%\s*(,\s*[\d.]+\s*)?\)|rgba?\([\d\s.,%]+\))$/i;
+function cleanText(v){ return String(v).replace(/[<>"'`&]/g, '').slice(0, 200); }
+function cleanRoom(v, key){
+  if(typeof v === 'string'){
+    if(key === 'color') return SAFE_COLOR.test(v.trim()) ? v.trim() : PLAYER_COLORS[0];
+    return cleanText(v);
+  }
+  if(Array.isArray(v)) return v.map(x => cleanRoom(x));
+  if(v && typeof v === 'object'){
+    const out = {};
+    for(const k of Object.keys(v)) out[cleanText(k)] = cleanRoom(v[k], k);
+    return out;
+  }
+  return v;
+}
+
 function listenRoom(db, code){
   db.ref('rooms/'+code).on('value', snap=>{
-    const val = snap.val();
+    const val = cleanRoom(snap.val());
     if(!val) return;
     const prev = state.onlineRoomData;
     state.onlineRoomData = val;
@@ -1202,7 +1221,7 @@ async function submitOnlinePick(dieKey){
 
   // whoever completes the last pending pick advances the room to reveal
   const snap = await db.ref('rooms/'+code).get();
-  const fresh = snap.val();
+  const fresh = cleanRoom(snap.val());
   if(!fresh || fresh.phase !== 'picking') return;
   const eligible = Object.keys(fresh.players||{}).filter(id => { const p=fresh.players[id]; return p.alive && !p.skipNext; });
   const freshPicks = fresh.picks || {};

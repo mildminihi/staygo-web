@@ -53,7 +53,7 @@ export default function Home() {
             </div>
             
             <div className="hero-illustration">
-              <img src="/assets/image/header-img.png" alt="Header Image"/>
+              <img src="/assets/image/header-img.webp" alt="Header Image"/>
             </div>
           </div>
         </div>

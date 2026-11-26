@@ -8,8 +8,8 @@ export default function WebGameCard({ game, showDescription = false }: { game: W
       {game.beta && <span className="beta-badge">Beta</span>}
       {'images' in cover ? (
         <div className="game-thumbnail game-thumbnail-hover">
-          <img src={cover.images[0]} alt={game.title} className="thumbnail-default" />
-          <img src={cover.images[1]} alt={game.title} className="thumbnail-hover" />
+          <img src={cover.images[0]} alt={game.title} className="thumbnail-default" loading="lazy" decoding="async" width={640} height={512} />
+          <img src={cover.images[1]} alt="" className="thumbnail-hover" loading="lazy" decoding="async" width={640} height={512} />
         </div>
       ) : (
         <div className="game-thumbnail">

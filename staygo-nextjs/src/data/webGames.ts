@@ -24,7 +24,7 @@ export const WEB_GAMES: WebGame[] = [
     meta: '2–5 Players • เกมการ์ดออนไลน์',
     short: 'เรียงแถว S-T-A-Y-G-O ให้ครบก่อนใคร',
     description: 'เกมการ์ด STAYGO! เล่นออนไลน์กับเพื่อนคนละเครื่อง สร้างห้องแล้วแชร์รหัส เรียงแถว S T A Y G O ให้ครบก่อนใคร ใช้พลัง Swap Take Again Yolo Got Oops! แกล้งกันได้เต็มที่',
-    cover: { images: ['/assets/image/staygo-cover-1.png', '/assets/image/staygo-cover-2.png'] },
+    cover: { images: ['/assets/image/staygo-cover-1.webp', '/assets/image/staygo-cover-2.webp'] },
     beta: true,
     cta: 'สร้าง / เข้าห้อง',
   },
@@ -34,7 +34,7 @@ export const WEB_GAMES: WebGame[] = [
     meta: '2–30 Players • เกมวาดรูปปาร์ตี้',
     short: 'วาดตามโจทย์ข้อละ 15 วิ 10 รูปรวด แล้วสลับกันเรียงรูปของเพื่อน',
     description: 'เกมปาร์ตี้วาดรูปบนมือถือ โฮสต์เปิดห้องบนจอใหญ่ ทุกคนวาดโจทย์เดียวกันข้อละ 15 วินาทีติดกัน 10 รูป แล้วสลับกันเรียงรูปของเพื่อนให้ตรงกับโจทย์ เรียงถูกกี่ข้อ ได้คะแนนทั้งคนเรียงและเจ้าของรูป',
-    cover: { images: ['/assets/image/speed-draw-cover-1.png', '/assets/image/speed-draw-cover-2.png'] },
+    cover: { images: ['/assets/image/speed-draw-cover-1.webp', '/assets/image/speed-draw-cover-2.webp'] },
     cta: 'สร้าง / เข้าห้อง',
   },
   {
@@ -43,7 +43,7 @@ export const WEB_GAMES: WebGame[] = [
     meta: '2–6 Players • เกมเสี่ยงดวง',
     short: 'เปิดการ์ดทีละใบ เก็บ STAYGO ให้ครบ ตัวซ้ำ = ระเบิด!',
     description: 'เกมเสี่ยงดวงด้วยการ์ด STAYGO เล่นบนเครื่องเดียว เปิดการ์ดทีละใบเก็บตัวอักษร S T A Y G O ให้ครบก่อนใคร แต่ถ้าเปิดได้ตัวซ้ำในเทิร์นเดียว ระเบิด! มีโหมดจอใหญ่สำหรับเปิดให้ทุกคนดู',
-    cover: { images: ['/assets/image/lunjua-cover-1.png', '/assets/image/lunjua-cover-2.png'] },
+    cover: { images: ['/assets/image/lunjua-cover-1.webp', '/assets/image/lunjua-cover-2.webp'] },
   },
   {
     href: '/games/flipped/',
@@ -51,7 +51,7 @@ export const WEB_GAMES: WebGame[] = [
     meta: '1 Player • เกมฟิสิกส์ Roguelike',
     short: 'คุณคือลูกเหล็ก ไม้ตีคือบอส ลงหลุมให้ได้!',
     description: 'พินบอลกลับด้านแนว roguelike คุณเป็นลูกเหล็กที่ดีดตัวเองชนบัมเปอร์ ทำลายเกราะแล้วพุ่งชนไม้ตีให้พังจนลงหลุมได้ เก็บบัฟทุกตู้ ตายแล้วเอาเศษเหล็กไปอัปเกรดถาวร เล่นได้ทั้งมือถือและคอม',
-    cover: { images: ['/assets/image/flipped-cover-1.png', '/assets/image/flipped-cover-2.png'] },
+    cover: { images: ['/assets/image/flipped-cover-1.webp', '/assets/image/flipped-cover-2.webp'] },
     beta: true,
   },
   {
@@ -60,7 +60,7 @@ export const WEB_GAMES: WebGame[] = [
     meta: '3–20 Players • เกมวาดรูปจับผิด',
     short: 'ทุกคนรู้คำยกเว้น 1 คน ผลัดกันวาดคนละเส้น แล้วโหวตจับคนวาดมั่ว',
     description: 'เกมปาร์ตี้วาดรูปจับผิด เปิดจอกลางบนทีวีหรือคอม ทุกคนเข้าห้องจากมือถือ เกือบทุกคนเห็นคำลับ ยกเว้นคนวาดมั่ว 1 คน ผลัดกันวาดคนละเส้นบนภาพเดียวกัน แล้วโหวตหาตัวคนที่ไม่รู้คำ ถ้าโดนจับยังพลิกชนะได้ด้วยการเดาคำ',
-    cover: { images: ['/assets/image/scribble-spy-cover-1.png', '/assets/image/scribble-spy-cover-2.png'] },
+    cover: { images: ['/assets/image/scribble-spy-cover-1.webp', '/assets/image/scribble-spy-cover-2.webp'] },
     beta: true,
     cta: 'สร้าง / เข้าห้อง',
   },
@@ -70,7 +70,7 @@ export const WEB_GAMES: WebGame[] = [
     meta: '1 Player • เกมจ่ายตลาดแข่งเวลา',
     short: 'ซื้อของให้แม่ให้ครบ หาร้านลดราคา เงินที่เหลือคือค่าขนม!',
     description: 'แม่ให้เงินไปจ่ายตลาด ซื้อของตามลิสต์ให้ครบก่อนหมดเวลา แต่ละร้านราคาและโปรสุ่มใหม่ทุกวัน ต้องเดินไปเช็กเอง ระวังแฟลชเซลที่มาแป๊บเดียว ยิ่งเหลือเงินมาก ยิ่งได้ค่าขนมไปซื้อขนมและของเล่น เล่น 3 วันแล้วบันทึกคะแนนลงกระดาน',
-    cover: { images: ['/assets/image/market-run-cover-1.png', '/assets/image/market-run-cover-2.png'] },
+    cover: { images: ['/assets/image/market-run-cover-1.webp', '/assets/image/market-run-cover-2.webp'] },
     beta: true,
   },
   {
@@ -79,7 +79,7 @@ export const WEB_GAMES: WebGame[] = [
     meta: '1 Player • เกมจำ',
     short: 'จับคู่อีโมจิให้ถูกต้อง',
     description: 'จับคู่อีโมจิให้ถูกต้อง เลือกระดับความยากและโหมดจับเวลา',
-    cover: { images: ['/assets/image/match-cover-1.png', '/assets/image/match-cover-2.png'] },
+    cover: { images: ['/assets/image/match-cover-1.webp', '/assets/image/match-cover-2.webp'] },
   },
   {
     href: '/games/dice-roguelike/',
@@ -87,7 +87,7 @@ export const WEB_GAMES: WebGame[] = [
     meta: '1 Player • เกมกลยุทธ์',
     short: 'ทอยเต๋าผจญภัยใน Dungeon',
     description: 'เกมผจญภัยด้วยลูกเต๋า วางแผนการต่อสู้แบบเทิร์นเบส รวบรวมไอเทมและเอาชนะบอส',
-    cover: { images: ['/assets/image/dice-rouge-cover-1.png', '/assets/image/dice-rouge-cover-2.png'] },
+    cover: { images: ['/assets/image/dice-rouge-cover-1.webp', '/assets/image/dice-rouge-cover-2.webp'] },
     beta: true,
   },
   {
@@ -96,7 +96,7 @@ export const WEB_GAMES: WebGame[] = [
     meta: '1 Player • เกมปริศนา',
     short: 'ทายตัวเลขลับภายใน 8 ครั้ง',
     description: 'ใช้ logic ทายตัวเลขลับภายใน 8 ครั้ง ด้วยระบบสีที่บอกคำใบ้ เหมือน Mastermind',
-    cover: { images: ['/assets/image/decoder-cover-1.png', '/assets/image/decoder-cover-2.png'] },
+    cover: { images: ['/assets/image/decoder-cover-1.webp', '/assets/image/decoder-cover-2.webp'] },
   },
   {
     href: '/games/dice-challenge/',
@@ -104,7 +104,7 @@ export const WEB_GAMES: WebGame[] = [
     meta: 'Multiplayer • เกมทอยเต๋า',
     short: 'เลือกแผ่นป้ายและทอยเต๋าเพื่อเก็บแต้ม',
     description: 'เลือกแผ่นป้ายและทอยเต๋า d6 เพื่อเก็บแต้ม รองรับโหมดปกติและโหมด Team สำหรับจัดกิจกรรม',
-    cover: { images: ['/assets/image/dice-challenge-cover-1.png', '/assets/image/dice-challenge-cover-2.png'] },
+    cover: { images: ['/assets/image/dice-challenge-cover-1.webp', '/assets/image/dice-challenge-cover-2.webp'] },
   },
   {
     href: '/games/dungeon-ledger/',
@@ -112,7 +112,7 @@ export const WEB_GAMES: WebGame[] = [
     meta: '1 Player • เกม Idle ผจญภัย',
     short: 'สุ่มฮีโร่ ลุยดันเจี้ยนแบบ auto-battle',
     description: 'สุ่มฮีโร่ ลุยดันเจี้ยนแบบ auto-battle เก็บไอเทม ตีเสริมพลัง แล้วบันทึกทุกการต่อสู้ลงในสมุดบัญชี',
-    cover: { images: ['/assets/image/ledger-cover-1.png', '/assets/image/ledger-cover-2.png'] },
+    cover: { images: ['/assets/image/ledger-cover-1.webp', '/assets/image/ledger-cover-2.webp'] },
     beta: true,
   },
   {
@@ -121,7 +121,7 @@ export const WEB_GAMES: WebGame[] = [
     meta: '2–6 Players • เกมกระดานไล่ล่า',
     short: 'งูกินหาง เป็นทั้งผู้ล่าและผู้ถูกล่า รอดคนสุดท้ายชนะ',
     description: 'วนรอบบนกระดาน เลือกลูกเต๋าแบบปิดหน้าจอ ไล่กินคู่แข่ง รอดคนสุดท้ายคือผู้ชนะ เล่นแบบส่งต่ออุปกรณ์เดียวหรือห้องออนไลน์',
-    cover: { images: ['/assets/image/ouroboros-cover-1.png', '/assets/image/ouroboros-cover-2.png'] },
+    cover: { images: ['/assets/image/ouroboros-cover-1.webp', '/assets/image/ouroboros-cover-2.webp'] },
   },
   {
     href: '/games/zoom-quiz/',
@@ -129,7 +129,7 @@ export const WEB_GAMES: WebGame[] = [
     meta: 'Multiplayer • เกมทายภาพ',
     short: 'สร้าง quiz ภาพซูมของตัวเอง แล้วให้เพื่อนทาย',
     description: 'สร้างเกมทายภาพของตัวเอง ใส่รูปแล้วเพิ่มตัวเลือกช่วยทายได้ ภาพจะซูมเข้าสุดแล้วค่อยๆ ซูมออก ให้ทุกคนช่วยกันทาย',
-    cover: { images: ['/assets/image/zoom-cover-1.png', '/assets/image/zoom-cover-2.png'] },
+    cover: { images: ['/assets/image/zoom-cover-1.webp', '/assets/image/zoom-cover-2.webp'] },
   },
   {
     href: '/games/thai-wordle/',
@@ -137,7 +137,7 @@ export const WEB_GAMES: WebGame[] = [
     meta: '1 Player • เกมทายคำ',
     short: 'ทายคำศัพท์ไทยสไตล์ Wordle มีคำประจำวันให้เล่นทุกวัน',
     description: 'เกมทายคำศัพท์ไทยสไตล์ Wordle ทายให้ถูกภายใน 6 ครั้ง มีคำประจำวันให้เล่นทุกวันและโหมดฝึกฝนเล่นได้ไม่จำกัด',
-    cover: { images: ['/assets/image/wordle-cover-1.png', '/assets/image/wordle-cover-2.png'] },
+    cover: { images: ['/assets/image/wordle-cover-1.webp', '/assets/image/wordle-cover-2.webp'] },
   },
   {
     href: '/games/jinxo-board/',
@@ -145,7 +145,7 @@ export const WEB_GAMES: WebGame[] = [
     meta: '4–7 Players • กระดานช่วยเล่นบอร์ดเกม',
     short: 'ใช้แทนกระดานผู้เล่น คู่กับเกมตัวจริง',
     description: 'เครื่องมือเสริมสำหรับเล่นคู่กับเกม JinxO ตัวจริง ใช้มือถือแทนกระดานผู้เล่น เขียนคำตอบ วงกลม กากบาท ดาว Jinx พร้อมนับโบนัสและคะแนน 3 รอบให้อัตโนมัติ',
-    cover: { images: ['/assets/image/jinxo-cover-1.png', '/assets/image/jinxo-cover-2.png'] },
+    cover: { images: ['/assets/image/jinxo-cover-1.webp', '/assets/image/jinxo-cover-2.webp'] },
     cta: 'เปิดกระดาน',
   },
   {
@@ -154,7 +154,7 @@ export const WEB_GAMES: WebGame[] = [
     meta: '4–20 Players • เกมปาร์ตี้',
     short: 'เปิดแผ่นป้ายทีละช่องเพื่อทายภาพ',
     description: 'เปิดแผ่นป้ายทีละช่องเพื่อทายภาพ เหมาะสำหรับเล่นเป็นกลุ่ม',
-    cover: { images: ['/assets/image/reveal-cover-1.png', '/assets/image/reveal-cover-2.png'] },
+    cover: { images: ['/assets/image/reveal-cover-1.webp', '/assets/image/reveal-cover-2.webp'] },
   },
   {
     href: '/games/cardloop/',
@@ -162,6 +162,6 @@ export const WEB_GAMES: WebGame[] = [
     meta: '1 Player • เกมไพ่',
     short: 'ตอบคำถาม 4 ข้อติดเพื่อชนะ',
     description: 'ตอบคำถาม 4 ข้อให้ถูกต้องติดต่อกันเพื่อชนะ เกมท้าทายความจำและโชค',
-    cover: { images: ['/assets/image/cardloop-cover-1.png', '/assets/image/cardloop-cover-2.png'] },
+    cover: { images: ['/assets/image/cardloop-cover-1.webp', '/assets/image/cardloop-cover-2.webp'] },
   },
 ];

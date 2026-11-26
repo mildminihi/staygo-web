@@ -597,7 +597,7 @@
 
   function renderBest() {
     const b = readBest();
-    $('bestBox').textContent = b ? `🏆 สถิติสูงสุด ฿${b.score} · ส่ง ${b.count} ออเดอร์` : 'ยังไม่มีสถิติ ลองออกกะแรกเลย!';
+    $('bestBox').textContent = b ? `🏆 สถิติสูงสุด ฿${b.score} · ส่ง ${b.count} ออเดอร์` : 'ยังไม่มีสถิติ ลองเล่นรอบแรกเลย!';
   }
 
   function setPaused(p) {

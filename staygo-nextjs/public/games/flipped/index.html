@@ -359,7 +359,7 @@ const BUFFS=[
 ];
 // In-run shop: bought with run coins, gone when the run ends.
 const ITEMS=[
- {id:'ball',name:'ลูกเหล็กเพิ่ม',icon:'⚪',price:()=>60+40*meta.bought,desc:'เพิ่มลูกเหล็กในรอบนี้ +1 ลูก ราคาขึ้นทุกครั้งที่ซื้อ',can:()=>true,buy:()=>{meta.balls++; meta.bought++; saveMeta();}},
+ {id:'ball',name:'ลูกเหล็กเพิ่ม',icon:'⚪',price:()=>Math.round(100*Math.pow(1.7,meta.bought)/10)*10,desc:'เพิ่มลูกเหล็กในรอบนี้ +1 ลูก ราคาขึ้นทุกครั้งที่ซื้อ',can:()=>true,buy:()=>{meta.balls++; meta.bought++; saveMeta();}},
  {id:'life',name:'ชีวิตสำรอง',icon:'💖',price:40,desc:'HP หมดแล้วฟื้นกลับมา 50% (ถือได้สูงสุด 2)',can:()=>run.lives<2,buy:()=>{run.lives++;}},
  {id:'guard',name:'โล่กันตี x3',icon:'🛡️',price:18,desc:'กันดาเมจได้ 3 ครั้ง ไม่ว่าโดนไม้ตีหรือหนาม',can:()=>true,buy:()=>{run.guard+=3;}},
  {id:'potion',name:'ยาซ่อมลูกเหล็ก',icon:'🧪',price:12,desc:'ฟื้น HP 40% ทันที',can:()=>ball.hp<S.maxHp,buy:()=>{ball.hp=Math.min(S.maxHp,ball.hp+S.maxHp*.4);}},

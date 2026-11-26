@@ -27,27 +27,28 @@
     <!-- Canonical URL -->
     <link rel="canonical" href="https://www.staygoch.com/tools/scoreboard/" />
     
-    <link rel="icon" type="image/png" href="../../games/reveal-board/staygo-logo.png" />
+    <link rel="icon" type="image/png" href="/games/reveal-board/staygo-logo.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Mitr:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Kanit:wght@700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="../../assets/css/site.css" />
+    <link rel="stylesheet" href="/assets/css/site.css" />
     <link rel="stylesheet" href="/assets/css/staygo-cards.css" />
-    <script defer src="../../assets/js/config.js"></script>
-    <script defer src="../../assets/js/site.js"></script>
+    <link rel="stylesheet" href="/assets/css/staygo-skin.css" />
+    <link rel="stylesheet" href="/assets/css/staygo-tools.css" />
+    <link rel="stylesheet" href="./styles.css" />
+    <script defer src="/assets/js/config.js"></script>
+    <script defer src="/assets/js/site.js"></script>
     <script src="/assets/js/analytics.js" defer></script>
     <script src="/assets/js/sfx.js"></script>
     <script src="/assets/js/i18n.js"></script>
     <script src="/assets/js/i18n/tools.js"></script>
-      <link rel="stylesheet" href="/assets/css/staygo-skin.css" />
-    <link rel="stylesheet" href="./skin.css" />
   </head>
   <body class="sg-page sg-skin">
     <header class="header">
       <div class="container">
         <div class="header-content">
-          <a href="../../" class="logo-link">
-            <img src="../../games/reveal-board/staygo-logo.png" alt="Staygo" class="logo" />
+          <a href="/" class="logo-link">
+            <img src="/games/reveal-board/staygo-logo.png" alt="Staygo" class="logo" />
           </a>
           
           <nav class="nav" aria-label="เมนูหลัก">
@@ -95,228 +96,62 @@
       </nav>
     </div>
 
-    <main>
-      <section class="section">
-        <div class="container">
-          <div class="team-header">
-            <h1 class="section-title">📊 ตารางคะแนน</h1>
-            <p class="team-description">สร้างบอร์ดคะแนนสำหรับนับคะแนนผู้เล่นหรือทีม</p>
-          </div>
+    <main class="tl sb">
+      <div class="tl-hero" id="hero">
+        <h1>📊 ตารางคะแนน</h1>
+        <p>จดคะแนนผู้เล่นหรือทีม กดบวกลบทีละ 1, 5 หรือ 10 คะแนนไม่หายแม้ปิดหน้าไป</p>
+      </div>
 
-          <!-- Setup Form -->
-          <div id="setupForm" class="scoreboard-setup">
-            <div class="setup-card">
-              <div class="setup-icon">📝</div>
-              <h3 class="setup-title">สร้างบอร์ดคะแนน</h3>
-              <p class="setup-subtitle">ใส่ชื่อผู้เล่นหรือทีม (แต่ละบรรทัด)</p>
-              
-              <div class="form-group">
-                <textarea 
-                  id="playersInput" 
-                  class="team-input scoreboard-input" 
-                  placeholder="👥 ทีมแดง&#10;👥 ทีมเขียว&#10;👥 ทีมเหลือง&#10;👥 ทีมเข้า"
-                  rows="8"
-                ></textarea>
-                <div class="input-hint">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <line x1="12" y1="16" x2="12" y2="12"></line>
-                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
-                  </svg>
-                  <span>ต้องมีอย่างน้อย 2 คนขึ้นไป</span>
-                </div>
-              </div>
-              
-              <button class="button button-primary button-lg" onclick="createScoreboard()">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 8px;">
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                  <polyline points="14 2 14 8 20 8"></polyline>
-                  <line x1="12" y1="18" x2="12" y2="12"></line>
-                  <line x1="9" y1="15" x2="15" y2="15"></line>
-                </svg>
-                สร้างบอร์ด
-              </button>
+      <!-- setup -->
+      <section id="scrSetup" class="tl-narrow tl-stack" hidden>
+        <div class="sg-panel tl-stack">
+          <div>
+            <span class="tl-label">เริ่มเร็ว</span>
+            <div id="presets" class="sb-presets">
+              <button class="sg-btn small" data-teams="2">👥 2 ทีม</button>
+              <button class="sg-btn small" data-teams="3">👥 3 ทีม</button>
+              <button class="sg-btn small" data-teams="4">👥 4 ทีม</button>
             </div>
           </div>
-
-          <!-- Scoreboard -->
-          <div id="scoreboardContainer" style="display: none;">
-            <div class="scoreboard-actions">
-              <button class="button button-secondary button-md" onclick="showSummary()">🏆 สรุปคะแนน</button>
-              <button class="button button-outline button-md" onclick="resetScoreboard()">🔄 เริ่มใหม่</button>
-              <button class="button button-outline button-md" id="bigBtn" type="button">📺 จอใหญ่</button>
-            </div>
-
-            <div id="scoreboardList" class="scoreboard-list"></div>
+          <div>
+            <span class="tl-label">ผู้เล่น / ทีม</span>
+            <div id="rows" class="sb-rows"></div>
+            <button id="addRow" class="sg-btn small block sb-add">＋ เพิ่มผู้เล่น</button>
+            <p class="tl-hint">แตะวงกลมเพื่อเปลี่ยนสี · กด Enter เพื่อเพิ่มคนถัดไป</p>
           </div>
+          <button id="startBtn" class="sg-btn blue block sb-start">▶ เริ่มนับคะแนน</button>
+          <button id="cancelEdit" class="sg-btn small block" hidden>ยกเลิก</button>
         </div>
       </section>
+
+      <!-- play -->
+      <section id="scrPlay" class="tl-stack" hidden>
+        <div class="sb-toolbar">
+          <div class="sb-steplabel">ทีละ</div>
+          <div id="steps" class="sb-steps" role="group" aria-label="บวกลบทีละ"></div>
+          <button id="undoBtn" class="sg-btn small sb-undo" disabled>↶ ย้อนกลับ</button>
+        </div>
+        <div id="cards" class="sb-cards"></div>
+        <div class="sb-actions tl-nobig">
+          <button id="summaryBtn" class="sg-btn yellow">🏆 สรุปคะแนน</button>
+          <button id="bigBtn" class="sg-btn">📺 จอใหญ่</button>
+          <button id="editBtn" class="sg-btn">✏️ แก้ไขผู้เล่น</button>
+          <button id="zeroBtn" class="sg-btn">🔄 ล้างคะแนน</button>
+          <button id="newBtn" class="sg-btn">🆕 เกมใหม่</button>
+        </div>
+      </section>
+
+      <!-- summary -->
+      <div id="summary" class="sb-overlay" hidden>
+        <div class="sg-panel sb-summary" role="dialog" aria-modal="true" aria-labelledby="sumTitle">
+          <h2 id="sumTitle">🏆 สรุปคะแนน</h2>
+          <ol id="ranking" class="sb-ranking"></ol>
+          <button id="closeSummary" class="sg-btn blue block">ปิด</button>
+        </div>
+      </div>
     </main>
 
-    <!-- Summary Modal -->
-    <div class="modal-overlay" id="summaryModal">
-      <div class="modal-content summary-modal">
-        <h2 class="modal-title">🏆 สรุปผลคะแนน</h2>
-        <div id="rankingList" class="ranking-list"></div>
-        <button class="modal-btn" onclick="closeSummary()">ปิด</button>
-      </div>
-    </div>
-
-    <script>
-      let players = [];
-
-      // Check if coming from team randomizer
-      document.addEventListener('DOMContentLoaded', () => {
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('fromTeams') === 'true') {
-          loadTeamsFromStorage();
-        }
-      });
-
-      function loadTeamsFromStorage() {
-        const teamData = localStorage.getItem('scoreboardTeams');
-        if (teamData) {
-          const teams = JSON.parse(teamData);
-          players = teams.map((team, index) => ({
-            id: index,
-            name: team.name,
-            members: team.members,
-            color: team.color,
-            score: 0
-          }));
-          
-          renderScoreboard();
-          document.getElementById('setupForm').style.display = 'none';
-          document.getElementById('scoreboardContainer').style.display = 'block';
-          localStorage.removeItem('scoreboardTeams'); // Clean up
-        }
-      }
-
-      function createScoreboard() {
-        const input = document.getElementById('playersInput').value.trim();
-        if (!input) {
-          alert('กรุณาใส่ชื่อผู้เล่นอย่างน้อย 1 คน');
-          return;
-        }
-
-        const names = input.split('\n').map(n => n.trim()).filter(n => n);
-        if (names.length < 2) {
-          alert('กรุณาใส่ชื่อผู้เล่นอย่างน้อย 2 คน');
-          return;
-        }
-
-        players = names.map((name, index) => ({
-          id: index,
-          name: name,
-          score: 0
-        }));
-
-        renderScoreboard();
-        document.getElementById('setupForm').style.display = 'none';
-        document.getElementById('scoreboardContainer').style.display = 'block';
-      }
-
-      function renderScoreboard() {
-        const container = document.getElementById('scoreboardList');
-        container.innerHTML = players.map(player => `
-          <div class="score-card">
-            <div class="score-card-header" ${player.color ? `style="background-color: ${player.color};"` : ''}>
-              <h3 class="score-card-name">${player.name}</h3>
-            </div>
-            <div class="score-card-body">
-              ${player.members ? `
-                <div class="team-members-list">
-                  ${player.members.map(member => `<div class="team-member-badge">${member}</div>`).join('')}
-                </div>
-              ` : ''}
-              <div class="score-display">
-                <span class="score-value">${player.score}</span>
-              </div>
-              <div class="score-controls">
-                <button class="score-btn minus-btn" onclick="updateScore(${player.id}, -1)">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                  </svg>
-                </button>
-                <button class="score-btn plus-btn" onclick="updateScore(${player.id}, 1)">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                    <line x1="12" y1="5" x2="12" y2="19"></line>
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </div>
-        `).join('');
-      }
-
-      function updateScore(playerId, delta) {
-        const player = players.find(p => p.id === playerId);
-        if (player) {
-          player.score = Math.max(0, player.score + delta);
-          window.SFX?.play(delta > 0 ? (delta >= 5 ? 'coin' : 'point') : 'minus');
-          renderScoreboard();
-        }
-      }
-
-      function showSummary() {
-        const sorted = [...players].sort((a, b) => b.score - a.score);
-        const rankingContainer = document.getElementById('rankingList');
-        
-        rankingContainer.innerHTML = sorted.map((player, index) => {
-          let medal = '';
-          let rankClass = '';
-          if (index === 0) {
-            medal = '🥇';
-            rankClass = 'rank-1';
-          } else if (index === 1) {
-            medal = '🥈';
-            rankClass = 'rank-2';
-          } else if (index === 2) {
-            medal = '🥉';
-            rankClass = 'rank-3';
-          }
-
-          return `
-            <div class="ranking-item ${rankClass}">
-              <div class="ranking-medal">${medal || `#${index + 1}`}</div>
-              <div class="ranking-info">
-                <div class="ranking-name">${player.name}</div>
-                <div class="ranking-score">${player.score} คะแนน</div>
-              </div>
-            </div>
-          `;
-        }).join('');
-
-        document.getElementById('summaryModal').classList.add('active');
-        window.SFX?.play('fanfare');
-      }
-
-      function closeSummary() {
-        document.getElementById('summaryModal').classList.remove('active');
-      }
-
-      function resetScoreboard() {
-        if (confirm('ต้องการเริ่มใหม่หรือไม่?')) {
-          players = [];
-          document.getElementById('playersInput').value = '';
-          document.getElementById('setupForm').style.display = 'block';
-          document.getElementById('scoreboardContainer').style.display = 'none';
-        }
-      }
-    </script>
-    <button id="exitBig" class="button button-outline button-sm sb-exitbig" type="button" hidden>ออกจากจอใหญ่</button>
-    <script>
-      // Big-screen mode for a TV / stream: hides the site header, enlarges the score cards.
-      (function () {
-        const set = (on) => {
-          document.body.classList.toggle('sb-big', on);
-          document.getElementById('exitBig').hidden = !on;
-        };
-        document.getElementById('bigBtn').addEventListener('click', () => set(true));
-        document.getElementById('exitBig').addEventListener('click', () => set(false));
-        document.addEventListener('keydown', (e) => e.key === 'Escape' && set(false));
-      })();
-    </script>
+    <button id="exitBig" class="sg-btn small sb-exitbig" hidden>ออกจากจอใหญ่</button>
+    <script src="./app.js"></script>
   </body>
 </html>

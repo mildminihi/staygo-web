@@ -1,0 +1,198 @@
+/* Scoreboard tool */
+
+/* ---------- setup ---------- */
+.sb-presets { display: flex; flex-wrap: wrap; gap: 8px; }
+.sb-rows { display: grid; gap: 8px; }
+.sb-row { display: flex; gap: 8px; align-items: center; }
+.sb-row .sg-input { flex: 1; min-width: 0; }
+.sb-swatch {
+  flex: 0 0 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 3px solid var(--sg-ink);
+  background: var(--c);
+  box-shadow: 0 2px 0 var(--sg-ink);
+  cursor: pointer;
+}
+.sb-del {
+  flex: 0 0 40px;
+  height: 40px;
+  border-radius: 12px;
+  border: 2px solid var(--sg-ink);
+  background: #fff;
+  color: var(--sg-ink);
+  cursor: pointer;
+  font-size: 15px;
+}
+.sb-del:disabled { opacity: 0.3; cursor: default; }
+.sb-add { margin-top: 10px; }
+.sb-start { font-size: 20px; }
+
+/* ---------- toolbar ---------- */
+.sb-toolbar {
+  position: sticky;
+  top: 8px;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  background: var(--sk-paper);
+  border: 3px solid var(--sg-ink);
+  border-radius: 18px;
+  box-shadow: 0 3px 0 var(--sg-ink);
+}
+.sb-steplabel { font-weight: 600; white-space: nowrap; }
+.sb-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; flex: 1; max-width: 260px; }
+.sb-steps button {
+  height: 42px;
+  border: 2.5px solid var(--sg-ink);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--sg-ink);
+  font-family: var(--sg-font-card);
+  font-weight: 700;
+  font-size: 20px;
+  cursor: pointer;
+}
+.sb-steps button.on { background: var(--sg-ink); color: #fff; }
+.sb-undo { margin-left: auto; white-space: nowrap; }
+.sb-undo:disabled { opacity: 0.4; }
+
+/* ---------- score cards ---------- */
+.sb-cards { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 210px), 1fr)); }
+.sb-card {
+  display: grid;
+  background: #fff;
+  border: 3px solid var(--sg-ink);
+  border-radius: 22px;
+  box-shadow: 0 4px 0 var(--sg-ink);
+  overflow: hidden;
+  transition: transform 0.2s;
+}
+.sb-card.lead { box-shadow: 0 4px 0 var(--sg-ink), 0 0 0 4px var(--sg-yellow); }
+.sb-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--c);
+  color: var(--t);
+  border-bottom: 3px solid var(--sg-ink);
+}
+.sb-rank {
+  flex: 0 0 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--sg-ink);
+  border: 2px solid var(--sg-ink);
+  font-family: var(--sg-font-card);
+  font-weight: 700;
+  font-size: 16px;
+}
+.sb-name { font-size: 20px; font-weight: 600; line-height: 1.25; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sb-members { display: flex; flex-wrap: wrap; gap: 4px; padding: 10px 14px 0; }
+.sb-members span { font-size: 13px; padding: 2px 8px; border-radius: 999px; background: var(--sk-soft); }
+.sb-score {
+  position: relative;
+  text-align: center;
+  font-size: clamp(56px, 16vw, 76px);
+  line-height: 1;
+  padding: 16px 0 12px;
+  color: var(--sg-ink);
+}
+.sb-score [data-score] { display: inline-block; }
+.sb-score [data-score].bump { animation: sbBump 0.25s ease-out; }
+.sb-pop {
+  position: absolute;
+  left: 50%;
+  top: 6px;
+  font-style: normal;
+  font-size: 26px;
+  font-weight: 700;
+  pointer-events: none;
+  animation: sbPop 0.8s ease-out forwards;
+}
+.sb-pop.up { color: var(--sk-green-dark); }
+.sb-pop.down { color: var(--sg-red); }
+.sb-ctrl { display: grid; grid-template-columns: 1fr 1.6fr; gap: 10px; padding: 0 12px 12px; }
+.sb-ctrl button {
+  height: 64px;
+  border: 3px solid var(--sg-ink);
+  border-radius: 16px;
+  box-shadow: 0 3px 0 var(--sg-ink);
+  font-family: var(--sg-font-card);
+  font-weight: 700;
+  font-size: 28px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: transform 0.06s, box-shadow 0.06s;
+}
+.sb-ctrl button:active { transform: translateY(3px); box-shadow: 0 0 0 var(--sg-ink); }
+.sb-minus { background: #fff; color: var(--sg-ink); }
+.sb-plus { background: var(--c); color: var(--t); }
+
+/* lots of players: smaller cards in two columns on phones */
+@media (max-width: 560px) {
+  .sb-cards[data-many]{ grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .sb-cards[data-many] .sb-name{ font-size: 16px; }
+  .sb-cards[data-many] .sb-score{ font-size: 48px; padding: 12px 0 8px; }
+  .sb-cards[data-many] .sb-ctrl{ grid-template-columns: 1fr 1fr; gap: 6px; padding: 0 8px 8px; }
+  .sb-cards[data-many] .sb-ctrl button{ height: 52px; font-size: 22px; }
+  .sb-cards[data-many] .sb-head{ padding: 8px 10px; gap: 6px; }
+  .sb-cards[data-many] .sb-rank{ flex-basis: 26px; height: 26px; font-size: 13px; }
+  .sb-steplabel { display: none; }
+}
+
+/* ---------- actions ---------- */
+.sb-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.sb-actions #summaryBtn { grid-column: 1 / -1; font-size: 18px; }
+
+/* ---------- summary ---------- */
+.sb-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  padding: 16px;
+  background: rgba(29, 27, 46, 0.55);
+  overflow-y: auto;
+}
+.sb-summary { margin: auto; width: min(100%, 440px); display: grid; gap: 14px; animation: sbIn 0.35s cubic-bezier(0.3, 1.5, 0.5, 1); }
+.sb-summary h2 { margin: 0; text-align: center; font-size: 28px; }
+.sb-ranking { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.sb-ranking li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border: 2.5px solid var(--sg-ink);
+  border-left: 10px solid var(--c);
+  border-radius: 14px;
+  background: #fff;
+}
+.sb-ranking li.r1 { background: var(--sk-cream); }
+.sb-ranking b { flex: 1; min-width: 0; font-size: 18px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sb-ranking .tl-num { font-size: 26px; }
+.sb-medal { flex: 0 0 34px; text-align: center; font-size: 24px; font-family: var(--sg-font-card); font-weight: 700; }
+
+/* ---------- big screen (TV / stream) ---------- */
+body.tl-big .sb-toolbar { top: 12px; }
+body.tl-big .sb-cards { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 22px; }
+body.tl-big .sb-name { font-size: 30px; }
+body.tl-big .sb-score { font-size: 120px; }
+body.tl-big .sb-ctrl button { height: 80px; font-size: 34px; }
+.sb-exitbig { position: fixed; right: 12px; bottom: 12px; z-index: 50; opacity: 0.6; }
+.sb-exitbig[hidden] { display: none !important; }
+
+@keyframes sbBump { 50% { transform: scale(1.18); } }
+@keyframes sbPop { from { transform: translate(-50%, 0); opacity: 1; } to { transform: translate(-50%, -34px); opacity: 0; } }
+@keyframes sbIn { from { transform: translateY(20px) scale(0.94); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .sb-score [data-score].bump, .sb-pop, .sb-summary { animation: none; }
+  .sb-pop { display: none; }
+}

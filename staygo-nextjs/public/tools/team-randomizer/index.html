@@ -195,6 +195,20 @@
     </footer>
 
     <script>
+      // Colours whose Thai names match what you see (ink = readable text colour on it)
+      const TEAM_COLORS = [
+        { name: 'แดง', hex: '#e8202a', ink: '#fff' },
+        { name: 'ส้ม', hex: '#ff7a1a', ink: '#fff' },
+        { name: 'เหลือง', hex: '#ffc21a', ink: '#1d1b2e' },
+        { name: 'เขียว', hex: '#22b573', ink: '#fff' },
+        { name: 'ฟ้า', hex: '#38bdf8', ink: '#1d1b2e' },
+        { name: 'น้ำเงิน', hex: '#1d4ed8', ink: '#fff' },
+        { name: 'ม่วง', hex: '#8b5cf6', ink: '#fff' },
+        { name: 'ชมพู', hex: '#ec4899', ink: '#fff' },
+        { name: 'น้ำตาล', hex: '#8b5a2b', ink: '#fff' },
+        { name: 'เทา', hex: '#6b7280', ink: '#fff' },
+      ];
+
       class TeamRandomizer {
         constructor() {
           this.members = [];
@@ -319,7 +333,8 @@
             numTeams = Math.ceil(shuffled.length / membersPerTeam);
           }
 
-          // Divide into teams
+          // Divide into teams; each team gets its own named colour (shuffled, never repeated)
+          const palette = [...TEAM_COLORS].sort(() => Math.random() - 0.5);
           this.teams = [];
           for (let i = 0; i < numTeams; i++) {
             const start = i * membersPerTeam;
@@ -327,35 +342,16 @@
             const teamMembers = shuffled.slice(start, end);
             
             if (teamMembers.length > 0) {
+              const c = palette[i] || TEAM_COLORS[i % TEAM_COLORS.length];
               this.teams.push({
                 members: teamMembers,
-                color: this.generateRandomColor()
+                color: c.hex,
+                ink: c.ink,
+                // more teams than colours: fall back to numbers so names stay unique
+                name: palette[i] ? `ทีมสี${c.name}` : `ทีม ${i + 1}`
               });
             }
           }
-        }
-
-        generateRandomColor() {
-          // Generate random pastel colors for better contrast
-          const hue = Math.floor(Math.random() * 360);
-          const saturation = 65 + Math.floor(Math.random() * 20); // 65-85%
-          const lightness = 55 + Math.floor(Math.random() * 15); // 55-70%
-          return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
-        }
-
-        getColorName(hslColor) {
-          // Extract hue from HSL
-          const hue = parseInt(hslColor.match(/\d+/)[0]);
-          
-          // Map hue to Thai color names
-          if (hue < 30) return 'แดง';
-          if (hue < 60) return 'ส้ม';
-          if (hue < 90) return 'เหลือง';
-          if (hue < 150) return 'เขียว';
-          if (hue < 210) return 'ฟ้า';
-          if (hue < 270) return 'น้ำเงิน';
-          if (hue < 330) return 'ม่วง';
-          return 'ชมพู';
         }
 
         renderTeams() {
@@ -372,12 +368,11 @@
 
           this.resultsContainer.className = 'team-results-grid';
           this.resultsContainer.innerHTML = this.teams.map((team, index) => {
-            const colorName = this.getColorName(team.color);
             return `
               <div class="team-card" style="border-color: ${team.color};">
                 <div class="team-card-header" style="background-color: ${team.color};">
-                  <h3 class="team-card-title">ทีมสี${colorName}</h3>
-                  <span class="team-card-count">${team.members.length} คน</span>
+                  <h3 class="team-card-title" style="color: ${team.ink}; text-shadow: none;">${team.name}</h3>
+                  <span class="team-card-count" style="color: ${team.ink};">${team.members.length} คน</span>
                 </div>
                 <div class="team-card-body">
                   <ul class="team-member-list">
@@ -413,9 +408,10 @@
 
         exportToScoreboard() {
           const teamData = this.teams.map((team, index) => ({
-            name: window.STAYGO_I18N ? STAYGO_I18N.t(`ทีม ${index + 1}`) : `ทีม ${index + 1}`,
+            name: window.STAYGO_I18N ? STAYGO_I18N.t(team.name) : team.name,
             members: team.members,
-            color: team.color
+            color: team.color,
+            ink: team.ink
           }));
           
           localStorage.setItem('scoreboardTeams', JSON.stringify(teamData));

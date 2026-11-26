@@ -6,9 +6,13 @@
   if (!I) return;
   function re(src) { return new RegExp("^" + src + "$"); }
   function tt(s) { return I.t(s); }
-  var COLORS = { "แดง": "Red", "ส้ม": "Orange", "เหลือง": "Yellow", "เขียว": "Green", "ฟ้า": "Sky", "น้ำเงิน": "Blue", "ม่วง": "Purple", "ชมพู": "Pink" };
+  var COLORS = { "แดง": "Red", "ส้ม": "Orange", "เหลือง": "Yellow", "เขียว": "Green", "ฟ้า": "Sky", "น้ำเงิน": "Blue", "ม่วง": "Purple", "ชมพู": "Pink", "น้ำตาล": "Brown", "เทา": "Gray" };
 
   I.addPatterns([
+    // scoreboard
+    [re("ผู้เล่น (\\d+)"), "Player $1"],
+    [re("ลด (\\d+) คะแนน"), "Subtract $1"],
+    [re("เพิ่ม (\\d+) คะแนน"), "Add $1"],
     // shared
     [re("ผู้เล่น (\\d+):?"), function (m, n) { return "Player " + n + (m.slice(-1) === ":" ? ":" : ""); }],
     [re("ทีม (\\d+)"), "Team $1"],
@@ -186,6 +190,31 @@
     "👥 ทีมแดง 👥 ทีมเขียว 👥 ทีมเหลือง 👥 ทีมเข้า": "👥 Red team\n👥 Green team\n👥 Yellow team\n👥 Blue team",
     "กรุณาใส่ชื่อผู้เล่นอย่างน้อย 1 คน": "Enter at least 1 name",
     "กรุณาใส่ชื่อผู้เล่นอย่างน้อย 2 คน": "Enter at least 2 names",
+    "จดคะแนนผู้เล่นหรือทีม กดบวกลบทีละ 1, 5 หรือ 10 คะแนนไม่หายแม้ปิดหน้าไป": "Keep score for players or teams. Add or subtract 1, 5 or 10 at a time, and scores stay even if you close the page",
+    "เริ่มเร็ว": "Quick start",
+    "👥 2 ทีม": "👥 2 teams",
+    "👥 3 ทีม": "👥 3 teams",
+    "👥 4 ทีม": "👥 4 teams",
+    "ผู้เล่น / ทีม": "Players / teams",
+    "＋ เพิ่มผู้เล่น": "＋ Add player",
+    "แตะวงกลมเพื่อเปลี่ยนสี · กด Enter เพื่อเพิ่มคนถัดไป": "Tap a circle to change colour · Enter adds the next one",
+    "▶ เริ่มนับคะแนน": "▶ Start scoring",
+    "✓ บันทึกแล้วนับต่อ": "✓ Save and keep scoring",
+    "ทีละ": "Step",
+    "บวกลบทีละ": "Points per tap",
+    "↶ ย้อนกลับ": "↶ Undo",
+    "✏️ แก้ไขผู้เล่น": "✏️ Edit players",
+    "🔄 ล้างคะแนน": "🔄 Reset scores",
+    "🆕 เกมใหม่": "🆕 New game",
+    "แตะอีกครั้งเพื่อล้างคะแนน": "Tap again to reset scores",
+    "แตะอีกครั้งเพื่อเริ่มเกมใหม่": "Tap again for a new game",
+    "เปลี่ยนสี": "Change colour",
+    "ทีมแดง": "Red team",
+    "ทีมน้ำเงิน": "Blue team",
+    "ทีมเหลือง": "Yellow team",
+    "ทีมเขียว": "Green team",
+    "ทีมม่วง": "Purple team",
+    "ทีมส้ม": "Orange team",
 
     // team randomizer
     "สุ่มทีมออนไลน์ - เครื่องมือแบ่งทีม | STAYGO": "Online Team Randomizer | STAYGO",

@@ -30,6 +30,7 @@
     [re("สถิติสูงสุด ฿(\\d+) · ส่ง (\\d+) ออเดอร์"), "Best ฿$1 · $2 deliveries"],
     [re("🏆 สถิติสูงสุด ฿(\\d+) · ส่ง (\\d+) ออเดอร์"), "🏆 Best ฿$1 · $2 deliveries"],
     [re("ช่อง (\\d+),(\\d+)"), "Tile $1,$2"],
+    [re("🛵 ด่วนจี๋ทะลุแยก: ส่งได้ (\\d+) ออเดอร์ รายได้ ฿(\\d+)"), "🛵 Express Rush: $1 deliveries, earned ฿$2"],
   ]);
 
   I.add({
@@ -78,7 +79,16 @@
     "🏁 หมดกะแล้ว!": "🏁 Shift over!",
     "🏆 สถิติใหม่!": "🏆 New record!",
     "ส่งสำเร็จ": "Delivered",
-    "แชร์ผล 📤": "Share 📤",
+    "แชร์การ์ดคะแนน 📸": "Share score card 📸",
+    "การ์ดคะแนนของคุณ": "Your score card",
+    "การ์ดคะแนน": "Score card",
+    "กำลังสร้างการ์ด…": "Making your card…",
+    "แชร์รูป 📤": "Share image 📤",
+    "บันทึกรูป ⬇️": "Save image ⬇️",
+    "คัดลอกข้อความ 📋": "Copy text 📋",
+    "มาแข่งกัน": "Beat my score",
+    "มาแข่งกันได้ที่": "Think you can beat it? Play at",
+    "ปิด": "Close",
     "คัดลอกแล้ว ✓": "Copied ✓",
     "ออกกะใหม่ ↻": "New shift ↻",
     "ยังไม่ได้ส่งเลยสักออเดอร์ 😅": "Not a single delivery yet 😅",

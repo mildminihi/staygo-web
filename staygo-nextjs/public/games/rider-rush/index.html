@@ -153,11 +153,23 @@
             <div><small>ส่งสำเร็จ</small><b id="overCount"></b></div>
           </div>
           <p id="overBest" class="tl-hint rr-center"></p>
-          <button id="shareBtn" class="sg-btn yellow block">แชร์ผล 📤</button>
+          <button id="shareBtn" class="sg-btn yellow block">แชร์การ์ดคะแนน 📸</button>
         </div>
         <div data-staygo-cta="rider-rush"></div>
         <button id="againBtn" class="sg-btn blue block rr-big">ออกกะใหม่ ↻</button>
       </section>
+
+      <!-- share sheet -->
+      <div id="shareSheet" class="rr-sheet" hidden>
+        <div class="rr-sheetcard sg-panel" role="dialog" aria-modal="true" aria-labelledby="shareTitle">
+          <button id="shareClose" class="rr-sheetx" aria-label="ปิด">✕</button>
+          <b id="shareTitle">การ์ดคะแนนของคุณ</b>
+          <div class="rr-sheetimg"><img id="shareImg" alt="การ์ดคะแนน" /><span class="rr-spin">กำลังสร้างการ์ด…</span></div>
+          <button id="shareGo" class="sg-btn blue block" hidden>แชร์รูป 📤</button>
+          <a id="shareSave" class="sg-btn yellow block" download>บันทึกรูป ⬇️</a>
+          <button id="shareCopy" class="sg-btn block">คัดลอกข้อความ 📋</button>
+        </div>
+      </div>
     </main>
 
     <script src="./app.js"></script>

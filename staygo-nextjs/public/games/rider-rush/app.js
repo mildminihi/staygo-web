@@ -559,7 +559,8 @@
     const best = readBest();
     const record = !best || G.score > best.score;
     if (record) writeBest({ score: G.score, count: G.count });
-    $('shareBtn').textContent = 'แชร์ผล 📤';
+    G.record = record && G.score > 0;
+    G.best = best;
     $('overScore').textContent = `฿${G.score}`;
     $('overCount').textContent = G.count;
     $('overRank').textContent = rankOf(G.count);
@@ -586,15 +587,126 @@
     if (!p) autoRide();
   }
 
-  async function share() {
-    const text = `🛵 ด่วนจี๋ทะลุแยก: ส่งได้ ${G.count} ออเดอร์ รายได้ ฿${G.score}\nมาแข่งกัน 👉 ${URL}`;
-    track('share');
-    try {
-      if (navigator.share) { await navigator.share({ text }); return; }
-      await navigator.clipboard.writeText(text);
-      $('shareBtn').textContent = 'คัดลอกแล้ว ✓';
-    } catch { /* cancelled */ }
+  /* ---------- score card image ---------- */
+  const tt = (str) => (window.STAYGO_I18N ? window.STAYGO_I18N.t(str) : str);
+  const loadImg = (src) => new Promise((res) => { const im = new Image(); im.onload = () => res(im); im.onerror = () => res(null); im.src = src; });
+  const shareText = () => tt(`🛵 ด่วนจี๋ทะลุแยก: ส่งได้ ${G.count} ออเดอร์ รายได้ ฿${G.score}`) + `\n${tt('มาแข่งกัน')} 👉 ${URL}`;
+
+  function rrect(c, x, y, w, h, r) {
+    c.beginPath();
+    c.moveTo(x + r, y);
+    c.arcTo(x + w, y, x + w, y + h, r);
+    c.arcTo(x + w, y + h, x, y + h, r);
+    c.arcTo(x, y + h, x, y, r);
+    c.arcTo(x, y, x + w, y, r);
+    c.closePath();
   }
+  function panel(c, x, y, w, h, r, fill, shadow = 10) {
+    c.fillStyle = '#231f20';
+    rrect(c, x, y + shadow, w, h, r); c.fill();
+    c.fillStyle = fill;
+    rrect(c, x, y, w, h, r); c.fill();
+    c.lineWidth = 7; c.strokeStyle = '#231f20'; c.stroke();
+  }
+  function fitText(c, text, x, y, maxW, font, size) {
+    let s = size;
+    do { c.font = font.replace('{s}', s); s -= 2; } while (c.measureText(text).width > maxW && s > 20);
+    c.fillText(text, x, y);
+  }
+
+  async function drawCard() {
+    const W = 1080, H = 1350, CX = W / 2;
+    const cv = document.createElement('canvas');
+    cv.width = W; cv.height = H;
+    const c = cv.getContext('2d');
+    const th = '"Mitr", "Kanit", sans-serif', head = '"Kanit", "Mitr", sans-serif', num = '"Fredoka", "Mitr", sans-serif';
+    try {
+      await Promise.all(['800 80px Kanit', '600 48px Mitr', '400 36px Mitr', '700 120px Fredoka'].map((f) => document.fonts.load(f)));
+    } catch { /* system fonts */ }
+    const logo = await loadImg('/assets/image/staygo-logo.png');
+
+    c.fillStyle = '#fffaf0'; c.fillRect(0, 0, W, H);
+    panel(c, 50, 44, W - 100, H - 110, 56, '#ffffff', 14);
+
+    if (logo) { const lw = 230, lh = lw * (logo.height / logo.width); c.drawImage(logo, CX - lw / 2, 84, lw, lh); }
+
+    // little road scene: shop -> rider on a blue route -> house
+    const bx = 110, by = 260, bw = W - 220, bh = 250;
+    c.save(); rrect(c, bx, by, bw, bh, 34); c.clip();
+    c.fillStyle = '#b7e19c'; c.fillRect(bx, by, bw, bh);
+    c.fillStyle = '#a9d98d';
+    for (let i = 0; i < 12; i++) for (let j = 0; j < 3; j++) if ((i + j) % 2) c.fillRect(bx + i * (bw / 12), by + j * (bh / 3), bw / 12, bh / 3);
+    c.restore();
+    rrect(c, bx, by, bw, bh, 34); c.lineWidth = 7; c.strokeStyle = '#231f20'; c.stroke();
+    c.strokeStyle = '#1a9bf0'; c.lineWidth = 46; c.lineJoin = 'round'; c.lineCap = 'round';
+    c.beginPath(); c.moveTo(bx + 110, by + 170); c.lineTo(bx + 330, by + 170); c.lineTo(bx + 330, by + 85); c.lineTo(bx + bw - 330, by + 85); c.lineTo(bx + bw - 330, by + 170); c.lineTo(bx + bw - 110, by + 170); c.stroke();
+    c.textAlign = 'center'; c.textBaseline = 'middle';
+    for (const [e, x, y] of [['🍜', bx + 95, by + 170], ['🏠', bx + bw - 95, by + 170]]) {
+      panel(c, x - 58, y - 58, 116, 116, 26, '#ffc21a', 6);
+      c.font = '70px sans-serif'; c.fillStyle = '#000'; c.fillText(e, x, y + 4);
+    }
+    c.font = '96px sans-serif'; c.fillText('🛵', CX, by + 80);
+
+    c.fillStyle = '#231f20';
+    fitText(c, tt('ด่วนจี๋ทะลุแยก'), CX, 600, W - 220, `800 {s}px ${head}`, 92);
+    fitText(c, tt(rankOf(G.count)), CX, 690, W - 220, `600 {s}px ${th}`, 50);
+
+    const sy = 750, sw = 400, sh = 250;
+    for (const [k, label, val, color] of [[0, tt('รายได้'), `฿${G.score}`, '#0f7a4f'], [1, tt('ส่งสำเร็จ'), String(G.count), '#231f20']]) {
+      const x = k ? CX + 20 : CX - 20 - sw;
+      panel(c, x, sy, sw, sh, 36, '#fff3d6', 8);
+      c.fillStyle = '#6b6461'; c.font = `400 38px ${th}`; c.fillText(label, x + sw / 2, sy + 62);
+      c.fillStyle = color; fitText(c, val, x + sw / 2, sy + 160, sw - 50, `700 {s}px ${num}`, 128);
+    }
+
+    let fy = 1090;
+    if (G.record) {
+      c.font = `600 44px ${th}`;
+      const t = tt('🏆 สถิติใหม่!');
+      const tw = c.measureText(t).width + 70;
+      panel(c, CX - tw / 2, fy - 42, tw, 84, 42, '#ffc21a', 6);
+      c.fillStyle = '#231f20'; c.fillText(t, CX, fy + 2);
+    } else if (G.best) {
+      c.fillStyle = '#6b6461'; c.font = `400 38px ${th}`;
+      c.fillText(tt(`สถิติสูงสุด ฿${G.best.score} · ส่ง ${G.best.count} ออเดอร์`), CX, fy);
+    }
+
+    c.fillStyle = '#231f20'; c.font = `600 40px ${th}`; c.fillText(tt('มาแข่งกันได้ที่'), CX, 1185);
+    c.fillStyle = '#1a9bf0'; c.font = `600 44px ${num}`; c.fillText('staygoch.com/games/rider-rush', CX, 1240);
+
+    return new Promise((res) => cv.toBlob((b) => res(b), 'image/png'));
+  }
+
+  const sheet = {
+    el: $('shareSheet'), img: $('shareImg'), go: $('shareGo'), save: $('shareSave'), copy: $('shareCopy'),
+    blob: null, url: '',
+  };
+  async function openShare() {
+    track('share_open');
+    sheet.el.hidden = false;
+    sheet.img.removeAttribute('src');
+    sheet.el.classList.add('loading');
+    sheet.copy.textContent = 'คัดลอกข้อความ 📋';
+    if (sheet.url) URL_.revokeObjectURL(sheet.url);
+    sheet.blob = await drawCard();
+    sheet.url = URL_.createObjectURL(sheet.blob);
+    sheet.img.src = sheet.url;
+    sheet.save.href = sheet.url;
+    sheet.save.download = `staygo-express-rush-${G.score}.png`;
+    sheet.el.classList.remove('loading');
+    const file = new File([sheet.blob], sheet.save.download, { type: 'image/png' });
+    sheet.go.hidden = !(navigator.canShare && navigator.canShare({ files: [file] }));
+    sheet.file = file;
+  }
+  async function shareImage() {
+    track('share', { share_type: 'image' });
+    try { await navigator.share({ files: [sheet.file], text: shareText() }); } catch { /* cancelled */ }
+  }
+  async function copyText() {
+    track('share', { share_type: 'text' });
+    try { await navigator.clipboard.writeText(shareText()); sheet.copy.textContent = 'คัดลอกแล้ว ✓'; } catch { /* blocked */ }
+  }
+  const URL_ = window.URL;
 
   el.board.addEventListener('click', onTap);
   $('startBtn').addEventListener('click', startGame);
@@ -602,9 +714,16 @@
   $('pauseBtn').addEventListener('click', () => setPaused(true));
   $('resumeBtn').addEventListener('click', () => setPaused(false));
   $('quitBtn').addEventListener('click', () => { el.pauseLayer.hidden = true; G.paused = false; G.time = 0; G.last = 0; hud(); gameOver(); });
-  $('shareBtn').addEventListener('click', share);
+  $('shareBtn').addEventListener('click', openShare);
+  sheet.go.addEventListener('click', shareImage);
+  sheet.copy.addEventListener('click', copyText);
+  sheet.save.addEventListener('click', () => track('share', { share_type: 'save' }));
+  $('shareClose').addEventListener('click', () => { sheet.el.hidden = true; });
+  addEventListener('staygo:lang', () => { if (!sheet.el.hidden && G) openShare(); });
+  sheet.el.addEventListener('click', (e) => { if (e.target === sheet.el) sheet.el.hidden = true; });
   document.addEventListener('visibilitychange', () => { if (document.hidden) setPaused(true); });
   addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !sheet.el.hidden) { sheet.el.hidden = true; return; }
     if (e.key === 'Escape' && G && G.running) setPaused(!G.paused);
   });
   renderBest();

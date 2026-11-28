@@ -218,7 +218,7 @@ try{const s=localStorage.getItem('rpb_meta'); if(s){ const o=JSON.parse(s); if(o
 meta.balls=Math.max(1,Math.min(meta.balls,BALLS_PER_ROUND-meta.used+meta.bought));
 function saveMeta(){try{localStorage.setItem('rpb_meta',JSON.stringify(meta));}catch(e){}}
 const UPG=[{k:'hp',name:'HP เริ่มต้น +15'},{k:'atk',name:'ATK เริ่มต้น +2'},{k:'en',name:'พลังเริ่มต้น +15'}];
-const upCost=lv=>15+lv*15;
+const upCost=lv=>20+lv*20; // scrap upgrades last a whole 3-ball round, so they cost a bit more
 function renderShop(){
   document.getElementById('scrap').textContent=meta.scrap;
   const total=Math.max(BALLS_PER_ROUND,meta.used+meta.balls);
@@ -402,12 +402,27 @@ const aim={active:false,mode:null,id:null,sx:0,sy:0,cx:0,cy:0,held:0};
 const mouse={x:200,y:300};
 let keyAng=-Math.PI/2, keyUsed=false, turnL=false, turnR=false;
 
+// ---------- balance knobs ----------
+// Economy: coins stay tight against shop prices, which climb every machine (machine 1 prices are unchanged).
+const ECON={
+  killCoin:n=>1+Math.floor(n/3),        // per starting bumper broken
+  goldCoin:n=>4+Math.floor(n/2),        // gold bumper bonus
+  armorCoin:2,                          // armored bumper bonus
+  flipCoin:3,                           // per flipper broken
+  clear:n=>10+n, clearBoss:1.5,         // machine clear reward (boss x1.5)
+  priceGrow:.15,                        // shop prices +15% per machine cleared after the first
+};
+const priceMul=()=>1+ECON.priceGrow*(run.machine-1);
+// Bosses: tougher every boss, and need more bumpers broken before the shield drops.
+const BOSS={hpMul:n=>1.8+.15*(n/3-1), dmgMul:1.4, shield:.75};
+const SHIELD_NORMAL=.6;
+
 function cfg(n){
   const boss=n%3===0, k=n-1;
   return {n,boss,
     // grows faster than linear so late machines keep up with the player's level/buff growth
-    fhp:Math.round(80*(1+.55*k+.03*k*k)*(boss?1.7:1)),
-    fdmg:Math.round((12+3.5*k+.15*k*k)*(boss?1.3:1)),
+    fhp:Math.round(80*(1+.55*k+.05*k*k)*(boss?BOSS.hpMul(n):1)),
+    fdmg:Math.round((12+3.5*k+.2*k*k)*(boss?BOSS.dmgMul:1)),
     react:Math.max(.025,.11-.014*k)*(boss?.8:1),
     cool:Math.max(.16,.36-.025*k),
     flip:17+1.6*k+(boss?3:0), hold:.12,
@@ -479,7 +494,7 @@ function setupMachine(){
     const hp=Math.round(M.bhp*mul);
     bumpers.push({x,y,ox:x,amp,ph:Math.random()*6.28,msp:1.1+Math.random()*.9,r,type,hp,maxHp:hp,alive:true,hitCd:0,flash:0,burn:0,burnDps:0,pulse:0});
   }
-  M.shieldReq=Math.ceil(bumpers.length*.6);
+  M.shieldReq=Math.ceil(bumpers.length*(M.boss?BOSS.shield:SHIELD_NORMAL));
   const nx=run.next||{};
   if(nx.bomb) M.shieldReq=0;
   if(nx.glue) M.react*=1.9;
@@ -591,9 +606,9 @@ function killBumper(b){
   ball.en=Math.min(S.enMax,ball.en+12);
   float(b.x,b.y,'+'+xp+' XP','#1a9bf0',13);
   if(S.leech) healBall(S.leech,ball.x,ball.y-14);
-  if(b.type==='g') addCoins(6+run.machine,b.x,b.y-18);
+  if(b.type==='g') addCoins(ECON.goldCoin(run.machine),b.x,b.y-18);
   if(b.type==='b') explode(b);
-  if(!b.spawned) addCoins(1+Math.floor(run.machine/2)+(b.type==='a'?2:0),b.x,b.y+16);
+  if(!b.spawned) addCoins(ECON.killCoin(run.machine)+(b.type==='a'?ECON.armorCoin:0),b.x,b.y+16);
   if(b.type==='h') healBall(18,b.x,b.y+14);
 }
 // bomb bumper: blast nearby bumpers
@@ -649,7 +664,7 @@ function damageFlipper(f,d,silent,pierce){
   if(!silent){ f.flash=.15; const t=tipOf(f); float((f.p.x+t.x)/2,(f.p.y+t.y)/2-14,Math.max(1,Math.round(d))+(sh?' 🛡️':''),sh?'#1a9bf0':'#e09a00',16); }
   if(f.hp<=0){
     f.hp=0; f.alive=false; shake=12; run.flipBroken++; sfx('crit'); setTimeout(()=>sfx('explode'),80);
-    addCoins(5,(f.p.x+tipOf(f).x)/2,(f.p.y+tipOf(f).y)/2+18);
+    addCoins(ECON.flipCoin,(f.p.x+tipOf(f).x)/2,(f.p.y+tipOf(f).y)/2+18);
     const t=tipOf(f); burst((f.p.x+t.x)/2,(f.p.y+t.y)/2,'#e8202a',40,340);
     banner={t:f.side<0?'ไม้ตีซ้ายพัง!':'ไม้ตีขวาพัง!',s:'หลุมเปิดแล้ว ลงไปเลย!',life:1.4,boss:false};
   }
@@ -819,7 +834,7 @@ function clearMachine(){
   sfx('drain'); setTimeout(()=>sfx('fanfare'),350);
   healBall(Math.round(S.maxHp*.15),200,600);
   if(M.boss) run.bossKills++;
-  const reward=Math.round((8+2*run.machine)*(M.boss?1.5:1)*M.coinMul);
+  const reward=Math.round(ECON.clear(run.machine)*(M.boss?ECON.clearBoss:1)*M.coinMul);
   run.coins+=reward; run.coinsEarned+=reward;
   run.shop=null; run.reroll=0;
   showBuffs(`ผ่าน${M.boss?'ตู้บอส':'ตู้ที่ '+run.machine}! 🎉`,`ได้ +${reward} 🪙 · เลือกบัฟ 1 อย่าง`,openShop);
@@ -844,8 +859,9 @@ function showBuffs(title,sub,then){
   document.getElementById('owned').textContent=owned?'บัฟที่มี: '+owned:'';
   document.getElementById('ovBuff').classList.add('show');
 }
-const rerollCost=()=>5+run.reroll*4;
-const priceOf=it=>typeof it.price==='function'?it.price():it.price;
+const rerollCost=()=>Math.round((5+run.reroll*4)*priceMul());
+// the extra ball has its own climbing price; everything else scales with how far the run is
+const priceOf=it=>typeof it.price==='function'?it.price():Math.round(it.price*priceMul());
 // the extra ball is always on sale; the other four slots are random
 function rollShop(){ run.shop=[{id:'ball',sold:false},...ITEMS.filter(it=>it.id!=='ball').sort(()=>Math.random()-.5).slice(0,4).map(it=>({id:it.id,sold:false}))]; }
 function openShop(){

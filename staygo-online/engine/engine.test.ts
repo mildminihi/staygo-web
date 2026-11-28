@@ -15,7 +15,6 @@ import {
   bustChance,
   DECK_SIZE,
   HAND_LIMIT,
-  SHOUT_MS,
   type SGState,
   type SGAction,
   type LJState,
@@ -35,23 +34,13 @@ function playRandomStaygo(seed: number, n: number): { s: SGState; steps: number 
   while (s.phase !== "end") {
     if (++steps > 5000) throw new Error(`seed ${seed}: game did not end`);
     now += 100;
-    let acts: SGAction[];
-    if (s.phase === "shout") {
-      // Sometimes shout in time, sometimes let it expire.
-      if (rng() < 0.5) acts = [{ type: "shout" }];
-      else {
-        now = s.shoutDeadline! + 1;
-        acts = [{ type: "expireShout" }];
-      }
-    } else {
-      acts = legalStaygo(s, s.cur, now);
-      if (rng() < 0.01) acts = [{ type: "skipAbsent" }];
-    }
+    let acts: SGAction[] = legalStaygo(s, s.cur, now);
+    if (rng() < 0.01) acts = [{ type: "skipAbsent" }];
     assert.ok(acts.length > 0, `seed ${seed}: no legal action in phase ${s.phase}`);
     // Prefer placing a letter to keep games realistic, but explore everything.
     const places = acts.filter((a) => a.type === "place");
     const act = places.length && rng() < 0.6 ? pick(places) : pick(acts);
-    const actor = act.type === "expireShout" || act.type === "skipAbsent" ? (s.cur + 1) % n : s.cur;
+    const actor = act.type === "skipAbsent" ? (s.cur + 1) % n : s.cur;
     const r = applyStaygo(s, actor, act, rng, now);
     assert.ok(r.ok, `seed ${seed}: legal action rejected: ${JSON.stringify(act)} → ${!r.ok && r.error}`);
     s = r.state;
@@ -68,13 +57,13 @@ function playRandomStaygo(seed: number, n: number): { s: SGState; steps: number 
 
 for (let n = 2; n <= 5; n++) {
   test(`STAYGO! ${GAMES_PER_COUNT} random games, ${n} players: every game ends, 60 cards always`, () => {
-    let shoutWins = 0;
+    let rowWins = 0;
     for (let g = 0; g < GAMES_PER_COUNT; g++) {
       const { s } = playRandomStaygo(n * 10_000 + g, n);
       assert.ok(s.winners && s.winners.length >= 1);
-      if (s.endReason === "shout") shoutWins++;
+      if (s.endReason === "row") rowWins++;
     }
-    assert.ok(shoutWins > 0, "some games should be won by shouting");
+    assert.ok(rowWins > 0, "some games should be won by a full row");
   });
 }
 
@@ -87,17 +76,9 @@ test("STAYGO!: actions from a player who is not cur are rejected", () => {
     const other = (s.cur + 1) % 4;
     // Everything the current player could do must be refused for someone else.
     for (const a of legalStaygo(s, s.cur, now)) {
-      if (a.type === "expireShout" || a.type === "skipAbsent") continue;
+      if (a.type === "skipAbsent") continue;
       const r = applyStaygo(s, other, a, rng, now);
       assert.equal(r.ok, false, `other player could ${JSON.stringify(a)}`);
-    }
-    if (s.phase === "shout") {
-      assert.equal(applyStaygo(s, other, { type: "shout" }, rng, now).ok, false);
-      now = s.shoutDeadline! + 1;
-      const r = applyStaygo(s, other, { type: "expireShout" }, rng, now);
-      assert.ok(r.ok, "anyone may expire the shout");
-      s = r.state;
-      continue;
     }
     const acts = legalStaygo(s, s.cur, now);
     const r = applyStaygo(s, s.cur, acts[Math.floor(rng() * acts.length)], rng, now);
@@ -114,11 +95,7 @@ test("STAYGO!: projections never leak other hands or the deck", () => {
     for (let step = 0; step < 400 && s.phase !== "end"; step++) {
       checkProjection(s);
       now += 10;
-      let acts = legalStaygo(s, s.cur, now);
-      if (s.phase === "shout") {
-        now = s.shoutDeadline! + 1;
-        acts = [{ type: "expireShout" }];
-      }
+      const acts = legalStaygo(s, s.cur, now);
       s = (applyStaygo(s, s.cur, acts[Math.floor(rng() * acts.length)], rng, now) as { state: SGState }).state;
     }
   }
@@ -143,32 +120,98 @@ test("STAYGO!: projections never leak other hands or the deck", () => {
   }
 });
 
-test("STAYGO!: shout window is 5 seconds of server time", () => {
-  const rng = seededRng(3);
-  let s = newStaygo(["A", "B"], rng, 0);
-  // Hand-build a row of 5 and give the current player the O.
+/** Two-player game where the current player holds exactly `hand` (other cards go back to the deck). */
+function rigged(seed: number, n = 2) {
+  const rng = seededRng(seed);
+  const s = newStaygo(NAMES.slice(0, n), rng, 0);
+  const pool = [...s.deck, ...s.players.flatMap((p) => p.hand)];
+  s.players.forEach((p) => (p.hand = []));
+  const take = (pred: (c: SGState["deck"][number]) => boolean) => pool.splice(pool.findIndex(pred), 1)[0];
+  const letter = (l: string) => take((c) => c.k === "L" && c.l === l);
+  return { s, rng, pool, take, letter, done: () => (s.deck = pool) };
+}
+
+test("STAYGO!: a full row wins at once, no shout", () => {
+  const { s, rng, letter, done } = rigged(3);
   const me = s.players[s.cur];
-  const pool = [...s.deck, ...me.hand];
-  const take = (l: string) => {
-    const i = pool.findIndex((c) => c.k === "L" && c.l === l);
-    return pool.splice(i, 1)[0];
-  };
-  me.row = ["S", "T", "A", "Y", "G"].map(take);
-  const o = take("O");
+  me.row = ["S", "T", "A", "Y", "G"].map(letter);
+  const o = letter("O");
   me.hand = [o];
-  s.deck = pool;
-  const placed = applyStaygo(s, s.cur, { type: "place", cardId: o.id }, rng, 1000);
-  assert.ok(placed.ok);
-  s = placed.state;
-  assert.equal(s.phase, "shout");
-  assert.equal(s.shoutDeadline, 1000 + SHOUT_MS);
-  assert.equal(applyStaygo(s, s.cur, { type: "shout" }, rng, 1000 + SHOUT_MS + 1).ok, false);
-  assert.equal(applyStaygo(s, 1 - s.cur, { type: "expireShout" }, rng, 1000 + SHOUT_MS).ok, false);
-  const won = applyStaygo(s, s.cur, { type: "shout" }, rng, 1000 + SHOUT_MS);
-  assert.ok(won.ok && won.state.winners?.[0] === s.cur);
-  const missed = applyStaygo(s, 1 - s.cur, { type: "expireShout" }, rng, 1000 + SHOUT_MS + 1);
-  assert.ok(missed.ok);
-  assert.equal(missed.state.players[s.cur].row.length, 5);
+  done();
+  const r = applyStaygo(s, s.cur, { type: "place", cardId: o.id }, rng, 1000);
+  assert.ok(r.ok);
+  assert.equal(r.state.phase, "end");
+  assert.equal(r.state.endReason, "row");
+  assert.deepEqual(r.state.winners, [s.cur]);
+});
+
+test("STAYGO!: Take picks any card from the discard pile", () => {
+  const { s, rng, letter, take, done } = rigged(4);
+  const t = letter("T");
+  s.players[s.cur].hand = [t, letter("S")];
+  const old = [letter("G"), take((c) => c.k === "W"), letter("A")];
+  s.discard = old.slice();
+  done();
+  let r = applyStaygo(s, s.cur, { type: "power", cardId: t.id }, rng, 0);
+  assert.ok(r.ok && r.state.phase === "pickT");
+  const priv = privateView(r.state, s.cur);
+  assert.ok(priv.pending?.type === "pickT" && priv.pending.options.length === 3);
+  assert.equal(applyStaygo(r.state, s.cur, { type: "pickDiscard", cardId: 9999 }, rng, 0).ok, false);
+  r = applyStaygo(r.state, s.cur, { type: "pickDiscard", cardId: old[1].id }, rng, 0);
+  assert.ok(r.ok);
+  const me = r.state.players[s.cur];
+  assert.ok(me.hand.some((c) => c.id === old[1].id), "picked card in hand");
+  assert.ok(!me.hand.some((c) => c.id === t.id), "T left the hand");
+  assert.deepEqual(r.state.discard.map((c) => c.id), [old[0].id, old[2].id, t.id]);
+  assert.equal(countCards(r.state), DECK_SIZE);
+});
+
+test("STAYGO!: Take with an empty discard pile draws 1", () => {
+  const { s, rng, letter, done } = rigged(5);
+  const t = letter("T");
+  s.players[s.cur].hand = [t, letter("S")];
+  done();
+  const top = s.deck[0];
+  const r = applyStaygo(s, s.cur, { type: "power", cardId: t.id }, rng, 0);
+  assert.ok(r.ok && r.state.phase !== "pickT");
+  const me = r.state.players[s.cur];
+  assert.equal(me.hand.length, 2);
+  assert.ok(me.hand.some((c) => c.id === top.id));
+  assert.deepEqual(r.state.discard.map((c) => c.id), [t.id]);
+});
+
+test("STAYGO!: Oops! takes the target's last row card into your hand", () => {
+  const { s, rng, letter, done } = rigged(6);
+  const other = 1 - s.cur;
+  const o = letter("O");
+  s.players[s.cur].hand = [o, letter("Y")];
+  s.players[other].row = ["S", "T"].map(letter);
+  const lastId = s.players[other].row[1].id;
+  done();
+  const pick = applyStaygo(s, s.cur, { type: "power", cardId: o.id }, rng, 0) as { state: SGState };
+  assert.equal(applyStaygo(pick.state, s.cur, { type: "target", players: [s.cur] }, rng, 0).ok, false, "not on yourself");
+  const r = applyStaygo(pick.state, s.cur, { type: "target", players: [other] }, rng, 0);
+  assert.ok(r.ok);
+  assert.equal(r.state.players[other].row.length, 1);
+  assert.ok(r.state.players[s.cur].hand.some((c) => c.id === lastId));
+  assert.ok(!r.state.players[other].hand.some((c) => c.id === lastId), "target does not get it back");
+});
+
+test("STAYGO!: GO! passes hands left or right", () => {
+  for (const dir of ["left", "right"] as const) {
+    const { s, rng, letter, take, done } = rigged(7, 3);
+    const go = take((c) => c.k === "GO");
+    const cur = s.cur;
+    s.players.forEach((p, i) => (p.hand = i === cur ? [go, letter("S")] : [letter(i === (cur + 1) % 3 ? "A" : "Y")]));
+    const marks = s.players.map((p) => p.hand[p.hand.length - 1].id);
+    done();
+    const r = applyStaygo(s, cur, { type: "playAction", cardId: go.id, dir }, rng, 0);
+    assert.ok(r.ok);
+    for (let i = 0; i < 3; i++) {
+      const from = dir === "left" ? (i + 2) % 3 : (i + 1) % 3;
+      assert.ok(r.state.players[i].hand.some((c) => c.id === marks[from]), `${dir}: seat ${i} gets seat ${from}'s hand`);
+    }
+  }
 });
 
 test("STAYGO!: hand limit forces discards down to 6", () => {

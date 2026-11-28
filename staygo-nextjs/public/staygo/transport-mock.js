@@ -151,7 +151,7 @@ export function createMockTransport() {
         uidListener?.(uid);
         fire();
       },
-      /** Gives the current player S-T-A-Y-G in their row and an O in hand, to test the shout window. */
+      /** Gives the current player S-T-A-Y-G in their row and an O in hand, to test a row win. */
       nearWin(code) {
         const room = rooms[code];
         const st = room?.state;

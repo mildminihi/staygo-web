@@ -9,16 +9,16 @@ const ABSENT_MS = 30_000;
 const NAME_KEY = "staygo-online-name";
 const POWER_DESC = {
   S: "สุ่มการ์ด 1 ใบจากเป้าหมาย แล้วเลือกการ์ด 1 ใบให้เขาคืน",
-  T: "จั่วการ์ด 2 ใบ",
+  T: "เลือกการ์ด 1 ใบจากกองทิ้งขึ้นมือ (กองทิ้งว่าง: จั่ว 1 ใบแทน)",
   A: "เล่นการ์ดเพิ่มอีก 2 ใบ (ไม่จั่วเพิ่ม)",
   Y: "เลือกผู้เล่น 2 คน ให้สลับการ์ดทั้งมือกัน",
   G: "ขโมยการ์ด 1 ใบแบบสุ่มจากเป้าหมาย",
-  O: "เป้าหมายต้องเอาการ์ดใบสุดท้ายในแถวคืนเข้ามือ",
+  O: "หยิบการ์ดใบสุดท้ายในแถวของเป้าหมายมาขึ้นมือคุณ",
 };
 const TARGET_TITLE = {
   S: "Swap — สุ่มการ์ดจากใคร?",
   G: "Got — ขโมยการ์ดจากใคร?",
-  O: "Oops! — ให้ใครคืนการ์ดใบสุดท้ายในแถว?",
+  O: "Oops! — หยิบการ์ดท้ายแถวของใคร?",
   Y: "Yolo — เลือก 2 คนให้สลับมือกัน",
   STAY: "STAY — ให้ใครข้ามเทิร์นถัดไป?",
 };
@@ -36,7 +36,6 @@ let busy = false;
 let selected = null; // selected card id in my hand
 let yoloPicks = [];
 let lastNoticeT = 0;
-let expiredFor = null; // shoutDeadline we already tried to expire
 let presenceSeat = -1; // seat index our presence hooks point at
 
 const params = new URLSearchParams(location.search);
@@ -59,7 +58,7 @@ function normPub(p) {
   p.players = (p.players || []).map((x) => ({ handCount: x?.handCount || 0, row: x?.row || [], skip: !!x?.skip }));
   p.log = p.log || [];
   // Firebase drops null fields, so restore them; otherwise `endAt !== null` is true from the start.
-  for (const k of ["winners", "pending", "endAt", "shoutDeadline", "endedAt", "discardTop", "endReason"]) p[k] = p[k] ?? null;
+  for (const k of ["winners", "pending", "endAt", "endedAt", "discardTop", "endReason"]) p[k] = p[k] ?? null;
   p.deckCount = p.deckCount ?? 0;
   p.turnCount = p.turnCount ?? 0;
   return p;
@@ -71,7 +70,7 @@ function normPriv(p) {
 
 function show(screen) {
   for (const id of ["config", "home", "lobby", "game"]) $(`screen-${id}`).hidden = id !== screen;
-  if (screen !== "game") for (const id of ["targetSheet", "shoutOverlay", "endOverlay"]) $(id).hidden = true;
+  if (screen !== "game") for (const id of ["targetSheet", "endOverlay"]) $(id).hidden = true;
 }
 
 async function send(action) {
@@ -202,10 +201,8 @@ function watch() {
 const sfx = (n, a) => window.SFX?.play(n, a);
 const LOG_SOUNDS = [
   [/STAYGO!!!|ชนะ!/, null], // handled by the phase change
-  [/แถวครบ 6/, "alarm"],
-  [/ไม่ทันกด/, "lose"],
   [/ต่อแถว/, "place"],
-  [/Take จั่ว/, "deal"],
+  [/Take/, "deal"],
   [/Again/, "powerup"],
   [/GO! ทุกคนส่ง/, "whoosh"],
   [/Swap/, "shuffle"],
@@ -366,13 +363,12 @@ function renderGame() {
     .join("");
 
   renderTargetSheet();
-  renderShout();
   renderEnd();
 }
 
 function absentInfo() {
   const seat = seats[pub.cur];
-  if (!seat || seat.online !== false || pub.phase === "end" || pub.phase === "shout") return null;
+  if (!seat || seat.online !== false || pub.phase === "end") return null;
   const since = Math.max(seat.offlineAt || 0, pub.turnStartedAt || 0);
   return { left: since + ABSENT_MS - T.serverNow() };
 }
@@ -397,7 +393,7 @@ function renderBanner() {
       p.phase === "target" ? "กำลังเลือกเป้าหมาย…" :
       p.phase === "giveS" ? `กำลังเลือกการ์ดให้ ${esc(nameOf(p.pending?.target))}` :
       p.phase === "excess" ? "กำลังทิ้งการ์ดให้เหลือ 6 ใบ" :
-      p.phase === "shout" ? "แถวครบ 6!" :
+      p.phase === "pickT" ? "Take — กำลังเลือกการ์ดจากกองทิ้ง" :
       p.aLock ? `Again — เล่นได้อีก ${p.playsLeft} ใบ` : "กำลังคิด…";
     html = `ตาของ <b>${esc(nameOf(p.cur))}</b> · ${what}`;
   } else if (p.phase === "play") {
@@ -414,6 +410,9 @@ function renderBanner() {
   } else if (p.phase === "target") {
     cls += " you";
     html = "เลือกเป้าหมาย";
+  } else if (p.phase === "pickT") {
+    cls += " you";
+    html = "Take: เลือกการ์ด 1 ใบจากกองทิ้ง";
   }
   b.className = cls;
   b.innerHTML = html;
@@ -438,7 +437,7 @@ function cardInfo(c) {
     return { title: "STAYGO (ไวลด์)", lines: ["วางเป็นตัวอักษรไหนก็ได้ในแถว", "ไม่มีพลังพิเศษ"], fit: need ? { text: `ใช้เป็นตัว ${need} ต่อแถวได้เลย`, cls: "need" } : null };
   }
   if (c.k === "STAY") return { title: "STAY", lines: ["เลือกผู้เล่น 1 คน ให้ข้ามเทิร์นถัดไป"], fit: null };
-  return { title: "GO!", lines: ["ทุกคนส่งการ์ดทั้งมือให้คนทางซ้าย"], fit: null };
+  return { title: "GO!", lines: ["ทุกคนส่งการ์ดทั้งมือไปทางซ้ายหรือขวา เลือกได้ตอนเล่น"], fit: null };
 }
 
 function cardInfoHTML(c) {
@@ -464,7 +463,12 @@ function cardPlays(c) {
       out.push({ label: `ใช้พลัง ${POWER_NAMES[c.l]}`, desc: POWER_DESC[c.l], cls: "yellow", action: { type: "power", cardId: c.id } });
     if (c.k === "L" && c.l === "A" && p.aLock) out.push({ label: "ใช้ Again ซ้อนไม่ได้", disabled: true });
     if (c.k === "STAY") out.push({ label: "เล่น STAY", desc: "เลือกคนให้ข้ามเทิร์นถัดไป", cls: "red", action: { type: "playAction", cardId: c.id } });
-    if (c.k === "GO") out.push({ label: "เล่น GO!", desc: "ทุกคนส่งการ์ดทั้งมือไปทางซ้าย", cls: "yellow", action: { type: "playAction", cardId: c.id } });
+    if (c.k === "GO") {
+      // "left" passes to the next seat in turn order, "right" to the previous one (same as the engine).
+      const n = p.players.length;
+      for (const [dir, label, to] of [["left", "GO! ส่งไปทางซ้าย", (me + 1) % n], ["right", "GO! ส่งไปทางขวา", (me - 1 + n) % n]])
+        out.push({ label, desc: `ทุกคนส่งทั้งมือ · คุณส่งให้ ${nameOf(to)}`, cls: "yellow", action: { type: "playAction", cardId: c.id, dir } });
+    }
   } else if (p.phase === "giveS") {
     out.push({ label: `ให้ใบนี้กับ ${nameOf(priv.pending?.target ?? p.pending?.target)}`, cls: "blue", action: { type: "give", cardId: c.id } });
   } else if (p.phase === "excess") {
@@ -570,16 +574,18 @@ function useful(kind, i) {
   return true;
 }
 function validFor(kind, i) {
-  return kind === "Y" || kind === "O" ? true : i !== mySeat();
+  return kind === "Y" ? true : i !== mySeat();
 }
 
 function renderTargetSheet() {
   const sheet = $("targetSheet");
   const pend = priv?.pending;
-  if (!myTurn() || pub.phase !== "target" || !pend || pend.type === "giveS") {
+  if (myTurn() && pub.phase === "pickT" && pend?.type === "pickT") return renderDiscardPick(pend);
+  if (!myTurn() || pub.phase !== "target" || !pend || pend.type === "giveS" || pend.type === "pickT") {
     sheet.hidden = true;
     return;
   }
+  $("targetList").className = "targets";
   const kind = pend.type;
   const all = pub.players.map((_, i) => i).filter((i) => validFor(kind, i));
   const anyUseful = all.some((i) => useful(kind, i));
@@ -620,33 +626,22 @@ function renderTargetSheet() {
 $("targetConfirm").onclick = () => send({ type: "target", players: yoloPicks });
 $("targetCancel").onclick = () => send({ type: "cancelTarget" });
 
-// ---- shout
-function renderShout() {
-  const ov = $("shoutOverlay");
-  if (pub.phase !== "shout" || !pub.shoutDeadline) {
-    ov.hidden = true;
-    return;
-  }
-  ov.hidden = false;
-  const mine = myTurn();
-  $("shoutBtn").hidden = !mine;
-  $("shoutWho").innerHTML = mine ? "แถวครบ 6! กดเลย!" : `<b>${esc(nameOf(pub.cur))}</b> แถวครบ 6! ต้องกด STAYGO! ให้ทัน`;
-  tickShout();
+// ---- Take: choose a card from the discard pile (newest first)
+function renderDiscardPick(pend) {
+  const sheet = $("targetSheet");
+  const opts = (pend.options || []).slice().reverse();
+  $("targetTitle").textContent = `Take — เลือก 1 ใบจากกองทิ้ง (${opts.length} ใบ)`;
+  $("targetCard").innerHTML = cardHTML(priv.hand.find((c) => c.id === pend.cardId) || { k: "L", l: "T" }, { width: 46 });
+  const list = $("targetList");
+  list.className = "discard-pick";
+  list.innerHTML = opts.map((c) => cardHTML(c, { tag: "button", attrs: `data-pick="${c.id}" title="${esc(cardInfo(c).title)}"` })).join("");
+  $("targetConfirm").hidden = true;
+  $("targetHint").textContent = "แตะการ์ดที่อยากได้ ใบซ้ายสุดคือใบที่เพิ่งทิ้งล่าสุด";
+  sheet.hidden = false;
+  list.querySelectorAll("[data-pick]").forEach((b) => {
+    b.onclick = () => send({ type: "pickDiscard", cardId: +b.dataset.pick });
+  });
 }
-function tickShout() {
-  if (!pub || pub.phase !== "shout" || !pub.shoutDeadline) return;
-  const left = pub.shoutDeadline - T.serverNow();
-  $("shoutTime").textContent = Math.max(0, left / 1000).toFixed(1);
-  $("shoutBar").style.width = `${Math.max(0, Math.min(100, (left / 5000) * 100))}%`;
-  // After the deadline anyone asks the server to apply the penalty. Small jitter avoids a stampede.
-  if (left < -150 && expiredFor !== pub.shoutDeadline) {
-    expiredFor = pub.shoutDeadline;
-    setTimeout(() => {
-      if (pub?.phase === "shout") T.action(code, { type: "expireShout" }).catch(() => {});
-    }, Math.random() * 500);
-  }
-}
-$("shoutBtn").onclick = () => send({ type: "shout" });
 
 // ---- end
 function renderEnd() {
@@ -661,7 +656,7 @@ function renderEnd() {
   $("endTitle").textContent = iWon ? (w.length > 1 ? "คุณชนะร่วม!" : "คุณชนะ!") : w.length > 1 ? "ชนะร่วม" : "ผู้ชนะ";
   $("endWinner").textContent = w.map(nameOf).join(" & ");
   $("endReason").textContent =
-    pub.endReason === "shout" ? "เรียงครบ S-T-A-Y-G-O และกด STAYGO! ทัน" : "กองจั่วหมด — แถวยาวที่สุด (เสมอ: การ์ดในมือน้อยที่สุด)";
+    pub.endReason === "deck" ? "กองจั่วหมด — แถวยาวที่สุด (เสมอ: การ์ดในมือน้อยที่สุด)" : "เรียงครบ S-T-A-Y-G-O ก่อนใคร";
   const dur = (pub.endedAt || T.serverNow()) - pub.startedAt;
   $("endStats").textContent = `${pub.turnCount + 1} เทิร์น · ${formatDuration(dur)}`;
   const order = pub.players
@@ -700,7 +695,6 @@ $("gLeave").onclick = () => {
 // countdowns
 setInterval(() => {
   if (!pub || !code) return;
-  tickShout();
   const el = document.querySelector("[data-absent]");
   const a = absentInfo();
   if (el && a) {

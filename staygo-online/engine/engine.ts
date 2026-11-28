@@ -85,11 +85,11 @@ const LOG_MAX = 40;
 
 export const HAND_LIMIT = 6;
 export const ROW_LEN = 6;
-export const SHOUT_MS = 5000;
 export const SG_MIN_PLAYERS = 2;
 export const SG_MAX_PLAYERS = 5;
 
-export type SGPhase = "play" | "target" | "giveS" | "shout" | "excess" | "end";
+// A full row wins at once (no shout). "pickT": choosing a card from the discard pile with Take.
+export type SGPhase = "play" | "target" | "giveS" | "pickT" | "excess" | "end";
 export type TargetKind = "S" | "G" | "O" | "Y" | "STAY";
 
 export interface SGPlayer {
@@ -101,7 +101,8 @@ export interface SGPlayer {
 export type SGPending =
   | null
   | { type: TargetKind; cardId: number }
-  | { type: "giveS"; target: number; takenCardId: number };
+  | { type: "giveS"; target: number; takenCardId: number }
+  | { type: "pickT"; cardId: number };
 
 export interface SGState {
   game: "staygo";
@@ -114,10 +115,9 @@ export interface SGState {
   playsLeft: number;
   aLock: boolean; // true during the extra plays from Again
   pending: SGPending;
-  shoutDeadline: number | null;
   endAt: number | null;
   winners: number[] | null;
-  endReason: "shout" | "deck" | null;
+  endReason: "row" | "deck" | null;
   log: LogEntry[];
   notices: (LogEntry | null)[]; // private, one per player
   turnCount: number;
@@ -130,18 +130,20 @@ export interface SGState {
 export type SGAction =
   | { type: "place"; cardId: number }
   | { type: "power"; cardId: number }
-  | { type: "playAction"; cardId: number }
+  | { type: "playAction"; cardId: number; dir?: GoDir }
   | { type: "target"; players: number[] }
   | { type: "cancelTarget" }
   | { type: "give"; cardId: number }
-  | { type: "shout" }
-  | { type: "expireShout" }
+  | { type: "pickDiscard"; cardId: number }
   | { type: "endTurnEarly" }
   | { type: "discardExcess"; cardId: number }
   | { type: "skipAbsent" };
 
 /** Actions any seated player may send, not only the current one. */
-export const ANYONE_ACTIONS = new Set<SGAction["type"]>(["expireShout", "skipAbsent"]);
+export const ANYONE_ACTIONS = new Set<SGAction["type"]>(["skipAbsent"]);
+
+/** GO! passes every hand one seat: "left" = to the next player (seat + 1), "right" = to the previous one. */
+export type GoDir = "left" | "right";
 
 export function newStaygo(names: string[], rng: () => number, now: number, first = 0): SGState {
   const n = names.length;
@@ -159,7 +161,6 @@ export function newStaygo(names: string[], rng: () => number, now: number, first
     playsLeft: 1,
     aLock: false,
     pending: null,
-    shoutDeadline: null,
     endAt: null,
     winners: null,
     endReason: null,
@@ -254,8 +255,16 @@ function finishByDeck(s: SGState, now: number) {
   s.endReason = "deck";
   s.endedAt = now;
   s.pending = null;
-  s.shoutDeadline = null;
   log(s, now, `กองจั่วหมดรอบแล้ว — ${s.winners.map((i) => s.names[i]).join(", ")} ชนะ!`);
+}
+
+function winByRow(s: SGState, now: number) {
+  s.winners = [s.cur];
+  s.phase = "end";
+  s.endReason = "row";
+  s.endedAt = now;
+  s.pending = null;
+  log(s, now, `${s.names[s.cur]} เรียงครบ S-T-A-Y-G-O ชนะ!`);
 }
 
 function endTurn(s: SGState, now: number) {
@@ -286,7 +295,7 @@ function discardCard(s: SGState, c: Card) {
 /** Which players a pending target power may legally pick (engine accepts empty-hand targets; the UI greys them). */
 export function validTargets(s: SGState, kind: TargetKind): number[] {
   const all = s.players.map((_, i) => i);
-  if (kind === "Y" || kind === "O") return all;
+  if (kind === "Y") return all;
   return all.filter((i) => i !== s.cur);
 }
 
@@ -310,6 +319,13 @@ export function applyStaygo(
 ): Result<SGState> {
   if (state.phase === "end") return fail("เกมจบแล้ว");
   if (!Number.isInteger(actor) || actor < 0 || actor >= state.players.length) return fail("ไม่พบผู้เล่น");
+  if ((state.phase as string) === "shout") {
+    // A room saved before the shout was removed: the full row wins now.
+    const s = clone(state);
+    winByRow(s, now);
+    s.version++;
+    return { ok: true, state: s };
+  }
   if (!ANYONE_ACTIONS.has(action.type) && actor !== state.cur) return fail("ยังไม่ถึงตาคุณ");
   const s = clone(state);
   const me = s.players[s.cur];
@@ -332,9 +348,7 @@ export function applyStaygo(
         me.row.push(c);
         log(s, now, `${myName} วาง ${c.k === "W" ? `STAYGO เป็น ${need}` : need} ต่อแถว (${me.row.length}/6)`);
         if (me.row.length === ROW_LEN) {
-          s.phase = "shout";
-          s.shoutDeadline = now + SHOUT_MS;
-          log(s, now, `${myName} แถวครบ 6! ต้องกด STAYGO! ภายใน 5 วินาที`);
+          winByRow(s, now);
           return null;
         }
         consumePlay(s, now);
@@ -348,15 +362,17 @@ export function applyStaygo(
         if (c.k !== "L") return "ใช้พลังได้เฉพาะการ์ดตัวอักษร";
         if (c.l === "A" && s.aLock) return "ระหว่าง Again ใช้พลัง A ไม่ได้";
         if (c.l === "T") {
+          // Take: pick any 1 card from the discard pile. With an empty pile, draw 1 instead.
+          if (s.discard.length) {
+            s.phase = "pickT";
+            s.pending = { type: "pickT", cardId: c.id };
+            return null;
+          }
           takeFromHand(s, s.cur, c.id);
           discardCard(s, c);
-          const got: Card[] = [];
-          for (let i = 0; i < 2; i++) {
-            const d = drawOne(s, s.cur);
-            if (d) got.push(d);
-          }
-          log(s, now, `${myName} ใช้ Take จั่ว ${got.length} ใบ`);
-          notice(s, s.cur, now, got.length ? `Take: ได้ ${got.map(cardName).join(", ")}` : "Take: กองจั่วหมดแล้ว");
+          const d = drawOne(s, s.cur);
+          log(s, now, `${myName} ใช้ Take กองทิ้งยังว่าง ${d ? "จั่ว 1 ใบแทน" : "และกองจั่วหมด"}`);
+          notice(s, s.cur, now, d ? `Take: กองทิ้งว่าง จั่วได้ ${cardName(d)}` : "Take: กองทิ้งว่างและกองจั่วหมดแล้ว");
           consumePlay(s, now);
           return null;
         }
@@ -387,26 +403,30 @@ export function applyStaygo(
           return null;
         }
         if (c.k !== "GO") return "การ์ดนี้ไม่ใช่การ์ดแอคชัน";
+        const dir: GoDir = action.dir ?? "left";
+        if (dir !== "left" && dir !== "right") return "เลือกทิศทางซ้ายหรือขวา";
         takeFromHand(s, s.cur, c.id);
         discardCard(s, c);
         const n = s.players.length;
+        const from = (i: number) => (dir === "left" ? (i - 1 + n) % n : (i + 1) % n); // who seat i receives from
         const hands = s.players.map((p) => p.hand);
-        s.players.forEach((p, i) => (p.hand = hands[(i - 1 + n) % n]));
-        log(s, now, `${myName} เล่น GO! ทุกคนส่งการ์ดทั้งมือไปทางซ้าย`);
-        s.players.forEach((p, i) => notice(s, i, now, `GO! ได้รับการ์ด ${p.hand.length} ใบจาก ${s.names[(i - 1 + n) % n]}`));
+        s.players.forEach((p, i) => (p.hand = hands[from(i)]));
+        log(s, now, `${myName} เล่น GO! ทุกคนส่งการ์ดทั้งมือไปทาง${dir === "left" ? "ซ้าย" : "ขวา"}`);
+        s.players.forEach((p, i) => notice(s, i, now, `GO! ได้รับการ์ด ${p.hand.length} ใบจาก ${s.names[from(i)]}`));
         consumePlay(s, now);
         return null;
       }
 
       case "cancelTarget": {
-        if (s.phase !== "target") return "ไม่มีอะไรให้ยกเลิก";
+        if (s.phase !== "target" && s.phase !== "pickT") return "ไม่มีอะไรให้ยกเลิก";
         s.phase = "play";
         s.pending = null;
         return null;
       }
 
       case "target": {
-        if (s.phase !== "target" || !s.pending || s.pending.type === "giveS") return "ตอนนี้เลือกเป้าหมายไม่ได้";
+        if (s.phase !== "target" || !s.pending || s.pending.type === "giveS" || s.pending.type === "pickT")
+          return "ตอนนี้เลือกเป้าหมายไม่ได้";
         const kind = s.pending.type;
         const ts = action.players;
         const need = kind === "Y" ? 2 : 1;
@@ -448,10 +468,13 @@ export function applyStaygo(
           return null;
         }
         if (kind === "O") {
-          const back = tp.row.pop();
-          if (back) {
-            tp.hand.push(back);
-            log(s, now, `${myName} ใช้ Oops! ${tName} ต้องเอา ${cardName(back)} คืนเข้ามือ`);
+          // Oops!: take the last card of the target's row into your own hand.
+          const got = tp.row.pop();
+          if (got) {
+            me.hand.push(got);
+            log(s, now, `${myName} ใช้ Oops! หยิบ ${cardName(got)} ท้ายแถวของ ${tName} มาเข้ามือ`);
+            notice(s, s.cur, now, `Oops!: ได้ ${cardName(got)} จากแถวของ ${tName}`);
+            notice(s, t, now, `${myName} หยิบ ${cardName(got)} ท้ายแถวของคุณไป`);
           } else log(s, now, `${myName} ใช้ Oops! กับ ${tName} แต่แถวว่าง`);
           consumePlay(s, now);
           return null;
@@ -486,25 +509,16 @@ export function applyStaygo(
         return null;
       }
 
-      case "shout": {
-        if (s.phase !== "shout") return "ตอนนี้ยังไม่ต้องตะโกน";
-        if (s.shoutDeadline === null || now > s.shoutDeadline) return "หมดเวลาแล้ว";
-        s.winners = [s.cur];
-        s.phase = "end";
-        s.endReason = "shout";
-        s.endedAt = now;
-        s.shoutDeadline = null;
-        log(s, now, `${myName}: STAYGO!!! ชนะ!`);
-        return null;
-      }
-
-      case "expireShout": {
-        if (s.phase !== "shout") return "ไม่ได้อยู่ในช่วงตะโกน";
-        if (s.shoutDeadline === null || now <= s.shoutDeadline) return "ยังไม่หมดเวลา";
-        const back = me.row.pop()!;
-        me.hand.push(back);
-        s.shoutDeadline = null;
-        log(s, now, `${myName} ไม่ทันกด STAYGO! ${cardName(back)} กลับเข้ามือ`);
+      case "pickDiscard": {
+        if (s.phase !== "pickT" || !s.pending || s.pending.type !== "pickT") return "ตอนนี้หยิบจากกองทิ้งไม่ได้";
+        const i = s.discard.findIndex((x) => x.id === action.cardId);
+        if (i < 0) return "ไม่มีการ์ดใบนี้ในกองทิ้ง";
+        const t = takeFromHand(s, s.cur, s.pending.cardId);
+        if (!t) return "ไม่มีการ์ดใบนี้ในมือ";
+        const got = s.discard.splice(i, 1)[0];
+        me.hand.push(got);
+        discardCard(s, t);
+        log(s, now, `${myName} ใช้ Take หยิบ ${cardName(got)} จากกองทิ้ง`);
         consumePlay(s, now);
         return null;
       }
@@ -531,7 +545,6 @@ export function applyStaygo(
 
       case "skipAbsent": {
         // The caller (Cloud Function) checks that the current player has been offline long enough.
-        if (s.phase === "shout") return "รอให้หมดเวลาตะโกนก่อน";
         if (s.phase === "giveS" && s.pending?.type === "giveS") {
           const c = randomFromHand(s, s.cur, rng)!;
           s.players[s.pending.target].hand.push(c);
@@ -553,11 +566,6 @@ export function applyStaygo(
 export function legalStaygo(s: SGState, actor: number, now: number): SGAction[] {
   const out: SGAction[] = [];
   if (s.phase === "end") return out;
-  if (s.phase === "shout") {
-    if (actor === s.cur && s.shoutDeadline !== null && now <= s.shoutDeadline) out.push({ type: "shout" });
-    if (s.shoutDeadline !== null && now > s.shoutDeadline) out.push({ type: "expireShout" });
-    return out;
-  }
   if (actor !== s.cur) return out;
   const me = s.players[s.cur];
   if (s.phase === "play") {
@@ -565,10 +573,11 @@ export function legalStaygo(s: SGState, actor: number, now: number): SGAction[] 
     for (const c of me.hand) {
       if (need && (c.k === "W" || (c.k === "L" && c.l === need))) out.push({ type: "place", cardId: c.id });
       if (c.k === "L" && !(c.l === "A" && s.aLock)) out.push({ type: "power", cardId: c.id });
-      if (c.k === "STAY" || c.k === "GO") out.push({ type: "playAction", cardId: c.id });
+      if (c.k === "STAY") out.push({ type: "playAction", cardId: c.id });
+      if (c.k === "GO") for (const dir of ["left", "right"] as const) out.push({ type: "playAction", cardId: c.id, dir });
     }
     if (s.aLock) out.push({ type: "endTurnEarly" });
-  } else if (s.phase === "target" && s.pending && s.pending.type !== "giveS") {
+  } else if (s.phase === "target" && s.pending && s.pending.type !== "giveS" && s.pending.type !== "pickT") {
     const v = validTargets(s, s.pending.type);
     if (s.pending.type === "Y") {
       for (const a of v) for (const b of v) if (a < b) out.push({ type: "target", players: [a, b] });
@@ -576,6 +585,9 @@ export function legalStaygo(s: SGState, actor: number, now: number): SGAction[] 
     out.push({ type: "cancelTarget" });
   } else if (s.phase === "giveS") {
     for (const c of me.hand) out.push({ type: "give", cardId: c.id });
+  } else if (s.phase === "pickT") {
+    for (const c of s.discard) out.push({ type: "pickDiscard", cardId: c.id });
+    out.push({ type: "cancelTarget" });
   } else if (s.phase === "excess") {
     for (const c of me.hand) out.push({ type: "discardExcess", cardId: c.id });
   }
@@ -604,11 +616,10 @@ export interface SGPublic {
   playsLeft: number;
   aLock: boolean;
   pending: null | { type: "giveS"; target: number }; // target picks stay private until they resolve
-  shoutDeadline: number | null;
   endAt: number | null;
   log: LogEntry[];
   winners: number[] | null;
-  endReason: "shout" | "deck" | null;
+  endReason: "row" | "deck" | null;
   turnCount: number;
   startedAt: number;
   turnStartedAt: number;
@@ -619,7 +630,11 @@ export interface SGPublic {
 export interface SGPrivate {
   hand: Card[];
   notice: LogEntry | null;
-  pending: null | { type: TargetKind; cardId: number } | { type: "giveS"; target: number; takenCard: Card | null };
+  pending:
+    | null
+    | { type: TargetKind; cardId: number }
+    | { type: "giveS"; target: number; takenCard: Card | null }
+    | { type: "pickT"; cardId: number; options: Card[] }; // options: the whole discard pile, oldest first
 }
 
 export function publicView(s: SGState): SGPublic {
@@ -635,7 +650,6 @@ export function publicView(s: SGState): SGPublic {
     playsLeft: s.playsLeft,
     aLock: s.aLock,
     pending,
-    shoutDeadline: s.shoutDeadline,
     endAt: s.endAt,
     log: s.log.slice(-20),
     winners: s.winners,
@@ -654,6 +668,8 @@ export function privateView(s: SGState, p: number): SGPrivate {
     if (s.pending.type === "giveS") {
       const id = s.pending.takenCardId;
       pending = { type: "giveS", target: s.pending.target, takenCard: s.players[p].hand.find((c) => c.id === id) ?? null };
+    } else if (s.pending.type === "pickT") {
+      pending = { type: "pickT", cardId: s.pending.cardId, options: s.discard.slice() };
     } else pending = { type: s.pending.type, cardId: s.pending.cardId };
   }
   return { hand: s.players[p].hand.slice(), notice: s.notices[p], pending };

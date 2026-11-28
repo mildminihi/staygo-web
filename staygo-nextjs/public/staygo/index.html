@@ -121,7 +121,7 @@
         <p class="muted center">อยู่ด้วยกันเครื่องเดียว? ลอง <a href="/games/lunjua/">ลุ้นจั่ว</a> (เล่นได้ทันที ไม่ต้องสร้างห้อง)</p>
         <details class="sg-panel rules">
           <summary>วิธีเล่น STAYGO!</summary>
-          <p><b>เป้าหมาย:</b> เรียงการ์ดตรงหน้าให้ครบ S → T → A → Y → G → O แล้วกด <b>STAYGO!</b> ภายใน 5 วินาที</p>
+          <p><b>เป้าหมาย:</b> เรียงการ์ดตรงหน้าให้ครบ S → T → A → Y → G → O ก่อนใครชนะทันที</p>
           <p><b>ในเทิร์นของคุณ:</b> จั่ว 1 ใบ แล้วเล่น 1 ใบ เลือกได้ว่าจะ</p>
           <ul>
             <li><b>วางต่อแถว</b> — ต้องเป็นตัวถัดไปที่แถวต้องการ (การ์ด STAYGO ใช้แทนตัวไหนก็ได้)</li>
@@ -131,13 +131,13 @@
           <p>จบเทิร์นถ้ามือเกิน 6 ใบ ต้องทิ้งให้เหลือ 6</p>
           <table class="powers">
             <tr><td><b>S</b> Swap</td><td>สุ่มการ์ด 1 ใบจากเป้าหมาย แล้วเลือกการ์ด 1 ใบให้เขาคืน</td></tr>
-            <tr><td><b>T</b> Take</td><td>จั่ว 2 ใบ</td></tr>
+            <tr><td><b>T</b> Take</td><td>เลือกการ์ด 1 ใบจากกองทิ้งขึ้นมือ (กองทิ้งว่าง: จั่ว 1 ใบแทน)</td></tr>
             <tr><td><b>A</b> Again</td><td>เล่นเพิ่มอีก 2 ใบ (ใช้ A ซ้อนไม่ได้)</td></tr>
             <tr><td><b>Y</b> Yolo</td><td>เลือก 2 คน (รวมตัวเองได้) ให้สลับมือกัน</td></tr>
             <tr><td><b>G</b> Got</td><td>ขโมยการ์ด 1 ใบแบบสุ่ม</td></tr>
-            <tr><td><b>O</b> Oops!</td><td>เป้าหมายเอาการ์ดใบสุดท้ายในแถวคืนเข้ามือ</td></tr>
+            <tr><td><b>O</b> Oops!</td><td>หยิบการ์ดใบสุดท้ายในแถวของเป้าหมายมาขึ้นมือคุณ</td></tr>
             <tr><td><b>STAY</b></td><td>เป้าหมายข้ามเทิร์นถัดไป</td></tr>
-            <tr><td><b>GO!</b></td><td>ทุกคนส่งการ์ดทั้งมือไปทางซ้าย</td></tr>
+            <tr><td><b>GO!</b></td><td>ทุกคนส่งการ์ดทั้งมือไปทางซ้ายหรือขวา (คนเล่นเลือก)</td></tr>
           </table>
           <p><b>กองจั่วหมด:</b> เล่นต่อจนวนกลับมาถึงคนที่ทำให้กองหมด แถวยาวสุดชนะ (เสมอ: การ์ดในมือน้อยกว่าชนะ)</p>
         </details>
@@ -202,16 +202,6 @@
             <button id="targetCancel" class="sg-btn">ยกเลิก</button>
             <button id="targetConfirm" class="sg-btn blue" hidden>ยืนยัน</button>
           </div>
-        </div>
-      </div>
-
-      <!-- Shout window -->
-      <div id="shoutOverlay" class="shout" hidden>
-        <div class="shout-card">
-          <p id="shoutWho"></p>
-          <button id="shoutBtn" class="shout-btn">STAYGO!</button>
-          <div class="shout-time"><b id="shoutTime">5.0</b> วินาที</div>
-          <div class="shout-track"><div id="shoutBar" class="shout-bar"></div></div>
         </div>
       </div>
 

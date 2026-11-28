@@ -1,11 +1,28 @@
-// เกมเล่นบนเว็บ — ใช้ทั้งหน้าแรก (แสดงแค่ HOME_GAME_LIMIT เกมแรก) และหน้า /games
+// เกมเล่นบนเว็บ — ใช้ทั้งหน้าแรก (จำนวนต่อหมวดดู HOME_GAMES_PER_CATEGORY) และหน้า /games
 
 export type WebGameCover =
   | { images: [string, string] }
   | { emoji: string; background: string; color?: string };
 
+export type GameCategoryId = 'staygo' | 'party' | 'solo';
+
+export type GameCategory = {
+  id: GameCategoryId;
+  icon: string;
+  title: string;
+  subtitle: string;
+};
+
+// ลำดับในนี้คือลำดับที่แสดงบนหน้าเว็บ
+export const GAME_CATEGORIES: GameCategory[] = [
+  { id: 'staygo', icon: '🃏', title: 'Board Game Online by STAYGO', subtitle: 'บอร์ดเกมของ STAYGO เล่นออนไลน์กับเพื่อนได้เลย' },
+  { id: 'party', icon: '🎉', title: 'Party Game', subtitle: 'เปิดจอใหญ่ เล่นกันเป็นกลุ่มจากมือถือ' },
+  { id: 'solo', icon: '🕹️', title: 'เล่นคนเดียว', subtitle: 'เกมเล่นคนเดียวบนเว็บ ทั้งมือถือและคอม' },
+];
+
 export type WebGame = {
   href: string;
+  category: GameCategoryId;
   title: string;
   meta: string;
   short: string;
@@ -15,11 +32,13 @@ export type WebGame = {
   cta?: string;
 };
 
-export const HOME_GAME_LIMIT = 4;
+// จำนวนเกมที่โชว์ในหน้าแรกของแต่ละหมวด — 2 = ครึ่งแถว (วางคู่กับหมวดถัดไป), 4 = เต็มแถว
+export const HOME_GAMES_PER_CATEGORY: Record<GameCategoryId, 2 | 4> = { staygo: 2, party: 2, solo: 4 };
 
 export const WEB_GAMES: WebGame[] = [
   {
     href: '/staygo/',
+    category: 'staygo',
     title: 'STAYGO! ออนไลน์',
     meta: '2–5 Players • เกมการ์ดออนไลน์',
     short: 'เรียงแถว S-T-A-Y-G-O ให้ครบก่อนใคร',
@@ -30,6 +49,7 @@ export const WEB_GAMES: WebGame[] = [
   },
   {
     href: '/games/speed-draw/',
+    category: 'party',
     title: 'วาดไว 15 วิ',
     meta: '2–30 Players • เกมวาดรูปปาร์ตี้',
     short: 'วาดตามโจทย์ข้อละ 15 วิ 10 รูปรวด แล้วสลับกันเรียงรูปของเพื่อน',
@@ -39,6 +59,7 @@ export const WEB_GAMES: WebGame[] = [
   },
   {
     href: '/games/lunjua/',
+    category: 'staygo',
     title: 'ลุ้นจั่ว',
     meta: '2–6 Players • เกมเสี่ยงดวง',
     short: 'เปิดการ์ดทีละใบ เก็บ STAYGO ให้ครบ ตัวซ้ำ = ระเบิด!',
@@ -47,6 +68,7 @@ export const WEB_GAMES: WebGame[] = [
   },
   {
     href: '/games/flipped/',
+    category: 'solo',
     title: 'FLIPPED: พินบอลกลับด้าน',
     meta: '1 Player • เกมฟิสิกส์ Roguelike',
     short: 'คุณคือลูกเหล็ก ไม้ตีคือบอส ลงหลุมให้ได้!',
@@ -56,6 +78,7 @@ export const WEB_GAMES: WebGame[] = [
   },
   {
     href: '/games/scribble-spy/',
+    category: 'party',
     title: 'ใครวาดมั่ว',
     meta: '3–20 Players • เกมวาดรูปจับผิด',
     short: 'ทุกคนรู้คำยกเว้น 1 คน ผลัดกันวาดคนละเส้น แล้วโหวตจับคนวาดมั่ว',
@@ -66,6 +89,7 @@ export const WEB_GAMES: WebGame[] = [
   },
   {
     href: '/games/market-run/',
+    category: 'solo',
     title: 'แม่ฝากซื้อ',
     meta: '1 Player • เกมจ่ายตลาดแข่งเวลา',
     short: 'ซื้อของให้แม่ให้ครบ หาร้านลดราคา เงินที่เหลือคือค่าขนม!',
@@ -75,6 +99,7 @@ export const WEB_GAMES: WebGame[] = [
   },
   {
     href: '/games/rider-rush/',
+    category: 'solo',
     title: 'ด่วนจี๋ทะลุแยก',
     meta: '1 Player • เกมต่อถนนแข่งเวลา',
     short: 'หมุนถนนให้ต่อกัน รับข้าวไปส่งให้ทันก่อนข้าวเย็น ส่งได้ไม่รู้จบ!',
@@ -84,6 +109,7 @@ export const WEB_GAMES: WebGame[] = [
   },
   {
     href: '/games/emoji-match/',
+    category: 'solo',
     title: 'จับคู่อีโมจิ',
     meta: '1 Player • เกมจำ',
     short: 'จับคู่อีโมจิให้ถูกต้อง',
@@ -92,6 +118,7 @@ export const WEB_GAMES: WebGame[] = [
   },
   {
     href: '/games/dice-roguelike/',
+    category: 'solo',
     title: 'Dice Roguelike',
     meta: '1 Player • เกมกลยุทธ์',
     short: 'ทอยเต๋าผจญภัยใน Dungeon',
@@ -101,6 +128,7 @@ export const WEB_GAMES: WebGame[] = [
   },
   {
     href: '/games/decoder/',
+    category: 'solo',
     title: 'ถอดรหัสตัวเลข',
     meta: '1 Player • เกมปริศนา',
     short: 'ทายตัวเลขลับภายใน 8 ครั้ง',
@@ -109,6 +137,7 @@ export const WEB_GAMES: WebGame[] = [
   },
   {
     href: '/games/dice-challenge/',
+    category: 'party',
     title: 'เกมทอยเต๋า',
     meta: 'Multiplayer • เกมทอยเต๋า',
     short: 'เลือกแผ่นป้ายและทอยเต๋าเพื่อเก็บแต้ม',
@@ -117,6 +146,7 @@ export const WEB_GAMES: WebGame[] = [
   },
   {
     href: '/games/dungeon-ledger/',
+    category: 'solo',
     title: 'Dungeon Ledger',
     meta: '1 Player • เกม Idle ผจญภัย',
     short: 'สุ่มฮีโร่ ลุยดันเจี้ยนแบบ auto-battle',
@@ -126,6 +156,7 @@ export const WEB_GAMES: WebGame[] = [
   },
   {
     href: '/games/ouroboros/',
+    category: 'staygo',
     title: 'Ouroboros',
     meta: '2–6 Players • เกมกระดานไล่ล่า',
     short: 'งูกินหาง เป็นทั้งผู้ล่าและผู้ถูกล่า รอดคนสุดท้ายชนะ',
@@ -134,6 +165,7 @@ export const WEB_GAMES: WebGame[] = [
   },
   {
     href: '/games/zoom-quiz/',
+    category: 'party',
     title: 'Zoom Quiz',
     meta: 'Multiplayer • เกมทายภาพ',
     short: 'สร้าง quiz ภาพซูมของตัวเอง แล้วให้เพื่อนทาย',
@@ -142,6 +174,7 @@ export const WEB_GAMES: WebGame[] = [
   },
   {
     href: '/games/thai-wordle/',
+    category: 'solo',
     title: 'ทายคำศัพท์ 5 ตัว',
     meta: '1 Player • เกมทายคำ',
     short: 'ทายคำศัพท์ไทยสไตล์ Wordle มีคำประจำวันให้เล่นทุกวัน',
@@ -149,24 +182,8 @@ export const WEB_GAMES: WebGame[] = [
     cover: { images: ['/assets/image/wordle-cover-1.webp', '/assets/image/wordle-cover-2.webp'] },
   },
   {
-    href: '/games/jinxo-board/',
-    title: 'กระดานจดแต้มสำหรับ JinxO',
-    meta: '4–7 Players • กระดานช่วยเล่นบอร์ดเกม',
-    short: 'ใช้แทนกระดานผู้เล่น คู่กับเกมตัวจริง',
-    description: 'เครื่องมือเสริมสำหรับเล่นคู่กับเกม JinxO ตัวจริง ใช้มือถือแทนกระดานผู้เล่น เขียนคำตอบ วงกลม กากบาท ดาว Jinx พร้อมนับโบนัสและคะแนน 3 รอบให้อัตโนมัติ',
-    cover: { images: ['/assets/image/jinxo-cover-1.webp', '/assets/image/jinxo-cover-2.webp'] },
-    cta: 'เปิดกระดาน',
-  },
-  {
-    href: '/games/reveal-board/',
-    title: 'เปิดแผ่นป้ายทายภาพ',
-    meta: '4–20 Players • เกมปาร์ตี้',
-    short: 'เปิดแผ่นป้ายทีละช่องเพื่อทายภาพ',
-    description: 'เปิดแผ่นป้ายทีละช่องเพื่อทายภาพ เหมาะสำหรับเล่นเป็นกลุ่ม',
-    cover: { images: ['/assets/image/reveal-cover-1.webp', '/assets/image/reveal-cover-2.webp'] },
-  },
-  {
     href: '/games/cardloop/',
+    category: 'solo',
     title: 'ลูปนรกหมกมุ่น',
     meta: '1 Player • เกมไพ่',
     short: 'ตอบคำถาม 4 ข้อติดเพื่อชนะ',

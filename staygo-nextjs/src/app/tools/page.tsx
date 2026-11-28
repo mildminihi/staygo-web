@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
-import { TOOLS } from '@/data/tools';
+import ToolButton from '@/components/ToolButton';
+import { TOOL_CATEGORIES, TOOLS } from '@/data/tools';
 
 export const metadata: Metadata = {
   alternates: { canonical: '/tools/' },
@@ -36,16 +37,25 @@ export default function ToolsPage() {
             <p style={{ color: 'var(--text-muted)', fontSize: '18px', margin: 0 }}>เครื่องมือช่วยเล่นเกมและจัดกิจกรรม ใช้ฟรีบนเว็บ</p>
           </div>
 
-          <div className="tools-grid">
-            {TOOLS.map((tool) => (
-              <a key={tool.href} href={tool.href} className="tool-button">
-                <div className="tool-icon">{tool.icon}</div>
-                {tool.isNew && <span className="tool-new">ใหม่</span>}
-                <span className="tool-label">{tool.label}</span>
-                <span className="tool-description">{tool.description}</span>
-              </a>
-            ))}
-          </div>
+          {TOOL_CATEGORIES.map((cat) => {
+            const tools = TOOLS.filter((t) => t.category === cat.id);
+            return (
+              <div key={cat.id} className="category-block" id={cat.id}>
+                <div className="category-head">
+                  <h2 className="category-title">
+                    {cat.icon} {cat.title}
+                    <span className="category-count">({tools.length})</span>
+                  </h2>
+                  <p className="category-subtitle">{cat.subtitle}</p>
+                </div>
+                <div className="tools-grid">
+                  {tools.map((tool) => (
+                    <ToolButton key={tool.href} tool={tool} showDescription />
+                  ))}
+                </div>
+              </div>
+            );
+          })}
         </div>
       </section>
     </main>

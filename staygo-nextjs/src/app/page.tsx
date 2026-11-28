@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import WebGameCard from '@/components/WebGameCard';
-import { HOME_GAME_LIMIT, WEB_GAMES } from '@/data/webGames';
-import { HOME_TOOL_LIMIT, TOOLS } from '@/data/tools';
+import ToolButton from '@/components/ToolButton';
+import { GAME_CATEGORIES, HOME_GAMES_PER_CATEGORY, WEB_GAMES } from '@/data/webGames';
+import { HOME_TOOLS_PER_CATEGORY, TOOL_CATEGORIES, TOOLS } from '@/data/tools';
 import { BOARD_GAMES } from '@/data/boardgames';
 import LatestClip from '@/components/LatestClip';
 import PlaylistTabs from '@/components/PlaylistTabs';
@@ -66,15 +67,20 @@ export default function Home() {
             <Link href="/tools/" className="link-more">ดูทั้งหมด ({TOOLS.length}) →</Link>
           </div>
 
-          <div className="tools-grid">
-            {TOOLS.slice(0, HOME_TOOL_LIMIT).map((tool) => (
-              <a key={tool.href} href={tool.href} className="tool-button">
-                <div className="tool-icon">{tool.icon}</div>
-                {tool.isNew && <span className="tool-new">ใหม่</span>}
-                <span className="tool-label">{tool.label}</span>
-              </a>
-            ))}
-          </div>
+          {TOOL_CATEGORIES.map((cat) => (
+            <div key={cat.id} className="category-block">
+              <div className="category-head">
+                <h3 className="category-title">{cat.icon} {cat.title}</h3>
+              </div>
+              <div className="tools-grid">
+                {TOOLS.filter((t) => t.category === cat.id)
+                  .slice(0, HOME_TOOLS_PER_CATEGORY)
+                  .map((tool) => (
+                    <ToolButton key={tool.href} tool={tool} />
+                  ))}
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -85,10 +91,24 @@ export default function Home() {
             <Link href="/games/" className="link-more">ดูทั้งหมด ({WEB_GAMES.length}) →</Link>
           </div>
 
-          <div className="game-grid">
-            {WEB_GAMES.slice(0, HOME_GAME_LIMIT).map((game) => (
-              <WebGameCard key={game.href} game={game} />
-            ))}
+          <div className="home-game-categories">
+            {GAME_CATEGORIES.map((cat) => {
+              const games = WEB_GAMES.filter((g) => g.category === cat.id);
+              const limit = HOME_GAMES_PER_CATEGORY[cat.id];
+              return (
+                <div key={cat.id} className={`home-game-category${limit === 2 ? ' home-game-category-half' : ''}`}>
+                  <div className="section-header category-head">
+                    <h3 className="category-title">{cat.icon} {cat.title}</h3>
+                    <Link href={`/games/#${cat.id}`} className="link-more">ดูทั้งหมด ({games.length}) →</Link>
+                  </div>
+                  <div className="game-grid">
+                    {games.slice(0, limit).map((game) => (
+                      <WebGameCard key={game.href} game={game} />
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>

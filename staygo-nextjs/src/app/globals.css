@@ -5812,3 +5812,56 @@ h3 {
 @media (prefers-reduced-motion: reduce) {
   .wp-backdrop, .wp-card, .wp-wave { animation: none; }
 }
+
+/* Category blocks (games / tools grouped by category) */
+.category-block + .category-block {
+  margin-top: 48px;
+}
+.category-head {
+  margin-bottom: 20px;
+}
+.category-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text);
+  margin: 0;
+}
+.category-subtitle {
+  color: var(--text-muted);
+  font-size: 15px;
+  margin: 4px 0 0;
+}
+.category-count {
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 15px;
+  margin-left: 6px;
+}
+
+/* Home: game categories — half-row categories (2 games) sit side by side */
+.home-game-categories {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 48px 24px;
+}
+.home-game-category {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+.home-game-category-half {
+  grid-column: span 1;
+}
+.home-game-category-half .game-grid {
+  grid-template-columns: repeat(2, 1fr);
+}
+@media (max-width: 768px) {
+  .home-game-categories {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+}
+@media (max-width: 480px) {
+  .home-game-category-half .game-grid {
+    grid-template-columns: 1fr;
+  }
+}
